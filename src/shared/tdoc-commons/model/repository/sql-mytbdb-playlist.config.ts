@@ -180,6 +180,14 @@ export class SqlMytbDbPlaylistConfig {
             'done_ss': {
                 noFacet: true
             },
+            'initial_s': {
+                selectSql: 'SELECT COUNT(*) as count, ' +
+                    ' SUBSTR(UPPER(p_name), 1, 1) as value ' +
+                    'FROM playlist ' +
+                    'WHERE LENGTH(p_name) > 0 ' +
+                    'GROUP BY SUBSTR(UPPER(p_name), 1, 1)' +
+                    'ORDER BY value',
+            },
             'keywords_txt': {
                 constValues: ['keywords_txt'],
                 filterField: '"666dummy999"'
@@ -224,7 +232,14 @@ export class SqlMytbDbPlaylistConfig {
                 noFacet: true
             },
             'playlists_txt': {
-                noFacet: true
+                selectSql: 'SELECT COUNT(playlist.p_id) AS count, ' +
+                    ' p_name AS value ' +
+                    'FROM' +
+                    ' playlist' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                filterField: 'playlist.p_name',
+                action: AdapterFilterActions.IN
             },
             'rate_pers_gesamt_is': {
                 noFacet: true
@@ -324,6 +339,7 @@ export class SqlMytbDbPlaylistConfig {
             loc_id_is: '"666dummy999"',
             loc_lochirarchie_ids_txt: '"666dummy999"',
             l_lochirarchietxt: '"666dummy999"',
+            initial_s: 'SUBSTR(UPPER(p_name), 1, 1)',
             html: 'CONCAT(p_name, " ", COALESCE(p_meta_desc,""))'
         },
         writeMapping: {

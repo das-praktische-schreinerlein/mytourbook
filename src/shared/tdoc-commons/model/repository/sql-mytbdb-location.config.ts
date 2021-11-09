@@ -287,6 +287,14 @@ export class SqlMytbDbLocationConfig {
                 filterFields: ['lif.if_id'],
                 action: AdapterFilterActions.IN_NUMBER
             },
+            'initial_s': {
+                selectSql: 'SELECT COUNT(*) as count, ' +
+                    ' SUBSTR(UPPER(l_name), 1, 1) as value ' +
+                    'FROM location ' +
+                    'WHERE LENGTH(l_name) > 0 ' +
+                    'GROUP BY SUBSTR(UPPER(l_name), 1, 1)' +
+                    'ORDER BY value',
+            },
             'keywords_txt': {
                 selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
@@ -437,6 +445,7 @@ export class SqlMytbDbLocationConfig {
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',
             trip_id_is: '"666dummy999"',
+            initial_s: 'SUBSTR(UPPER(l_name), 1, 1)',
             html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""))'
         },
         writeMapping: {

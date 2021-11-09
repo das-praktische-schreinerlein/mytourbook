@@ -378,6 +378,14 @@ export class SqlMytbDbTrackConfig {
                 selectField: 'CONCAT("DONE", (k_datevon IS NOT NULL))',
                 orderBy: 'value asc'
             },
+            'initial_s': {
+                selectSql: 'SELECT COUNT(*) as count, ' +
+                    ' SUBSTR(UPPER(k_name), 1, 1) as value ' +
+                    'FROM kategorie ' +
+                    'WHERE LENGTH(k_name) > 0 ' +
+                    'GROUP BY SUBSTR(UPPER(k_name), 1, 1)' +
+                    'ORDER BY value',
+            },
             'keywords_txt': {
                 selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
@@ -639,6 +647,7 @@ export class SqlMytbDbTrackConfig {
             video_id_i: '"666dummy999"',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
+            initial_s: 'SUBSTR(UPPER(k_name), 1, 1)',
             html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_name)'
         },
         spartialConfig: {

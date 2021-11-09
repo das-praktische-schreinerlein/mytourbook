@@ -321,6 +321,9 @@ export class SqlMytbDbImageConfig {
                 selectField: 'CONCAT("DONE", (i_date IS NOT NULL))',
                 orderBy: 'value asc'
             },
+            'initial_s': {
+                noFacet: true
+            },
             'keywords_txt': {
                 selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
@@ -581,6 +584,7 @@ export class SqlMytbDbImageConfig {
             track_id_is: 'image.k_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
+            initial_s: '"666dummy999"',
             html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
         },
         writeMapping: {

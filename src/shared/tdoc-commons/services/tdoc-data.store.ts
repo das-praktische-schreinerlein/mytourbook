@@ -55,6 +55,7 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         noFavoriteChildren: true,
         noMainFavoriteChildren: true,
         noSubType: true,
+        initial_s: true,
         objects_txt: true,
         persons_txt: true,
         playlists_txt: true,
@@ -218,6 +219,13 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
             filter = filter || {};
             filter['route_attr_txt'] = {
                 'like': searchForm.routeAttrPart.split(/,/)
+            };
+        }
+
+        if (searchForm.initial !== undefined && searchForm.initial.length > 0) {
+            filter = filter || {};
+            filter['initial_s'] = {
+                'in': searchForm.initial.split(/,/)
             };
         }
 

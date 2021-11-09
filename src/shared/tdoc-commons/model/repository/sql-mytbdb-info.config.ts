@@ -247,6 +247,14 @@ export class SqlMytbDbInfoConfig {
             'done_ss': {
                 noFacet: true
             },
+            'initial_s': {
+                selectSql: 'SELECT COUNT(*) as count, ' +
+                    ' SUBSTR(UPPER(if_name), 1, 1) as value ' +
+                    'FROM info ' +
+                    'WHERE LENGTH(if_name) > 0 ' +
+                    'GROUP BY SUBSTR(UPPER(if_name), 1, 1)' +
+                    'ORDER BY value',
+            },
             'keywords_txt': {
                 selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
@@ -419,6 +427,7 @@ export class SqlMytbDbInfoConfig {
             loc_id_is: 'info.l_id',
             loc_lochirarchie_ids_txt: 'lifl.l_id',
             l_lochirarchietxt: 'lifl.l_name',
+            initial_s: 'SUBSTR(UPPER(if_name), 1, 1)',
             html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), ' +
                 '     " ", COALESCE(if_url,""))'
         },

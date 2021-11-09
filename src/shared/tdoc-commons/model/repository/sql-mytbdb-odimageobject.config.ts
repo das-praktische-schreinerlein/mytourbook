@@ -240,6 +240,9 @@ export class SqlMytbDbOdImageObjectConfig {
                 selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id',
                 orderBy: 'value asc'
             },
+            'initial_s': {
+               noFacet: true
+            },
             'keywords_txt': {
                 selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
@@ -479,6 +482,7 @@ export class SqlMytbDbOdImageObjectConfig {
             track_id_i: 'image.k_id',
             track_id_is: 'image.k_id',
             news_id_is: '"666dummy999"',
+            initial_s: '"666dummy999"',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             html: 'CONCAT(COALESCE(i_meta_name,""), " ", COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""), " ", l_name)'

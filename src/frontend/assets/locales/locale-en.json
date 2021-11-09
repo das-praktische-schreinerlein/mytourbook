@@ -370,6 +370,7 @@
     "hrt_route_id_i": "special filter route:",
     "hrt_route_id_is": "special filter route:",
     "hrt_noRoute": "special filter no route:",
+    "hrt_initial": "initial of name:",
     "hrt_loc_parent_id_i": "at location:",
     "hrt_objectDetectionCategory":  "objectdetection objectcategory:",
     "hrt_objectDetectionDetector":  "objectdetector:",

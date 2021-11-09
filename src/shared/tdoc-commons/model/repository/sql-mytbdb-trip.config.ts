@@ -284,6 +284,14 @@ export class SqlMytbDbTripConfig {
                 selectField: 'CONCAT("DONE", (tr_datevon IS NOT NULL))',
                 orderBy: 'value asc'
             },
+            'initial_s': {
+                selectSql: 'SELECT COUNT(*) as count, ' +
+                    ' SUBSTR(UPPER(tr_name), 1, 1) as value ' +
+                    'FROM trip ' +
+                    'WHERE LENGTH(tr_name) > 0 ' +
+                    'GROUP BY SUBSTR(UPPER(tr_name), 1, 1)' +
+                    'ORDER BY value',
+            },
             'keywords_txt': {
                 noFacet: true
             },
@@ -462,6 +470,7 @@ export class SqlMytbDbTripConfig {
             loc_id_is: 'trip.l_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
+            initial_s: 'SUBSTR(UPPER(tr_name), 1, 1)',
             html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc,""))'
         },
         writeMapping: {

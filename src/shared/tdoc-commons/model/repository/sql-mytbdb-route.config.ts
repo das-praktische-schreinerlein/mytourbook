@@ -358,6 +358,14 @@ export class SqlMytbDbRouteConfig {
                 filterFields: ['tif.if_id'],
                 action: AdapterFilterActions.IN_NUMBER
             },
+            'initial_s': {
+                selectSql: 'SELECT COUNT(*) as count, ' +
+                    ' SUBSTR(UPPER(t_name), 1, 1) as value ' +
+                    'FROM tour ' +
+                    'WHERE LENGTH(t_name) > 0 ' +
+                    'GROUP BY SUBSTR(UPPER(t_name), 1, 1)' +
+                    'ORDER BY value',
+            },
             'keywords_txt': {
                 selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
@@ -780,6 +788,7 @@ export class SqlMytbDbRouteConfig {
             loc_id_is: 'tour.l_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
+            initial_s: 'SUBSTR(UPPER(t_name), 1, 1)',
             html: 'CONCAT(t_name, " ", COALESCE(t_desc_gebiet, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", l_name)'
         },
         writeMapping: {

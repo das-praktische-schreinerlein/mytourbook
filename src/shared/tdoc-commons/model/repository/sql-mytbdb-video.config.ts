@@ -295,6 +295,9 @@ export class SqlMytbDbVideoConfig {
                 selectField: 'CONCAT("DONE", (v_date IS NOT NULL))',
                 orderBy: 'value asc'
             },
+            'initial_s': {
+                noFacet: true
+            },
             'keywords_txt': {
                 selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
@@ -549,6 +552,7 @@ export class SqlMytbDbVideoConfig {
             keywords_txt: 'v_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            initial_s: '"666dummy999"',
             name_s: 'v_meta_name',
             persons_txt: 'v_persons',
             objects_txt: 'v_objects',

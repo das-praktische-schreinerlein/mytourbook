@@ -16,6 +16,7 @@
 - improved layout
 - use commons 5.4.0
 - added view all_entries to show all entries (especially from database) in one searchresult  
+- added initial-name filter
 
 ### new features
 - backend/frontend: added statistics-section
@@ -28,7 +29,8 @@
 - backend/frontend: added to append details to playlist-entry
 - backend/frontend: added playlist as entity
 - backend/frontend: added view all_entries to show all entries (especially from database) in one searchresult
-
+- backend/frontend: added initial-name filter
+- 
 ### improvements
 - backend: added sort by name
 - backend: improved sql for similarity-search

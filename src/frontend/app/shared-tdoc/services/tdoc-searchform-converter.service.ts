@@ -89,6 +89,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         whatMap.set('persons', searchForm.persons);
         whatMap.set('objects', searchForm.objects);
         whatMap.set('playlists', searchForm.playlists);
+        whatMap.set('initial', searchForm.initial);
         return this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
     }
 
@@ -192,7 +193,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
                 : ''));
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
-            ['action:', 'keyword:', 'playlists:', 'persons:', 'objects:']);
+            ['action:', 'keyword:', 'playlists:', 'persons:', 'objects:', 'initial:']);
         const what: string = (whatFilterValues.has('keyword:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('keyword:'), 'keyword:', ',') : '');
         const actiontype: string = (whatFilterValues.has('action:') ?
@@ -203,6 +204,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('persons:'), 'persons:', ',') : '');
         const objects: string = (whatFilterValues.has('objects:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('objects:'), 'objects:', ',') : '');
+        const initial: string = (whatFilterValues.has('initial:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('initial:'), 'initial:', ',') : '');
 
         searchForm.theme = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
@@ -237,6 +240,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.objects = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(objects, /^alles$/, ''),
             defaults['objects'], '');
+        searchForm.initial = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(initial, /^alles$/, ''),
+            defaults['initial'], '');
         searchForm.fulltext = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['fulltext'], /^egal$/, ''),
             defaults['fulltext'], '');
@@ -353,6 +359,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             undefined, true, ''));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.routeAttrPart, 'hrt_routeAttrPart',
             undefined, true, ''));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.initial, 'hrt_initial', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.playlists, 'hrt_playlists', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.dashboardFilter, 'hrt_dashboardFilter',
             undefined, true, 'label.dashboardColumn.'));
