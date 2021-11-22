@@ -39,6 +39,7 @@
 ### bug fixes
 - backend: fixed invalid argument-check in cli
 - backend: fixed solr-import
+- backend: fix solr header-limit
 
 ### breaking changes
 - none

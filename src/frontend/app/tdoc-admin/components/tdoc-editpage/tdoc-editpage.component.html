@@ -6,11 +6,15 @@
         <br clear="all" />
         <div class="card-footer text-right" style="width: 100%">
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
-                <app-tdoc-action [record]="record" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
+                <app-tdoc-action [record]="record"
+                                 [type]="'actionTagsBig'"
+                                 (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
                 <a [href]="getBackToShowUrl()" (click)="submitBackToShow()" class="btn btn-action btn-sm"
                    i18n="link back2show tdoc|Linktext back to show tdoc@@a.edit.tdoc.back2show">Back to Show</a>
                 <a [href]="getBackToSearchUrl()" (click)="submitBackToSearch()" class="btn btn-action btn-sm"
                    i18n="link back2search tdoc|Linktext back to search tdoc@@a.edit.tdoc.back2search">Back to Search</a>
+                <app-cdoc-object-navigation [baseSearchUrl]="'tdoc/'" [navigationobjects]="record.tdocnavigationobjects"></app-cdoc-object-navigation>
+                <app-tdoc-simple-search-navigation [record]="record"></app-tdoc-simple-search-navigation>
             </div>
         </div>
     </div>
@@ -31,6 +35,21 @@
                       [tdocs]="tracks"
                       [showImageTrackAndGeoPos]="'true'"
                       [mapCenterPos]="undefined"></app-tdoc-map>
+    </div>
+
+    <div class="container content-container" *ngIf="flgTopImagesAvailable">
+        <app-tdoc-inline-searchpage [label]="'TOP-Bilder'"
+                                    i18n-label="label inline-searchpage TOPIMAGE|Label inline-searchpage TOPIMAGE@@linline-search.label.tdoc.TOPIMAGE"
+                                    [params]="getFiltersForType(record, 'TOPIMAGE')"
+                                    [htmlId]="'TOPIMAGE'"
+                                    [showForm]="false"
+                                    [showLayout]="true"
+                                    [showResultList]="flgShowTopImages"
+                                    [layout]="Layout.BIG"
+                                    [short]="true"
+                                    [searchLinkLabel]="'Durchsuchen'"
+                                    (searchResultFound)="onTopImagesFound($event);"
+                                    [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
     </div>
 
     <div class="container content-container" *ngIf="record.gpsTrackBasefile">

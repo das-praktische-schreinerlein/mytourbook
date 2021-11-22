@@ -8,3 +8,15 @@ div.datatechvaluetable .entry .value {
     text-align: right;
     white-space: nowrap;
 }
+
+div.datatechvaluetableflat .entry {
+    display: inline;
+}
+div.datatechvaluetableflat .entry .label {
+    display: inline;
+}
+div.datatechvaluetableflat .entry .value {
+    display: inline;
+    text-align: right;
+    white-space: nowrap;
+}

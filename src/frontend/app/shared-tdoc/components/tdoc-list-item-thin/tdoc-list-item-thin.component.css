@@ -5,3 +5,7 @@ div.tdoc-list-item-thin {
     padding: 5px;
     font-size: 0.75em;
 }
+
+div.tdoc-list-item-thin h5 {
+    font-size: 0.75rem;
+}

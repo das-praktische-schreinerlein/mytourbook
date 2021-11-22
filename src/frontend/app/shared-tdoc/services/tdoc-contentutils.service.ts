@@ -81,7 +81,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         return this.getImageUrl(image, environment.picsPreviewPathResolution || 'x300');
     }
 
-    getLocationHierarchy(record: TourDocRecord, lastOnly: boolean): any[] {
+    getLocationHierarchy(record: TourDocRecord, lastOnly: boolean, truncate: boolean, maxWordLength: number): any[] {
         if (record.locHirarchie === undefined || record.locHirarchieIds === undefined) {
             return [];
         }
@@ -99,12 +99,35 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         }
 
         for (let i = lastOnly ? lastIndex : 0; i < hierarchyTexts.length; i++) {
+            if (record.type !== 'LOCATION' &&
+                i === 0 && hierarchyTexts.length > 1 &&
+                hierarchyTexts[i] === 'OFFEN' || hierarchyTexts[i] === 'OPEN') {
+                continue;
+            }
+
             if (hierarchyIds[i] !== undefined && hierarchyTexts[i] !== undefined && hierarchyTexts[i].length > 0) {
-                hierarchy.push(['LOCATION_' + hierarchyIds[i], hierarchyTexts[i]]);
+                hierarchy.push(['LOCATION_' + hierarchyIds[i],
+                    this.getLocationName(hierarchyTexts[i], truncate && (i < hierarchyTexts.length - 1), maxWordLength)]);
             }
         }
 
         return hierarchy;
+    }
+
+    getLocationName(name: string, truncate: boolean, maxWordLength: number): string {
+        if (!truncate) {
+            return name;
+        }
+
+        const names = name.split(' ');
+        return names.map(value => {
+            value = value.trim();
+            if (maxWordLength > 0 && value.length > maxWordLength) {
+                return value.slice(0, maxWordLength);
+            }
+
+            return value;
+        }).join(' ');
     }
 
     getStyleClassForRecord(record: TourDocRecord, layout: string): string[] {

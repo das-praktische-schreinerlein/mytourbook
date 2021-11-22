@@ -1,8 +1,18 @@
 <ng-container *ngIf="tdocdatatech !== undefined">
-    <div class="techvaluetable datatechvaluetable">
-        <div *ngIf="tdocdatatech.dur > 0" class="entry"><div class="label">&#x231A;:</div><div class="value">{{tdocdatatech.dur | number : '1.0-1'}} h</div></div>
-        <div *ngIf="tdocdatatech.altAsc > 0" class="entry"><div class="label">&#x2197;:</div><div class="value">{{tdocdatatech.altAsc | number : '1.0'}} Hm</div></div>
-        <div *ngIf="tdocdatatech.altMax > 0" class="entry"><div class="label">max:</div><div class="value">{{tdocdatatech.altMax | number : '1.0'}} m</div></div>
-        <div *ngIf="tdocdatatech.dist > 0" class="entry"><div class="label">&#x2194;:</div><div class="value">{{tdocdatatech.dist | number : '1.0-1'}} km</div></div>
-    </div>
+    <ng-container *ngIf="!flat">
+        <div class="techvaluetable datatechvaluetable">
+            <div *ngIf="tdocdatatech.dur > 0" class="entry"><div class="label">&#x231A;:</div><div class="value">{{tdocdatatech.dur | number : '1.0-1'}} h</div></div>
+            <div *ngIf="tdocdatatech.dist > 0" class="entry"><div class="label">&#x2194;:</div><div class="value">{{tdocdatatech.dist | number : '1.0-1'}} km</div></div>
+            <div *ngIf="tdocdatatech.altMax > 0" class="entry"><div class="label">max:</div><div class="value">{{tdocdatatech.altMax | number : '1.0'}} m</div></div>
+            <div *ngIf="tdocdatatech.altAsc > 0" class="entry"><div class="label">&#x2197;:</div><div class="value">{{tdocdatatech.altAsc | number : '1.0'}} Hm</div></div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="flat">
+        <div class="techvaluetableflat datatechvaluetableflat">
+            <div *ngIf="tdocdatatech.dur > 0" class="entry"><div class="label">&#x231A;:</div><div class="value">{{tdocdatatech.dur | number : '1.0-1'}} h</div></div>
+            <div *ngIf="tdocdatatech.dist > 0" class="entry"><div class="label">&#x2194;:</div><div class="value">{{tdocdatatech.dist | number : '1.0-1'}} km</div></div>
+            <div *ngIf="tdocdatatech.altMax > 0" class="entry"><div class="label">max:</div><div class="value">{{tdocdatatech.altMax | number : '1.0'}} m</div></div>
+            <div *ngIf="tdocdatatech.altAsc > 0" class="entry"><div class="label">&#x2197;:</div><div class="value">{{tdocdatatech.altAsc | number : '1.0'}} Hm</div></div>
+        </div>
+    </ng-container>
 </ng-container>

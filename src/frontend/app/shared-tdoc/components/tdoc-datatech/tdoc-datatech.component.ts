@@ -16,7 +16,7 @@ export class TourDocDataTechComponent extends AbstractInlineComponent {
     public record: TourDocRecord;
 
     @Input()
-    public small? = false;
+    public flat ? = false;
 
     constructor(protected cd: ChangeDetectorRef) {
         super(cd);

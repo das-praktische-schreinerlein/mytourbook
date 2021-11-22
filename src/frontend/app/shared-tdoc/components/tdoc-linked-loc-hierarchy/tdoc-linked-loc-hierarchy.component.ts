@@ -19,7 +19,10 @@ export class TourDocLinkedLocHierarchyComponent extends AbstractInlineComponent 
     public record: TourDocRecord;
 
     @Input()
-    public lastOnly? = false;
+    public lastOnly ? = false;
+
+    @Input()
+    public truncateMaxWordLength ? = undefined;
 
     constructor(private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
                 private cdocRoutingService: CommonDocRoutingService, private contentUtils: TourDocContentUtils,
@@ -33,7 +36,8 @@ export class TourDocLinkedLocHierarchyComponent extends AbstractInlineComponent 
             return;
         }
 
-        this.locations = this.contentUtils.getLocationHierarchy(this.record, this.lastOnly);
+        this.locations = this.contentUtils.getLocationHierarchy(this.record, this.lastOnly,
+            this.truncateMaxWordLength !== undefined, this.truncateMaxWordLength);
     }
 
     public submitShow(event, location): boolean {
