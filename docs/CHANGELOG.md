@@ -2,7 +2,7 @@
  
 # Versions
 
-## 7.2.0 (OPEN)
+## 7.2.0 (2021-11-25)
 - added statistics-section
 - added linked route-attributes for track-routes
 - added modal window to create new entries and append them to selectbox
