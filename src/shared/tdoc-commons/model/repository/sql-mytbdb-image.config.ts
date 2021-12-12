@@ -532,6 +532,8 @@ export class SqlMytbDbImageConfig {
         sortMapping: {
             'date': 'i_date DESC, image.i_id DESC',
             'dateAsc': 'i_date ASC, image.i_id ASC',
+            'trackDate': 'i_date DESC, image.i_id ASC',
+            'trackDateAsc': 'i_date ASC, image.i_id ASC',
             'distance': 'geodist ASC',
             'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
             'dataTechAltDesc': 'k_altitude_asc DESC',

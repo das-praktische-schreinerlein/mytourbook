@@ -141,6 +141,12 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'dateAsc': {
                 'sort': 'datesort_dt asc, name_s ASC'
             },
+            'trackDate': {
+                'sort': 'datesort_dt desc, name_s ASC'
+            },
+            'trackDateAsc': {
+                'sort': 'datesort_dt asc, name_s ASC'
+            },
             'tripDate': {
                 'sort': 'datesort_dt desc, name_s ASC'
             },

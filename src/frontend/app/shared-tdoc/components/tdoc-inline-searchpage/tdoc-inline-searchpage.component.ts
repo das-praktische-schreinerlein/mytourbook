@@ -26,13 +26,19 @@ export class TourDocInlineSearchpageComponent extends
     CommonDocInlineSearchpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
 
     @Input()
-    public showItemMapFlag?: false;
+    public showItemMapFlag ?: false;
 
     @Output()
     public showItemOnMap: EventEmitter<CommonDocRecord> = new EventEmitter();
 
     @Input()
-    public baseSearchUrl? = 'tdoc/';
+    public baseSearchUrl ? = 'tdoc/';
+
+    @Input()
+    public noHeader ? = false;
+
+    @Input()
+    public noCount ? = false;
 
     constructor(appService: GenericAppService, commonRoutingService: CommonRoutingService,
                 tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,

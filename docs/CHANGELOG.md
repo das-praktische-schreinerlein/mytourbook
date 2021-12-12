@@ -2,6 +2,22 @@
  
 # Versions
 
+## 7.3.0
+- added groupby track for image-list, added layoutOptions noCount, noHeader
+
+### new features
+- none
+
+### improvements
+- frontend: added groupby track for image-list, added layoutOptions noCount, noHeader
+
+### bug fixes
+- none
+
+### breaking changes
+- none
+
+
 ## 7.2.0 (2021-11-25)
 - added statistics-section
 - added linked route-attributes for track-routes
