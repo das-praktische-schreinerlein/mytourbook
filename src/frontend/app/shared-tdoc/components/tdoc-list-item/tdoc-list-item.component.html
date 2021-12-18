@@ -143,6 +143,11 @@
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
             <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
             <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
+            <div style="display: inline-block">
+                <app-tdoc-ratepers [record]="listItem.currentRecord" style="float: left"></app-tdoc-ratepers>
+                <app-tdoc-datatech [record]="listItem.currentRecord" style="float: right"></app-tdoc-datatech >
+                <app-tdoc-ratetech [record]="listItem.currentRecord" style="float: left"></app-tdoc-ratetech>
+            </div>
             <p class="card-text">
                 {{listItem.currentRecord.descTxt | truncate : 300 }}
             </p>
@@ -152,10 +157,7 @@
             <ngb-accordion #acc="ngbAccordion" activeIds="">
                 <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.tdoc.title">
                     <ng-template ngbPanelContent>
-                        <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
                         <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord"></app-tdoc-ratepers-difficulty>
-                        <app-tdoc-ratetech [record]="listItem.currentRecord"></app-tdoc-ratetech>
-                        <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
                         <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
 
                         <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
