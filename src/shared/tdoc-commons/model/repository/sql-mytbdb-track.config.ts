@@ -294,10 +294,13 @@ export class SqlMytbDbTrackConfig {
             'noMainFavoriteChildren': {
                 selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noMainFavoriteChildren" AS value,' +
                     ' "noMainFavoriteChildren" AS label, "true" AS id' +
-                    ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id NOT IN ' +
-                    '     (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
-                    '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kategorie_favorites%"))' +
-                    '      AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) noMainFavoriteChildren' +
+                    ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE' +
+                    '      k_id NOT IN (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID' +
+                    '           WHERE p_id IN (SELECT DISTINCT p_id FROM playlist WHERE p_name like "kategorie_favorites"))' +
+                    '      AND (k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)' +
+                    '          OR k_id IN (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID' +
+                    '                        WHERE p_id IN (SELECT DISTINCT p_id FROM playlist WHERE p_name like "favorites")))' +
+                    ' ) noMainFavoriteChildren' +
                     ' ON kategorie.k_id=noMainFavoriteChildren.id',
                 cache: {
                     useCache: false
