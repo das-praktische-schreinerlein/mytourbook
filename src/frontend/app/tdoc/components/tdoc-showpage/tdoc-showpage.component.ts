@@ -271,6 +271,14 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         return filters;
     }
 
+    renderDesc(): string {
+        if (!this.record || this.record.descTxt === undefined || this.record.descTxt.toLowerCase() === 'tododesc') {
+            return;
+        }
+
+        return super.renderDesc();
+    }
+
     protected createNearByFilter(record: TourDocRecord): string {
         return record.geoLat !== undefined
             ? 'nearby:' + [record.geoLat, record.geoLon, 1].join('_') +

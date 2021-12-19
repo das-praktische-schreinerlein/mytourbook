@@ -22,7 +22,7 @@ export class TourDocKeywordsComponent extends CommonDocKeywordsComponent {
             return {
                 keywordsConfig: BeanUtils.getValue(config, 'components.tdoc-keywords.structuredKeywords'),
                 possiblePrefixes: BeanUtils.getValue(config, 'components.tdoc-keywords.possiblePrefixes'),
-                blacklist: []
+                blacklist: BeanUtils.getValue(config, 'components.tdoc-keywords.blacklist')
             };
         } else {
             console.warn('no valid keywordsConfig found for components.tdoc-keywords.structuredKeywords');

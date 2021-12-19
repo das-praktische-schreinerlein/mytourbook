@@ -45,6 +45,14 @@ export class TourDocListItemComponent  extends CommonDocListItemComponent {
         }
     }
 
+    getDesc(): string {
+        if (!this.record || this.record.descTxt === undefined || this.record.descTxt.toLowerCase() === 'tododesc') {
+            return;
+        }
+
+        return this.record.descTxt;
+    }
+
     protected updateData() {
         const tdocRecord: TourDocRecord = <TourDocRecord>this.record;
         if (tdocRecord && this.showItemMapFlag && (tdocRecord.geoLat || tdocRecord.gpsTrackSrc || tdocRecord.gpsTrackBasefile)) {

@@ -128,7 +128,7 @@
                         { "property": "tdocdatatech_altMax", "command": "LE", "expectedValues": ["1500"]}]
                 }
             ],
-            "blacklist": ["OFFEN", "Mom", "Pa", "Micha"]
+            "blacklist": ["TODOKEYWORDS", "OFFEN", "Mom", "Pa", "Micha"]
         },
         "tdoc-persontags": {
             "editPrefix": "",
