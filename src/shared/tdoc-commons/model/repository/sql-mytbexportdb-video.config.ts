@@ -226,7 +226,8 @@ export class SqlMytbExportDbVideoConfig {
             'dataTechDistAsc': 'k_distance ASC',
             'forExport': 'v_date ASC, video.v_id ASC',
             'ratePers': 'v_rate DESC, v_date DESC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, v_date ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, v_date ASC',
             'relevance': 'v_date DESC'
         },
         spartialConfig: {

@@ -446,7 +446,8 @@ export class SqlMytbDbOdImageObjectConfig {
             'odState': 'io_state ASC, image.i_id ASC',
             'odPrecision': 'io_precision DESC, image.i_id ASC',
             'ratePers': 'i_rate DESC, i_date DESC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, i_date ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, i_date ASC',
             'relevance': 'i_date DESC'
         },
         spartialConfig: {

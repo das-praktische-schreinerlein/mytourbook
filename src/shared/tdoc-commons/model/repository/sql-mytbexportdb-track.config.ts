@@ -244,7 +244,8 @@ export class SqlMytbExportDbTrackConfig {
             'dataTechDistAsc': 'k_distance ASC',
             'forExport': 'k_datevon ASC',
             'ratePers': 'k_rate_gesamt DESC, k_datevon DESC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, k_datevon ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, k_datevon ASC',
             'relevance': 'k_datevon DESC'
         },
         filterMapping: {

@@ -301,7 +301,8 @@ export class SqlMytbDbAllConfig {
             'forExport': 'date ASC, id ASC',
             'ratePers': 'rate_gesamt DESC, date DESC',
             'playlistPos': 'pos ASC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, date ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, date ASC',
             'relevance': 'date DESC'
         },
         spartialConfig: {

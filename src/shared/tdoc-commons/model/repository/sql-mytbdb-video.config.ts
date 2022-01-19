@@ -436,6 +436,10 @@ export class SqlMytbDbVideoConfig {
         sortMapping: {
             'date': 'v_date DESC, video.v_id DESC',
             'dateAsc': 'v_date ASC, video.v_id ASC',
+            'trackDate': 'v_date DESC, video.v_id ASC',
+            'trackDateAsc': 'v_date ASC, video.v_id ASC',
+            'tripDate': 'v_date DESC, video.v_id ASC',
+            'tripDateAsc': 'v_date ASC, video.v_id ASC',
             'distance': 'geodist ASC',
             'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
             'dataTechAltDesc': 'k_altitude_asc DESC',
@@ -447,7 +451,8 @@ export class SqlMytbDbVideoConfig {
             'dataTechDistAsc': 'k_distance ASC',
             'forExport': 'v_date ASC, video.v_id ASC',
             'ratePers': 'v_rate DESC, v_date DESC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, v_date ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, v_date ASC',
             'playlistPos': 'video_playlist.vp_pos ASC',
             'relevance': 'v_date DESC'
         },

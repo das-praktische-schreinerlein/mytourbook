@@ -3,13 +3,16 @@
 # Versions
 
 ## 7.3.0
-- added groupby track for image-list, added layoutOptions noCount, noHeader
+- added additional groupby track+trip+location for image/track/trip/video/route-list
+- added layoutOptions noCount, noHeader
 
 ### new features
 - none
 
 ### improvements
-- frontend: added groupby track for image-list, added layoutOptions noCount, noHeader
+- frontend: added additional groupby track+trip+location for image/track/trip/video/route-list
+- frontend: added layoutOptions noCount, noHeader
+- frontend: config - show download-icon only in popup
 
 ### bug fixes
 - none

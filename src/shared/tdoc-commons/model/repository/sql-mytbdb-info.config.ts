@@ -385,6 +385,7 @@ export class SqlMytbDbInfoConfig {
             'type': 'if_typ ASC, if_name ASC',
             'forExport': 'info.if_id ASC, if_name ASC',
             'location': 'l_lochirarchietxt ASC, if_name ASC, if_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, if_name ASC, if_name ASC',
             'relevance': 'info.if_id DESC, if_name ASC'
         },
         spartialConfig: {

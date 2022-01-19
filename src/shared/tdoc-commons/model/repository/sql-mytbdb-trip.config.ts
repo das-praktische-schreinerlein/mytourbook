@@ -429,6 +429,7 @@ export class SqlMytbDbTripConfig {
             'name': 'tr_name ASC',
             'playlistPos': 'trip_playlist.trp_pos ASC',
             'location': 'l_lochirarchietxt ASC, tr_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, tr_name ASC',
             'relevance': 'tr_datevon DESC, tr_name ASC'
         },
         spartialConfig: {

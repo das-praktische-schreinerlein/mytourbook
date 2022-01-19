@@ -619,6 +619,7 @@ export class SqlMytbDbTrackConfig {
             'ratePers': 'k_rate_gesamt DESC, k_datevon DESC, k_name ASC',
             'playlistPos': 'kategorie_playlist.kp_pos ASC',
             'location': 'l_lochirarchietxt ASC, k_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, k_name ASC',
             'relevance': 'k_datevon DESC, k_name ASC'
         },
         filterMapping: {

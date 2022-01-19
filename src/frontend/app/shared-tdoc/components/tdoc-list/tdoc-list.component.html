@@ -19,6 +19,7 @@
                 <ng-container *ngTemplateOutlet="showTrackLine;context:{record: record, idx: idx}"></ng-container>
                 <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
                 <ng-container *ngTemplateOutlet="showRegionLine;context:{record: record, idx: idx}"></ng-container>
+                <ng-container *ngTemplateOutlet="showLocationLine;context:{record: record, idx: idx}"></ng-container>
                 <app-tdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-small"
                                     [record]="record"
                                     [idx]="idx"
@@ -42,6 +43,7 @@
                 <ng-container *ngTemplateOutlet="showTrackLine;context:{record: record, idx: idx}"></ng-container>
                 <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
                 <ng-container *ngTemplateOutlet="showRegionLine;context:{record: record, idx: idx}"></ng-container>
+                <ng-container *ngTemplateOutlet="showLocationLine;context:{record: record, idx: idx}"></ng-container>
                 <app-tdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-flat"
                                           [record]="record"
                                           [idx]="idx"
@@ -65,6 +67,7 @@
                 <ng-container *ngTemplateOutlet="showTrackLine;context:{record: record, idx: idx}"></ng-container>
                 <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
                 <ng-container *ngTemplateOutlet="showRegionLine;context:{record: record, idx: idx}"></ng-container>
+                <ng-container *ngTemplateOutlet="showLocationLine;context:{record: record, idx: idx}"></ng-container>
                 <app-tdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-thin"
                                      [record]="record"
                                      [idx]="idx"
@@ -88,6 +91,7 @@
                 <ng-container *ngTemplateOutlet="showTrackLine;context:{record: record, idx: idx}"></ng-container>
                 <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
                 <ng-container *ngTemplateOutlet="showRegionLine;context:{record: record, idx: idx}"></ng-container>
+                <ng-container *ngTemplateOutlet="showLocationLine;context:{record: record, idx: idx}"></ng-container>
                 <app-tdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-big"
                                 [record]="record"
                                 [idx]="idx"
@@ -109,16 +113,18 @@
 </div>
 
 <ng-template #showTripLine let-record="record" let-idx="idx">
-    <ng-container *ngIf="searchResult.searchForm.type==='track' &&
-                    (searchResult.searchForm.sort==='tripDate' || searchResult.searchForm.sort==='tripDateAsc')">
-        <ng-container *ngIf="record['type'] === 'TRACK' && record['tripId'] === undefined && idx > 0 &&
-                        record.tripId !== searchResult.currentRecords[idx - 1].tripId">
+    <ng-container *ngIf="(searchResult.searchForm.type === 'track' || searchResult.searchForm.type === 'image'
+                    || searchResult.searchForm.type === 'video') &&
+                    (record['type'] === 'TRACK' || record['type'] === 'IMAGE' || record['type'] === 'VIDEO') &&
+                    (searchResult.searchForm.sort === 'tripDate' || searchResult.searchForm.sort === 'tripDateAsc')">
+        <ng-container *ngIf="record['tripId'] === undefined &&
+                        idx > 0 && record.tripId !== searchResult.currentRecords[idx - 1].tripId">
             <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
                  class="container content-container app-tdoc-list-item app-tdoc-list-item-flat app-tdoc-list-notripline">
                 <span i18n="label tdoc-list showTripLine no trip|Label tdoc-list showTripLine no trip@@tdoc-list.showTripLine.label.noTrip">Tagestrips</span>
             </div>
         </ng-container>
-        <ng-container *ngIf="record['type'] === 'TRACK' && record['tripId'] !== undefined &&
+        <ng-container *ngIf="record['tripId'] !== undefined &&
                         (idx === 0 || (idx > 0 && record.tripId !== searchResult.currentRecords[idx - 1].tripId))">
             <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
                  class="container content-container app-tdoc-list-item app-tdoc-list-item-flat app-tdoc-list-tripline">
@@ -137,16 +143,17 @@
 </ng-template>
 
 <ng-template #showRegionLine let-record="record" let-idx="idx">
-    <ng-container *ngIf="searchResult.searchForm.type==='route' &&
-                    searchResult.searchForm.sort==='region'">
-        <ng-container *ngIf="record['type'] === 'ROUTE' && calcRegion(record) === undefined &&
+    <ng-container *ngIf="searchResult.searchForm.type === 'route' &&
+                    searchResult.searchForm.sort === 'region' &&
+                    record['type'] === 'ROUTE'">
+        <ng-container *ngIf="calcRegion(record) === undefined &&
                         idx > 0 && (calcRegion(record) !== calcRegion(searchResult.currentRecords[idx - 1]))">
             <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
                  class="container content-container app-tdoc-list-item app-tdoc-list-item-flat">
                 <span i18n="label tdoc-list showRegionLine no region|Label tdoc-list showRegionLine no region@@tdoc-list.showRegionLine.label.noRegion">Kein Gebiet</span>
             </div>
         </ng-container>
-        <ng-container *ngIf="record['type'] === 'ROUTE' && calcRegion(record)  &&
+        <ng-container *ngIf="calcRegion(record) &&
                         (idx === 0 || (idx > 0 && calcRegion(record) !== calcRegion(searchResult.currentRecords[idx - 1])))">
             <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
                  class="container content-container app-tdoc-list-item app-tdoc-list-item-flat">
@@ -157,16 +164,17 @@
 </ng-template>
 
 <ng-template #showTrackLine let-record="record" let-idx="idx">
-    <ng-container *ngIf="searchResult.searchForm.type==='image' &&
-                    (searchResult.searchForm.sort==='trackDate' || searchResult.searchForm.sort==='trackDateAsc')">
-        <ng-container *ngIf="record['type'] === 'IMAGE' && record['trackId'] === undefined && idx > 0 &&
-                        record.trackId !== searchResult.currentRecords[idx - 1].trackId">
+    <ng-container *ngIf="(searchResult.searchForm.type === 'image' || searchResult.searchForm.type === 'video') &&
+                    (searchResult.searchForm.sort === 'trackDate' || searchResult.searchForm.sort === 'trackDateAsc') &&
+                    (record['type'] === 'IMAGE' || record['type'] === 'VIDEO')">
+        <ng-container *ngIf="record['trackId'] === undefined &&
+                        idx > 0 && record.trackId !== searchResult.currentRecords[idx - 1].trackId">
             <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
                  class="container content-container app-tdoc-list-item app-tdoc-list-item-flat app-tdoc-list-notrackline">
                 <span i18n="label tdoc-list showTrackLine no track|Label tdoc-list showTrackLine no track@@tdoc-list.showTrackLine.label.noTrack"> </span>
             </div>
         </ng-container>
-        <ng-container *ngIf="record['type'] === 'IMAGE' && record['trackId'] !== undefined &&
+        <ng-container *ngIf="record['trackId'] !== undefined &&
                         (idx === 0 || (idx > 0 && record.trackId !== searchResult.currentRecords[idx - 1].trackId))">
             <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
                  class="container content-container app-tdoc-list-item app-tdoc-list-item-flat app-tdoc-list-trackline">
@@ -177,6 +185,37 @@
                                             [showForm]="false"
                                             [layout]="Layout.FLAT"
                                             [noCount]=true
+                                            [showResultList]="true"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #showLocationLine let-record="record" let-idx="idx">
+    <ng-container *ngIf="(searchResult.searchForm.type === 'route' || searchResult.searchForm.type === 'trip' || searchResult.searchForm.type === 'track'
+                    || searchResult.searchForm.type === 'image' || searchResult.searchForm.type === 'video') &&
+                    (searchResult.searchForm.sort === 'locationDetails') &&
+                    (record['type'] === 'ROUTE' || record['type'] === 'TRACK' || record['type'] === 'TRIP'
+                     || record['type'] === 'IMAGE' || record['type'] === 'VIDEO')">
+        <ng-container *ngIf="record['locId'] === undefined &&
+                        idx > 0 && record.locId !== searchResult.currentRecords[idx - 1].locId">
+            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
+                 class="container content-container app-tdoc-list-item app-tdoc-list-item-flat app-tdoc-list-nolocationline">
+                <span i18n="label tdoc-list showLocationLine no location|Label tdoc-list showLocationLine no location@@tdoc-list.showLocationLine.label.noLocation">Keine Region</span>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="record['locId'] !== undefined &&
+                        (idx === 0 || (idx > 0 && record.locId !== searchResult.currentRecords[idx - 1].locId))">
+            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
+                 class="container content-container app-tdoc-list-item app-tdoc-list-item-flat app-tdoc-list-locationline">
+                <app-tdoc-inline-searchpage [label]="'Location'"
+                                            i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.tdoc.LOCATION"
+                                            [params]="{'moreFilter': 'loc_id_i:' + record['locId'], type: 'LOCATION'}"
+                                            [htmlId]="'LOCATION'"
+                                            [showForm]="false"
+                                            [noCount]=true
+                                            [layout]="Layout.THIN"
                                             [showResultList]="true"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </div>

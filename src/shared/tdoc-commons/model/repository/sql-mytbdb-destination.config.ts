@@ -509,6 +509,7 @@ export class SqlMytbDbDestinationConfig {
             'ratePers': 'd_rate_gesamt DESC, d_datevon DESC, d_name ASC',
             'name': 'd_name ASC',
             'location': 'l_lochirarchietxt ASC, d_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC',
             'relevance': 'd_datevon DESC, d_name ASC'
         },
         spartialConfig: {

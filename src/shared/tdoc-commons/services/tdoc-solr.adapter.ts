@@ -194,6 +194,9 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'location': {
                 'sort': 'loc_lochirarchie_s asc, name_s ASC'
             },
+            'locationDetails': {
+                'sort': 'loc_lochirarchie_s asc, name_s ASC'
+            },
             'region': {
                 'sort': 'data_info_region_s asc, loc_lochirarchie_s asc, name_s ASC'
             },

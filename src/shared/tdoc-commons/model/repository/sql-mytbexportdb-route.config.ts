@@ -271,7 +271,8 @@ export class SqlMytbExportDbRouteConfig {
             'dataTechDistAsc': 't_route_m ASC',
             'forExport': 'tour.t_id ASC',
             'ratePers': 't_rate_gesamt DESC, t_datevon DESC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, t_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, t_name ASC',
             'relevance': 't_datevon DESC'
         },
         spartialConfig: {

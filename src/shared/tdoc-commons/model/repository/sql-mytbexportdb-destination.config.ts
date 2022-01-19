@@ -243,7 +243,8 @@ export class SqlMytbExportDbDestinationConfig {
             'dataTechDistAsc': 'd_route_m ASC',
             'forExport': 'destination.d_id ASC',
             'ratePers': 'd_rate_gesamt DESC, d_datevon DESC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, d_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, d_name ASC',
             'relevance': 'd_datevon DESC'
         },
         spartialConfig: {

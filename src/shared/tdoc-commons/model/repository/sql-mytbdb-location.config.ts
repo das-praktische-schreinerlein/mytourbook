@@ -414,6 +414,7 @@ export class SqlMytbDbLocationConfig {
             'name': 'l_name ASC',
             'playlistPos': 'location_playlist.lp_pos ASC',
             'location': 'l_lochirarchietxt ASC, l_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, l_name ASC',
             'relevance': 'l_name ASC, l_name ASC'
         },
         spartialConfig: {

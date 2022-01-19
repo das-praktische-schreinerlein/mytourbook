@@ -748,6 +748,7 @@ export class SqlMytbDbRouteConfig {
             'ratePers': 't_rate_gesamt DESC, t_datevon DESC, t_name ASC',
             'playlistPos': 'tour_playlist.tp_pos ASC',
             'location': 'l_lochirarchietxt ASC, t_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, t_name ASC',
             'region': 't_desc_gebiet ASC, l_lochirarchietxt ASC, t_name ASC',
             'relevance': 't_datevon DESC, t_name ASC'
         },

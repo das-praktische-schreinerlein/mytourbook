@@ -226,7 +226,8 @@ export class SqlMytbExportDbImageConfig {
             'dataTechDistAsc': 'k_distance ASC',
             'forExport': 'i_date ASC, image.i_id ASC',
             'ratePers': 'i_rate DESC, i_date DESC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, i_date ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, i_date ASC',
             'relevance': 'i_date DESC'
         },
         spartialConfig: {

@@ -534,6 +534,8 @@ export class SqlMytbDbImageConfig {
             'dateAsc': 'i_date ASC, image.i_id ASC',
             'trackDate': 'i_date DESC, image.i_id ASC',
             'trackDateAsc': 'i_date ASC, image.i_id ASC',
+            'tripDate': 'i_date DESC, image.i_id ASC',
+            'tripDateAsc': 'i_date ASC, image.i_id ASC',
             'distance': 'geodist ASC',
             'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
             'dataTechAltDesc': 'k_altitude_asc DESC',
@@ -546,7 +548,8 @@ export class SqlMytbDbImageConfig {
             'forExport': 'i_date ASC, image.i_id ASC',
             'ratePers': 'i_rate DESC, i_date DESC',
             'playlistPos': 'image_playlist.ip_pos ASC',
-            'location': 'l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, i_date ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, i_date ASC',
             'relevance': 'i_date DESC'
         },
         spartialConfig: {

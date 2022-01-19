@@ -159,6 +159,7 @@ export class SqlMytbExportDbLocationConfig {
         sortMapping: {
             'distance': 'geodist ASC',
             'location': 'l_lochirarchietxt ASC',
+            'locationDetails': 'l_lochirarchietxt ASC',
             'relevance': 'l_lochirarchietxt ASC'
         },
         spartialConfig: {
