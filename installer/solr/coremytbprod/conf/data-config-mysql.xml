@@ -549,14 +549,26 @@
 
             <entity name='image'
                     query="
-                        SELECT
-                             image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        (SELECT image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                            FROM image
+                                   INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                                   INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
+                                   INNER JOIN tour ON tour.t_id=kategorie_full.t_id
+                            WHERE p_id in (18)
+                              AND tour.d_id = '${destination.d_id}'
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
+                            limit 1
+                        )
+                        UNION
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id = kategorie_full.k_id
                              INNER JOIN tour ON tour.t_id=kategorie_full.t_id
                         WHERE
                             tour.d_id = '${destination.d_id}'
-                            AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
-                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
+                            AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
+                            limit 1)"
                     deltaImportQuery="
                         SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
@@ -908,11 +920,19 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                            FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
+                            WHERE p_id in (18)
+                                AND image.k_id IN ('${track.k_id}')
+                            ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc
+                            limit 1
+                        )
+                        UNION
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image
-                        WHERE k_id = '${track.k_id}'
+                            WHERE image.k_id IN ('${track.k_id}')
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
-                        limit 10"
+                            limit 1)"
                     deltaImportQuery="
                         SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
@@ -1248,13 +1268,24 @@
 
             <entity name='image'
                     query="
-                        SELECT
-                             image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                            FROM image
+                                   INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                                   INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
+                            WHERE p_id in (18)
+                              AND kategorie_full.t_id = ${route.t_id}
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
+                            limit 1
+                        )
+                        UNION
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                         WHERE
                             kategorie_full.t_id = ${route.t_id}
-                            AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
-                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
+                            limit 1)"
                     deltaImportQuery="
                         SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
@@ -1490,11 +1521,23 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
-                        FROM image
-                        WHERE k_id in (${location.l_katids} 0)
-                          AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
-                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                            FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
+                                INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                            WHERE p_id in (18)
+                                AND image.k_id IN (${location.l_katids} 0)
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
+                            limit 1
+                        )
+                        UNION
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                            FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                            WHERE
+                                image.k_id IN (${location.l_katids} 0)
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
+                            limit 1)"
                     deltaImportQuery="
                         SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
@@ -2157,11 +2200,24 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                            FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
+                                INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                            WHERE p_id in (18)
+                                AND kategorie_full.tr_id in (${trip.tr_id})
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
+                            limit 1
+                        )
+                        UNION
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image
-                        WHERE k_id in (select k_id FROM kategorie_full WHERE tr_id in (${trip.tr_id}))
-                          AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
-                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                                INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                            WHERE
+                                kategorie_full.tr_id in (${trip.tr_id})
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
+                            limit 1)"
                     deltaImportQuery="
                         SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url
                         FROM image WHERE i_id='${dih.delta.id}'"
@@ -2413,11 +2469,23 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url
-                        FROM image
-                        WHERE k_id in (select k_id FROM kategorie_full WHERE n_id in (${news.n_id}))
-                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
-                        limit 10"
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                            FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
+                                INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                            WHERE p_id in (18)
+                                AND kategorie_full.n_id in (${news.n_id})
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
+                            limit 1
+                        )
+                        UNION
+                        (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                            FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                            WHERE
+                                kategorie_full.n_id in (${news.n_id})
+                                AND (I_PERSONS IS NULL)
+                            ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
+                            limit 1)"
                     deltaImportQuery="
                         SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url
                         FROM image WHERE i_id='${dih.delta.id}'"

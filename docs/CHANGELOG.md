@@ -5,6 +5,7 @@
 ## 7.3.0
 - added additional groupby track+trip+location for image/track/trip/video/route-list
 - added layoutOptions noCount, noHeader
+- improved selection of teaser-image
 
 ### new features
 - none
@@ -13,6 +14,7 @@
 - frontend: added additional groupby track+trip+location for image/track/trip/video/route-list
 - frontend: added layoutOptions noCount, noHeader
 - frontend: config - show download-icon only in popup
+- solr: improved selection of teaser-image
 
 ### bug fixes
 - none
