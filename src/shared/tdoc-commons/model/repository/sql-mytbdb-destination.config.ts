@@ -53,7 +53,9 @@ export class SqlMytbDbDestinationConfig {
                     ' INNER JOIN kategorie ON tour.k_id=kategorie.k_id ' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
-                    'WHERE destination.d_id IN (":id") and p_id in (18)',
+                    'WHERE destination.d_id IN (":id") and p_id in (18) ' +
+                    'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
+                    'LIMIT 1',
                 parameterNames: ['id']
             },
             {

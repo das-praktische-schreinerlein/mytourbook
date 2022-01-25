@@ -79,7 +79,9 @@ export class SqlMytbDbLocationConfig {
                 sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
                     'FROM kategorie' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
-                    'WHERE kategorie.l_id IN (:id) order by i_rate desc limit 0, 1',
+                    'WHERE kategorie.l_id IN (:id) ' +
+                    'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
+                    'LIMIT 1',
                 parameterNames: ['id']
             },
             {

@@ -24,24 +24,32 @@ export class SqlMytbDbAllConfig {
             {
                 profile: 'image',
                 sql: 'SELECT * FROM (' +
-                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, i_rate ' +
+                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, ' +
+                    '      I_RATE_MOTIVE, I_RATE_WICHTIGKEIT, I_RATE, kategorie.k_rate_gesamt, image.I_ID ' +
                     '  FROM image' +
+                    '      INNER JOIN kategorie ON image.k_id=kategorie.k_id' +
                     '  WHERE "IMAGE" = ":type" AND image.i_id IN (:id)' +
                     ' UNION ' +
-                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, i_rate ' +
+                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, ' +
+                    '      I_RATE_MOTIVE, I_RATE_WICHTIGKEIT, I_RATE, kategorie.k_rate_gesamt, image.I_ID ' +
                     '  FROM kategorie INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     '  WHERE "TRIP" = ":type" AND kategorie.tr_id IN (:id)' +
                     ' UNION ' +
-                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, i_rate ' +
+                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, ' +
+                    '      I_RATE_MOTIVE, I_RATE_WICHTIGKEIT, I_RATE, kategorie.k_rate_gesamt, image.I_ID ' +
                     '  FROM tour INNER JOIN kategorie ON tour.k_id=kategorie.k_id' +
                     '   INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     '   INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     '  WHERE "ROUTE" = ":type" AND tour.t_id IN (:id) and p_id in (18)' +
                     ' UNION ' +
-                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, i_rate ' +
+                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, ' +
+                    '      I_RATE_MOTIVE, I_RATE_WICHTIGKEIT, I_RATE, kategorie.k_rate_gesamt, image.I_ID ' +
                     '  FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
+                    '      INNER JOIN kategorie ON image.k_id=kategorie.k_id' +
                     '  WHERE "TRACK" = ":type" AND image.k_id IN (:id) and p_id in (18)' +
-                    ') allimage  order by i_rate desc limit 0, 1',
+                    ') allimage ' +
+                    'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, k_rate_gesamt DESC, I_ID DESC ' +
+                    'LIMIT 1',
                 parameterNames: ['id', 'type']
             },
             {
