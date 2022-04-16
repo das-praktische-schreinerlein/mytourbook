@@ -418,7 +418,7 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocLinkedRouteRecordValidator.instance.validate(<TourDocLinkedRouteRecord>doc, errFieldPrefix);
             case 'tdoclinkedinfos':
                 return TourDocLinkedInfoRecordValidator.instance.validate(<TourDocLinkedInfoRecord>doc, errFieldPrefix);
-            case 'tdoclinkedplaylist':
+            case 'tdoclinkedplaylists':
                 return TourDocLinkedPlaylistRecordValidator.instance.validate(<TourDocLinkedPlaylistRecord>doc, errFieldPrefix);
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validate(<TourDocObjectDetectionImageObjectRecord>doc,
@@ -452,7 +452,7 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocLinkedRouteRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdoclinkedinfos':
                 return TourDocLinkedInfoRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
-            case 'tdoclinkedplaylist':
+            case 'tdoclinkedplaylists':
                 return TourDocLinkedPlaylistRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
