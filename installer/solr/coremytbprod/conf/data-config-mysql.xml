@@ -556,7 +556,7 @@
                                    INNER JOIN tour ON tour.t_id=kategorie_full.t_id
                             WHERE p_id in (18)
                               AND tour.d_id = '${destination.d_id}'
-                                AND (I_PERSONS IS NULL)
+                              AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
                             limit 1
                         )
@@ -566,7 +566,7 @@
                              INNER JOIN tour ON tour.t_id=kategorie_full.t_id
                         WHERE
                             tour.d_id = '${destination.d_id}'
-                            AND (I_PERSONS IS NULL)
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
                             limit 1)"
                     deltaImportQuery="
@@ -1274,7 +1274,7 @@
                                    INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
                             WHERE p_id in (18)
                               AND kategorie_full.t_id = ${route.t_id}
-                                AND (I_PERSONS IS NULL)
+                              AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
                             limit 1
                         )
@@ -1283,7 +1283,7 @@
                         FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                         WHERE
                             kategorie_full.t_id = ${route.t_id}
-                                AND (I_PERSONS IS NULL)
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
                             limit 1)"
                     deltaImportQuery="
@@ -1526,7 +1526,7 @@
                                 INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                             WHERE p_id in (18)
                                 AND image.k_id IN (${location.l_katids} 0)
-                                AND (I_PERSONS IS NULL)
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
                             limit 1
                         )
@@ -1535,7 +1535,7 @@
                             FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                             WHERE
                                 image.k_id IN (${location.l_katids} 0)
-                                AND (I_PERSONS IS NULL)
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
                             limit 1)"
                     deltaImportQuery="
@@ -2205,7 +2205,7 @@
                                 INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                             WHERE p_id in (18)
                                 AND kategorie_full.tr_id in (${trip.tr_id})
-                                AND (I_PERSONS IS NULL)
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
                             limit 1
                         )
@@ -2215,7 +2215,7 @@
                                 INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                             WHERE
                                 kategorie_full.tr_id in (${trip.tr_id})
-                                AND (I_PERSONS IS NULL)
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
                             limit 1)"
                     deltaImportQuery="
@@ -2474,7 +2474,7 @@
                                 INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                             WHERE p_id in (18)
                                 AND kategorie_full.n_id in (${news.n_id})
-                                AND (I_PERSONS IS NULL)
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
                             limit 1
                         )
@@ -2483,7 +2483,7 @@
                             FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                             WHERE
                                 kategorie_full.n_id in (${news.n_id})
-                                AND (I_PERSONS IS NULL)
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
                             limit 1)"
                     deltaImportQuery="
