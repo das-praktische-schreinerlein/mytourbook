@@ -496,7 +496,7 @@ export class SqlMytbDbRouteConfig {
                 selectField: 'CONCAT("ac_", tour.t_typ)'
             },
             'track_id_i': {
-                filterFields: ['kategorie.k_id'],
+                filterFields: ['kategorie.k_id', 'kategorie_tour.k_id'],
                 action: AdapterFilterActions.IN_NUMBER
             },
             'track_id_is': {
@@ -505,7 +505,7 @@ export class SqlMytbDbRouteConfig {
                     ' FROM kategorie LEFT JOIN tour ON kategorie.t_id = tour.t_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
-                filterFields: ['kategorie.k_id'],
+                filterFields: ['kategorie.k_id', 'kategorie_tour.k_id'],
                 action: AdapterFilterActions.IN_NUMBER
             },
             'trip_id_i': {

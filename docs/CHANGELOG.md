@@ -17,7 +17,7 @@
 - solr: improved selection of teaser-image
 
 ### bug fixes
-- none
+- backend: fixed track-filter for route
 
 ### breaking changes
 - none
