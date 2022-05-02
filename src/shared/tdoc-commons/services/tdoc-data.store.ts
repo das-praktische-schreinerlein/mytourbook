@@ -306,6 +306,12 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                 'in_number': searchForm.techDataDuration.split(/,/)
             };
         }
+        if (searchForm.techDataSections !== undefined && searchForm.techDataSections.length > 0) {
+            filter = filter || {};
+            filter['data_tech_sections_facet_ss'] = {
+                'in': searchForm.techDataSections.split(/,/)
+            };
+        }
         if (searchForm.techRateOverall !== undefined && searchForm.techRateOverall.length > 0) {
             filter = filter || {};
             filter['rate_tech_overall_ss'] = {

@@ -23,6 +23,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         techDataAltitudeMax: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataDistance: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataDuration: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        techDataSections: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.NAME, new TextValidationRule(false)),
         techRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         personalRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         personalRateDifficulty: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
@@ -47,6 +48,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
     techDataAltitudeMax: string;
     techDataDistance: string;
     techDataDuration: string;
+    techDataSections: string;
     techRateOverall: string;
     personalRateOverall: string;
     personalRateDifficulty: string;
@@ -72,6 +74,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         this.techDataAltitudeMax = values['techDataAltitudeMax'] || '';
         this.techDataDistance = values['techDataDistance'] || '';
         this.techDataDuration = values['techDataDuration'] || '';
+        this.techDataSections = values['techDataSections'] || '';
         this.techRateOverall = values['techRateOverall'] || '';
         this.personalRateOverall = values['personalRateOverall'] || '';
         this.personalRateDifficulty = values['personalRateDifficulty'] || '';
@@ -121,6 +124,8 @@ export class TourDocSearchFormFactory {
             TourDocSearchForm.tdocFields.techDataDistance.validator.sanitize(values['techDataDistance']) || '';
         sanitizedValues.techDataDuration =
             TourDocSearchForm.tdocFields.techDataDuration.validator.sanitize(values['techDataDuration']) || '';
+        sanitizedValues.techDataSections =
+            TourDocSearchForm.tdocFields.techDataSections.validator.sanitize(values['techDataSections']) || '';
         sanitizedValues.techRateOverall = TourDocSearchForm.tdocFields.techRateOverall.validator.sanitize(values['techRateOverall']) || '';
         sanitizedValues.personalRateOverall = TourDocSearchForm.tdocFields.personalRateOverall.validator.sanitize(
             values['personalRateOverall']) || '';
@@ -174,6 +179,7 @@ export class TourDocSearchFormValidator {
         state = TourDocSearchForm.tdocFields.techDataAscent.validator.isValid(values['techDataAscent']) && state;
         state = TourDocSearchForm.tdocFields.techDataDistance.validator.isValid(values['techDataDistance']) && state;
         state = TourDocSearchForm.tdocFields.techDataDuration.validator.isValid(values['techDataDuration']) && state;
+        state = TourDocSearchForm.tdocFields.techDataSections.validator.isValid(values['techDataSections']) && state;
         state = TourDocSearchForm.tdocFields.techRateOverall.validator.isValid(values['techRateOverall']) && state;
         state = TourDocSearchForm.tdocFields.personalRateOverall.validator.isValid(values['personalRateOverall']) && state;
         state = TourDocSearchForm.tdocFields.personalRateDifficulty.validator.isValid(values['personalRateDifficulty']) && state;

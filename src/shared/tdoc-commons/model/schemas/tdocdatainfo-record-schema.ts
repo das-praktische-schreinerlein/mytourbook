@@ -12,6 +12,7 @@ export const TourDocDataInfoRecordSchema = new Schema({
         destloc: {type: 'string'},
         guides: {type: 'string'},
         region: {type: 'string'},
+        sectionDetails: {type: 'string'},
         tdoc_id: {type: 'string', indexed: true}
     }
 });

@@ -466,6 +466,19 @@
                                                  (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                     </ng-container>
                 </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectTechDataSections.length > 0">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataSections').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataSections label|Label for filter: techDataSections@@label.searchform.tdoc.techDataSections">Etappen:</label>
+                    <ng-container *ngIf="optionsSelectTechDataSections.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectTechDataSections"
+                                                 [settings]="settingsSelectTechDataSections"
+                                                 [texts]="textsSelectTechDataSections"
+                                                 formControlName="techDataSections"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
             </div>
         </fieldset>
 

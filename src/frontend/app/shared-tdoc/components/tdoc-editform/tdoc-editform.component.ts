@@ -492,6 +492,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocdatainfo.destloc': {},
                 'tdocdatainfo.guides': {},
                 'tdocdatainfo.region': {},
+                'tdocdatainfo.sectionDetails': {},
                 'tdocinfo.name': {},
                 'tdocinfo.desc': {},
                 'tdocinfo.shortDesc': {},

@@ -109,6 +109,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['data_tech_alt_max_i'] = BeanUtils.getValue(props, 'tdocdatatech.altMax');
         values['data_tech_dist_f'] = BeanUtils.getValue(props, 'tdocdatatech.dist');
         values['data_tech_dur_f'] = BeanUtils.getValue(props, 'tdocdatatech.dur');
+        values['data_tech_sections_s'] = BeanUtils.getValue(props, 'tdocdatatech.sections');
 
         values['rate_tech_overall_s'] = BeanUtils.getValue(props, 'tdocratetech.overall');
         values['rate_tech_ks_s'] = BeanUtils.getValue(props, 'tdocratetech.ks');
@@ -131,6 +132,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['data_info_region_s'] = BeanUtils.getValue(props, 'tdocdatainfo.region');
         values['data_info_baseloc_s'] = BeanUtils.getValue(props, 'tdocdatainfo.baseloc');
         values['data_info_destloc_s'] = BeanUtils.getValue(props, 'tdocdatainfo.destloc');
+        values['data_info_section_details_s'] = BeanUtils.getValue(props, 'tdocdatainfo.sectionDetails');
 
         values['info_name_s'] = BeanUtils.getValue(props, 'tdocinfo.name');
         values['info_desc_txt'] = BeanUtils.getValue(props, 'tdocinfo.desc');
@@ -347,6 +349,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         dataTechValues['altMax'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_max_i', undefined);
         dataTechValues['dist'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_dist_f', undefined);
         dataTechValues['dur'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_dur_f', undefined);
+        dataTechValues['sections'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_tech_sections_s', undefined);
         let dataTechSet = false;
         for (const field in dataTechValues) {
             if (dataTechValues[field] !== undefined && dataTechValues[field] !== 0) {
@@ -416,6 +419,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         dataInfoValues['region'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_info_region_s', undefined);
         dataInfoValues['baseloc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_info_baseloc_s', undefined);
         dataInfoValues['destloc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_info_destloc_s', undefined);
+        dataInfoValues['sectionDetails'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_info_section_details_s', undefined);
         let dataInfoSet = false;
         for (const field in dataInfoValues) {
             if (dataInfoValues[field] !== undefined && (dataInfoValues[field] + '').length > 0) {

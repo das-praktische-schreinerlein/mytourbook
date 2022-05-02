@@ -17,6 +17,7 @@ export interface TourDocDataInfoRecordType extends BaseEntityRecordType {
     destloc: string;
     guides: string;
     region: string;
+    sectionDetails: string;
 }
 
 export class TourDocDataInfoRecord extends BaseEntityRecord implements TourDocDataInfoRecordType {
@@ -25,6 +26,7 @@ export class TourDocDataInfoRecord extends BaseEntityRecord implements TourDocDa
         destloc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         guides: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         region: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        sectionDetails: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
@@ -32,6 +34,7 @@ export class TourDocDataInfoRecord extends BaseEntityRecord implements TourDocDa
     destloc: string;
     guides: string;
     region: string;
+    sectionDetails: string;
     tdoc_id: string;
 
     toString() {

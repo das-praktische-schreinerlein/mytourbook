@@ -59,6 +59,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         moreFilterMap.set('techDataAscent', searchForm.techDataAscent);
         moreFilterMap.set('techDataDistance', searchForm.techDataDistance);
         moreFilterMap.set('techDataDuration', searchForm.techDataDuration);
+        moreFilterMap.set('techDataSections', searchForm.techDataSections);
         moreFilterMap.set('techRateOverall', searchForm.techRateOverall);
         moreFilterMap.set('personalRateDifficulty', searchForm.personalRateDifficulty);
         moreFilterMap.set('personalRateOverall', searchForm.personalRateOverall);
@@ -138,8 +139,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('locId:'), 'locId:', ',') : '');
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
-            ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techRateOverall:',
-             'personalRateOverall:', 'personalRateDifficulty:',
+            ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techDataSections:',
+             'techRateOverall:', 'personalRateOverall:', 'personalRateDifficulty:',
              'objectDetectionCategory:', 'objectDetectionDetector:', 'objectDetectionKey:', 'objectDetectionPrecision:',
              'objectDetectionState:', 'routeAttr:', 'routeAttrPart:', 'dashboardFilter:']);
         let moreFilter = '';
@@ -156,6 +157,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techDataDistance:'), 'techDataDistance:', ',') : '');
         const techDataDuration: string = (moreFilterValues.has('techDataDuration:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techDataDuration:'), 'techDataDuration:', ',') : '');
+        const techDataSections: string = (moreFilterValues.has('techDataSections:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techDataSections:'), 'techDataSections:', ',') : '');
         const techRateOverall: string = (moreFilterValues.has('techRateOverall:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techRateOverall:'), 'techRateOverall:', ',') : '');
         const personalRateOverall: string = (moreFilterValues.has('personalRateOverall:') ?
@@ -264,6 +267,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.techDataDuration = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataDuration, /^ungefiltert$/, ''),
             defaults['techDataDuration'], '');
+        searchForm.techDataSections = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(techDataSections, /^ungefiltert$/, ''),
+            defaults['techDataSections'], '');
         searchForm.techDataDistance = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataDistance, /^ungefiltert$/, ''),
             defaults['techDataDistance'], '');
@@ -338,6 +344,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.techDataAscent, 'hrt_techDataAscent', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.techDataDistance, 'hrt_techDataDistance', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.techDataDuration, 'hrt_techDataDuration', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.techDataSections, 'hrt_techDataSections', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.techRateOverall, 'hrt_techRateOverall', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.personalRateOverall, 'hrt_personalRateOverall',
             undefined, true, 'filter.tdocratepers.gesamt.'));

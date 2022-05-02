@@ -14,6 +14,7 @@ export const TourDocDataTechRecordSchema = new Schema({
         altMin: {type: 'number'},
         dist: {type: 'number'},
         dur: {type: 'number'},
+        sections: {type: 'string'},
         tdoc_id: {type: 'string', indexed: true}
     }
 });

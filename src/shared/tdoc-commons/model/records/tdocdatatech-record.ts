@@ -8,7 +8,7 @@ import {
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {
     GenericValidatorDatatypes,
-    IdValidationRule,
+    IdValidationRule, NameValidationRule,
     NumberValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
@@ -19,6 +19,7 @@ export interface TourDocDataTechRecordType extends BaseEntityRecordType {
     altMin: number;
     dist: number;
     dur: number;
+    sections: string;
 }
 
 export class TourDocDataTechRecord extends BaseEntityRecord implements TourDocDataTechRecordType {
@@ -35,6 +36,8 @@ export class TourDocDataTechRecord extends BaseEntityRecord implements TourDocDa
             new NumberValidationRule(false, 0, 99999, undefined)),
         dur: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
             new NumberValidationRule(false, 0, 999999, undefined)),
+        sections: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME,
+            new NameValidationRule(false)),
         tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
@@ -44,6 +47,7 @@ export class TourDocDataTechRecord extends BaseEntityRecord implements TourDocDa
     altMin: number;
     dist: number;
     dur: number;
+    sections: string;
     tdoc_id: string;
 
     toString() {
@@ -55,6 +59,7 @@ export class TourDocDataTechRecord extends BaseEntityRecord implements TourDocDa
             '  altMin: ' + this.altMin + ',\n' +
             '  dist: ' + this.dist + ',\n' +
             '  dur: ' + this.dur + ',\n' +
+            '  sections: ' + this.sections + ',\n' +
             '  tdoc_id: ' + this.tdoc_id + '' +
             '}';
     }

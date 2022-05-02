@@ -392,6 +392,7 @@
     "hrt_techDataAscent": "ascent:",
     "hrt_techDataDistance": "distance:",
     "hrt_techDataDuration": "duration:",
+    "hrt_techDataSections": "sections:",
     "hrt_techRateOverall": "tech rate:",
     "hrt_personalRateOverall": "personal rate:",
     "hrt_personalRateDifficulty": "personal difficulty:",

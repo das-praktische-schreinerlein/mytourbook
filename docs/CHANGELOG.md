@@ -6,9 +6,10 @@
 - added additional groupby track+trip+location for image/track/trip/video/route-list
 - added layoutOptions noCount, noHeader
 - improved selection of teaser-image
-
+- added sectionDetails
+ 
 ### new features
-- none
+- frontend/backend: added sectionDetails
 
 ### improvements
 - frontend: added additional groupby track+trip+location for image/track/trip/video/route-list

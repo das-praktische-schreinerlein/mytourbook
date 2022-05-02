@@ -15,8 +15,8 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
         fieldList: ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
             'image_similar_id_i', 'dateshow_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
-            'data_tech_dist_f', 'data_tech_dur_f',
-            'data_info_guides_s', 'data_info_region_s', 'data_info_baseloc_s', 'data_info_destloc_s',
+            'data_tech_dist_f', 'data_tech_dur_f', 'data_tech_sections_s',
+            'data_info_guides_s', 'data_info_region_s', 'data_info_baseloc_s', 'data_info_destloc_s', 'data_info_section_details_s',
             'info_name_s', 'info_desc_txt', 'info_shortdesc_txt', 'info_publisher_s', 'info_reference_s', 'info_tif_linked_details_s',
             'info_lif_linked_details_s', 'info_type_s',
             'rate_pers_ausdauer_i', 'rate_pers_bildung_i', 'rate_pers_gesamt_i', 'rate_pers_kraft_i', 'rate_pers_mental_i',
@@ -50,6 +50,10 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'data_tech_dur_facet_fs': {
                 'f.data_tech_dur_facet_fs.facet.limit': '-1',
                 'f.data_tech_dur_facet_fs.facet.sort': 'index'
+            },
+            'data_tech_sections_facet_ss': {
+                'f.data_tech_sections_facet_ss.facet.limit': '-1',
+                'f.data_tech_sections_facet_ss.facet.sort': 'index'
             },
             'done_ss': {
                 'f.done_ss.facet.limit': '-1',
@@ -168,6 +172,9 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'dataTechDistDesc': {
                 'sort': 'data_tech_dist_f desc, name_s ASC'
             },
+            'dataTechSectionsDesc': {
+                'sort': 'data_tech_sections_s desc, name_s ASC'
+            },
             'dataTechDurAsc': {
                 'sort': 'data_tech_dur_f asc, name_s ASC'
             },
@@ -179,6 +186,9 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             },
             'dataTechDistAsc': {
                 'sort': 'data_tech_dist_f asc, name_s ASC'
+            },
+            'dataTechSectionsAsc': {
+                'sort': 'data_tech_sections_s asc, name_s ASC'
             },
             'ratePers': {
                 'sort': 'sub(15, rate_pers_gesamt_i) asc, datesort_dt desc',

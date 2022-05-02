@@ -412,6 +412,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             techDataDistance: this.tdocSearchForm.techDataDistance,
             techDataAltitudeMax: this.tdocSearchForm.techDataAltitudeMax,
             techDataAscent: this.tdocSearchForm.techDataAscent,
+            techDataSections: this.tdocSearchForm.techDataSections,
             nearbyAddress: this.tdocSearchForm.nearbyAddress,
             fulltext: this.tdocSearchForm.fulltext
         }));

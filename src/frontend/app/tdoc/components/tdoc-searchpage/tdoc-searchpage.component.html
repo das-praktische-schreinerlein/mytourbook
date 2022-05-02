@@ -81,6 +81,9 @@
                         <app-cdoc-tagcloud [label]="'Aufstieg in hm'" [facetName]="'data_tech_alt_asc_facet_is'" [max]="50"
                                            (columnClicked)="onTagcloudClicked($event, 'techDataAscent')"
                                            [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Etappen '" [facetName]="'data_tech_sections_facet_ss'" [max]="50"
+                                           (columnClicked)="onTagcloudClicked($event, 'techDataSections')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
                     </div>
                 </div>
 

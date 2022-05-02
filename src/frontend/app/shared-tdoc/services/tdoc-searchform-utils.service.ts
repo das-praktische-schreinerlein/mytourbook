@@ -71,6 +71,10 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
         return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_dur_facet_fs', '', '');
     }
 
+    getTechDataSectionsValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_sections_facet_ss', '', '');
+    }
+
     getObjectsValues(searchResult: TourDocSearchResult): any[] {
         return this.searchFormUtils.getFacetValues(searchResult, 'objects_txt', '', '');
     }

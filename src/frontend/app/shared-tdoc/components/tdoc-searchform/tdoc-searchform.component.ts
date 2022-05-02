@@ -34,6 +34,7 @@ export class TourDocSearchformComponent
     public optionsSelectTechDataAscent: IMultiSelectOption[] = [];
     public optionsSelectTechDataAltitudeMax: IMultiSelectOption[] = [];
     public optionsSelectTechDataDuration: IMultiSelectOption[] = [];
+    public optionsSelectTechDataSections: IMultiSelectOption[] = [];
     public optionsSelectPersonalRateOverall: IMultiSelectOption[] = [];
     public optionsSelectPersonalRateDifficulty: IMultiSelectOption[] = [];
     public optionsSelectPersons: IMultiSelectOption[] = [];
@@ -62,6 +63,7 @@ export class TourDocSearchformComponent
     public settingsSelectTechDataAscent = this.defaultSeLectSettings;
     public settingsSelectTechDataAltitudeMax = this.defaultSeLectSettings;
     public settingsSelectTechDataDuration = this.defaultSeLectSettings;
+    public settingsSelectTechDataSections = this.defaultSeLectSettings;
 
     public settingsSelectPersonalRateOverall = this.defaultSeLectSettings;
     public settingsSelectPersonalRateDifficulty = this.defaultSeLectSettings;
@@ -135,6 +137,13 @@ export class TourDocSearchformComponent
         uncheckAll: 'Alle abwählen',
         checked: 'Dauer ausgewählt',
         checkedPlural: 'Dauer ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
+    public textsSelectTechDataSections: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Etappe ausgewählt',
+        checkedPlural: 'Etappen ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'Alle'};
@@ -267,6 +276,7 @@ export class TourDocSearchformComponent
             techDataAltitudeMax: [],
             techDataDistance: [],
             techDataDuration: [],
+            techDataSections: [],
             techRateOverall: [],
             personalRateOverall: [],
             personalRateDifficulty: [],
@@ -334,6 +344,7 @@ export class TourDocSearchformComponent
             techDataAltitudeMax: [(values.techDataAltitudeMax ? values.techDataAltitudeMax.split(/,/) : [])],
             techDataDistance: [(values.techDataDistance ? values.techDataDistance.split(/,/) : [])],
             techDataDuration: [(values.techDataDuration ? values.techDataDuration.split(/,/) : [])],
+            techDataSections: [(values.techDataSections ? values.techDataSections.split(/,/) : [])],
             techRateOverall: [(values.techRateOverall ? values.techRateOverall.split(/,/) : [])],
             personalRateOverall: [(values.personalRateOverall ? values.personalRateOverall.split(/,/) : [])],
             personalRateDifficulty: [(values.personalRateDifficulty ? values.personalRateDifficulty.split(/,/) : [])],
@@ -392,6 +403,10 @@ export class TourDocSearchformComponent
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.tdocSearchFormUtils.getTechDataDurationValues(tdocSearchSearchResult), true, [], true),
             rawValues['techDataDuration']);
+        this.optionsSelectTechDataDuration = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.tdocSearchFormUtils.getTechDataSectionsValues(tdocSearchSearchResult), true, [], true),
+            rawValues['techDataSections']);
         this.optionsSelectPersonalRateOverall = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.tdocSearchFormUtils.getPersonalRateOverallValues(tdocSearchSearchResult), true, [], true);
         this.optionsSelectPersonalRateDifficulty = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
@@ -443,7 +458,7 @@ export class TourDocSearchformComponent
         this.showDetailsAvailable = (this.optionsSelectWhat.length > 0 || this.optionsSelectTechRateOverall.length > 0 ||
             this.optionsSelectTechDataDistance.length > 0 || this.optionsSelectTechDataAltitudeMax.length > 0 ||
             this.optionsSelectTechDataAscent.length > 0 || this.optionsSelectRouteAttr.length > 0 ||
-            this.optionsSelectRouteAttrPart.length > 0);
+            this.optionsSelectRouteAttrPart.length > 0 ||  this.optionsSelectTechDataSections.length > 0);
         this.showMetaAvailable = (this.optionsSelectPlaylists.length > 0 || this.optionsSelectPersons.length > 0 ||
             this.optionsSelectObjects.length > 0 || this.optionsSelectPersonalRateDifficulty.length > 0 ||
             this.optionsSelectPersonalRateOverall.length > 0);
