@@ -192,6 +192,9 @@ export class SqlMytbDbDestinationConfig {
                 selectField: 'ROUND(ROUND(d_route_dauer * 2) / 2, 1)',
                 orderBy: 'value asc'
             },
+            'data_tech_sections_facet_ss': {
+                noFacet: true
+            },
             'data_info_region_s': {
                 selectField: 'destination.d_desc_gebiet',
                 orderBy: 'value asc'

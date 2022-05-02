@@ -380,6 +380,9 @@ export class SqlMytbDbTrackConfig {
                 selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
                 orderBy: 'value asc'
             },
+            'data_tech_sections_facet_ss': {
+                noFacet: true
+            },
             'done_ss': {
                 selectField: 'CONCAT("DONE", (k_datevon IS NOT NULL))',
                 orderBy: 'value asc'

@@ -317,6 +317,9 @@ export class SqlMytbDbImageConfig {
                 selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id',
                 orderBy: 'value asc'
             },
+            'data_tech_sections_facet_ss': {
+                noFacet: true
+            },
             'done_ss': {
                 selectField: 'CONCAT("DONE", (i_date IS NOT NULL))',
                 orderBy: 'value asc'

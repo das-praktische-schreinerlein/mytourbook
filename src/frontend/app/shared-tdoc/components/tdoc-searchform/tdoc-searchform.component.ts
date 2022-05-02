@@ -403,7 +403,7 @@ export class TourDocSearchformComponent
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.tdocSearchFormUtils.getTechDataDurationValues(tdocSearchSearchResult), true, [], true),
             rawValues['techDataDuration']);
-        this.optionsSelectTechDataDuration = this.searchFormUtils.moveSelectedToTop(
+        this.optionsSelectTechDataSections = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.tdocSearchFormUtils.getTechDataSectionsValues(tdocSearchSearchResult), true, [], true),
             rawValues['techDataSections']);

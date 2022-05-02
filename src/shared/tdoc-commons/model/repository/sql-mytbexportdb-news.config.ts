@@ -77,6 +77,9 @@ export class SqlMytbExportDbNewsConfig {
             'data_tech_dur_facet_fs': {
                 noFacet: true
             },
+            'data_tech_sections_facet_ss': {
+                noFacet: true
+            },
             'done_ss': {
                 selectField: 'CONCAT("DONE", (n_date IS NOT NULL))',
                 orderBy: 'value asc'

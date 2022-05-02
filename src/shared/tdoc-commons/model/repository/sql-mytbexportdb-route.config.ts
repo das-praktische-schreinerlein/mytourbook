@@ -118,6 +118,9 @@ export class SqlMytbExportDbRouteConfig {
                 selectField: 'ROUND(ROUND(t_route_dauer * 2) / 2, 1)',
                 orderBy: 'value asc'
             },
+            'data_tech_sections_facet_ss': {
+                noFacet: true
+            },
             'data_info_guides_s': {
                 selectField: 'tour.t_desc_fuehrer',
                 orderBy: 'value asc'

@@ -291,6 +291,9 @@ export class SqlMytbDbVideoConfig {
                 selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
                 orderBy: 'value asc'
             },
+            'data_tech_sections_facet_ss': {
+                noFacet: true
+            },
             'done_ss': {
                 selectField: 'CONCAT("DONE", (v_date IS NOT NULL))',
                 orderBy: 'value asc'

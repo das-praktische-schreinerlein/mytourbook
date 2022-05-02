@@ -204,6 +204,9 @@ export class SqlMytbDbAllConfig {
             'data_tech_dur_facet_fs': {
                 filterField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(datebis, datevon))/3600 * 2) / 2, 1)'
             },
+            'data_tech_sections_facet_ss': {
+                noFacet: true
+            },
             'done_ss': {
                 noFacet: true
             },

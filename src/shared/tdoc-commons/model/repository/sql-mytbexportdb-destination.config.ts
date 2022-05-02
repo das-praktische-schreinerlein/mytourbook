@@ -98,6 +98,9 @@ export class SqlMytbExportDbDestinationConfig {
                 selectField: 'destination.d_desc_gebiet',
                 orderBy: 'value asc'
             },
+            'data_tech_sections_facet_ss': {
+                noFacet: true
+            },
             'done_ss': {
                 selectField: 'CONCAT("DONE", (d_datevon IS NOT NULL))',
                 orderBy: 'value asc'
