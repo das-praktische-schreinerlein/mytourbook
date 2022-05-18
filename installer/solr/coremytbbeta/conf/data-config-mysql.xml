@@ -1031,10 +1031,12 @@
                            ROUND((T_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
                            ROUND((T_ROUTE_M / 5)) * 5                                                                          AS distFacet,
                            ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           T_CALCED_SECTIONS                                                                                   AS sectionsFacet,
                            T_DESC_FUEHRER_FULL                                                                                 AS guides,
                            T_DESC_GEBIET                                                                                       AS region,
                            T_DESC_TALORT                                                                                       AS baseloc,
-                           T_DESC_ZIEL                                                                                         AS destloc
+                           T_DESC_ZIEL                                                                                         AS destloc,
+                           T_DESC_SECTIONDETAILS                                                                               AS sectionDetails
                     FROM tour,
                          location
                     WHERE tour.l_id = location.l_id
@@ -1098,10 +1100,12 @@
                            ROUND((T_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
                            ROUND((T_ROUTE_M / 5)) * 5                                                                          AS distFacet,
                            ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           T_CALCED_SECTIONS                                                                                   AS sectionsFacet,
                            T_DESC_FUEHRER_FULL                                                                                 AS guides,
                            T_DESC_GEBIET                                                                                       AS region,
                            T_DESC_TALORT                                                                                       AS baseloc,
-                           T_DESC_ZIEL                                                                                         AS destloc
+                           T_DESC_ZIEL                                                                                         AS destloc,
+                           T_DESC_SECTIONDETAILS                                                                               AS sectionDetails
                     FROM tour,
                          location
                     WHERE tour.l_id = location.l_id
@@ -1150,14 +1154,17 @@
             <field column="altAsc" name="data_tech_alt_asc_i" />
             <field column="dist" name="data_tech_dist_f" />
             <field column="dur" name="data_tech_dur_f" />
+            <field column="sectionsFacet" name="data_tech_sections_s" />
             <field column="guides" name="data_info_guides_s" />
             <field column="region" name="data_info_region_s" />
             <field column="destloc" name="data_info_destloc_s" />
             <field column="baseloc" name="data_info_baseloc_s" />
+            <field column="sectionDetails" name="data_info_section_details_s" />
             <field column="altAscFacet" name="data_tech_alt_asc_facet_is" />
             <field column="altMaxFacet" name="data_tech_alt_max_facet_is" />
             <field column="distFacet" name="data_tech_dist_facets_fs" />
             <field column="durFacet" name="data_tech_dur_facet_fs" />
+            <field column="sectionsFacet" name="data_tech_sections_facet_ss" />
             <field column="overall" name="rate_tech_overall_s" />
             <field column="ks" name="rate_tech_ks_s" />
             <field column="firn" name="rate_tech_firn_s" />

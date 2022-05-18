@@ -89,7 +89,7 @@
                          SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
                               FROM playlist
                               WHERE playlist.p_id IN (${playlist.p_id})
-                           UNION
+                            UNION
                          SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(countLocations AS CHAR)) AS extended_object_properties
                               FROM playlist
                               WHERE playlist.p_id IN (${playlist.p_id})
@@ -555,17 +555,18 @@
                                    INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
                                    INNER JOIN tour ON tour.t_id=kategorie_full.t_id
                             WHERE p_id in (18)
-                              AND tour.d_id = '${destination.d_id}'
-                              AND COALESCE(I_PERSONS, '') = ''
+                                AND tour.d_id = '${destination.d_id}'
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
                             limit 1
                         )
                         UNION
                         (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
-                        FROM image INNER JOIN kategorie_full ON image.k_id = kategorie_full.k_id
-                             INNER JOIN tour ON tour.t_id=kategorie_full.t_id
-                        WHERE
-                            tour.d_id = '${destination.d_id}'
+                            FROM image
+                                   INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                                   INNER JOIN tour ON tour.t_id=kategorie_full.t_id
+                            WHERE
+                                tour.d_id = '${destination.d_id}'
                                 AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
                             limit 1)"
@@ -929,9 +930,9 @@
                         )
                         UNION
                         (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
-                        FROM image
+                            FROM image
                             WHERE image.k_id IN ('${track.k_id}')
-                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
+                            ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                             limit 1)"
                     deltaImportQuery="
                         SELECT i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
@@ -1030,10 +1031,12 @@
                            ROUND((T_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
                            ROUND((T_ROUTE_M / 5)) * 5                                                                          AS distFacet,
                            ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           T_CALCED_SECTIONS                                                                                   AS sectionsFacet,
                            T_DESC_FUEHRER_FULL                                                                                 AS guides,
                            T_DESC_GEBIET                                                                                       AS region,
                            T_DESC_TALORT                                                                                       AS baseloc,
-                           T_DESC_ZIEL                                                                                         AS destloc
+                           T_DESC_ZIEL                                                                                         AS destloc,
+                           T_DESC_SECTIONDETAILS                                                                               AS sectionDetails
                     FROM tour,
                          location
                     WHERE tour.l_id = location.l_id
@@ -1097,10 +1100,12 @@
                            ROUND((T_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
                            ROUND((T_ROUTE_M / 5)) * 5                                                                          AS distFacet,
                            ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           T_CALCED_SECTIONS                                                                                   AS sectionsFacet,
                            T_DESC_FUEHRER_FULL                                                                                 AS guides,
                            T_DESC_GEBIET                                                                                       AS region,
                            T_DESC_TALORT                                                                                       AS baseloc,
-                           T_DESC_ZIEL                                                                                         AS destloc
+                           T_DESC_ZIEL                                                                                         AS destloc,
+                           T_DESC_SECTIONDETAILS                                                                               AS sectionDetails
                     FROM tour,
                          location
                     WHERE tour.l_id = location.l_id
@@ -1149,14 +1154,17 @@
             <field column="altAsc" name="data_tech_alt_asc_i" />
             <field column="dist" name="data_tech_dist_f" />
             <field column="dur" name="data_tech_dur_f" />
+            <field column="sectionsFacet" name="data_tech_sections_s" />
             <field column="guides" name="data_info_guides_s" />
             <field column="region" name="data_info_region_s" />
             <field column="destloc" name="data_info_destloc_s" />
             <field column="baseloc" name="data_info_baseloc_s" />
+            <field column="sectionDetails" name="data_info_section_details_s" />
             <field column="altAscFacet" name="data_tech_alt_asc_facet_is" />
             <field column="altMaxFacet" name="data_tech_alt_max_facet_is" />
             <field column="distFacet" name="data_tech_dist_facets_fs" />
             <field column="durFacet" name="data_tech_dur_facet_fs" />
+            <field column="sectionsFacet" name="data_tech_sections_facet_ss" />
             <field column="overall" name="rate_tech_overall_s" />
             <field column="ks" name="rate_tech_ks_s" />
             <field column="firn" name="rate_tech_firn_s" />
@@ -1273,16 +1281,16 @@
                                    INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                                    INNER JOIN image_playlist ON image.i_id=image_playlist.i_id
                             WHERE p_id in (18)
-                              AND kategorie_full.t_id = ${route.t_id}
-                              AND COALESCE(I_PERSONS, '') = ''
+                                AND kategorie_full.t_id = ${route.t_id}
+                                AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, kategorie_full.k_rate_gesamt DESC, image.I_ID desc
                             limit 1
                         )
                         UNION
                         (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
-                        FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
-                        WHERE
-                            kategorie_full.t_id = ${route.t_id}
+                            FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                            WHERE
+                                kategorie_full.t_id = ${route.t_id}
                                 AND COALESCE(I_PERSONS, '') = ''
                             ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie_full.k_rate_gesamt DESC, I_ID DESC
                             limit 1)"
@@ -2211,7 +2219,7 @@
                         )
                         UNION
                         (select image.i_id, i_date, CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
-                        FROM image
+                            FROM image
                                 INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                             WHERE
                                 kategorie_full.tr_id in (${trip.tr_id})

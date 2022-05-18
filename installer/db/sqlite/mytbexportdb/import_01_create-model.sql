@@ -76,7 +76,7 @@ CREATE TABLE info (
 DROP TABLE IF EXISTS info_playlist;
 CREATE TABLE info_playlist
 (
-    ifp_id  int(11) NOT NULL PRIMARY KEY,
+    ifp_id  int(11) PRIMARY KEY,
     if_id   int(11) NOT NULL DEFAULT '0',
     p_id    int(11) NOT NULL DEFAULT '0',
     ifp_pos int(11)          DEFAULT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE trip (
 DROP TABLE IF EXISTS trip_playlist;
 CREATE TABLE trip_playlist
 (
-    trp_id  int(11) NOT NULL PRIMARY KEY,
+    trp_id  int(11) PRIMARY KEY,
     tr_id   int(11) NOT NULL DEFAULT '0',
     p_id    int(11) NOT NULL DEFAULT '0',
     trp_pos int(11)          DEFAULT NULL,
@@ -170,7 +170,7 @@ CREATE TABLE location (
 
 DROP TABLE IF EXISTS location_info;
 CREATE TABLE location_info (
-  lif_id int(11) NOT NULL PRIMARY KEY,
+  lif_id int(11) PRIMARY KEY,
   if_id int(11) NOT NULL,
   l_id int(11) NOT NULL,
   lif_linked_details varchar(255) DEFAULT NULL
@@ -179,7 +179,7 @@ CREATE TABLE location_info (
 DROP TABLE IF EXISTS location_playlist;
 CREATE TABLE location_playlist
 (
-    lp_id  int(11) NOT NULL PRIMARY KEY,
+    lp_id  int(11) PRIMARY KEY,
     l_id   int(11) NOT NULL DEFAULT '0',
     p_id   int(11) NOT NULL DEFAULT '0',
     lp_pos int(11)          DEFAULT NULL,
@@ -258,6 +258,7 @@ CREATE TABLE tour (
   t_desc_gebiet varchar(255) DEFAULT NULL,
   t_desc_talort varchar(255) DEFAULT NULL,
   t_desc_ziel varchar(255) DEFAULT NULL,
+  t_desc_sectionDetails varchar(255) DEFAULT NULL,
   t_meta_shortdesc mediumtext,
   t_keywords text,
   t_persons text,
@@ -307,6 +308,7 @@ CREATE TABLE tour (
   t_meta_shortdesc_html text,
   t_dateshow date DEFAULT NULL,
   t_gesperrt int(2) DEFAULT 1,
+  t_calced_sections VARCHAR(255) DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countInfos int(11) DEFAULT 0,
@@ -318,7 +320,7 @@ CREATE TABLE tour (
 
 DROP TABLE IF EXISTS tour_info;
 CREATE TABLE tour_info (
-  tif_id int(11) NOT NULL PRIMARY KEY,
+  tif_id int(11) PRIMARY KEY,
   if_id int(11) NOT NULL,
   t_id int(11) NOT NULL,
   tif_linked_details varchar(255) DEFAULT NULL
@@ -327,7 +329,7 @@ CREATE TABLE tour_info (
 DROP TABLE IF EXISTS tour_playlist;
 CREATE TABLE tour_playlist
 (
-    tp_id  int(11) NOT NULL PRIMARY KEY,
+    tp_id  int(11) PRIMARY KEY,
     t_id   int(11) NOT NULL DEFAULT '0',
     p_id   int(11) NOT NULL DEFAULT '0',
     tp_pos int(11)          DEFAULT NULL,
@@ -400,7 +402,7 @@ CREATE TABLE kategorie_tour (
 DROP TABLE IF EXISTS kategorie_playlist;
 CREATE TABLE kategorie_playlist
 (
-    kp_id  int(11) NOT NULL PRIMARY KEY,
+    kp_id  int(11) PRIMARY KEY,
     k_id   int(11) NOT NULL DEFAULT '0',
     p_id   int(11) NOT NULL DEFAULT '0',
     kp_pos int(11)          DEFAULT NULL,
@@ -441,7 +443,7 @@ CREATE TABLE image (
 
 DROP TABLE IF EXISTS image_playlist;
 CREATE TABLE image_playlist (
-  ip_id int(11) NOT NULL PRIMARY KEY,
+  ip_id int(11) PRIMARY KEY,
   i_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
   ip_pos int(11) DEFAULT NULL,
@@ -480,7 +482,7 @@ CREATE TABLE video (
 
 DROP TABLE IF EXISTS video_playlist;
 CREATE TABLE video_playlist (
-  vp_id int(11) NOT NULL PRIMARY KEY,
+  vp_id int(11) PRIMARY KEY,
   v_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
   vp_pos int(11) DEFAULT NULL,
