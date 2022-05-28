@@ -158,7 +158,6 @@ export class SqlMytbDbTripConfig {
             'trip.tr_id',
             'trip.l_id',
             'trip.tr_name',
-            'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc,"")) AS html',
             'CAST(l_geo_latdeg AS CHAR(50)) AS tr_gps_lat',
             'CAST(l_geo_longdeg AS CHAR(50)) AS tr_gps_lon',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS tr_gps_loc',
@@ -477,7 +476,7 @@ export class SqlMytbDbTripConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(tr_name), 1, 1)',
-            html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc,""))'
+            html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc, ""), GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
         },
         writeMapping: {
             'trip.l_id': ':loc_id_i:',

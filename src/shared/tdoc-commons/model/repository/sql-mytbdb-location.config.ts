@@ -166,7 +166,6 @@ export class SqlMytbDbLocationConfig {
             'location.l_id',
             'l_parent_id',
             'l_name',
-            'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,"")) AS html',
             'l_gesperrt',
             'l_meta_shortdesc',
             'l_meta_shortdesc AS l_meta_shortdesc_md',
@@ -452,7 +451,7 @@ export class SqlMytbDbLocationConfig {
             info_id_is: '"666dummy999"',
             trip_id_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(l_name), 1, 1)',
-            html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""))'
+            html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""), " ", GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
         },
         writeMapping: {
             'location.l_meta_shortdesc': ':desc_txt:',

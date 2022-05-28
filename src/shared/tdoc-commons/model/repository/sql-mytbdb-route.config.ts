@@ -190,7 +190,6 @@ export class SqlMytbDbRouteConfig {
             'tour.t_id',
             'tour.l_id',
             't_name',
-            'CONCAT(t_name, " ", COALESCE(t_desc_gebiet, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", l_name) AS html',
             't_datevon AS t_date_show',
             't_datevon',
             'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -800,7 +799,7 @@ export class SqlMytbDbRouteConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(t_name), 1, 1)',
-            html: 'CONCAT(t_name, " ", COALESCE(t_desc_gebiet, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", l_name)'
+            html: 'CONCAT(t_name, " ", COALESCE(t_desc_gebiet, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
         },
         writeMapping: {
             'tour.l_id': ':loc_id_i:',

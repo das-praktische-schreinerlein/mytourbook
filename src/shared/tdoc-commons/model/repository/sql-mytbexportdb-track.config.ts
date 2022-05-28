@@ -46,7 +46,6 @@ export class SqlMytbExportDbTrackConfig {
             'n_id',
             'k_name',
             'k_html',
-            'CONCAT(k_html, " ", k_name, " ", k_keywords, " ", k_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
             'k_dateshow',
             'k_datevon',
             'k_datebis',

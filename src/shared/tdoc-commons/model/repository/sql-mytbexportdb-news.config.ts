@@ -40,7 +40,6 @@ export class SqlMytbExportDbNewsConfig {
             'CONCAT("NEWS", "_", news.n_id) AS id',
             'news.n_id',
             'n_headline',
-            'CONCAT(n_headline, " ", n_keywords, " ", n_message_md) AS html',
             'n_date',
             'n_datevon',
             'n_datebis',

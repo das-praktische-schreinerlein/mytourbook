@@ -154,7 +154,6 @@ export class SqlMytbDbVideoConfig {
             'kategorie.tr_id',
             'kategorie.l_id',
             'COALESCE(v_meta_name,k_name) AS v_meta_name',
-            'CONCAT(COALESCE(v_meta_name,""), " ", l_name) AS html',
             'v_gesperrt',
             'v_date',
             'DATE_FORMAT(v_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -495,7 +494,7 @@ export class SqlMytbDbVideoConfig {
             track_id_is: 'video.k_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
-            html: 'CONCAT(COALESCE(v_meta_name,""), " ", l_name)'
+            html: 'CONCAT(COALESCE(v_meta_name, ""), " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", " ", location.l_name)'
         },
         writeMapping: {
             'video.l_id': ':loc_id_i:',

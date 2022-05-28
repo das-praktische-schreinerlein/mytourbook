@@ -204,7 +204,6 @@ export class SqlMytbDbTrackConfig {
 //                'n_id',
             'k_name',
 //                'k_html',
-            'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_name) AS html',
             'k_gesperrt',
             'k_datevon AS k_dateshow',
             'k_datevon',
@@ -658,7 +657,7 @@ export class SqlMytbDbTrackConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(k_name), 1, 1)',
-            html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_name)'
+            html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',

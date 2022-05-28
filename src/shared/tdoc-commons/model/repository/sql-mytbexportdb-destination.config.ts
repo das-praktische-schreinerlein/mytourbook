@@ -29,7 +29,6 @@ export class SqlMytbExportDbDestinationConfig {
             'destination.d_id',
             'destination.l_id',
             'd_name',
-            'CONCAT(d_name, " ", l_name) AS html',
             'd_datevon AS d_date_show',
             'd_datevon',
             'DATE_FORMAT(d_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',

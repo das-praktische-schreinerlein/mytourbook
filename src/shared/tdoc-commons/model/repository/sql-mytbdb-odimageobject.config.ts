@@ -112,7 +112,6 @@ export class SqlMytbDbOdImageObjectConfig {
             'kategorie.tr_id',
             'kategorie.l_id',
             'COALESCE(persons.o_name, realobjects.o_name, i_meta_name, k_name) AS i_meta_name',
-            'CONCAT(COALESCE(i_meta_name,""), " ", COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""), " ", l_name) AS html',
             'i_gesperrt',
             'i_date',
             'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -489,7 +488,7 @@ export class SqlMytbDbOdImageObjectConfig {
             initial_s: '"666dummy999"',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
-            html: 'CONCAT(COALESCE(i_meta_name,""), " ", COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""), " ", l_name)'
+            html: 'CONCAT(COALESCE(i_meta_name,""), " ", COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""),  " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", location.l_name)'
         },
         // TODO: for import
         writeMapping: {

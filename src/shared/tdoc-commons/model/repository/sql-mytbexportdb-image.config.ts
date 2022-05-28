@@ -39,7 +39,6 @@ export class SqlMytbExportDbImageConfig {
             'n_id',
             'i_katname',
             'k_html',
-            'CONCAT(i_katname, " ", i_keywords, " ", l_lochirarchietxt) AS html',
             'k_dateshow',
             'i_date',
             'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',

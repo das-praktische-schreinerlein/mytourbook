@@ -39,7 +39,6 @@ export class SqlMytbExportDbVideoConfig {
             'n_id',
             'v_katname',
             'k_html',
-            'CONCAT(v_katname, " ", v_keywords, " ", l_lochirarchietxt) AS html',
             'k_dateshow',
             'v_date',
             'DATE_FORMAT(v_date, GET_FORMAT(DATE, "ISO")) AS dateonly',

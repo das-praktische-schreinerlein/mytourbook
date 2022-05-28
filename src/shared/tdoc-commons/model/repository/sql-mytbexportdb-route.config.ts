@@ -48,7 +48,6 @@ export class SqlMytbExportDbRouteConfig {
             'tour.d_id',
             't_name',
             't_html_list',
-            'CONCAT(t_name, " ", t_keywords, " ", t_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
             't_datevon AS t_date_show',
             't_datevon',
             'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',

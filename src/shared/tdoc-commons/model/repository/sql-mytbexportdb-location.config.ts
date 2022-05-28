@@ -39,7 +39,6 @@ export class SqlMytbExportDbLocationConfig {
             'location.l_id',
             'l_name',
             'l_html',
-            'CONCAT(l_name, " ", l_keywords, " ", l_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
             'l_keywords',
             'l_meta_shortdesc',
             'l_meta_shortdesc_md',

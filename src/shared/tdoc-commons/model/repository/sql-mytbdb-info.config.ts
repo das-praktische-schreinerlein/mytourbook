@@ -139,8 +139,6 @@ export class SqlMytbDbInfoConfig {
             'info.if_name',
             'if_publisher',
             'info.if_url as if_reference',
-            'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), ' +
-            '     " ", COALESCE(if_url,"")) AS html',
             'CAST(location.l_geo_latdeg AS CHAR(50)) AS if_gps_lat',
             'CAST(location.l_geo_longdeg AS CHAR(50)) AS if_gps_lon',
             'CONCAT(location.l_geo_latdeg, ",", location.l_geo_longdeg) AS if_gps_loc',
@@ -432,8 +430,7 @@ export class SqlMytbDbInfoConfig {
             loc_lochirarchie_ids_txt: 'lifl.l_id',
             l_lochirarchietxt: 'lifl.l_name',
             initial_s: 'SUBSTR(UPPER(if_name), 1, 1)',
-            html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), ' +
-                '     " ", COALESCE(if_url,""))'
+            html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), " ", COALESCE(if_url,""))'
         },
         writeMapping: {
             'info.l_id': ':loc_id_i:',

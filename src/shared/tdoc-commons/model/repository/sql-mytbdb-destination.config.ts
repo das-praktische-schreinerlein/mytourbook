@@ -78,7 +78,6 @@ export class SqlMytbDbDestinationConfig {
             'destination.d_id',
             'destination.l_id',
             'd_name',
-            'CONCAT(d_name, " ", COALESCE(d_desc_gebiet, ""), " ", l_name) AS html',
             'd_datevon AS d_date_show',
             'd_datevon',
             'DATE_FORMAT(d_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -556,7 +555,7 @@ export class SqlMytbDbDestinationConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(d_name), 1, 1)',
-            html: 'CONCAT(d_name, " ", COALESCE(d_desc_gebiet, ""), " ", l_name)'
+            html: 'CONCAT(d_name, " ", COALESCE(d_desc_gebiet, ""), " ", GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
         },
         writeMapping: {
         },

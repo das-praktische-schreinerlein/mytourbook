@@ -39,7 +39,6 @@ export class SqlMytbExportDbTripConfig {
             'CONCAT("TRIP", "_", trip.tr_id) AS id',
             'trip.tr_id',
             'trip.tr_name',
-            'CONCAT(tr_name, " ", tr_keywords, " ", tr_meta_shortdesc_md) AS html',
             'tr_dateshow',
             'tr_datevon',
             'tr_datebis',
