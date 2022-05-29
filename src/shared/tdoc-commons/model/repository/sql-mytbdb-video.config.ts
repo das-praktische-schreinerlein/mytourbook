@@ -13,7 +13,7 @@ export class SqlMytbDbVideoConfig {
         key: 'video',
         tableName: 'video',
         selectFrom: 'video LEFT JOIN kategorie ON kategorie.k_id=video.k_id ' +
-            'LEFT JOIN location ON location.l_id = kategorie.l_id ',
+           'LEFT JOIN location_hirarchical as location ON location.l_id = kategorie.l_id ',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN video_keyword ON video.v_id=video_keyword.v_id ' +
@@ -166,8 +166,8 @@ export class SqlMytbDbVideoConfig {
             'CAST(v_gps_lat AS CHAR(50)) AS v_gps_lat',
             'CAST(v_gps_lon AS CHAR(50)) AS v_gps_lon',
             'CONCAT(v_gps_lat, ",", v_gps_lon) AS v_gps_loc',
-            'CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS l_lochirarchietxt',
-            'CONCAT(CAST(location.l_parent_id AS CHAR(50)), ",", CAST(location.l_id AS CHAR(50))) AS l_lochirarchieids',
+            'l_lochirarchietxt',
+            'l_lochirarchieids',
             'CONCAT(video.v_dir, "/", video.v_file) AS v_fav_url_txt',
             'k_altitude_asc',
             'k_altitude_desc',
@@ -316,12 +316,13 @@ export class SqlMytbDbVideoConfig {
             },
             'loc_lochirarchie_txt': {
                 selectSql: 'SELECT COUNT(video.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label' +
-                    ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
+                    ' l_lochirarchietxt AS label' +
+                    ' FROM location_hirarchical as location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
                     ' LEFT JOIN video ON kategorie.k_id=video.k_id ' +
-                    ' GROUP BY GetTechName(l_name), location.l_id' +
+                    ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                triggerTables: ['location', 'kategorie', 'video'],
+                filterField: 'GetTechName(l_lochirarchietxt)',
                 action: AdapterFilterActions.LIKE
             },
             'month_is': {

@@ -5,7 +5,7 @@ export class SqlMytbDbDestinationConfig {
     public static readonly tableConfig: TableConfig = {
         key: 'destination',
         tableName: 'destination',
-        selectFrom: 'destination LEFT JOIN location ON destination.l_id = location.l_id ',
+        selectFrom: 'destination LEFT JOIN location_hirarchical as location ON destination.l_id = location.l_id ',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN tour dtour ON destination.d_id in (MD5(CONCAT(dtour.l_id, "_", dtour.t_desc_gebiet, "_", dtour.t_desc_ziel, "_", dtour.t_typ)))',
@@ -87,8 +87,8 @@ export class SqlMytbDbDestinationConfig {
             'CAST(l_geo_latdeg AS CHAR(50)) AS d_gps_lat',
             'CAST(l_geo_longdeg AS CHAR(50)) AS d_gps_lon',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS d_gps_loc',
-            'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
-            'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
+            'l_lochirarchietxt AS l_lochirarchietxt',
+            'l_lochirarchieids AS l_lochirarchieids',
             'd_route_hm',
             'd_ele_max',
             'd_route_m',
@@ -230,11 +230,12 @@ export class SqlMytbDbDestinationConfig {
             },
             'loc_lochirarchie_txt': {
                 selectSql: 'SELECT COUNT(destination.l_id) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
-                    ' FROM location LEFT JOIN destination ON destination.l_id = location.l_id ' +
+                    ' l_lochirarchietxt AS label, location.l_id AS id' +
+                    ' FROM location_hirarchical as location LEFT JOIN destination ON destination.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                triggerTables: ['location', 'tour'],
+                filterField: 'GetTechName(l_lochirarchietxt)',
                 action: AdapterFilterActions.LIKE
             },
             'month_is': {
@@ -555,7 +556,7 @@ export class SqlMytbDbDestinationConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(d_name), 1, 1)',
-            html: 'CONCAT(d_name, " ", COALESCE(d_desc_gebiet, ""), " ", GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
+            html: 'CONCAT(d_name, " ", COALESCE(d_desc_gebiet, ""), " ", l_lochirarchietxt)'
         },
         writeMapping: {
         },

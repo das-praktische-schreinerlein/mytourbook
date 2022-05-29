@@ -12,7 +12,7 @@ export class SqlMytbDbLocationConfig {
     public static readonly tableConfig: TableConfig = {
         key: 'location',
         tableName: 'location',
-        selectFrom: 'location ',
+        selectFrom: 'location_hirarchical as location ',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN location_keyword ON location.l_id=location_keyword.l_id ' +
@@ -61,7 +61,7 @@ export class SqlMytbDbLocationConfig {
             {
                 from: ' ',
                 triggerParams: ['id', 'loadTrack'],
-                groupByFields: ['l_geo_area']
+                groupByFields: ['location.l_geo_area']
             }
         ],
         groupbBySelectFieldListIgnore: ['l_keywords', 'l_playlists'],
@@ -135,15 +135,15 @@ export class SqlMytbDbLocationConfig {
             {
                 profile: 'navigation_objects',
                 sql: '(SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "PREDECESSOR")' +
-                    '  AS navigation_objects, GetLocationNameAncestry(location.l_id, location.l_name, "->") AS l_lochirarchietxt' +
-                    '  FROM location WHERE GetLocationNameAncestry(location.l_id, location.l_name, "->") <' +
-                    '      (SELECT GetLocationNameAncestry(location.l_id, location.l_name, "->") FROM location WHERE l_id IN (:id))' +
+                    '  AS navigation_objects, l_lochirarchietxt AS l_lochirarchietxt' +
+                    '  FROM location_hirarchical as location WHERE l_lochirarchietxt <' +
+                    '      (SELECT l_lochirarchietxt FROM location_hirarchical as location WHERE l_id IN (:id))' +
                     '  ORDER BY l_lochirarchietxt DESC, l_id DESC LIMIT 1) ' +
                     'UNION ' +
                     ' (SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "SUCCESSOR")' +
-                    '  AS navigation_objects, GetLocationNameAncestry(location.l_id, location.l_name, "->") AS l_lochirarchietxt' +
-                    '  FROM location WHERE GetLocationNameAncestry(location.l_id, location.l_name, "->") >' +
-                    '      (SELECT GetLocationNameAncestry(location.l_id, location.l_name, "->") FROM location WHERE l_id IN (:id))' +
+                    '  AS navigation_objects, l_lochirarchietxt AS l_lochirarchietxt' +
+                    '  FROM location_hirarchical as location WHERE l_lochirarchietxt >' +
+                    '      (SELECT l_lochirarchietxt FROM location_hirarchical as location WHERE l_id IN (:id))' +
                     '  ORDER BY l_lochirarchietxt, l_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
@@ -163,17 +163,17 @@ export class SqlMytbDbLocationConfig {
             'location.l_typ',
             'CONCAT("loc_", l_typ) AS subtype',
             'CONCAT("LOCATION", "_", location.l_id) AS id',
-            'location.l_id',
-            'l_parent_id',
-            'l_name',
-            'l_gesperrt',
-            'l_meta_shortdesc',
+            'location.l_id as l_id',
+            'location.l_parent_id as l_parent_id',
+            'location.l_name as l_name',
+            'location.l_gesperrt as l_gesperrt',
+            'location.l_meta_shortdesc as l_meta_shortdesc',
             'l_meta_shortdesc AS l_meta_shortdesc_md',
             'CAST(l_geo_latdeg AS CHAR(50)) AS l_geo_latdeg',
             'CAST(l_geo_longdeg AS CHAR(50)) AS l_geo_longdeg',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS l_gps_loc',
-            'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
-            'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids'],
+            'l_lochirarchietxt AS l_lochirarchietxt',
+            'l_lochirarchieids AS l_lochirarchieids'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -314,11 +314,12 @@ export class SqlMytbDbLocationConfig {
             },
             'loc_lochirarchie_txt': {
                 selectSql: 'SELECT COUNT(*) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, l_id AS id' +
-                    ' FROM location' +
+                    ' l_lochirarchietxt AS label, l_id AS id' +
+                    ' FROM location_hirarchical as location' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                triggerTables: ['location'],
+                filterField: 'GetTechName(l_lochirarchietxt)',
                 action: AdapterFilterActions.LIKE
             },
             'month_is': {
@@ -451,7 +452,7 @@ export class SqlMytbDbLocationConfig {
             info_id_is: '"666dummy999"',
             trip_id_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(l_name), 1, 1)',
-            html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""), " ", GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
+            html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""), " ", l_lochirarchietxt)'
         },
         writeMapping: {
             'location.l_meta_shortdesc': ':desc_txt:',

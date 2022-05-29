@@ -11,7 +11,7 @@ export class SqlMytbDbTripConfig {
         key: 'trip',
         tableName: 'trip',
         selectFrom: 'trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id' +
-            ' LEFT JOIN location ON location.l_id = trip.l_id',
+            ' LEFT JOIN location_hirarchical as location ON location.l_id = trip.l_id',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
@@ -161,8 +161,8 @@ export class SqlMytbDbTripConfig {
             'CAST(l_geo_latdeg AS CHAR(50)) AS tr_gps_lat',
             'CAST(l_geo_longdeg AS CHAR(50)) AS tr_gps_lon',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS tr_gps_loc',
-            'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
-            'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
+            'l_lochirarchietxt AS l_lochirarchietxt',
+            'l_lochirarchieids AS l_lochirarchieids',
             'tr_datevon AS tr_dateshow',
             'tr_datevon',
             'tr_datebis',
@@ -304,11 +304,12 @@ export class SqlMytbDbTripConfig {
             },
             'loc_lochirarchie_txt': {
                 selectSql: 'SELECT COUNt(trip.l_id) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
-                    ' FROM location LEFT JOIN trip ON trip.l_id = location.l_id ' +
+                    ' l_lochirarchietxt AS label, location.l_id AS id' +
+                    ' FROM location_hirarchical as location LEFT JOIN trip ON trip.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                triggerTables: ['location', 'trip'],
+                filterField: 'GetTechName(l_lochirarchietxt)',
                 action: AdapterFilterActions.LIKE
             },
             'month_is': {
@@ -476,7 +477,7 @@ export class SqlMytbDbTripConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(tr_name), 1, 1)',
-            html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc, ""), GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
+            html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc, ""), l_lochirarchietxt)'
         },
         writeMapping: {
             'trip.l_id': ':loc_id_i:',

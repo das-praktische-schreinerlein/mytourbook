@@ -12,7 +12,7 @@ export class SqlMytbDbRouteConfig {
     public static readonly tableConfig: TableConfig = {
         key: 'route',
         tableName: 'tour',
-        selectFrom: 'tour LEFT JOIN location ON tour.l_id = location.l_id ',
+        selectFrom: 'tour LEFT JOIN location_hirarchical as location ON tour.l_id = location.l_id ',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN tour_keyword ON tour.t_id=tour_keyword.t_id ' +
@@ -156,18 +156,18 @@ export class SqlMytbDbRouteConfig {
                 sql: '(SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")' +
                     '  AS navigation_objects' +
                     '  FROM tour LEFT JOIN location ON tour.l_id = location.l_id' +
-                    '  WHERE CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) <' +
-                    '      (SELECT CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) FROM tour ' +
+                    '  WHERE CONCAT(l_lochirarchietxt, t_name) <' +
+                    '      (SELECT CONCAT(l_lochirarchietxt, t_name) FROM tour ' +
                     '       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
-                    '  ORDER BY CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) DESC, t_id DESC LIMIT 1) ' +
+                    '  ORDER BY CONCAT(l_lochirarchietxt, t_name) DESC, t_id DESC LIMIT 1) ' +
                     'UNION ' +
                     ' (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")' +
                     '  AS navigation_objects' +
                     '  FROM tour LEFT JOIN location ON tour.l_id = location.l_id' +
-                    '   WHERE CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) >' +
-                    '      (SELECT CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) FROM tour' +
+                    '   WHERE CONCAT(l_lochirarchietxt, t_name) >' +
+                    '      (SELECT CONCAT(l_lochirarchietxt, t_name) FROM tour' +
                     '       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
-                    '   ORDER BY CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name), t_id LIMIT 1)',
+                    '   ORDER BY CONCAT(l_lochirarchietxt, t_name), t_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
             },
@@ -202,8 +202,8 @@ export class SqlMytbDbRouteConfig {
             'CAST(l_geo_latdeg AS CHAR(50)) AS t_gps_lat',
             'CAST(l_geo_longdeg AS CHAR(50)) AS t_gps_lon',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS t_gps_loc',
-            'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
-            'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
+            'l_lochirarchietxt AS l_lochirarchietxt',
+            'l_lochirarchieids AS l_lochirarchieids',
             't_route_hm',
             't_ele_max',
             't_route_m',
@@ -388,12 +388,13 @@ export class SqlMytbDbRouteConfig {
                 noFacet: true
             },
             'loc_lochirarchie_txt': {
-                selectSql: 'SELECT COUNt(tour.l_id) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
-                    ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
+                selectSql: 'SELECT COUNT(tour.l_id) AS count, GetTechName(l_name) AS value,' +
+                    ' l_lochirarchietxt AS label, location.l_id AS id' +
+                    ' FROM location_hirarchical as location LEFT JOIN tour ON tour.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                triggerTables: ['location', 'tour'],
+                filterField: 'GetTechName(l_lochirarchietxt)',
                 action: AdapterFilterActions.LIKE
             },
             'month_is': {
@@ -799,7 +800,7 @@ export class SqlMytbDbRouteConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(t_name), 1, 1)',
-            html: 'CONCAT(t_name, " ", COALESCE(t_desc_gebiet, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
+            html: 'CONCAT(t_name, " ", COALESCE(t_desc_gebiet, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", l_lochirarchietxt)'
         },
         writeMapping: {
             'tour.l_id': ':loc_id_i:',

@@ -7,6 +7,7 @@
 - added layoutOptions noCount, noHeader
 - improved selection of teaser-image
 - added sectionDetails
+- use location-view to get optimized hierarchical-data
  
 ### new features
 - frontend/backend: added sectionDetails
@@ -18,6 +19,7 @@
 - solr: improved selection of teaser-image
 - backend: improved sql-filter
 - backend: added imagemagic-installer
+- backend: use location-view to get optimized hierarchical-data
 
 ### bug fixes
 - backend: fixed track-filter for route

@@ -11,7 +11,7 @@ export class SqlMytbDbOdImageObjectConfig {
             'LEFT JOIN objects realobjects ON image_object.io_obj_type=realobjects.o_key' +
             '     AND LOWER(realobjects.o_category) NOT LIKE "person" ' +
             'LEFT JOIN kategorie ON kategorie.k_id=image.k_id ' +
-            'LEFT JOIN location ON location.l_id = kategorie.l_id ',
+            'LEFT JOIN location_hirarchical as location ON location.l_id = kategorie.l_id ',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
@@ -124,8 +124,8 @@ export class SqlMytbDbOdImageObjectConfig {
             'CAST(i_gps_lat AS CHAR(50)) AS i_gps_lat',
             'CAST(i_gps_lon AS CHAR(50)) AS i_gps_lon',
             'CONCAT(i_gps_lat, ",", i_gps_lon) AS i_gps_loc',
-            'CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS l_lochirarchietxt',
-            'CONCAT(CAST(location.l_parent_id AS CHAR(50)), ",", CAST(location.l_id AS CHAR(50))) AS l_lochirarchieids',
+            'l_lochirarchietxt',
+            'l_lochirarchieids',
             'CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt',
             'k_altitude_asc',
             'k_altitude_desc',
@@ -261,14 +261,15 @@ export class SqlMytbDbOdImageObjectConfig {
             },
             'loc_lochirarchie_txt': {
                 selectSql: 'SELECT COUNT(image.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
-                    ' location.l_name AS label' +
-                    ' FROM location INNER JOIN kategorie ON location.l_id = kategorie.l_id ' +
+                    ' l_lochirarchietxt AS label' +
+                    ' FROM location_hirarchical as location INNER JOIN kategorie ON location.l_id = kategorie.l_id ' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     ' INNER JOIN image_object ON image_object.i_id=image.i_id' +
-                    ' GROUP BY GetTechName(l_name), location.l_id' +
-                    ' ORDER BY l_name ASC',
-                filterField: 'GetTechName(l_name)',
-                action: AdapterFilterActions.IN
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label ASC',
+                triggerTables: ['location', 'kategorie', 'image', 'image_object'],
+                filterField: 'GetTechName(l_lochirarchietxt)',
+                action: AdapterFilterActions.LIKE
             },
             'month_is': {
                 selectField: 'MONTH(i_date)',

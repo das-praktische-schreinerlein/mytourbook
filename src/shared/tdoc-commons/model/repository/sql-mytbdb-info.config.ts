@@ -11,7 +11,7 @@ export class SqlMytbDbInfoConfig {
     public static readonly tableConfig: TableConfig = {
         key: 'info',
         tableName: 'info',
-        selectFrom: 'info LEFT JOIN location ON location.l_id = info.l_id',
+        selectFrom: 'info LEFT JOIN location_hirarchical as location ON location.l_id = info.l_id',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN location lifl ON info.l_id=lifl.l_id ',
@@ -142,8 +142,8 @@ export class SqlMytbDbInfoConfig {
             'CAST(location.l_geo_latdeg AS CHAR(50)) AS if_gps_lat',
             'CAST(location.l_geo_longdeg AS CHAR(50)) AS if_gps_lon',
             'CONCAT(location.l_geo_latdeg, ",", location.l_geo_longdeg) AS if_gps_loc',
-            'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
-            'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
+            'l_lochirarchietxt AS l_lochirarchietxt',
+            'l_lochirarchieids AS l_lochirarchieids',
             'if_gesperrt',
             'if_meta_desc',
             'if_meta_desc AS if_meta_desc_md',
@@ -272,10 +272,11 @@ export class SqlMytbDbInfoConfig {
             },
             'loc_lochirarchie_txt': {
                 selectSql: 'SELECT COUNT(info.l_id) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
-                    ' FROM location LEFT JOIN info ON info.l_id = location.l_id ' +
+                    ' l_lochirarchietxt AS label, location.l_id AS id' +
+                    ' FROM location_hirarchical as location LEFT JOIN info ON info.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
+                triggerTables: ['location', 'info'],
                 filterField: 'GetTechName(GetLocationNameAncestry(lifl.l_id, lifl.l_name, " -> "))',
                 action: AdapterFilterActions.LIKE
             },

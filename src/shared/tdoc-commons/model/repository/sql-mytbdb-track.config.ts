@@ -11,7 +11,7 @@ export class SqlMytbDbTrackConfig {
     public static readonly tableConfig: TableConfig = {
         key: 'track',
         tableName: 'kategorie',
-        selectFrom: 'kategorie LEFT JOIN location ON location.l_id = kategorie.l_id ',
+        selectFrom: 'kategorie LEFT JOIN location_hirarchical as location ON location.l_id = kategorie.l_id ',
 //                        'LEFT JOIN image ON kategorie.i_id=image.i_id ' +
         optionalGroupBy: [
             {
@@ -218,8 +218,8 @@ export class SqlMytbDbTrackConfig {
             'CAST(l_geo_latdeg AS CHAR(50)) AS k_gps_lat',
             'CAST(l_geo_longdeg AS CHAR(50)) AS k_gps_lon',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS k_gps_loc',
-            'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
-            'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
+            'l_lochirarchietxt AS l_lochirarchietxt',
+            'l_lochirarchieids AS l_lochirarchieids',
 //                'CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt',
             'k_altitude_asc',
             'k_altitude_desc',
@@ -410,11 +410,12 @@ export class SqlMytbDbTrackConfig {
             },
             'loc_lochirarchie_txt': {
                 selectSql: 'SELECT COUNT(kategorie.l_id) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
-                    ' FROM location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
+                    ' l_lochirarchietxt AS label, location.l_id AS id' +
+                    ' FROM location_hirarchical as location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
-                filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                triggerTables: ['location', 'kategorie'],
+                filterField: 'GetTechName(l_lochirarchietxt)',
                 action: AdapterFilterActions.LIKE
             },
             'month_is': {
@@ -657,7 +658,7 @@ export class SqlMytbDbTrackConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(k_name), 1, 1)',
-            html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", GetLocationNameAncestry(location.l_id, location.l_name, " -> "))'
+            html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_lochirarchietxt)'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',
