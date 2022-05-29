@@ -7,7 +7,12 @@
     "solrgoal": "install-solr-doit",
     "solrdownloadurl": "https://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz",
     "set_this_for_solrgoal_withsolr": "install-solr-doit",
-    "set_this_for_solrgoal_withouthsolr": "noop"
+    "set_this_for_solrgoal_withouthsolr": "noop",
+    "imagemagicgoal": "install-imagemagic-dosymlink",
+    "imagemagicdownloadurl": "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-7.1.0-portable-Q16-HDRI-x86.zip",
+    "imagemagicsharedpath": "F:/ProgrammeShared/ImageMagick/",
+    "set_this_for_imagemagicgoal_withdownload": "install-imagemagic-doinstall",
+    "set_this_for_imagemagicgoal_withsymlink": "install-imagemagic-dosymlink"
   },
   "scripts": {
     "adminserver-serve-dev": "node dist/backend/adminServer.js --adminbackend config/adminServer.dev.json --firewall config/adminfirewall.dev.json --debug true",
@@ -98,6 +103,24 @@
     "init-frontendserver-cache-dev-de": "node dist/frontendserver-dev-de/frontendserverAdmin.js --localSitemapUrl http://localhost:4001/mytbdev/de/sitemap-pdoc-de.xml --sitemapbase http://localhost:4001/mytbdev/de/ --backend config/backend.dev.json --frontend config/frontend.dev.json",
     "init-frontendserver-cache-beta-de": "node dist/frontendserver-beta-de/frontendserverAdmin.js --backend config/backend.beta.json --frontend config/frontend.beta.json",
     "init-frontendserver-cache-prod-de": "node dist/frontendserver-de/frontendserverAdmin.js --backend config/backend.prod.json --frontend config/frontend.prod.json",
+    "install-imagemagic": "cross-var npm run $npm_package_config_imagemagicgoal",
+    "install-imagemagic-doinstall": "npm run install-imagemagic-clear && npm run install-imagemagic-download && npm run install-imagemagic-unpack && npm run install-imagemagic-cleanout",
+    "install-imagemagic-dosymlink": "npm run install-imagemagic-clear && npm run install-imagemagic-symlink",
+    "install-imagemagic-clear": "cross-os install-imagemagic-clear-os",
+    "install-imagemagic-clear-os": {
+      "darwin": "./node_modules/.bin/rimraf contrib/imagemagic && ./node_modules/.bin/mkdirp contrib/imagemagic",
+      "linux": "./node_modules/.bin/rimraf contrib/imagemagic && ./node_modules/.bin/mkdirp contrib/imagemagic",
+      "win32": "node_modules\\.bin\\rimraf contrib/imagemagic && node_modules\\.bin\\mkdirp contrib/imagemagic"
+    },
+    "install-imagemagic-download": "cd contrib && cross-var curl $npm_package_config_imagemagicdownloadurl -o imagemagic.zip",
+    "install-imagemagic-unpack": "cd contrib && tar xf imagemagic.zip -C imagemagic",
+    "install-imagemagic-cleanout": "cross-os install-imagemagic-cleanout-os",
+    "install-imagemagic-cleanout-os": {
+      "darwin": "./node_modules/.bin/rimraf contrib/imagemagic.zip",
+      "linux": "./node_modules/.bin/rimraf contrib/imagemagic.zip",
+      "win32": "node_modules\\.bin\\rimraf contrib/imagemagic.zip"
+    },
+    "install-imagemagic-symlink": "cd contrib && cross-var symlink-dir $npm_package_config_imagemagicsharedpath imagemagic",
     "install-solr": "cross-var npm run $npm_package_config_solrgoal",
     "install-solr-doit": "npm run install-solr-clear && npm run install-solr-download && npm run install-solr-unpack && npm run install-solr-cleanout && npm run install-solr-download-langfiles && npm run install-solr-convert-langfiles && npm run install-solr-download-dataimport",
     "install-solr-clear": "cross-os install-solr-clear-os",

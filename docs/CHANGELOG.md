@@ -16,6 +16,8 @@
 - frontend: added layoutOptions noCount, noHeader
 - frontend: config - show download-icon only in popup
 - solr: improved selection of teaser-image
+- backend: improved sql-filter
+- backend: added imagemagic-installer
 
 ### bug fixes
 - backend: fixed track-filter for route

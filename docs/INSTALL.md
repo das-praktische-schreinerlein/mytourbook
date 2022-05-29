@@ -16,6 +16,44 @@ MYCMSPROJECT="mytourbook"
 npm prune && npm install
 ``` 
 
+### prepare ImageMagic
+
+#### install-imagemagic
+- configure package.json
+```
+  "config": {
+   ...
+    "imagemagicgoal": "install-imagemagic-doinstall",
+    "imagemagicdownloadurl": "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-7.1.0-portable-Q16-HDRI-x86.zip",
+  },
+
+```
+- run install script
+```
+npm install 
+npm run install-imagemagic
+```
+
+##### OR do it manually install-imagemagic
+- install ImageMagic 7 [Download a portable-version](https://imagemagick.org/script/download.php)
+- A) configure path in backend.dev.json + backend.import.json
+```
+    "imageMagicAppPath": "F:\\ProgrammeShared\\ImageMagick\\",
+```
+- B) or use default-config and make a link
+  - package.json
+```
+  "config": {
+    ...
+    "imagemagicgoal": "install-imagemagic-dosymlink",
+    "imagemagicsharedpath": "F:/ProgrammeShared/ImageMagick/",
+  },
+```
+  - backend.dev.json + backend.import.json
+```
+    "imageMagicAppPath": "conftrib/ImageMagick/",
+```
+
 ### prepare solr
 
 #### install-solr
