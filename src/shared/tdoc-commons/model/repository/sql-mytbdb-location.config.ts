@@ -76,7 +76,7 @@ export class SqlMytbDbLocationConfig {
             },
             {
                 profile: 'image',
-                sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                sql: 'SELECT i_calced_path AS i_fav_url_txt ' +
                     'FROM kategorie' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     'WHERE kategorie.l_id IN (:id) ' +
@@ -169,9 +169,11 @@ export class SqlMytbDbLocationConfig {
             'location.l_gesperrt as l_gesperrt',
             'location.l_meta_shortdesc as l_meta_shortdesc',
             'l_meta_shortdesc AS l_meta_shortdesc_md',
-            'CAST(l_geo_latdeg AS CHAR(50)) AS l_geo_latdeg',
-            'CAST(l_geo_longdeg AS CHAR(50)) AS l_geo_longdeg',
-            'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS l_gps_loc',
+            'l_calced_gps_lat AS l_geo_latdeg',
+            'l_calced_gps_lon AS l_geo_longdeg',
+            'l_calced_gps_loc AS l_gps_loc',
+            'l_geo_ele',
+            'l_calced_altMaxFacet AS altMaxFacet',
             'l_lochirarchietxt AS l_lochirarchietxt',
             'l_lochirarchieids AS l_lochirarchieids'],
         facetConfigs: {
@@ -226,7 +228,7 @@ export class SqlMytbDbLocationConfig {
                 selectSql: 'SELECT COUNT(location.l_id) AS count, "noSubType" AS value,' +
                     ' "noSubType" AS label, "true" AS id' +
                     ' FROM location WHERE l_typ IS NULL OR l_typ in (0)',
-                filterField: 'CONCAT("ac_", location.l_typ)',
+                filterField: 'location.l_calced_subtype',
                 action: AdapterFilterActions.IN
             },
             'todoDesc': {
@@ -259,7 +261,7 @@ export class SqlMytbDbLocationConfig {
                 action: AdapterFilterActions.NOTIN
             },
             'actiontype_ss': {
-                selectField: 'CONCAT("ac_", location.l_typ)'
+                selectField: 'location.l_calced_subtype'
             },
             'blocked_is': {
                 selectField: 'l_gesperrt'
@@ -414,6 +416,8 @@ export class SqlMytbDbLocationConfig {
                 ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) DESC, l_name ASC',
             'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id)  tour t_sort WHERE t_sort.l_id = location.l_id) ASC, l_name ASC',
             'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour t_sort WHERE t_sort.l_id = location.l_id) DESC, l_name ASC',
+            'dataTechMaxDesc': 'l_geo_ele DESC',
+            'dataTechMaxAsc': 'l_geo_ele ASC',
             'distance': 'geodist ASC, l_name ASC',
             'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC, l_name ASC',
             'name': 'l_name ASC',
@@ -460,6 +464,7 @@ export class SqlMytbDbLocationConfig {
             // 'location.l_meta_shortdesc_md': ':desc_md_txt:',
             // 'location.l_meta_shortdesc_html': ':desc_html_txt:',
             'location.l_gesperrt': ':blocked_i:',
+            'location.l_geo_ele': ':data_tech_alt_max_i:',
             'location.l_geo_longdeg': ':geo_lon_s:',
             'location.l_geo_latdeg': ':geo_lat_s:',
             'location.l_geo_poly': ':geo_loc_p:',
@@ -473,6 +478,8 @@ export class SqlMytbDbLocationConfig {
             loc_id_i: 'l_id',
             loc_id_is: 'l_id',
             loc_id_parent_i: 'l_parent_id',
+            data_tech_alt_min_i: 'l_geo_ele',
+            data_tech_alt_max_i: 'l_geo_ele',
             desc_txt: 'l_meta_shortdesc',
             desc_md_txt: 'l_meta_shortdesc_md',
             desc_html_txt: 'l_meta_shortdesc_html',

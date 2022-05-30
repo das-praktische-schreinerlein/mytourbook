@@ -29,8 +29,7 @@ export class SqlMytbDbTripConfig {
                 from: 'LEFT JOIN kategorie_tour ON kategorie.k_id=kategorie_tour.k_id ' +
                     'LEFT JOIN tour kt ON kategorie_tour.t_id=kt.t_id ' +
                     'LEFT JOIN tour kt2 ON kategorie.t_id=kt2.t_id ' +
-                    'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(kt.l_id, "_", kt.t_desc_gebiet, "_", kt.t_desc_ziel, "_", kt.t_typ)), ' +
-                    '                                          MD5(CONCAT(kt2.l_id, "_", kt2.t_desc_gebiet, "_", kt2.t_desc_ziel, "_", kt2.t_typ)))',
+                    'LEFT JOIN destination dt ON dt.d_id in (kt.t_calced_d_id, kt2.t_calced_d_id)',
                 triggerParams: ['destination_id_s', 'destination_id_ss'],
                 groupByFields: []
             },
@@ -91,7 +90,7 @@ export class SqlMytbDbTripConfig {
             },
             {
                 profile: 'image',
-                sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                sql: 'SELECT i_calced_path AS i_fav_url_txt ' +
                     'FROM kategorie' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     'WHERE kategorie.tr_id IN (:id) ' +
@@ -158,9 +157,9 @@ export class SqlMytbDbTripConfig {
             'trip.tr_id',
             'trip.l_id',
             'trip.tr_name',
-            'CAST(l_geo_latdeg AS CHAR(50)) AS tr_gps_lat',
-            'CAST(l_geo_longdeg AS CHAR(50)) AS tr_gps_lon',
-            'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS tr_gps_loc',
+            'l_calced_gps_lat AS tr_gps_lat',
+            'l_calced_gps_lon AS tr_gps_lon',
+            'l_calced_gps_loc AS tr_gps_loc',
             'l_lochirarchietxt AS l_lochirarchietxt',
             'l_lochirarchieids AS l_lochirarchieids',
             'tr_datevon AS tr_dateshow',
@@ -177,7 +176,9 @@ export class SqlMytbDbTripConfig {
             'MAX(k_altitude_max) AS k_altitude_max',
             'SUM(k_distance) AS k_distance_sum',
             'tr_meta_shortdesc',
-            'tr_meta_shortdesc AS tr_meta_shortdesc_md'],
+            'tr_meta_shortdesc AS tr_meta_shortdesc_md',
+            'tr_calced_dur AS dur',
+            'tr_calced_durFacet AS durFacet'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -279,7 +280,8 @@ export class SqlMytbDbTripConfig {
                 noFacet: true
             },
             'data_tech_dur_facet_fs': {
-                noFacet: true
+                selectField: 'tr_calced_durFacet',
+                orderBy: 'value asc'
             },
             'data_tech_sections_facet_ss': {
                 noFacet: true

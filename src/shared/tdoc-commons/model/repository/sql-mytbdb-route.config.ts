@@ -45,7 +45,7 @@ export class SqlMytbDbRouteConfig {
                     'GROUP_CONCAT(DISTINCT COALESCE(kategorie.k_route_attr, "") ORDER BY kategorie.k_route_attr SEPARATOR ";; ") AS t_k_route_attr']
             },
             {
-                from: 'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(tour.l_id, "_", tour.t_desc_gebiet, "_", tour.t_desc_ziel, "_", tour.t_typ)))',
+                from: 'LEFT JOIN destination dt ON dt.d_id in (tour.t_calced_d_id)',
                 triggerParams: ['destination_id_s', 'destination_id_ss'],
                 groupByFields: []
             },
@@ -98,7 +98,7 @@ export class SqlMytbDbRouteConfig {
             },
             {
                 profile: 'image',
-                sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                sql: 'SELECT i_calced_path AS i_fav_url_txt ' +
                     'FROM tour INNER JOIN kategorie ON tour.k_id=kategorie.k_id' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
@@ -155,18 +155,18 @@ export class SqlMytbDbRouteConfig {
                 profile: 'navigation_objects',
                 sql: '(SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")' +
                     '  AS navigation_objects' +
-                    '  FROM tour LEFT JOIN location ON tour.l_id = location.l_id' +
+                    '  FROM tour LEFT JOIN location_hirarchical as location ON tour.l_id = location.l_id' +
                     '  WHERE CONCAT(l_lochirarchietxt, t_name) <' +
                     '      (SELECT CONCAT(l_lochirarchietxt, t_name) FROM tour ' +
-                    '       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
+                    '       LEFT JOIN location_hirarchical as location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
                     '  ORDER BY CONCAT(l_lochirarchietxt, t_name) DESC, t_id DESC LIMIT 1) ' +
                     'UNION ' +
                     ' (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")' +
                     '  AS navigation_objects' +
-                    '  FROM tour LEFT JOIN location ON tour.l_id = location.l_id' +
+                    '  FROM tour LEFT JOIN location_hirarchical as location ON tour.l_id = location.l_id' +
                     '   WHERE CONCAT(l_lochirarchietxt, t_name) >' +
                     '      (SELECT CONCAT(l_lochirarchietxt, t_name) FROM tour' +
-                    '       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
+                    '       LEFT JOIN location_hirarchical as location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
                     '   ORDER BY CONCAT(l_lochirarchietxt, t_name), t_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
@@ -183,8 +183,8 @@ export class SqlMytbDbRouteConfig {
         ],
         selectFieldList: [
             '"ROUTE" AS type',
-            'CONCAT("ac_", tour.t_typ) AS actiontype',
-            'CONCAT("ac_", tour.t_typ) AS subtype',
+            't_calced_actiontype AS actiontype',
+            't_calced_actiontype AS subtype',
             'CONCAT("ROUTE", "_", tour.t_id) AS id',
             'tour.k_id',
             'tour.t_id',
@@ -199,9 +199,9 @@ export class SqlMytbDbRouteConfig {
             't_gpstracks_basefile',
             't_meta_shortdesc',
             't_meta_shortdesc AS t_meta_shortdesc_md',
-            'CAST(l_geo_latdeg AS CHAR(50)) AS t_gps_lat',
-            'CAST(l_geo_longdeg AS CHAR(50)) AS t_gps_lon',
-            'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS t_gps_loc',
+            'l_calced_gps_lat AS t_gps_lat',
+            'l_calced_gps_lon AS t_gps_lon',
+            'l_calced_gps_loc AS t_gps_loc',
             'l_lochirarchietxt AS l_lochirarchietxt',
             'l_lochirarchieids AS l_lochirarchieids',
             't_route_hm',
@@ -229,11 +229,11 @@ export class SqlMytbDbRouteConfig {
             't_desc_talort',
             't_desc_ziel',
             't_gesperrt',
-            'ROUND((t_route_hm / 500))*500 AS altAscFacet',
-            'ROUND((t_ele_max / 500))*500 AS altMaxFacet',
-            'ROUND((t_route_m / 5))*5 AS distFacet',
+            't_calced_altAscFacet AS altAscFacet',
+            't_calced_altMaxFacet AS altMaxFacet',
+            't_calced_distFacet AS distFacet',
             't_route_dauer',
-            'ROUND(ROUND(t_route_dauer * 2) / 2, 1) AS durFacet'],
+            't_calced_durFacet AS durFacet'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -279,7 +279,7 @@ export class SqlMytbDbRouteConfig {
                 selectSql: 'SELECT COUNT(tour.t_id) AS count, "noSubType" AS value,' +
                     ' "noSubType" AS label, "true" AS id' +
                     ' FROM tour WHERE t_typ IS NULL OR t_typ in (0)',
-                filterField: 'CONCAT("ac_", tour.t_typ)',
+                filterField: 'tour.t_calced_actiontype',
                 action: AdapterFilterActions.IN
             },
             'todoDesc': {
@@ -315,7 +315,7 @@ export class SqlMytbDbRouteConfig {
                 action: AdapterFilterActions.NOTIN
             },
             'actiontype_ss': {
-                selectField: 'CONCAT("ac_", tour.t_typ)'
+                selectField: 'tour.t_calced_actiontype'
             },
             'blocked_is': {
                 selectField: 't_gesperrt'
@@ -329,11 +329,11 @@ export class SqlMytbDbRouteConfig {
                 orderBy: 'value asc'
             },
             'data_tech_dist_facets_fs': {
-                selectField: 'ROUND((t_route_m / 5))*5',
+                selectField: 't_calced_distFacet',
                 orderBy: 'value asc'
             },
             'data_tech_dur_facet_fs': {
-                selectField: 'ROUND(ROUND(t_route_dauer * 2) / 2, 1)',
+                selectField: 't_calced_durFacet',
                 orderBy: 'value asc'
             },
             'data_tech_sections_facet_ss': {
@@ -499,7 +499,7 @@ export class SqlMytbDbRouteConfig {
                 action: AdapterFilterActions.LIKEIN
             },
             'subtype_ss': {
-                selectField: 'CONCAT("ac_", tour.t_typ)'
+                selectField: 'tour.t_calced_actiontype'
             },
             'track_id_i': {
                 filterFields: ['kategorie.k_id', 'kategorie_tour.k_id'],
@@ -542,7 +542,7 @@ export class SqlMytbDbRouteConfig {
                     '                  select distinct \'ROUTE_DONE\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct t_name          as name,' +
-                    '                                           CONCAT("ac_", T_TYP) as type,' +
+                    '                                           t_calced_actiontype as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -555,7 +555,7 @@ export class SqlMytbDbRouteConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_name          as name,' +
-                    '                                           CONCAT("ac_", T_TYP) as type,' +
+                    '                                           t_calced_actiontype as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -598,7 +598,7 @@ export class SqlMytbDbRouteConfig {
                     '' +
                     '                  select distinct \'ROUTE_DONE\' as typ, type, \'ALLOVER\' year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct t_name as name, CONCAT("ac_", T_TYP) as type, K_DATEVON' +
+                    '                           select distinct t_name as name, t_calced_actiontype as type, K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +
@@ -608,7 +608,7 @@ export class SqlMytbDbRouteConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct t_name as name, CONCAT("ac_", T_TYP) as type, K_DATEVON' +
+                    '                           select distinct t_name as name, t_calced_actiontype as type, K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
                     '                           where t.t_id > 1' +
@@ -643,7 +643,7 @@ export class SqlMytbDbRouteConfig {
                     '                  select \'ROUTE_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
-                    '                                           CONCAT("ac_", T_TYP) as type,' +
+                    '                                           t_calced_actiontype as type,' +
                     '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
@@ -676,7 +676,7 @@ export class SqlMytbDbRouteConfig {
                     '                  select \'ROUTE_NEW\' as typ, type, \'ALLOVER\' year, count(*) count' +
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
-                    '                                           CONCAT("ac_", T_TYP) as type,' +
+                    '                                           t_calced_actiontype as type,' +
                     '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
@@ -692,7 +692,7 @@ export class SqlMytbDbRouteConfig {
                     '                  select \'ROUTE_NEW\' as typ, type, \'ALLOVER\' year, count(*) count' +
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
-                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500)  as            type,' +
+                    '                                           CONCAT("ele_", t_calced_altMaxFacet) as type,' +
                     '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
@@ -777,7 +777,7 @@ export class SqlMytbDbRouteConfig {
             noCoordinates: '"666dummy999"',
             noLocation: 'tour.l_id',
             noRoute: '"666dummy999"',
-            noSubType: 'CONCAT("ac_", tour.t_typ)',
+            noSubType: 'tour.t_calced_actiontype',
             todoDesc: '"todoDesc"',
             todoKeywords: 'keyword.kw_name',
             unrated: 'tour.t_rate_gesamt',

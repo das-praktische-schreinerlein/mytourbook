@@ -24,25 +24,25 @@ export class SqlMytbDbAllConfig {
             {
                 profile: 'image',
                 sql: 'SELECT * FROM (' +
-                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, ' +
+                    'SELECT i_calced_path AS i_fav_url_txt, ' +
                     '      I_RATE_MOTIVE, I_RATE_WICHTIGKEIT, I_RATE, kategorie.k_rate_gesamt, image.I_ID ' +
                     '  FROM image' +
                     '      INNER JOIN kategorie ON image.k_id=kategorie.k_id' +
                     '  WHERE "IMAGE" = ":type" AND image.i_id IN (:id)' +
                     ' UNION ' +
-                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, ' +
+                    'SELECT i_calced_path AS i_fav_url_txt, ' +
                     '      I_RATE_MOTIVE, I_RATE_WICHTIGKEIT, I_RATE, kategorie.k_rate_gesamt, image.I_ID ' +
                     '  FROM kategorie INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     '  WHERE "TRIP" = ":type" AND kategorie.tr_id IN (:id)' +
                     ' UNION ' +
-                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, ' +
+                    'SELECT i_calced_path AS i_fav_url_txt, ' +
                     '      I_RATE_MOTIVE, I_RATE_WICHTIGKEIT, I_RATE, kategorie.k_rate_gesamt, image.I_ID ' +
                     '  FROM tour INNER JOIN kategorie ON tour.k_id=kategorie.k_id' +
                     '   INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     '   INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     '  WHERE "ROUTE" = ":type" AND tour.t_id IN (:id) and p_id in (18)' +
                     ' UNION ' +
-                    'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt, ' +
+                    'SELECT i_calced_path AS i_fav_url_txt, ' +
                     '      I_RATE_MOTIVE, I_RATE_WICHTIGKEIT, I_RATE, kategorie.k_rate_gesamt, image.I_ID ' +
                     '  FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     '      INNER JOIN kategorie ON image.k_id=kategorie.k_id' +
@@ -193,16 +193,16 @@ export class SqlMytbDbAllConfig {
                 filterField: 'blocked'
             },
             'data_tech_alt_asc_facet_is': {
-                filterField: 'altitude_asc',
+                filterField: 'altAscFacet',
             },
             'data_tech_alt_max_facet_is': {
-                filterField: 'gps_ele'
+                filterField: 'altMaxFacet'
             },
             'data_tech_dist_facets_fs': {
-                filterField: 'distance'
+                filterField: 'distFacet'
             },
             'data_tech_dur_facet_fs': {
-                filterField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(datebis, datevon))/3600 * 2) / 2, 1)'
+                filterField: 'durFacet'
             },
             'data_tech_sections_facet_ss': {
                 noFacet: true
@@ -352,7 +352,7 @@ export class SqlMytbDbAllConfig {
             track_id_is: 'k_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
-            html: 'CONCAT(COALESCE(meta_name,""), " ", l_name)'
+            html: 'CONCAT(COALESCE(meta_name,""), " ", l_lochirarchietxt)'
         },
         writeMapping: {
         },

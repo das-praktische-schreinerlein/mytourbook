@@ -23,7 +23,7 @@ export class SqlMytbDbVideoConfig {
             },
             {
                 from: 'LEFT JOIN tour kt2 ON kategorie.t_id=kt2.t_id ' +
-                    'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(kt2.l_id, "_", kt2.t_desc_gebiet, "_", kt2.t_desc_ziel, "_", kt2.t_typ)))',
+                    'LEFT JOIN destination dt ON dt.d_id in (kt2.t_calced_d_id)',
                 triggerParams: ['destination_id_s', 'destination_id_ss'],
                 groupByFields: []
             },
@@ -144,8 +144,8 @@ export class SqlMytbDbVideoConfig {
         selectFieldList: [
             '"VIDEO" AS type',
             'k_type',
-            'CONCAT("ac_", kategorie.k_type) AS actiontype',
-            'CONCAT("ac_", kategorie.k_type) AS subtype',
+            'kategorie.k_calced_actiontype AS actiontype',
+            'kategorie.k_calced_actiontype AS subtype',
             'CONCAT("VIDEO", "_", video.v_id) AS id',
             // 'n_id',
             'video.v_id',
@@ -163,12 +163,12 @@ export class SqlMytbDbVideoConfig {
             'k_gpstracks_basefile',
             'v_meta_shortdesc',
             'v_meta_shortdesc AS v_meta_shortdesc_md',
-            'CAST(v_gps_lat AS CHAR(50)) AS v_gps_lat',
-            'CAST(v_gps_lon AS CHAR(50)) AS v_gps_lon',
-            'CONCAT(v_gps_lat, ",", v_gps_lon) AS v_gps_loc',
+            'v_calced_gps_lat AS v_gps_lat',
+            'v_calced_gps_lon AS v_gps_lon',
+            'v_calced_gps_loc AS v_gps_loc',
             'l_lochirarchietxt',
             'l_lochirarchieids',
-            'CONCAT(video.v_dir, "/", video.v_file) AS v_fav_url_txt',
+            'v_calced_path AS v_fav_url_txt',
             'k_altitude_asc',
             'k_altitude_desc',
             'v_gps_ele',
@@ -182,11 +182,11 @@ export class SqlMytbDbVideoConfig {
             'v_rate_motive',
             'k_rate_schwierigkeit',
             'v_rate_wichtigkeit',
-            'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
-            'ROUND((v_gps_ele / 500))*500 AS altMaxFacet',
-            'ROUND((k_distance / 5))*5 AS distFacet',
-            'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
-            'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
+            'k_calced_altAscFacet AS altAscFacet',
+            'v_calced_altMaxFacet AS altMaxFacet',
+            'k_calced_distFacet AS distFacet',
+            'k_calced_dur AS dur',
+            'k_calced_durFacet AS durFacet'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -265,28 +265,28 @@ export class SqlMytbDbVideoConfig {
                 action: AdapterFilterActions.NOTIN
             },
             'actiontype_ss': {
-                selectField: 'CONCAT("ac_", kategorie.k_type)',
+                selectField: 'kategorie.k_calced_actiontype',
                 selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id'
             },
             'blocked_is': {
                 selectField: 'v_gesperrt'
             },
             'data_tech_alt_asc_facet_is': {
-                selectField: 'ROUND((k_altitude_asc / 500))*500',
+                selectField: 'k_calced_altAscFacet',
                 selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
                 orderBy: 'value asc'
             },
             'data_tech_alt_max_facet_is': {
-                selectField: 'ROUND((v_gps_ele / 500))*500',
+                selectField: 'v_calced_altMaxFacet',
                 orderBy: 'value asc'
             },
             'data_tech_dist_facets_fs': {
-                selectField: 'ROUND((k_distance / 5))*5',
+                selectField: 'k_calced_distFacet',
                 selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
                 orderBy: 'value asc'
             },
             'data_tech_dur_facet_fs': {
-                selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
+                selectField: 'k_calced_durFacet',
                 selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
                 orderBy: 'value asc'
             },
@@ -418,7 +418,7 @@ export class SqlMytbDbVideoConfig {
                 noFacet: true
             },
             'subtype_ss': {
-                selectField: 'CONCAT("ac_", kategorie.k_type)',
+                selectField: 'kategorie.k_calced_actiontype',
                 selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
                 orderBy: 'value asc'
             },
@@ -444,11 +444,11 @@ export class SqlMytbDbVideoConfig {
             'tripDate': 'v_date DESC, video.v_id ASC',
             'tripDateAsc': 'v_date ASC, video.v_id ASC',
             'distance': 'geodist ASC',
-            'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
+            'dataTechDurDesc': 'k_calced_dur DESC',
             'dataTechAltDesc': 'k_altitude_asc DESC',
             'dataTechMaxDesc': 'v_gps_ele DESC',
             'dataTechDistDesc': 'k_distance DESC',
-            'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 ASC',
+            'dataTechDurAsc': 'k_calced_dur ASC',
             'dataTechAltAsc': 'k_altitude_asc ASC',
             'dataTechMaxAsc': 'v_gps_ele ASC',
             'dataTechDistAsc': 'k_distance ASC',
@@ -495,7 +495,7 @@ export class SqlMytbDbVideoConfig {
             track_id_is: 'video.k_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
-            html: 'CONCAT(COALESCE(v_meta_name, ""), " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", " ", location.l_name)'
+            html: 'CONCAT(COALESCE(v_meta_name, ""), " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", " ", location.l_lochirarchietxt)'
         },
         writeMapping: {
             'video.l_id': ':loc_id_i:',

@@ -31,7 +31,7 @@ export class SqlMytbDbInfoConfig {
                 groupByFields: ['GROUP_CONCAT(DISTINCT COALESCE(tift.tif_linked_details, "") ORDER BY tift.tif_linked_details SEPARATOR ", ") AS tif_ref_details']
             },
             {
-                from: 'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(tiftour.l_id, "_", tiftour.t_desc_gebiet, "_", tiftour.t_desc_ziel, "_", tiftour.t_typ)))',
+                from: 'LEFT JOIN destination dt ON dt.d_id in (tiftour.t_calced_d_id)',
                 triggerParams: ['destination_id_s', 'destination_id_ss'],
                 groupByFields: []
             },
@@ -139,9 +139,9 @@ export class SqlMytbDbInfoConfig {
             'info.if_name',
             'if_publisher',
             'info.if_url as if_reference',
-            'CAST(location.l_geo_latdeg AS CHAR(50)) AS if_gps_lat',
-            'CAST(location.l_geo_longdeg AS CHAR(50)) AS if_gps_lon',
-            'CONCAT(location.l_geo_latdeg, ",", location.l_geo_longdeg) AS if_gps_loc',
+            'l_calced_gps_lat AS if_gps_lat',
+            'l_calced_gps_lon AS if_gps_lon',
+            'l_calced_gps_loc AS if_gps_loc',
             'l_lochirarchietxt AS l_lochirarchietxt',
             'l_lochirarchieids AS l_lochirarchieids',
             'if_gesperrt',
@@ -351,7 +351,7 @@ export class SqlMytbDbInfoConfig {
                 noFacet: true
             },
             'subtype_ss': {
-                selectField: 'CONCAT("if_", info.if_typ)'
+                selectField: 'info.if_calced_subtype'
             },
             'trip_id_i': {
                 filterFields: ['kt_trip.tr_id'],

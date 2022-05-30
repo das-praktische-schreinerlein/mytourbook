@@ -8,7 +8,7 @@ export class SqlMytbDbDestinationConfig {
         selectFrom: 'destination LEFT JOIN location_hirarchical as location ON destination.l_id = location.l_id ',
         optionalGroupBy: [
             {
-                from: 'LEFT JOIN tour dtour ON destination.d_id in (MD5(CONCAT(dtour.l_id, "_", dtour.t_desc_gebiet, "_", dtour.t_desc_ziel, "_", dtour.t_typ)))',
+                from: 'LEFT JOIN tour dtour ON destination.d_id in (dtour.t_calced_d_id)',
                 triggerParams: ['route_id_i', 'route_id_is', 'info_id_i', 'info_id_is'],
                 groupByFields: []
             },
@@ -20,14 +20,14 @@ export class SqlMytbDbDestinationConfig {
             },
             {
                 from:
-                    'LEFT JOIN tour t ON destination.d_id in (MD5(CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ))) ' +
+                    'LEFT JOIN tour t ON destination.d_id in (t.t_calced_d_id) ' +
                     'LEFT JOIN kategorie_tour kt ON kt.t_id=t.t_id ' +
                     'LEFT JOIN kategorie k ON k.k_id=kt.k_id OR k.t_id=t.t_id ',
                 triggerParams: ['track_id_i', 'track_id_is'],
                 groupByFields: []
             },
             {
-                from: 'LEFT JOIN tour ntour ON destination.d_id=MD5(CONCAT(ntour.l_id, "_", ntour.t_desc_gebiet, "_", ntour.t_desc_ziel, "_", ntour.t_typ)) ' +
+                from: 'LEFT JOIN tour ntour ON destination.d_id=ntour.t_calced_d_id ' +
                     'LEFT JOIN kategorie_tour kt_kt ON ntour.t_id=kt_kt.t_id ' +
                     'LEFT JOIN kategorie kt_k ON kt_kt.k_id=kt_k.k_id OR ntour.t_id=kt_k.t_id ' +
                     'LEFT JOIN news kt_news ON kt_k.k_datevon >= kt_news.n_datevon AND kt_k.k_datevon <= kt_news.n_datebis ',
@@ -35,7 +35,7 @@ export class SqlMytbDbDestinationConfig {
                 groupByFields: ['kt_news.n_id']
             },
             {
-                from: 'LEFT JOIN tour trtour ON destination.d_id=MD5(CONCAT(trtour.l_id, "_", trtour.t_desc_gebiet, "_", trtour.t_desc_ziel, "_", trtour.t_typ)) ' +
+                from: 'LEFT JOIN tour trtour ON destination.d_id=trtour.t_calced_d_id ' +
                     'LEFT JOIN kategorie_tour kt_kt ON trtour.t_id=kt_kt.t_id ' +
                     'LEFT JOIN kategorie kt_k ON kt_kt.k_id=kt_k.k_id OR kt_k.t_id=trtour.t_id ' +
                     'LEFT JOIN trip kt_trip ON kt_k.tr_id=kt_trip.tr_id',
@@ -47,9 +47,9 @@ export class SqlMytbDbDestinationConfig {
         loadDetailData: [
             {
                 profile: 'image',
-                sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                sql: 'SELECT i_calced_path AS i_fav_url_txt ' +
                     'FROM destination ' +
-                    ' INNER JOIN tour ON destination.d_id=MD5(CONCAT(tour.l_id, "_", t_desc_gebiet, "_", t_desc_ziel, "_", t_typ)) ' +
+                    ' INNER JOIN tour ON destination.d_id=tour.t_calced_d_id ' +
                     ' INNER JOIN kategorie ON tour.k_id=kategorie.k_id ' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
@@ -62,7 +62,7 @@ export class SqlMytbDbDestinationConfig {
                 profile: 'keywords',
                 sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM destination ' +
-                    ' INNER JOIN tour ON destination.d_id=MD5(CONCAT(tour.l_id, "_", t_desc_gebiet, "_", t_desc_ziel, "_", t_typ)) ' +
+                    ' INNER JOIN tour ON destination.d_id=tour.t_calced_d_id ' +
                     ' INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
                     ' INNER JOIN keyword ON tour_keyword.kw_id=keyword.kw_id ' +
                     'WHERE destination.d_id IN (":id")',
@@ -72,9 +72,9 @@ export class SqlMytbDbDestinationConfig {
         ],
         selectFieldList: [
             'DISTINCT "DESTINATION" AS type',
-            'CONCAT("ac_", destination.d_typ) AS actiontype',
-            'CONCAT("ac_", destination.d_typ) AS subtype',
-            'CONCAT("DESTINATION", "_", destination.d_id) AS id',
+            'd_calced_actiontype AS actiontype',
+            'd_calced_actiontype AS subtype',
+            'd_calced_id AS id',
             'destination.d_id',
             'destination.l_id',
             'd_name',
@@ -84,9 +84,9 @@ export class SqlMytbDbDestinationConfig {
             'WEEK(d_datevon) AS week',
             'MONTH(d_datevon) AS month',
             'YEAR(d_datevon) AS year',
-            'CAST(l_geo_latdeg AS CHAR(50)) AS d_gps_lat',
-            'CAST(l_geo_longdeg AS CHAR(50)) AS d_gps_lon',
-            'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS d_gps_loc',
+            'l_calced_gps_lat AS d_gps_lat',
+            'l_calced_gps_lon AS d_gps_lon',
+            'l_calced_gps_loc AS d_gps_loc',
             'l_lochirarchietxt AS l_lochirarchietxt',
             'l_lochirarchieids AS l_lochirarchieids',
             'd_route_hm',
@@ -109,11 +109,11 @@ export class SqlMytbDbDestinationConfig {
             'd_rate_schneeschuh',
             'd_desc_gebiet',
             'd_desc_ziel',
-            'ROUND((d_route_hm / 500))*500 AS altAscFacet',
-            'ROUND((d_ele_max / 500))*500 AS altMaxFacet',
-            'ROUND((d_route_m / 5))*5 AS distFacet',
+            'd_calced_altAscFacet AS altAscFacet',
+            'd_calced_altMaxFacet AS altMaxFacet',
+            'd_calced_distFacet AS distFacet',
             'd_route_dauer',
-            'ROUND(ROUND(d_route_dauer * 2) / 2, 1) AS durFacet'],
+            'd_calced_durFacet AS durFacet'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -166,29 +166,29 @@ export class SqlMytbDbDestinationConfig {
             },
             // common
             'id_notin_is': {
-                filterField: 'CONCAT("DESTINATION", "_", destination.d_id)',
+                filterField: 'destination.d_calced_id',
                 action: AdapterFilterActions.NOTIN
             },
             'actiontype_ss': {
-                selectField: 'CONCAT("ac_", destination.d_typ)'
+                selectField: 'destination.d_calced_actiontype'
             },
             'blocked_is': {
                 noFacet: true
             },
             'data_tech_alt_asc_facet_is': {
-                selectField: 'ROUND((d_route_hm / 500))*500',
+                selectField: 'd_calced_altAscFacet',
                 orderBy: 'value asc'
             },
             'data_tech_alt_max_facet_is': {
-                selectField: 'ROUND((d_ele_max / 500))*500',
+                selectField: 'd_calced_altMaxFacet',
                 orderBy: 'value asc'
             },
             'data_tech_dist_facets_fs': {
-                selectField: 'ROUND((d_route_m / 5))*5',
+                selectField: 'd_calced_distFacet',
                 orderBy: 'value asc'
             },
             'data_tech_dur_facet_fs': {
-                selectField: 'ROUND(ROUND(d_route_dauer * 2) / 2, 1)',
+                selectField: 'd_calced_durFacet',
                 orderBy: 'value asc'
             },
             'data_tech_sections_facet_ss': {
@@ -335,8 +335,8 @@ export class SqlMytbDbDestinationConfig {
                     '         from (' +
                     '                  select \'DESTINATION_DONE\' as typ, type, year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ)     as name,' +
-                    '                                           CONCAT("ac_", T_TYP) as type,' +
+                    '                           select distinct t.t_calced_statisticname_actiontype as name,' +
+                    '                                           t_calced_actiontype as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -348,8 +348,8 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ)     as name,' +
-                    '                                           CONCAT("ac_", T_TYP) as type,' +
+                    '                           select distinct t.t_calced_statisticname_actiontype as name,' +
+                    '                                           t_calced_actiontype as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -360,7 +360,7 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t_ele_max)     as name,' +
+                    '                           select distinct t_calced_statisticname_ele as name,' +
                     '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
@@ -374,7 +374,7 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t_ele_max)     as name,' +
+                    '                           select distinct t_calced_statisticname_ele as name,' +
                     '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
@@ -392,8 +392,8 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                  select \'DESTINATION_DONE\' as typ, type, \'ALLOVER\' year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ) as name,' +
-                    '                                CONCAT("ac_", T_TYP) as type,' +
+                    '                           select distinct t.t_calced_statisticname_actiontype as name,' +
+                    '                                t_calced_actiontype as type,' +
 '                                                    K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
@@ -404,8 +404,8 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ) as name,' +
-                    '                                CONCAT("ac_", T_TYP) as type,' +
+                    '                           select distinct t.t_calced_statisticname_actiontype as name,' +
+                    '                                t_calced_actiontype as type,' +
                 '                                    K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
@@ -415,7 +415,7 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t.t_ele_max) as name,' +
+                    '                           select distinct t_calced_statisticname_ele as name,' +
                     '                               CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
                     '                               K_DATEVON' +
                     '                           from kategorie k' +
@@ -428,7 +428,7 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t.t_ele_max) as name,' +
+                    '                           select distinct t_calced_statisticname_ele as name,' +
                     '                               CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
                     '                               K_DATEVON' +
                     '                           from kategorie k' +
@@ -444,9 +444,9 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                  select \'DESTINATION_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ) as       name,' +
-                    '                                           CONCAT("ac_", T_TYP) as type,' +
-                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                           select distinct t.t_calced_statisticname_actiontype as name,' +
+                    '                                           t_calced_actiontype as type,' +
+                    '                                           min(YEAR(t_datevon)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
@@ -455,9 +455,9 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t.t_ele_max) as       name,' +
+                    '                           select distinct t_calced_statisticname_ele as name,' +
                     '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
-                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_datevon)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
@@ -472,9 +472,9 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                  select \'DESTINATION_NEW\' as typ, type, \'ALLOVER\' year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ) as       name,' +
-                    '                                           CONCAT("ac_", T_TYP) as type,' +
-                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                           select distinct t.t_calced_statisticname_actiontype as name,' +
+                    '                                           t_calced_actiontype as type,' +
+                    '                                           min(YEAR(t_datevon)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
@@ -483,9 +483,9 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t.t_ele_max) as       name,' +
+                    '                           select distinct t_calced_statisticname_ele as name,' +
                     '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
-                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_datevon)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +

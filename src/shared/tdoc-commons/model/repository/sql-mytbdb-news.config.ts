@@ -57,7 +57,7 @@ export class SqlMytbDbNewsConfig {
         loadDetailData: [
             {
                 profile: 'image',
-                sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                sql: 'SELECT i_calced_path AS i_fav_url_txt ' +
                     'FROM news' +
                     ' INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +

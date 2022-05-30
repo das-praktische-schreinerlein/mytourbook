@@ -35,8 +35,7 @@ export class SqlMytbDbTrackConfig {
             },
             {
                 from: 'LEFT JOIN tour kt2 ON kategorie.t_id=kt2.t_id ' +
-                    'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(kt.l_id, "_", kt.t_desc_gebiet, "_", kt.t_desc_ziel, "_", kt.t_typ)), ' +
-                    '                                          MD5(CONCAT(kt2.l_id, "_", kt2.t_desc_gebiet, "_", kt2.t_desc_ziel, "_", kt2.t_typ)))',
+                    'LEFT JOIN destination dt ON dt.d_id in (kt.t_calced_d_id, kt2.t_calced_d_id)',
                 triggerParams: ['destination_id_s', 'destination_id_ss'],
                 groupByFields: []
             },
@@ -111,7 +110,7 @@ export class SqlMytbDbTrackConfig {
             },
             {
                 profile: 'image',
-                sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                sql: 'SELECT i_calced_path AS i_fav_url_txt ' +
                     'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     'WHERE image.k_id IN (:id) and p_id in (18)',
                 parameterNames: ['id']
@@ -193,8 +192,8 @@ export class SqlMytbDbTrackConfig {
         selectFieldList: [
             '"TRACK" AS type',
             'kategorie.k_type',
-            'CONCAT("ac_", kategorie.k_type) AS actiontype',
-            'CONCAT("ac_", kategorie.k_type) AS subtype',
+            'kategorie.k_calced_actiontype AS actiontype',
+            'kategorie.k_calced_actiontype AS subtype',
             'CONCAT("TRACK", "_", kategorie.k_id) AS id',
 //                'kategorie.i_id',
             'kategorie.k_id',
@@ -215,12 +214,12 @@ export class SqlMytbDbTrackConfig {
             'k_gpstracks_basefile',
             'k_meta_shortdesc',
             'k_meta_shortdesc AS k_meta_shortdesc_md',
-            'CAST(l_geo_latdeg AS CHAR(50)) AS k_gps_lat',
-            'CAST(l_geo_longdeg AS CHAR(50)) AS k_gps_lon',
-            'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS k_gps_loc',
+            'l_calced_gps_lat AS k_gps_lat',
+            'l_calced_gps_lon AS k_gps_lon',
+            'l_calced_gps_loc AS k_gps_loc',
             'l_lochirarchietxt AS l_lochirarchietxt',
             'l_lochirarchieids AS l_lochirarchieids',
-//                'CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt',
+//                'i_calced_path AS i_fav_url_txt',
             'k_altitude_asc',
             'k_altitude_desc',
             'k_altitude_min',
@@ -234,11 +233,11 @@ export class SqlMytbDbTrackConfig {
             'k_rate_motive',
             'k_rate_schwierigkeit',
             'k_rate_wichtigkeit',
-            'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
-            'ROUND((k_altitude_max / 500))*500 AS altMaxFacet',
-            'ROUND((k_distance / 5))*5 AS distFacet',
-            'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
-            'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
+            'k_calced_altAscFacet AS altAscFacet',
+            'k_calced_altMaxFacet AS altMaxFacet',
+            'k_calced_distFacet AS distFacet',
+            'k_calced_dur AS dur',
+            'k_calced_durFacet AS durFacet'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -316,7 +315,7 @@ export class SqlMytbDbTrackConfig {
                 selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noSubType" AS value,' +
                     ' "noSubType" AS label, "true" AS id' +
                     ' FROM kategorie WHERE k_type IS NULL OR k_type in (0)',
-                filterField: 'CONCAT("ac_", kategorie.k_type)',
+                filterField: 'kategorie.k_calced_actiontype',
                 action: AdapterFilterActions.IN
             },
             'todoDesc': {
@@ -358,25 +357,25 @@ export class SqlMytbDbTrackConfig {
                 action: AdapterFilterActions.NOTIN
             },
             'actiontype_ss': {
-                selectField: 'CONCAT("ac_", kategorie.k_type)'
+                selectField: 'kategorie.k_calced_actiontype'
             },
             'blocked_is': {
                 selectField: 'k_gesperrt'
             },
             'data_tech_alt_asc_facet_is': {
-                selectField: 'ROUND((k_altitude_asc / 500))*500',
+                selectField: 'k_calced_altAscFacet',
                 orderBy: 'value ASC'
             },
             'data_tech_alt_max_facet_is': {
-                selectField: 'ROUND((k_altitude_max / 500))*500',
+                selectField: 'k_calced_altMaxFacet',
                 orderBy: 'value asc'
             },
             'data_tech_dist_facets_fs': {
-                selectField: 'ROUND((k_distance / 5))*5',
+                selectField: 'k_calced_distFacet',
                 orderBy: 'value asc'
             },
             'data_tech_dur_facet_fs': {
-                selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
+                selectField: 'k_calced_durFacet',
                 orderBy: 'value asc'
             },
             'data_tech_sections_facet_ss': {
@@ -520,7 +519,7 @@ export class SqlMytbDbTrackConfig {
                 action: AdapterFilterActions.IN_NUMBER
             },
             'subtype_ss': {
-                selectField: 'CONCAT("ac_", kategorie.k_type)'
+                selectField: 'kategorie.k_calced_actiontype'
             },
             'trip_id_is': {
                 selectSql: 'SELECT COUNT(kategorie.tr_id) AS count, trip.tr_id AS value,' +
@@ -551,7 +550,7 @@ export class SqlMytbDbTrackConfig {
                     '              select distinct \'TRACK_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct k_name as            name,' +
-                    '                                           CONCAT("ac_", K_TYPE)  as type,' +
+                    '                                           k_calced_actiontype  as type,' +
                     '                                           YEAR(k_DATEVON) year' +
                     '                           from kategorie k' +
                     '                       ) x' +
@@ -562,7 +561,7 @@ export class SqlMytbDbTrackConfig {
                     '              select distinct \'TRACK_NEW\' as typ, type, \'ALLOVER\' as year, count(*) count' +
                     '                  from (' +
                     '                           select distinct k_name as            name,' +
-                    '                                           CONCAT("ac_", K_TYPE)  as type' +
+                    '                                           k.k_calced_actiontype  as type' +
                     '                           from kategorie k' +
                     '                       ) x' +
                     '                  group by type, year' +
@@ -572,7 +571,7 @@ export class SqlMytbDbTrackConfig {
                     '              select distinct \'TRACK_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct k_name as            name,' +
-                    '                                           CONCAT("ele_", ROUND((k_altitude_max / 500))*500) as type,' +
+                    '                                           CONCAT("ele_", k_calced_altMaxFacet) as type,' +
                     '                                           YEAR(k_DATEVON) year' +
                     '                           from kategorie k' +
                     '                       ) x' +
@@ -583,7 +582,7 @@ export class SqlMytbDbTrackConfig {
                     '              select distinct \'TRACK_NEW\' as typ, type, \'ALLOVER\' as year, count(*) count' +
                     '                  from (' +
                     '                           select distinct k_name as            name,' +
-                    '                                           CONCAT("ele_", ROUND((k_altitude_max / 500))*500) as type' +
+                    '                                           CONCAT("ele_", k_calced_altMaxFacet) as type' +
                     '                           from kategorie k' +
                     '                       ) x' +
                     '                  group by type, year' +
@@ -609,11 +608,11 @@ export class SqlMytbDbTrackConfig {
             'tripDate': 'k_datevon DESC, k_name ASC',
             'tripDateAsc': 'k_datevon ASC, k_name ASC',
             'distance': 'geodist ASC, k_name ASC',
-            'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC, k_name ASC',
+            'dataTechDurDesc': 'k_calced_dur DESC, k_name ASC',
             'dataTechAltDesc': 'k_altitude_asc DESC, k_name ASC',
             'dataTechMaxDesc': 'k_altitude_max DESC, k_name ASC',
             'dataTechDistDesc': 'k_distance DESC, k_name ASC',
-            'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 ASC, k_name ASC',
+            'dataTechDurAsc': 'k_calced_dur ASC, k_name ASC',
             'dataTechAltAsc': 'k_altitude_asc ASC, k_name ASC',
             'dataTechMaxAsc': 'k_altitude_max ASC, k_name ASC',
             'dataTechDistAsc': 'k_distance ASC, k_name ASC',
@@ -634,7 +633,7 @@ export class SqlMytbDbTrackConfig {
             noCoordinates: '"666dummy999"',
             noLocation: 'kategorie.l_id',
             noRoute: 'kategorie.t_id',
-            noSubType: 'CONCAT("ac_", kategorie.k_type)',
+            noSubType: 'kategorie.k_calced_actiontype',
             todoDesc: '"todoDesc"',
             todoKeywords: 'keyword.kw_name',
             unrated: 'kategorie.k_rate_gesamt',
