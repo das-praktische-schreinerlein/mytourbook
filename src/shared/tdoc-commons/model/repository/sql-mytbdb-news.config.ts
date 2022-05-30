@@ -131,7 +131,6 @@ export class SqlMytbDbNewsConfig {
             'CONCAT("NEWS", "_", news.n_id) AS id',
             'news.n_id',
             'n_headline',
-            'CONCAT(n_headline, " ", COALESCE(n_message,"")) AS html',
             'n_date',
             'n_datevon',
             'n_datebis',

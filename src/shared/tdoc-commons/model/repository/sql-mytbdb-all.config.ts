@@ -93,7 +93,6 @@ export class SqlMytbDbAllConfig {
             'tr_id',
             'all_entries.l_id',
             'meta_name',
-            'html',
             'blocked',
             'date',
             'datevon',

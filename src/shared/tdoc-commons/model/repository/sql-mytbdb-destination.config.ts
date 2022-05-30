@@ -361,7 +361,7 @@ export class SqlMytbDbDestinationConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_calced_statisticname_ele as name,' +
-                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                                           CONCAT("ele_", t_calced_altMaxFacet) as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -375,7 +375,7 @@ export class SqlMytbDbDestinationConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_calced_statisticname_ele as name,' +
-                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                                           CONCAT("ele_", t_calced_altMaxFacet) as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -416,7 +416,7 @@ export class SqlMytbDbDestinationConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_calced_statisticname_ele as name,' +
-                    '                               CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                               CONCAT("ele_", t_calced_altMaxFacet) as type,' +
                     '                               K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
@@ -429,7 +429,7 @@ export class SqlMytbDbDestinationConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_calced_statisticname_ele as name,' +
-                    '                               CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                               CONCAT("ele_", t_calced_altMaxFacet) as type,' +
                     '                               K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
@@ -456,7 +456,7 @@ export class SqlMytbDbDestinationConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_calced_statisticname_ele as name,' +
-                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                                           CONCAT("ele_", t_calced_altMaxFacet) as type,' +
                     '                                           min(YEAR(t_datevon)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
@@ -484,7 +484,7 @@ export class SqlMytbDbDestinationConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_calced_statisticname_ele as name,' +
-                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                                           CONCAT("ele_", t_calced_altMaxFacet) as type,' +
                     '                                           min(YEAR(t_datevon)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +

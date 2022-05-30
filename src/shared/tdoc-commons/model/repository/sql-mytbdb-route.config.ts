@@ -321,11 +321,11 @@ export class SqlMytbDbRouteConfig {
                 selectField: 't_gesperrt'
             },
             'data_tech_alt_asc_facet_is': {
-                selectField: 'ROUND((t_route_hm / 500))*500',
+                selectField: 't_calced_altAscFacet',
                 orderBy: 'value asc'
             },
             'data_tech_alt_max_facet_is': {
-                selectField: 'ROUND((t_ele_max / 500))*500',
+                selectField: 't_calced_altMaxFacet',
                 orderBy: 'value asc'
             },
             'data_tech_dist_facets_fs': {
@@ -567,7 +567,7 @@ export class SqlMytbDbRouteConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_name          as name,' +
-                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500)   as type,' +
+                    '                                           CONCAT("ele_", t_calced_altMaxFacet)   as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -581,7 +581,7 @@ export class SqlMytbDbRouteConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_name          as name,' +
-                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500)  as type,' +
+                    '                                           CONCAT("ele_", t_calced_altMaxFacet)  as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -617,7 +617,7 @@ export class SqlMytbDbRouteConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct t_name as name, CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type, K_DATEVON' +
+                    '                           select distinct t_name as name, CONCAT("ele_",t_calced_altMaxFacet) as type, K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +
@@ -628,7 +628,7 @@ export class SqlMytbDbRouteConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct t_name as name, CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type, K_DATEVON' +
+                    '                           select distinct t_name as name, CONCAT("ele_", t_calced_altMaxFacet) as type, K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
                     '                           where t.t_id > 1' +
@@ -659,7 +659,7 @@ export class SqlMytbDbRouteConfig {
                     '                  select \'ROUTE_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
-                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500)  as         type,' +
+                    '                                           CONCAT("ele_", t_calced_altMaxFacet)  as         type,' +
                     '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +

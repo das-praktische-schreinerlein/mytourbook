@@ -89,7 +89,6 @@ export class SqlMytbDbPlaylistConfig {
             'CONCAT("PLAYLIST", "_", playlist.p_id) AS id',
             'playlist.p_id',
             'playlist.p_name',
-            'CONCAT(p_name, " ", COALESCE(p_meta_desc,"")) AS html',
             'p_meta_desc',
             'p_meta_desc AS p_meta_desc_md',
             'p_meta_desc AS p_meta_desc_html'],
