@@ -1,4 +1,11 @@
 -- ##################
+-- import playlist
+-- ##################
+INSERT INTO playlist (p_id, p_name, p_meta_desc)
+    SELECT p_id, p_name, p_meta_desc
+    FROM importmytbdb_playlist;
+
+-- ##################
 -- import location
 -- ##################
 INSERT INTO location (l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ)
@@ -44,13 +51,6 @@ SET
 INSERT into location_playlist (lp_id, l_id, p_id, lp_pos)
     SELECT lp_id, l_id, p_id, lp_pos
     FROM importmytbdb_location_playlist;
-
--- ##################
--- import playlist
--- ##################
-INSERT INTO playlist (p_id, p_name, p_meta_desc)
-    SELECT p_id, p_name, p_meta_desc
-    FROM importmytbdb_playlist;
 
 -- ##################
 -- import info

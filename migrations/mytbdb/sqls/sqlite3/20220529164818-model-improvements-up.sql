@@ -1,4 +1,3 @@
--- ----------------
 -- add location-view with hierarchical fields, improve model
 -- ----------------
 -- not supported ALTER TABLE image ADD COLUMN i_calced_id VARCHAR(50) GENERATED ALWAYS AS ("IMAGE", "_" || i_id) VIRTUAL;
@@ -27,10 +26,14 @@ ALTER TABLE video ADD COLUMN v_calced_gps_loc VARCHAR(50) GENERATED ALWAYS AS (v
 ALTER TABLE video ADD COLUMN v_calced_gps_lat VARCHAR(50) GENERATED ALWAYS AS (CAST(v_gps_lat AS CHAR(50))) VIRTUAL;
 ALTER TABLE video ADD COLUMN v_calced_gps_lon VARCHAR(50) GENERATED ALWAYS AS (CAST(v_gps_lon AS CHAR(50))) VIRTUAL;
 
-ALTER TABLE tour ADD COLUMN t_calced_d_id VARCHAR(255) GENERATED ALWAYS AS ( COALESCE(l_id, "")  ||  "_" ||
-                                                                                                      COALESCE(t_desc_gebiet, "") ||  "_" || 
-                                                                                                      COALESCE(t_desc_ziel, "") ||  "_" || 
-                                                                                                      COALESCE(t_typ, "")) VIRTUAL;
+ALTER TABLE tour ADD COLUMN t_calced_d_id VARCHAR(255) GENERATED ALWAYS AS ( REPLACE(REPLACE(LOWER(COALESCE(l_id, "") ||
+                                                                                                   COALESCE(t_desc_gebiet, "") ||  "_" ||
+                                                                                                   COALESCE(t_desc_ziel, "") ||  "_" ||
+                                                                                                   COALESCE(t_typ, "")
+                                                                                                   ),
+                                                                                              " ", "_"),
+                                                                                      "/", "_")
+                                                                            ) VIRTUAL;
 ALTER TABLE tour ADD COLUMN t_calced_statisticname_actiontype VARCHAR(255) GENERATED ALWAYS AS (l_id || "_" || t_desc_gebiet || "_" || t_desc_ziel || "_ac_" || t_typ) VIRTUAL;
 ALTER TABLE tour ADD COLUMN t_calced_statisticname_ele VARCHAR(255) GENERATED ALWAYS AS (l_id || "_" || t_desc_gebiet || "_" || t_desc_ziel || "_ele_" || t_ele_max) VIRTUAL;
 
