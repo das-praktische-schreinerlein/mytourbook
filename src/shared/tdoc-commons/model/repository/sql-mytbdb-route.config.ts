@@ -617,7 +617,7 @@ export class SqlMytbDbRouteConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct t_name as name, CONCAT("ele_",t_calced_altMaxFacet) as type, K_DATEVON' +
+                    '                           select distinct t_name as name, CONCAT("ele_", t_calced_altMaxFacet) as type, K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +

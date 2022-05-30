@@ -163,7 +163,7 @@ export class SqlMytbDbLocationConfig {
             'location.l_typ',
             'CONCAT("loc_", l_typ) AS subtype',
             'CONCAT("LOCATION", "_", location.l_id) AS id',
-            'location.l_id as l_id',
+            'location.l_id',
             'location.l_parent_id as l_parent_id',
             'location.l_name as l_name',
             'location.l_gesperrt as l_gesperrt',
