@@ -12,7 +12,7 @@
                 query="
                     SELECT DISTINCT playlist.p_id,
                                     'PLAYLIST'                                                   AS type,
-                                    'PLAYLIST' || '_' || playlist.p_id                          AS id,
+                                    playlist.p_calced_id                          AS id,
                                     playlist.countInfos,
                                     playlist.countImages,
                                     playlist.countLocations,
@@ -28,7 +28,7 @@
                 deltaImportQuery="
                     SELECT DISTINCT playlist.p_id,
                                     'PLAYLIST'                                                   AS type,
-                                    'PLAYLIST' || '_' playlist.p_id                          AS id,
+                                    playlist.p_calced_id                          AS id,
                                     playlist.countInfos,
                                     playlist.countImages,
                                     playlist.countLocations,
@@ -120,8 +120,8 @@
                 query="
                     SELECT DISTINCT info.if_id,
                                     'INFO'                                                   AS type,
-                                    'if_' || info.if_typ                               AS subtype,
-                                    'INFO' || '_' || info.if_id                          AS id,
+                                    info.if_calced_subtype                          AS subtype,
+                                    info.if_calced_id                          AS id,
                                     info.l_id,
                                     info.countRoutes,
                                     info.countLocations,
@@ -140,8 +140,8 @@
                 deltaImportQuery="
                     SELECT DISTINCT info.if_id,
                                     'INFO'                                                   AS type,
-                                    'if_' || info.if_typ                               AS subtype,
-                                    'INFO' || '_' || info.if_id                          AS id,
+                                    info.if_calced_subtype                          AS subtype,
+                                    info.if_calced_id                          AS id,
                                     info.l_id,
                                     info.countRoutes,
                                     info.countLocations,
@@ -234,7 +234,7 @@
 
             <entity name='tour'
                     query="
-                        SELECT tour.t_id, tour.d_id, t_keywords, 'ac_' || tour.t_typ AS actiontype
+                        SELECT tour.t_id, tour.d_id, t_keywords, tour.t_calced_actiontype AS actiontype
                           FROM info
                           INNER JOIN tour_info ON tour_info.if_id = info.if_id
                           INNER JOIN tour ON tour_info.t_id = tour.t_id
@@ -281,7 +281,7 @@
             </entity>
             <entity name='destination'
                     query="
-                        SELECT destination.d_id, d_keywords, 'ac_' || destination.d_typ AS actiontype
+                        SELECT destination.d_id, d_keywords, destination.d_calced_actiontype AS actiontype
                           FROM info
                           INNER JOIN tour_info ON tour_info.if_id = info.if_id
                           INNER JOIN tour ON tour_info.t_id = tour.t_id
@@ -301,9 +301,9 @@
                 pk="id"
                 query="
                     SELECT 'DESTINATION'                                                                                             AS type,
-                           'ac_' || destination.d_typ                                                                           AS actiontype,
-                           'ac_' || destination.d_typ                                                                           AS subtype,
-                           'DESTINATION' || '_' || destination.d_id                                                                     AS id,
+                           destination.d_calced_actiontype                                                                           AS actiontype,
+                           destination.d_calced_actiontype                          AS subtype,
+                           destination.d_calced_id                          AS id,
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
@@ -325,7 +325,7 @@
                            d_rate_gesamt,
                            d_gps_lat,
                            d_gps_lon,
-                           d_gps_lat || ',' || d_gps_lon                                                                   AS d_gps_loc,
+                           l_calced_gps_loc                                                                   AS d_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            d_k_ids,
@@ -348,10 +348,10 @@
                            `D_RATE_MOTIVE`                                                                                     AS motive,
                            `D_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
                            `D_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
-                           ROUND((D_ROUTE_HM / 500)) * 500                                                                     AS altAscFacet,
-                           ROUND((D_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
-                           ROUND((D_ROUTE_M / 5)) * 5                                                                          AS distFacet,
-                           ROUND(ROUND(D_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           D_calced_altAscFacet                                                       AS altAscFacet,
+                           D_calced_altMaxFacet                                                               AS altMaxFacet,
+                           D_calced_distFacet                                                        AS distFacet,
+                           D_calced_durFacet                                                        AS durFacet,
                            D_DESC_GEBIET                                                                                       AS region,
                            D_DESC_ZIEL                                                                                         AS destloc
                     FROM destination,
@@ -360,7 +360,7 @@
                     ORDER BY d_datevon, d_id"
                 deltaImportQuery="
                     SELECT 'DESTINATION'                                                                                             AS type,
-                           'DESTINATION' || '_' || destination.d_id                                                                     AS id,
+                           destination.d_calced_id                          AS id,
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
@@ -382,7 +382,7 @@
                            d_rate_gesamt,
                            d_gps_lat,
                            d_gps_lon,
-                           d_gps_lat || ',' || d_gps_lon                                                                   AS d_gps_loc,
+                           l_calced_gps_loc                                                                   AS d_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            d_k_ids,
@@ -405,10 +405,10 @@
                            `D_RATE_MOTIVE`                                                                                     AS motive,
                            `D_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
                            `D_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
-                           ROUND((D_ROUTE_HM / 500)) * 500                                                                     AS altAscFacet,
-                           ROUND((D_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
-                           ROUND((D_ROUTE_M / 5)) * 5                                                                          AS distFacet,
-                           ROUND(ROUND(D_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           D_calced_altAscFacet                                                                AS altAscFacet,
+                           D_calced_altMaxFacet                                                               AS altMaxFacet,
+                           D_calced_distFacet                                                        AS distFacet,
+                           D_calced_durFacet                                                        AS durFacet,
                            D_DESC_GEBIET                                                                                       AS region,
                            D_DESC_ZIEL                                                                                         AS destloc
                     FROM destination,
@@ -550,7 +550,7 @@
             <entity name='image'
                     query="
                         SELECT
-                             image.i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                             image.i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id = kategorie_full.k_id
                              INNER JOIN tour ON tour.t_id=kategorie_full.t_id
                         WHERE
@@ -559,7 +559,7 @@
                             ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, image.I_ID DESC
                         limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -576,9 +576,9 @@
                                n_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                k_persons,
                                k_objects
                         FROM kategorie_full INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
@@ -590,9 +590,9 @@
                         SELECT tr_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                k_persons,
                                k_objects
                         FROM kategorie_full
@@ -635,9 +635,9 @@
                 pk="id"
                 query="
                     SELECT 'TRACK'                                                                                        AS type,
-                           'ac_' || kategorie_full.k_type                                                           AS actiontype,
-                           'ac_' || kategorie_full.k_type                                                           AS subtype,
-                           'TRACK' || '_' || kategorie_full.k_id                                                      AS id,
+                           kategorie_full.k_calced_actiontype                          AS actiontype,
+                           kategorie_full.k_calced_actiontype                          AS subtype,
+                           kategorie_full.k_calced_id                          AS id,
                            kategorie_full.k_id,
                            kategorie_full.t_id,
                            kategorie_full.d_id,
@@ -656,11 +656,11 @@
                            k_dateshow || 'Z' AS k_dateshow,
                            k_datevon || 'Z'                                                                                      AS datesort,
                            k_datevon || 'Z' AS k_datevon,
-                           DATETIME(k_datevon)                                                AS dateonly,
+                           k_calced_dateonly                                                AS dateonly,
                            'DONE' || (k_datevon IS NOT NULL)                                                        AS done,
-                           CAST(STRFTIME('%W', k_datevon) AS INT)                                                                                AS week,
-                           CAST(STRFTIME('%m', k_datevon) AS INT)                                                                               AS month,
-                           CAST(STRFTIME('%Y', k_datevon) AS INT)                                                                                AS year,
+                           k_calced_week                                                                                AS week,
+                           k_calced_month                                                                               AS month,
+                           k_calced_year                                                                                AS year,
                            k_gpstracks_basefile,
                            k_keywords,
                            k_persons,
@@ -672,7 +672,7 @@
                            k_route_attr,
                            k_gps_lat,
                            k_gps_lon,
-                           k_gps_lat || ',' || k_gps_lon                                                              AS k_gps_loc,
+                           l_calced_gps_loc                                                              AS k_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            `K_ALTITUDE_ASC`                                                                               AS altAsc,
@@ -688,20 +688,20 @@
                            `K_RATE_MOTIVE`                                                                                AS motive,
                            `K_RATE_SCHWIERIGKEIT`                                                                         AS schwierigkeit,
                            `K_RATE_WICHTIGKEIT`                                                                           AS wichtigkeit,
-                           ROUND((K_ALTITUDE_ASC / 500)) * 500                                                            AS altAscFacet,
-                           ROUND((K_ALTITUDE_MAX / 500)) * 500                                                            AS altMaxFacet,
-                           ROUND((K_DISTANCE / 5)) * 5                                                                    AS distFacet,
-                           (JULIANDAY(K_DATEBIS) - JULIANDAY(K_DATEVON)) * 24                                             AS dur,
-                           ROUND(ROUND((JULIANDAY(K_DATEBIS) - JULIANDAY(K_DATEVON)) * 24 * 2) / 2, 1)                    AS durFacet
+                           K_calced_altAscFacet                                                                AS altAscFacet,
+                           K_calced_altMaxFacet                                                               AS altMaxFacet,
+                           K_calced_distFacet                                                        AS distFacet,
+                           K_calced_dur                                             AS dur,
+                           K_calced_durFacet                                                        AS durFacet
                     FROM kategorie_full,
                          location
                     WHERE kategorie_full.l_id = location.l_id
                     ORDER BY k_datevon"
                 deltaImportQuery="
                     SELECT 'TRACK'                                                                                        AS type,
-                           'ac_' || kategorie_full.k_type                                                           AS actiontype,
-                           'ac_' || kategorie_full.k_type                                                           AS subtype,
-                           'TRACK' || '_' || kategorie_full.k_id                                                      AS id,
+                           kategorie_full.k_calced_actiontype                          AS actiontype,
+                           kategorie_full.k_calced_actiontype                          AS subtype,
+                           kategorie_full.k_calced_id                          AS id,
                            kategorie_full.k_id,
                            kategorie_full.t_id,
                            kategorie_full.d_id,
@@ -719,11 +719,11 @@
                            k_dateshow || 'Z' AS k_dateshow,
                            k_datevon || 'Z'                                                                                      AS datesort,
                            k_datevon || 'Z' AS k_datevon,
-                           DATETIME(k_datevon)                                                AS dateonly,
+                           k_calced_dateonly                                                AS dateonly,
                            'DONE' || (k_datevon IS NOT NULL)                                                        AS done,
-                           CAST(STRFTIME('%W', k_datevon) AS INT)                                                                                AS month,
-                           CAST(STRFTIME('%m', k_datevon) AS INT)                                                                               AS month,
-                           CAST(STRFTIME('%Y', k_datevon) AS INT)                                                                                AS year,
+                           k_calced_week                                                                                AS month,
+                           k_calced_month                                                                               AS month,
+                           k_calced_year                                                                                AS year,
                            k_gpstracks_basefile,
                            k_keywords,
                            k_persons,
@@ -734,7 +734,7 @@
                            k_rate_gesamt,
                            k_gps_lat,
                            k_gps_lon,
-                           k_gps_lat || ',' || k_gps_lon                                                              AS k_gps_loc,
+                           l_calced_gps_loc                                                              AS k_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            `K_ALTITUDE_ASC`                                                                               AS altAsc,
@@ -750,11 +750,11 @@
                            `K_RATE_MOTIVE`                                                                                AS motive,
                            `K_RATE_SCHWIERIGKEIT`                                                                         AS schwierigkeit,
                            `K_RATE_WICHTIGKEIT`                                                                           AS wichtigkeit,
-                           ROUND((K_ALTITUDE_ASC / 500)) * 500                                                            AS altAscFacet,
-                           ROUND((K_ALTITUDE_MAX / 500)) * 500                                                            AS altMaxFacet,
-                           ROUND((K_DISTANCE / 5)) * 5                                                                    AS distFacet,
-                           (JULIANDAY(K_DATEBIS) - JULIANDAY(K_DATEVON)) * 24                                             AS dur,
-                           ROUND(ROUND((JULIANDAY(K_DATEBIS) - JULIANDAY(K_DATEVON)) * 24 * 2) / 2, 1)                    AS durFacet
+                            K_calced_altAscFacet                                                                AS altAscFacet,
+                            K_calced_altMaxFacet                                                               AS altMaxFacet,
+                            K_calced_distFacet                                                        AS distFacet,
+                            K_calced_dur                                             AS dur,
+                            K_calced_durFacet                                                        AS durFacet
                     FROM kategorie_full,
                          location
                     WHERE kategorie_full.l_id = location.l_id
@@ -883,7 +883,7 @@
                 <field column="p_id" name="playlist_id_i"/>
                 <field column="p_id" name="playlist_id_is"/>
                 <field column="p_name" name="playlists_txt"/>
-                <field column="ifp_pos" name="position_is"/>
+                <field column="kp_pos" name="position_is"/>
                 <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
@@ -907,13 +907,13 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url, i_persons, i_objects
                         FROM image
                         WHERE k_id = '${track.k_id}'
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                         limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -950,9 +950,9 @@
                 pk="id"
                 query="
                     SELECT 'ROUTE'                                                                                             AS type,
-                           'ac_' || tour.t_typ                                                                           AS actiontype,
-                           'ac_' || tour.t_typ                                                                           AS subtype,
-                           'ROUTE' || '_' || tour.t_id                                                                     AS id,
+                           tour.t_calced_actiontype                                                                           AS actiontype,
+                           tour.t_calced_actiontype                          AS subtype,
+                           tour.t_calced_id                          AS id,
                            tour.k_id,
                            tour.t_id,
                            tour.d_id,
@@ -970,7 +970,7 @@
                            t_dateshow || 'Z' as t_dateshow,
                            t_datevon || 'Z'                                                                                           AS datesort,
                            t_datevon || 'Z' AS t_datevon,
-                           DATETIME(t_datevon)                                                     AS dateonly,
+                           t_calced_dateonly                                                    AS dateonly,
                            'DONE' || (t_datevon IS NOT NULL)                                                             AS done,
                            t_gpstracks_basefile,
                            t_keywords,
@@ -982,7 +982,7 @@
                            t_rate_gesamt,
                            t_gps_lat,
                            t_gps_lon,
-                           t_gps_lat || ',' || t_gps_lon                                                                   AS t_gps_loc,
+                           l_calced_gps_loc                                                       AS t_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            t_k_ids,
@@ -1005,10 +1005,10 @@
                            `T_RATE_MOTIVE`                                                                                     AS motive,
                            `T_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
                            `T_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
-                           ROUND((T_ROUTE_HM / 500)) * 500                                                                     AS altAscFacet,
-                           ROUND((T_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
-                           ROUND((T_ROUTE_M / 5)) * 5                                                                          AS distFacet,
-                           ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           T_calced_altAscFacet                                                                AS altAscFacet,
+                           T_calced_altMaxFacet                                                               AS altMaxFacet,
+                           T_calced_distFacet                                                        AS distFacet,
+                           T_calced_durFacet                                                        AS durFacet,
                            T_CALCED_SECTIONS                                                                                   AS sectionsFacet,
                            T_DESC_FUEHRER_FULL                                                                                 AS guides,
                            T_DESC_GEBIET                                                                                       AS region,
@@ -1021,7 +1021,7 @@
                     ORDER BY t_datevon, t_id"
                 deltaImportQuery="
                     SELECT 'ROUTE'                                                                                             AS type,
-                           'ROUTE' || '_' || tour.t_id                                                                     AS id,
+                           tour.t_calced_id                          AS id,
                            tour.k_id,
                            tour.t_id,
                            tour.d_id,
@@ -1039,7 +1039,7 @@
                            t_dateshow || 'Z' AS t_dateshow,
                            t_datevon || 'Z'                                                                                           AS datesort,
                            t_datevon || 'Z' AS t_datevon,
-                           DATETIME(t_datevon)                                                     AS dateonly,
+                           t_calced_dateonly                                                     AS dateonly,
                            'DONE' || (t_datevon IS NOT NULL)                                                             AS done,
                            t_gpstracks_basefile,
                            t_keywords,
@@ -1051,7 +1051,7 @@
                            t_rate_gesamt,
                            t_gps_lat,
                            t_gps_lon,
-                           t_gps_lat || ',' || t_gps_lon                                                                   AS t_gps_loc,
+                           l_calced_gps_loc                                                       AS t_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            t_k_ids,
@@ -1074,10 +1074,10 @@
                            `T_RATE_MOTIVE`                                                                                     AS motive,
                            `T_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
                            `T_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
-                           ROUND((T_ROUTE_HM / 500)) * 500                                                                     AS altAscFacet,
-                           ROUND((T_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
-                           ROUND((T_ROUTE_M / 5)) * 5                                                                          AS distFacet,
-                           ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           T_calced_altAscFacet                                                                AS altAscFacet,
+                           T_calced_altMaxFacet                                                               AS altMaxFacet,
+                           T_calced_distFacet                                                        AS distFacet,
+                           T_calced_durFacet                                                        AS durFacet,
                            T_CALCED_SECTIONS                                                                                   AS sectionsFacet,
                            T_DESC_FUEHRER_FULL                                                                                 AS guides,
                            T_DESC_GEBIET                                                                                       AS region,
@@ -1253,7 +1253,7 @@
             <entity name='image'
                     query="
                         SELECT
-                             image.i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                             image.i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                         WHERE
                             kategorie_full.t_id = ${route.t_id}
@@ -1261,7 +1261,7 @@
                         ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, image.I_ID DESC
                         limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -1278,9 +1278,9 @@
                                n_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                k_persons,
                                k_objects,
                                k_route_attr
@@ -1292,9 +1292,9 @@
                         SELECT tr_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                k_persons,
                                k_objects,
                                k_route_attr
@@ -1340,8 +1340,8 @@
                 pk="id"
                 query="
                     SELECT 'LOCATION'                                                                                     AS type,
-                           'loc_' || location.l_typ                                                                 AS subtype,
-                           'LOCATION' || '_' || l_id                                                                  AS id,
+                           location.l_calced_subtype                          AS subtype,
+                           l_calced_id                          AS id,
                            l_id,
                            l_parent_id,
                            location.countImages,
@@ -1360,7 +1360,7 @@
                            l_html || ' ' || l_name || ' ' || l_keywords || ' ' || l_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
                            l_gps_lat,
                            l_gps_lon,
-                           l_gps_lat || ',' || l_gps_lon                                                              AS l_gps_loc,
+                           l_calced_gps_loc                                                              AS l_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            l_katids,
@@ -1373,7 +1373,7 @@
                     ORDER BY l_typ asc, l_name"
                 deltaImportQuery="
                     SELECT 'LOCATION'                                                                                     AS type,
-                           'LOCATION' || '_' || l_id                                                                  AS id,
+                           l_calced_id                          AS id,
                            l_id,
                            location.countImages,
                            location.countImagesTop,
@@ -1391,7 +1391,7 @@
                            l_html || ' ' || l_name || ' ' || l_keywords || ' ' || l_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
                            l_gps_lat,
                            l_gps_lon,
-                           l_gps_lat || ',' || l_gps_lon                                                              AS l_gps_loc,
+                           l_calced_gps_loc                                                              AS l_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            l_katids,
@@ -1495,14 +1495,14 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url, i_persons, i_objects
                         FROM image
                         WHERE k_id in (${location.l_katids} 0)
                             AND COALESCE(I_PERSONS, '') = ''
                         ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, I_ID DESC
                         limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -1514,7 +1514,7 @@
             </entity>
 
             <entity name='tour'
-                    query="select t_id, t_keywords, 'ac_' || tour.t_typ AS actiontype FROM tour WHERE t_id in (${location.l_tids} 0)"
+                    query="select t_id, t_keywords, tour.t_calced_actiontype AS actiontype FROM tour WHERE t_id in (${location.l_tids} 0)"
                     deltaImportQuery="select t_id, t_keywords FROM tour WHERE t_id='${dih.delta.id}'"
                     deltaQuery="SELECT t_id FROM tour'"
             >
@@ -1527,9 +1527,9 @@
                         SELECT tr_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                k_persons,
                                k_objects
                         FROM kategorie_full
@@ -1539,9 +1539,9 @@
                         SELECT tr_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                k_persons,
                                k_objects
                         FROM kategorie_full
@@ -1618,10 +1618,10 @@
                 pk="id"
                 query="
                     SELECT 'IMAGE'                                                                                           AS type,
-                           'ac_' || kategorie_full.k_type                                                              AS actiontype,
-                           'ac_' || kategorie_full.k_type                                                              AS subtype,
-                           'IMAGE' || '_' || image.i_id                                                                  AS id,
-                           i_dir || '/' || i_file                                                                        AS i_url,
+                           kategorie_full.k_calced_actiontype                          AS actiontype,
+                           kategorie_full.k_calced_actiontype                          AS subtype,
+                           image.i_calced_id                          AS id,
+                           i_calced_path                                                                        AS i_url,
                            image.i_id,
                            image.k_id,
                            kategorie_full.tr_id,
@@ -1633,13 +1633,13 @@
                            i_katname,
                            i_katdesc,
                            i_katdesc || ' ' || k_name || ' ' || i_keywords || ' ' || k_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
-                           CAST(STRFTIME('%W', i_date) AS INT)                                                                                      AS week,
-                           CAST(STRFTIME('%m', i_date) AS INT)                                                                                     AS month,
-                           CAST(STRFTIME('%Y', i_date) AS INT)                                                                                      AS year,
+                           i_calced_week                                                                                      AS week,
+                           i_calced_month                                                                                     AS month,
+                           i_calced_year                                                                                      AS year,
                            i_dateshow || 'Z' AS i_dateshow,
                            i_date || 'Z'                                                                                            AS datesort,
                            i_date || 'Z' AS i_date,
-                           DATETIME(i_date)                                                      AS dateonly,
+                           i_calced_dateonly                                                      AS dateonly,
                            'DONE' || (i_date IS NOT NULL)                                                              AS done,
                            k_gpstracks_basefile,
                            i_keywords,
@@ -1651,14 +1651,14 @@
                            i_rate,
                            i_gps_lat,
                            i_gps_lon,
-                           i_gps_lat || ',' || i_gps_lon                                                                 AS i_gps_loc,
+                           i_calced_gps_loc                                                                 AS i_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            `I_GPS_ELE`                                                                                       AS altMax,
                            `I_RATE`                                                                                          AS gesamt,
                            `I_RATE_MOTIVE`                                                                                   AS motive,
                            `I_RATE_WICHTIGKEIT`                                                                              AS wichtigkeit,
-                           ROUND((I_GPS_ELE / 500)) * 500                                                                    AS altMaxFacet
+                           I_calced_altMaxFacet                                                               AS altMaxFacet
                     FROM image,
                          kategorie_full,
                          location
@@ -1667,10 +1667,10 @@
                     ORDER BY i_date, image.i_id"
                 deltaImportQuery="
                     SELECT 'IMAGE'                                                  AS type,
-                           'ac_' || kategorie_full.k_type                     AS actiontype,
-                           'ac_' || kategorie_full.k_type                     AS subtype,
-                           'IMAGE' || '_' || image.i_id                         AS id,
-                           i_dir || '/' || i_file                               AS i_url,
+                           kategorie_full.k_calced_actiontype                          AS actiontype,
+                           kategorie_full.k_calced_actiontype                          AS subtype,
+                           image.i_calced_id                          AS id,
+                           i_calced_path                               AS i_url,
                            image.i_id,
                            image.k_id,
                            kategorie_full.n_id,
@@ -1681,13 +1681,13 @@
                            i_katname,
                            i_katdesc,
                            i_katdesc || ' ' || k_name || ' ' || k_meta_shortdesc_md AS html,
-                           CAST(STRFTIME('%W', i_date) AS INT)                                             AS week,
-                           CAST(STRFTIME('%m', i_date) AS INT)                                            AS month,
-                           CAST(STRFTIME('%Y', i_date) AS INT)                                             AS year,
+                           i_calced_week                                             AS week,
+                           i_calced_month                                            AS month,
+                           i_calced_year                                             AS year,
                            i_dateshow || 'Z' AS i_dateshow,
                            i_date || 'Z'                                                   AS datesort,
                            i_date || 'Z' AS i_date,
-                           DATETIME(i_date)             AS dateonly,
+                           i_calced_dateonly             AS dateonly,
                            'DONE' || (i_date IS NOT NULL)                     AS done,
                            k_gpstracks_basefile,
                            i_keywords,
@@ -1699,14 +1699,14 @@
                            i_rate,
                            i_gps_lat,
                            i_gps_lon,
-                           i_gps_lat || ',' || i_gps_lon                        AS i_gps_loc,
+                           i_calced_gps_loc                        AS i_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            `I_GPS_ELE`                                              AS altMax,
                            `I_RATE`                                                 AS gesamt,
                            `I_RATE_MOTIVE`                                          AS motive,
                            `I_RATE_WICHTIGKEIT`                                     AS wichtigkeit,
-                           ROUND((I_GPS_ELE / 500)) * 500                           AS altMaxFacet
+                           I_calced_altMaxFacet                                                               AS altMaxFacet
                     FROM image,
                          kategorie_full,
                          location
@@ -1793,10 +1793,10 @@
                 pk="id"
                 query="
                     SELECT 'VIDEO'                                                                                           AS type,
-                           'ac_' || kategorie_full.k_type                                                              AS actiontype,
-                           'ac_' || kategorie_full.k_type                                                              AS subtype,
-                           'VIDEO' || '_' || video.v_id                                                                  AS id,
-                           v_dir || '/' || v_file                                                                        AS v_url,
+                           kategorie_full.k_calced_actiontype                          AS actiontype,
+                           kategorie_full.k_calced_actiontype                          AS subtype,
+                           video.v_calced_id                          AS id,
+                           v_calced_path                                                                        AS v_url,
                            video.v_id,
                            video.k_id,
                            kategorie_full.tr_id,
@@ -1808,13 +1808,13 @@
                            v_katname,
                            v_katdesc,
                            v_katdesc || ' ' || k_name || ' ' || v_keywords || ' ' || k_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
-                           CAST(STRFTIME('%W', v_date) AS INT)                                                                                      AS week,
-                           CAST(STRFTIME('%m', v_date) AS INT)                                                                                     AS month,
-                           CAST(STRFTIME('%Y', v_date) AS INT)                                                                                      AS year,
+                           v_calced_week                                                                                      AS week,
+                           v_calced_month                                                                                     AS month,
+                           v_calced_year                                                                                      AS year,
                            v_dateshow || 'Z' AS v_dateshow,
                            v_date || 'Z'                                                                                            AS datesort,
                            v_date || 'Z' AS v_date,
-                           DATETIME(v_date)                                                      AS dateonly,
+                           v_calced_dateonly                                                      AS dateonly,
                            'DONE' || (v_date IS NOT NULL)                                                              AS done,
                            k_gpstracks_basefile,
                            v_keywords,
@@ -1826,14 +1826,14 @@
                            v_rate,
                            v_gps_lat,
                            v_gps_lon,
-                           v_gps_lat || ',' || v_gps_lon                                                                 AS v_gps_loc,
+                           v_calced_gps_loc                                                                 AS v_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            `V_GPS_ELE`                                                                                       AS altMax,
                            `V_RATE`                                                                                          AS gesamt,
                            `V_RATE_MOTIVE`                                                                                   AS motive,
                            `V_RATE_WICHTIGKEIT`                                                                              AS wichtigkeit,
-                           ROUND((V_GPS_ELE / 500)) * 500                                                                    AS altMaxFacet
+                           V_calced_altMaxFacet                                                               AS altMaxFacet
                     FROM video,
                          kategorie_full,
                          location
@@ -1842,10 +1842,10 @@
                     ORDER BY v_date, video.v_id"
                 deltaImportQuery="
                     SELECT 'VIDEO'                                                  AS type,
-                           'ac_' || kategorie_full.k_type                     AS actiontype,
-                           'ac_' || kategorie_full.k_type                     AS subtype,
-                           'VIDEO' || '_' || video.v_id                         AS id,
-                           v_dir || '/' || v_file                               AS v_url,
+                           kategorie_full.k_calced_actiontype                          AS actiontype,
+                           kategorie_full.k_calced_actiontype                          AS subtype,
+                           video.v_calced_id                          AS id,
+                           v_calced_path                               AS v_url,
                            video.v_id,
                            video.k_id,
                            kategorie_full.d_id,
@@ -1856,13 +1856,13 @@
                            v_katname,
                            v_katdesc,
                            v_katdesc || ' ' || k_name || ' ' || k_meta_shortdesc_md AS html,
-                           CAST(STRFTIME('%W', v_date) AS INT)                                             AS week,
-                           CAST(STRFTIME('%m', v_date) AS INT)                                            AS month,
-                           CAST(STRFTIME('%Y', v_date) AS INT)                                             AS year,
+                           v_calced_week                                             AS week,
+                           v_calced_month                                            AS month,
+                           v_calced_year                                             AS year,
                            v_dateshow || 'Z' AS v_dateshow,
                            v_date || 'Z'                                                   AS datesort,
                            v_date || 'Z' AS v_date,
-                           DATETIME(v_date)             AS dateonly,
+                           v_calced_dateonly             AS dateonly,
                            'DONE' || (v_date IS NOT NULL)                     AS done,
                            k_gpstracks_basefile,
                            v_keywords,
@@ -1874,14 +1874,14 @@
                            v_rate,
                            v_gps_lat,
                            v_gps_lon,
-                           v_gps_lat || ',' || v_gps_lon                        AS v_gps_loc,
+                           v_calced_gps_loc                        AS v_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            `V_GPS_ELE`                                              AS altMax,
                            `V_RATE`                                                 AS gesamt,
                            `V_RATE_MOTIVE`                                          AS motive,
                            `V_RATE_WICHTIGKEIT`                                     AS wichtigkeit,
-                           ROUND((V_GPS_ELE / 500)) * 500                           AS altMaxFacet
+                           V_calced_altMaxFacet                                                               AS altMaxFacet
                     FROM video,
                          kategorie_full,
                          location
@@ -1986,7 +1986,7 @@
                 query="
                     SELECT DISTINCT trip.tr_id,
                                     'TRIP'                                                       AS type,
-                                    'TRIP' || '_' || trip.tr_id                              AS id,
+                                    trip.tr_calced_id                          AS id,
                                     trip.l_id,
                                     trip.countImages,
                                     trip.countImagesTop,
@@ -1996,7 +1996,7 @@
                                     tr_dateshow || 'Z' AS tr_dateshow,
                                     tr_datevon || 'Z'                                                   AS datesort,
                                     tr_datevon || 'Z' AS tr_datevon,
-                                    DATETIME(tr_datevon)             AS dateonly,
+                                    tr_calced_dateonly             AS dateonly,
                                     'DONE' || (tr_datevon IS NOT NULL)                     AS done,
                                     (JULIANDAY(tr_datebis) - JULIANDAY(tr_datevon)) * 24         AS dur,
                                     tr_name,
@@ -2025,7 +2025,7 @@
                 deltaImportQuery="
                     SELECT DISTINCT trip.tr_id,
                                     'TRIP'                                                       AS type,
-                                    'TRIP' || '_' || trip.tr_id                              AS id,
+                                    trip.tr_calced_id                          AS id,
                                     trip.l_id,
                                     trip.countImages,
                                     trip.countImagesTop,
@@ -2035,7 +2035,7 @@
                                     tr_dateshow || 'Z' AS tr_dateshow,
                                     tr_datevon || 'Z'                                                   AS datesort,
                                     tr_datevon || 'Z' AS tr_datevon,
-                                    DATETIME(tr_datevon)             AS dateonly,
+                                    tr_calced_dateonly             AS dateonly,
                                     'DONE' || (tr_datevon IS NOT NULL)                     AS done,
                                     (JULIANDAY(tr_datebis) - JULIANDAY(tr_datevon)) * 24         AS dur,
                                     tr_name,
@@ -2163,14 +2163,14 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url
                         FROM image
                         WHERE k_id in (select k_id FROM kategorie_full WHERE tr_id in (${trip.tr_id}))
                             AND COALESCE(I_PERSONS, '') = ''
                         ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, I_ID DESC
                         limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url
+                        SELECT i_id, i_date || 'Z' AS i_calced_path AS i_url
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -2181,7 +2181,7 @@
 
             <entity name='tour'
                     query="
-                        SELECT t_id, d_id, t_keywords, 'ac_' || tour.t_typ AS actiontype
+                        SELECT t_id, d_id, t_keywords, tour.t_calced_actiontype AS actiontype
                         FROM tour
                         WHERE t_id in (select t_id FROM kategorie_full WHERE tr_id in (${trip.tr_id}))"
                     deltaImportQuery="select t_id, t_keywords FROM tour WHERE t_id='${dih.delta.id}'"
@@ -2194,7 +2194,7 @@
             </entity>
             <entity name='destination'
                     query="
-                        SELECT destination.d_id, d_keywords, 'ac_' || destination.d_typ AS actiontype
+                        SELECT destination.d_id, d_keywords, destination.d_calced_actiontype AS actiontype
                         FROM destination inner join tour ON destination.d_id=tour.d_id
                         WHERE t_id in (select t_id FROM kategorie_full WHERE tr_id in (${trip.tr_id}))"
                     deltaImportQuery="select d_id, d_keywords FROM destination WHERE d_id='${dih.delta.id}'"
@@ -2211,9 +2211,9 @@
                                n_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                t_id,
                                k_keywords,
                                k_persons,
@@ -2230,9 +2230,9 @@
                                n_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                t_id,
                                k_keywords,
                                k_persons,
@@ -2271,7 +2271,7 @@
                 query="
                     SELECT DISTINCT news.n_id,
                                     'NEWS'                                                   AS type,
-                                    'NEWS' || '_' || news.n_id                           AS id,
+                                    news.n_calced_id                          AS id,
                                     news.countImages,
                                     news.countImagesTop,
                                     news.countRoutes,
@@ -2305,7 +2305,7 @@
                 deltaImportQuery="
                     SELECT DISTINCT news.n_id,
                                     'NEWS'                                                   AS type,
-                                    'NEWS' || '_' || news.n_id                           AS id,
+                                    news.n_calced_id                          AS id,
                                     news.countImages,
                                     news.countImagesTop,
                                     news.countRoutes,
@@ -2420,13 +2420,13 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url
                         FROM image
                         WHERE k_id in (select k_id FROM kategorie_full WHERE n_id in (${news.n_id}))
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                         limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url
+                        SELECT i_id, i_date || 'Z' AS i_date, i_calced_path AS i_url
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -2436,7 +2436,7 @@
             </entity>
             <entity name='tour'
                     query="
-                        SELECT tour.t_id, tour.d_id, t_keywords, 'ac_' || tour.t_typ AS actiontype
+                        SELECT tour.t_id, tour.d_id, t_keywords, tour.t_calced_actiontype AS actiontype
                           FROM news
                           INNER JOIN kategorie_full ON (kategorie_full.n_id = news.n_id)
                           INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
@@ -2452,7 +2452,7 @@
             </entity>
             <entity name='destination'
                     query="
-                        SELECT destination.d_id, d_keywords, 'ac_' || destination.d_typ AS actiontype
+                        SELECT destination.d_id, d_keywords,  destination.d_calced_actiontype AS actiontype
                           FROM news
                           INNER JOIN kategorie_full ON (kategorie_full.n_id = news.n_id)
                           INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
@@ -2473,9 +2473,9 @@
                                n_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                t_id,
                                k_keywords,
                                k_persons,
@@ -2492,9 +2492,9 @@
                                n_id,
                                k_dateshow || 'Z' AS k_dateshow,
                                k_datevon || 'Z' AS k_datevon,
-                               CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
-                               CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
-                               CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
+                               k_calced_week  AS week,
+                               k_calced_month AS month,
+                               k_calced_year  AS year,
                                t_id,
                                k_keywords,
                                k_persons,

@@ -8,6 +8,7 @@
 - improved selection of teaser-image
 - added sectionDetails
 - use location-view to get optimized hierarchical-data
+- optimized model
  
 ### new features
 - frontend/backend: added sectionDetails
@@ -20,6 +21,7 @@
 - backend: improved sql-filter
 - backend: added imagemagic-installer
 - backend: use location-view to get optimized hierarchical-data
+- backend: optimized model
 
 ### bug fixes
 - backend: fixed track-filter for route

@@ -22,9 +22,9 @@ insert numbers (thing) select thing from numbers;
 insert numbers (thing) select thing from numbers;
 insert numbers (thing) select thing from numbers;
 
---
+-- ---------------
 -- configuration-tables
---
+-- ---------------
 DROP TABLE IF EXISTS rates;
 CREATE TABLE rates (
   r_id int(11) NOT NULL,
@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS playlist (
   p_id int(11) NOT NULL,
   p_meta_desc text COLLATE latin1_general_ci,
   p_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  p_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
   countInfos int(11) DEFAULT 0,
   countImages int(11) DEFAULT 0,
   countLocations int(11) DEFAULT 0,
@@ -53,10 +54,9 @@ CREATE TABLE IF NOT EXISTS playlist (
   KEY idx_p__p_id (p_id)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-
---
+-- ---------------
 -- news-data
---
+-- ---------------
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
   n_id int(11) NOT NULL AUTO_INCREMENT,
@@ -72,6 +72,7 @@ CREATE TABLE news (
   n_persons text,
   n_objects text,
   n_gesperrt int(2) DEFAULT 1,
+  n_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
@@ -83,9 +84,9 @@ CREATE TABLE news (
   KEY idx_n__w_id (w_id)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
---
+-- ---------------
 -- info-data
---
+-- ---------------
 DROP TABLE IF EXISTS info;
 CREATE TABLE IF NOT EXISTS info (
   if_id int(11) NOT NULL AUTO_INCREMENT,
@@ -101,6 +102,8 @@ CREATE TABLE IF NOT EXISTS info (
   if_publisher varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   if_typ int(11) DEFAULT NULL,
   if_url varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  if_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  if_calced_subtype VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (if_id),
   KEY idx_if__if_id (if_id),
   KEY idx_if__kw_id (kw_id),
@@ -125,9 +128,9 @@ CREATE TABLE info_playlist
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 CREATE INDEX IF NOT EXISTS idx_IFP__IFP_POS ON info_playlist (ifp_pos);
 
---
+-- ---------------
 -- trip-data
---
+-- ---------------
 DROP TABLE IF EXISTS trip;
 CREATE TABLE trip (
   tr_id int(11) NOT NULL AUTO_INCREMENT,
@@ -150,6 +153,13 @@ CREATE TABLE trip (
   tr_objects text COLLATE latin1_general_ci,
   tr_dateshow date DEFAULT NULL,
   tr_gesperrt int(2) DEFAULT 1,
+  tr_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  tr_calced_dur DECIMAL(11, 2) DEFAULT NULL,
+  tr_calced_durFacet DECIMAL(11, 1) DEFAULT NULL,
+  tr_calced_dateonly VARCHAR(20) COLLATE latin1_general_ci DEFAULT NULL,
+  tr_calced_week tinyint DEFAULT NULL,
+  tr_calced_month tinyint DEFAULT NULL,
+  tr_calced_year tinyint DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
@@ -178,9 +188,9 @@ CREATE TABLE trip_playlist
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 CREATE INDEX IF NOT EXISTS idx_TRP__TRP_POS ON trip_playlist (trp_pos);
 
---
+-- ---------------
 -- location-data
---
+-- ---------------
 DROP TABLE IF EXISTS location;
 CREATE TABLE location (
   l_id int(11) DEFAULT NULL,
@@ -205,6 +215,12 @@ CREATE TABLE location (
   l_persons text COLLATE latin1_general_ci,
   l_objects text COLLATE latin1_general_ci,
   l_gesperrt int(2) DEFAULT 1,
+  l_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  l_calced_subtype VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  l_calced_gps_loc VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  l_calced_gps_lat VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  l_calced_gps_lon VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  l_calced_altMaxFacet DECIMAL UNSIGNED DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countInfos int(11) DEFAULT 0,
@@ -247,9 +263,9 @@ CREATE TABLE location_playlist
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 CREATE INDEX IF NOT EXISTS idx_LP__LP_POS ON location_playlist (lp_pos);
 
---
+-- ---------------
 -- destination-data
---
+-- ---------------
 DROP TABLE IF EXISTS destination;
 CREATE TABLE destination (
   d_id VARCHAR(80),
@@ -288,6 +304,12 @@ CREATE TABLE destination (
   d_typ int(11) DEFAULT NULL,
   d_dateshow date DEFAULT NULL,
   d_gesperrt int(2) DEFAULT 1,
+  d_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  d_calced_actiontype VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  d_calced_altAscFacet DECIMAL UNSIGNED DEFAULT NULL,
+  d_calced_altMaxFacet DECIMAL UNSIGNED DEFAULT NULL,
+  d_calced_distFacet DECIMAL(11, 1) UNSIGNED DEFAULT NULL,
+  d_calced_durFacet DECIMAL(11, 1) DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countInfos int(11) DEFAULT 0,
@@ -303,9 +325,9 @@ CREATE TABLE destination (
   KEY d_gps_lon (d_gps_lon)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
---
+-- ---------------
 -- tour-data
---
+-- ---------------
 DROP TABLE IF EXISTS tour;
 CREATE TABLE tour (
   t_id int(11) NOT NULL AUTO_INCREMENT,
@@ -371,7 +393,18 @@ CREATE TABLE tour (
   t_meta_shortdesc_html text COLLATE latin1_general_ci,
   t_dateshow date DEFAULT NULL,
   t_gesperrt int(2) DEFAULT 1,
+  t_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  t_calced_d_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
   t_calced_sections VARCHAR(255) COLLATE latin1_general_ci DEFAULT NULL,
+  t_calced_actiontype VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  t_calced_altAscFacet DECIMAL UNSIGNED DEFAULT NULL,
+  t_calced_altMaxFacet DECIMAL UNSIGNED DEFAULT NULL,
+  t_calced_distFacet DECIMAL(11, 1) UNSIGNED DEFAULT NULL,
+  t_calced_durFacet DECIMAL(11, 1) DEFAULT NULL,
+  t_calced_dateonly VARCHAR(20) COLLATE latin1_general_ci DEFAULT NULL,
+  t_calced_week tinyint DEFAULT NULL,
+  t_calced_month tinyint DEFAULT NULL,
+  t_calced_year tinyint DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countInfos int(11) DEFAULT 0,
@@ -416,9 +449,9 @@ CREATE TABLE tour_playlist
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 CREATE INDEX IF NOT EXISTS idx_TP__TP_POS ON tour_playlist (tp_pos);
 
---
+-- ---------------
 -- track-data
---
+-- ---------------
 DROP TABLE IF EXISTS kategorie_full;
 CREATE TABLE kategorie_full (
   k_id int(11) NOT NULL AUTO_INCREMENT,
@@ -462,6 +495,17 @@ CREATE TABLE kategorie_full (
   k_route_attr VARCHAR(255) COLLATE latin1_general_ci DEFAULT NULL,
   n_id int(11) DEFAULT NULL,
   k_dateshow date DEFAULT NULL,
+  k_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  k_calced_actiontype VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  k_calced_altAscFacet DECIMAL UNSIGNED DEFAULT NULL,
+  k_calced_altMaxFacet DECIMAL UNSIGNED DEFAULT NULL,
+  k_calced_distFacet DECIMAL(11, 1) DEFAULT NULL,
+  k_calced_dur DECIMAL(11, 2) DEFAULT NULL,
+  k_calced_durFacet DECIMAL(11, 1) DEFAULT NULL,
+  k_calced_dateonly VARCHAR(20) COLLATE latin1_general_ci DEFAULT NULL,
+  k_calced_week tinyint DEFAULT NULL,
+  k_calced_month tinyint DEFAULT NULL,
+  k_calced_year tinyint DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
@@ -513,9 +557,9 @@ CREATE TABLE kategorie_playlist
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 CREATE INDEX IF NOT EXISTS idx_KP__KP_POS ON kategorie_playlist (kp_pos);
 
---
+-- ---------------
 -- image-data
---
+-- ---------------
 DROP TABLE IF EXISTS image;
 CREATE TABLE image (
   i_id int(11) NOT NULL AUTO_INCREMENT,
@@ -540,6 +584,16 @@ CREATE TABLE image (
   i_rate_wichtigkeit int(11) DEFAULT NULL,
   i_image_objects text COLLATE latin1_general_ci,
   i_dateshow date DEFAULT NULL,
+  i_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  i_calced_path VARCHAR(255) COLLATE latin1_general_ci DEFAULT NULL,
+  i_calced_gps_loc VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  i_calced_gps_lat VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  i_calced_gps_lon VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  i_calced_altMaxFacet DECIMAL UNSIGNED DEFAULT NULL,
+  i_calced_dateonly VARCHAR(20) COLLATE latin1_general_ci DEFAULT NULL,
+  i_calced_week tinyint DEFAULT NULL,
+  i_calced_month tinyint DEFAULT NULL,
+  i_calced_year tinyint DEFAULT NULL,
   PRIMARY KEY (i_id),
   KEY idx_i__i_id (i_id),
   KEY idx_i__k_id (k_id),
@@ -569,9 +623,9 @@ CREATE TABLE image_playlist (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 CREATE INDEX IF NOT EXISTS idx_IP__IP_POS ON image_playlist (ip_pos);
 
---
+-- ---------------
 -- video-data
---
+-- ---------------
 DROP TABLE IF EXISTS video;
 CREATE TABLE video (
   v_id int(11) NOT NULL AUTO_INCREMENT,
@@ -596,6 +650,16 @@ CREATE TABLE video (
   v_rate_wichtigkeit int(11) DEFAULT NULL,
   v_video_objects text COLLATE latin1_general_ci,
   v_dateshow date DEFAULT NULL,
+  v_calced_id VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  v_calced_path VARCHAR(255) COLLATE latin1_general_ci DEFAULT NULL,
+  v_calced_gps_loc VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  v_calced_gps_lat VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  v_calced_gps_lon VARCHAR(50) COLLATE latin1_general_ci DEFAULT NULL,
+  v_calced_altMaxFacet DECIMAL UNSIGNED DEFAULT NULL,
+  v_calced_dateonly VARCHAR(20) COLLATE latin1_general_ci DEFAULT NULL,
+  v_calced_week tinyint DEFAULT NULL,
+  v_calced_month tinyint DEFAULT NULL,
+  v_calced_year tinyint DEFAULT NULL,
   PRIMARY KEY (v_id),
   KEY idx_v__v_id (v_id),
   KEY idx_v__k_id (k_id),

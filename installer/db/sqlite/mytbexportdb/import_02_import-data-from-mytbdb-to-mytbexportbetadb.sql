@@ -1,15 +1,20 @@
 -- ##################
 -- import playlist
 -- ##################
-INSERT INTO playlist (p_id, p_name, p_meta_desc)
-    SELECT p_id, p_name, p_meta_desc
+INSERT INTO playlist (p_id, p_name, p_meta_desc,
+        p_calced_id)
+    SELECT p_id, p_name, p_meta_desc,
+        "PLAYLIST" || "_" || p_id
     FROM importmytbdb_playlist;
 
 -- ##################
 -- import location
 -- ##################
-INSERT INTO location (l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ)
-     SELECT l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ FROM importmytbdb_location;
+INSERT INTO location (l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ,
+        l_calced_id, l_calced_subtype, l_calced_gps_loc, l_calced_gps_lat, l_calced_gps_lon, l_calced_altMaxFacet)
+    SELECT l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ,
+        "LOCATION" || "_" || l_id, l_calced_subtype, l_calced_gps_loc, l_calced_gps_lat, l_calced_gps_lon, l_calced_altMaxFacet
+    FROM importmytbdb_location;
 
 -- TODO UPDATE location SET l_lochirarchietxt=GetLocationNameAncestry(location.l_id, location.l_name, ' -> '), l_lochirarchieids=GetLocationIdAncestry(location.l_id, ',');
 UPDATE location SET l_lochirarchietxt=REPLACE(l_lochirarchietxt, 'OFFEN -> ', '');
@@ -55,8 +60,10 @@ INSERT into location_playlist (lp_id, l_id, p_id, lp_pos)
 -- ##################
 -- import info
 -- ##################
-INSERT INTO info (if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_name, if_publisher, if_typ, if_url)
-    SELECT if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_name, if_publisher, if_typ, if_url
+INSERT INTO info (if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_name, if_publisher, if_typ, if_url,
+        if_calced_id, if_calced_subtype)
+    SELECT if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_name, if_publisher, if_typ, if_url,
+        "INFO" || "_" || if_id, if_calced_subtype
     FROM importmytbdb_info;
 
 -- calc keywords
@@ -88,8 +95,11 @@ INSERT into location_info (lif_id, if_id, l_id, lif_linked_details)
 -- ##################
 -- import news
 -- ##################
-INSERT INTO news (n_id, w_id, n_gesperrt, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords)
-    SELECT n_id, w_id, n_gesperrt, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords FROM importmytbdb_news;
+INSERT INTO news (n_id, w_id, n_gesperrt, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords,
+        n_calced_id)
+    SELECT n_id, w_id, n_gesperrt, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords,
+        "NEWS" || "_" || n_id
+    FROM importmytbdb_news;
 
 -- remove todos
 UPDATE news SET n_message=REPLACE(n_message, 'TODODESC', '');
@@ -108,8 +118,11 @@ SET
 -- ##################
 -- import trip
 -- ##################
-INSERT INTO trip (tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url)
-    SELECT tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url
+INSERT INTO trip (tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url,
+        tr_calced_id, tr_calced_dur, tr_calced_durFacet, tr_calced_dateonly, tr_calced_week, tr_calced_month, tr_calced_year)
+    SELECT tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url,
+        "TRIP" || "_" || tr_id, tr_calced_dur, tr_calced_durFacet,
+         DATETIME(tr_datevon), CAST(STRFTIME('%W', tr_datevon) AS INT), CAST(STRFTIME('%m', tr_datevon) AS INT), CAST(STRFTIME('%Y', tr_datevon) AS INT)
 FROM importmytbdb_trip;
 
 -- remove todos
@@ -131,8 +144,12 @@ INSERT into trip_playlist (trp_id, tr_id, p_id, trp_pos)
 -- ##################
 -- import tracks
 -- ##################
-INSERT into kategorie_full (k_id, t_id, l_id, tr_id, k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_route_attr, k_type)
-    SELECT k_id, t_id, l_id, COALESCE(tr_id, 0), k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_route_attr, k_type
+INSERT into kategorie_full (k_id, t_id, l_id, tr_id, k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_route_attr, k_type,
+         k_calced_id, k_calced_actiontype, k_calced_altAscFacet, k_calced_altMaxFacet, k_calced_distFacet, k_calced_dur, k_calced_durFacet,
+         k_calced_dateonly, k_calced_week, k_calced_month, k_calced_year)
+    SELECT k_id, t_id, l_id, COALESCE(tr_id, 0), k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_route_attr, k_type,
+         "TRACK" || "_" || k_id, k_calced_actiontype, k_calced_altAscFacet, k_calced_altMaxFacet, k_calced_distFacet, k_calced_dur, k_calced_durFacet,
+          DATETIME(k_datevon), CAST(STRFTIME('%W', k_datevon) AS INT), CAST(STRFTIME('%m', k_datevon) AS INT), CAST(STRFTIME('%Y', k_datevon) AS INT)
     FROM importmytbdb_kategorie WHERE (importmytbdb_kategorie.k_gesperrt=0 OR importmytbdb_kategorie.k_gesperrt IS NULL);
 
 -- calc keywords
@@ -203,15 +220,16 @@ INSERT into kategorie_playlist(kp_id, k_id, p_id, kp_pos)
 -- ##################
 -- import routes
 -- ##################
-INSERT into tour (t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ, t_calced_sections)
-    SELECT t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ, t_calced_sections
+INSERT into tour (t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
+        t_calced_id, t_calced_d_id, t_calced_sections, t_calced_actiontype, t_calced_altAscFacet, t_calced_altMaxFacet, t_calced_distFacet, t_calced_durFacet,
+        t_calced_dateonly, t_calced_week, t_calced_month, t_calced_year)
+    SELECT t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
+        "ROUTE" || "_" || t_id, t_calced_d_id, t_calced_sections, t_calced_actiontype, t_calced_altAscFacet, t_calced_altMaxFacet, t_calced_distFacet, t_calced_durFacet,
+         DATETIME(t_datevon), CAST(STRFTIME('%W', t_datevon) AS INT), CAST(STRFTIME('%m', t_datevon) AS INT), CAST(STRFTIME('%Y', t_datevon) AS INT)
     FROM importmytbdb_tour;
 
 -- calc tour: d-ids
-UPDATE tour SET d_id=REPLACE(REPLACE(LOWER(COALESCE(tour.l_id, "") || "_" ||
-            COALESCE(t_desc_gebiet, "") || "_" ||
-            COALESCE(t_desc_ziel, "") || "_" ||
-            COALESCE(t_typ, "")), " ", "_"), "/", "_");
+UPDATE tour SET d_id=t_calced_d_id;
 
 -- calc keywords
 -- TODO
@@ -300,12 +318,15 @@ INSERT INTO destination (d_id,
        d_rate_klettern,
        d_rate_bergtour,
        d_rate_schneeschuh,
-       d_route_dauer
+       d_route_dauer,
+       d_calced_id,
+       d_calced_actiontype,
+       d_calced_altAscFacet,
+       d_calced_altMaxFacet,
+       d_calced_distFacet,
+       d_calced_durFacet
        )
-SELECT REPLACE(REPLACE(LOWER(COALESCE(tour.l_id, "") || "_" ||
-            COALESCE(t_desc_gebiet, "") || "_" ||
-            COALESCE(t_desc_ziel, "") || "_" ||
-            COALESCE(t_typ, "")), " ", "_"), "/", "_")                    AS d_id,
+SELECT tour.t_calced_d_id AS d_id,
        tour.l_id,
        t_gesperrt AS d_gesperrt,
        t_desc_gebiet AS d_desc_gebiet,
@@ -331,7 +352,13 @@ SELECT REPLACE(REPLACE(LOWER(COALESCE(tour.l_id, "") || "_" ||
        min(t_rate_klettern)                                            AS d_rate_klettern,
        min(t_rate_bergtour)                                            AS d_rate_bergtour,
        min(t_rate_schneeschuh)                                         AS d_rate_schneeschuh,
-       min(t_route_dauer)                                              AS d_route_dauer
+       min(t_route_dauer)                                              AS d_route_dauer,
+       "DESTINATION" || "_" || t_calced_d_id                           AS d_calced_id,
+       t_calced_actiontype                                             AS d_calced_actiontype,
+       min(t_calced_altAscFacet)                                       AS d_calced_altAscFacet,
+       min(t_calced_altMaxFacet)                                       AS d_calced_altMaxFacet,
+       min(t_calced_distFacet)                                         AS d_calced_distFacet,
+       min(t_calced_durFacet)                                          AS d_calced_durFacet
 FROM tour
          LEFT JOIN location ON tour.l_id = location.l_id
 GROUP BY d_id;
@@ -353,8 +380,12 @@ WHERE toupdate.d_id=grouped.d_id**/;
 -- ##################
 -- import images
 -- ##################
-INSERT into image (i_id, k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit)
-    SELECT distinct importmytbdb_image.i_id, importmytbdb_image.k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit
+INSERT into image (i_id, k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit,
+        i_calced_id, i_calced_path, i_calced_gps_loc, i_calced_gps_lat, i_calced_gps_lon, i_calced_altMaxFacet,
+        i_calced_dateonly, i_calced_week, i_calced_month, i_calced_year)
+    SELECT distinct importmytbdb_image.i_id, importmytbdb_image.k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit,
+        "IMAGE" || "_" || importmytbdb_image.i_id, i_calced_path, i_calced_gps_loc, i_calced_gps_lat, i_calced_gps_lon, i_calced_altMaxFacet,
+         DATETIME(i_date), CAST(STRFTIME('%W', i_date) AS INT), CAST(STRFTIME('%m', i_date) AS INT), CAST(STRFTIME('%Y', i_date) AS INT)
     FROM importmytbdb_image INNER JOIN importmytbdb_image_playlist ON importmytbdb_image_playlist.i_id=importmytbdb_image.i_id
     WHERE importmytbdb_image_playlist.p_id=17;
 
@@ -430,8 +461,12 @@ WHERE toupdate.i_id=grouped.i_id**/;
 -- ##################
 -- import videos
 -- ##################
-INSERT into video (v_id, k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit)
-    SELECT distinct importmytbdb_video.v_id, importmytbdb_video.k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit
+INSERT into video (v_id, k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit,
+        v_calced_id, v_calced_path, v_calced_gps_loc, v_calced_gps_lat, v_calced_gps_lon, v_calced_altMaxFacet,
+        v_calced_dateonly, v_calced_week, v_calced_month, v_calced_year)
+    SELECT distinct importmytbdb_video.v_id, importmytbdb_video.k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit,
+        "VIDEO" || "_" || importmytbdb_video.v_id, v_calced_path, v_calced_gps_loc, v_calced_gps_lat, v_calced_gps_lon, v_calced_altMaxFacet,
+        DATETIME(v_date), CAST(STRFTIME('%W', v_date) AS INT), CAST(STRFTIME('%m', v_date) AS INT), CAST(STRFTIME('%Y', v_date) AS INT)
     FROM importmytbdb_video INNER JOIN importmytbdb_video_playlist ON importmytbdb_video_playlist.v_id=importmytbdb_video.v_id
     WHERE importmytbdb_video_playlist.p_id=17;
 

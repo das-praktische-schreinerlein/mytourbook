@@ -39,20 +39,20 @@ ALTER TABLE tour ADD COLUMN t_calced_statisticname_ele VARCHAR(255) GENERATED AL
 
 
 ALTER TABLE image ADD COLUMN i_calced_altMaxFacet DECIMAL UNSIGNED GENERATED ALWAYS AS (ROUND((i_gps_ele / 500)) * 500) VIRTUAL;
--- not supported ALTER TABLE image ADD COLUMN i_calced_dateonly VARCHAR(20) GENERATED ALWAYS AS (DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO"))) VIRTUAL;
--- not supported ALTER TABLE image ADD COLUMN i_calced_week tinyint GENERATED ALWAYS AS (WEEK(i_date)) VIRTUAL;
--- not supported ALTER TABLE image ADD COLUMN i_calced_month tinyint GENERATED ALWAYS AS (MONTH(i_date)) VIRTUAL;
--- not supported ALTER TABLE image ADD COLUMN i_calced_year tinyint GENERATED ALWAYS AS (YEAR(i_date)) VIRTUAL;
+-- not supported ALTER TABLE image ADD COLUMN i_calced_dateonly VARCHAR(20) GENERATED ALWAYS AS (DATETIME(i_date)) VIRTUAL;
+-- not supported ALTER TABLE image ADD COLUMN i_calced_week tinyint GENERATED ALWAYS AS (CAST(STRFTIME('%W', i_date) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE image ADD COLUMN i_calced_month tinyint GENERATED ALWAYS AS (CAST(STRFTIME('%m', i_date) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE image ADD COLUMN i_calced_year tinyint GENERATED ALWAYS AS (CAST(STRFTIME('%Y', i_date) AS INT)) VIRTUAL;
 
 ALTER TABLE kategorie ADD COLUMN k_calced_altAscFacet DECIMAL UNSIGNED GENERATED ALWAYS AS (ROUND((k_altitude_asc / 500)) * 500) VIRTUAL;
 ALTER TABLE kategorie ADD COLUMN k_calced_altMaxFacet DECIMAL UNSIGNED GENERATED ALWAYS AS (ROUND((k_altitude_max / 500)) * 500) VIRTUAL;
 ALTER TABLE kategorie ADD COLUMN k_calced_distFacet DECIMAL(11, 1) GENERATED ALWAYS AS (ROUND((k_distance / 5)) * 5) VIRTUAL;
 ALTER TABLE kategorie ADD COLUMN k_calced_dur DECIMAL(11, 2) GENERATED ALWAYS AS ((JULIANDAY(k_datebis) - JULIANDAY(k_datevon)) * 24) VIRTUAL;
 ALTER TABLE kategorie ADD COLUMN k_calced_durFacet DECIMAL(11, 1) GENERATED ALWAYS AS (ROUND(ROUND((JULIANDAY(k_datebis) - JULIANDAY(k_datevon)) * 24 * 2) / 2, 1)) VIRTUAL;
--- not supported ALTER TABLE kategorie ADD COLUMN k_calced_dateonly VARCHAR(20) GENERATED  ALWAYS AS (DATE_FORMAT(k_datevon, GET_FORMAT(DATE, "ISO"))) VIRTUAL;
--- not supported ALTER TABLE kategorie ADD COLUMN k_calced_week tinyint GENERATED  ALWAYS AS (WEEK(k_datevon)) VIRTUAL;
--- not supported ALTER TABLE kategorie ADD COLUMN k_calced_month tinyint GENERATED  ALWAYS AS (MONTH(k_datevon)) VIRTUAL;
--- not supported ALTER TABLE kategorie ADD COLUMN k_calced_year tinyint GENERATED  ALWAYS AS (YEAR(k_datevon)) VIRTUAL;
+-- not supported ALTER TABLE kategorie ADD COLUMN k_calced_dateonly VARCHAR(20) GENERATED  ALWAYS AS (DATETIME(k_datevon)) VIRTUAL;
+-- not supported ALTER TABLE kategorie ADD COLUMN k_calced_week tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%W', k_datevon) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE kategorie ADD COLUMN k_calced_month tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%m', k_datevon) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE kategorie ADD COLUMN k_calced_year tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%Y', k_datevon) AS INT)) VIRTUAL;
 
 ALTER TABLE location ADD COLUMN l_calced_altMaxFacet DECIMAL UNSIGNED GENERATED ALWAYS AS (ROUND((l_geo_ele / 500)) * 500) VIRTUAL;
 
@@ -60,23 +60,23 @@ ALTER TABLE tour ADD COLUMN t_calced_altAscFacet DECIMAL UNSIGNED GENERATED ALWA
 ALTER TABLE tour ADD COLUMN t_calced_altMaxFacet DECIMAL UNSIGNED GENERATED ALWAYS AS (ROUND((t_ele_max / 500)) * 500) VIRTUAL;
 ALTER TABLE tour ADD COLUMN t_calced_distFacet DECIMAL(11, 1) GENERATED ALWAYS AS (ROUND((t_route_m / 5)) * 5) VIRTUAL;
 ALTER TABLE tour ADD COLUMN t_calced_durFacet DECIMAL(11, 1) GENERATED ALWAYS AS (ROUND(ROUND(t_route_dauer * 2) / 2, 1)) VIRTUAL;
--- not supported ALTER TABLE tour ADD COLUMN t_calced_dateonly VARCHAR(20) GENERATED  ALWAYS AS (DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO"))) VIRTUAL;
--- not supported ALTER TABLE tour ADD COLUMN t_calced_week tinyint GENERATED  ALWAYS AS (WEEK(t_datevon)) VIRTUAL;
--- not supported ALTER TABLE tour ADD COLUMN t_calced_month tinyint GENERATED  ALWAYS AS (MONTH(t_datevon)) VIRTUAL;
--- not supported ALTER TABLE tour ADD COLUMN t_calced_year tinyint GENERATED  ALWAYS AS (YEAR(t_datevon)) VIRTUAL;
+-- not supported ALTER TABLE tour ADD COLUMN t_calced_dateonly VARCHAR(20) GENERATED  ALWAYS AS (DATETIME(t_datevon)) VIRTUAL;
+-- not supported ALTER TABLE tour ADD COLUMN t_calced_week tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%W', t_datevon) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE tour ADD COLUMN t_calced_month tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%m', t_datevon) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE tour ADD COLUMN t_calced_year tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%Y', t_datevon) AS INT)) VIRTUAL;
 
 ALTER TABLE trip ADD COLUMN tr_calced_dur DECIMAL(11, 2) GENERATED ALWAYS AS ((JULIANDAY(tr_datebis) - JULIANDAY(tr_datevon)) * 24) VIRTUAL;
 ALTER TABLE trip ADD COLUMN tr_calced_durFacet DECIMAL(11, 1) GENERATED ALWAYS AS (ROUND(ROUND((JULIANDAY(tr_datebis) - JULIANDAY(tr_datevon)) * 24) / 2, 1)) VIRTUAL;
--- not supported ALTER TABLE trip ADD COLUMN tr_calced_dateonly VARCHAR(20) GENERATED  ALWAYS AS (DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, "ISO"))) VIRTUAL;
--- not supported ALTER TABLE trip ADD COLUMN tr_calced_week tinyint GENERATED  ALWAYS AS (WEEK(tr_datevon)) VIRTUAL;
--- not supported ALTER TABLE trip ADD COLUMN tr_calced_month tinyint GENERATED  ALWAYS AS (MONTH(tr_datevon)) VIRTUAL;
--- not supported ALTER TABLE trip ADD COLUMN tr_calced_year tinyint GENERATED  ALWAYS AS (YEAR(tr_datevon)) VIRTUAL;
+-- not supported ALTER TABLE trip ADD COLUMN tr_calced_dateonly VARCHAR(20) GENERATED  ALWAYS AS (DATETIME(tr_datevon)) VIRTUAL;
+-- not supported ALTER TABLE trip ADD COLUMN tr_calced_week tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%W', tr_datevon) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE trip ADD COLUMN tr_calced_month tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%m', tr_datevon) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE trip ADD COLUMN tr_calced_year tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%Y', tr_datevon) AS INT)) VIRTUAL;
 
 ALTER TABLE video ADD COLUMN v_calced_altMaxFacet DECIMAL UNSIGNED GENERATED ALWAYS AS (ROUND((v_gps_ele / 500)) * 500) VIRTUAL;
--- not supported ALTER TABLE video ADD COLUMN v_calced_dateonly VARCHAR(20) GENERATED  ALWAYS AS (DATE_FORMAT(v_date, GET_FORMAT(DATE, "ISO"))) VIRTUAL;
--- not supported ALTER TABLE video ADD COLUMN v_calced_week tinyint GENERATED  ALWAYS AS (WEEK(v_date)) VIRTUAL;
--- not supported ALTER TABLE video ADD COLUMN v_calced_month tinyint GENERATED  ALWAYS AS (MONTH(v_date)) VIRTUAL;
--- not supported ALTER TABLE video ADD COLUMN v_calced_year tinyint GENERATED  ALWAYS AS (YEAR(v_date)) VIRTUAL;
+-- not supported ALTER TABLE video ADD COLUMN v_calced_dateonly VARCHAR(20) GENERATED  ALWAYS AS (DATETIME(v_date)) VIRTUAL;
+-- not supported ALTER TABLE video ADD COLUMN v_calced_week tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%W', v_date) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE video ADD COLUMN v_calced_month tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%m', v_date) AS INT)) VIRTUAL;
+-- not supported ALTER TABLE video ADD COLUMN v_calced_year tinyint GENERATED  ALWAYS AS (CAST(STRFTIME('%Y', v_date) AS INT)) VIRTUAL;
 
 DROP VIEW IF EXISTS location_hirarchical;
 CREATE VIEW location_hirarchical
