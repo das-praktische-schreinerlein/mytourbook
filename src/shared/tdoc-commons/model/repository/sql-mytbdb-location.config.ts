@@ -449,7 +449,7 @@ export class SqlMytbDbLocationConfig {
             id: 'location.l_id',
             loc_id_i: 'location.l_id',
             loc_id_is: 'location.l_id',
-            loc_parent_id_i: 'l_parent_id',
+            loc_parent_id_i: 'location.l_parent_id',
             image_id_is: '"666dummy999"',
             image_id_i: '"666dummy999"',
             info_id_i: '"666dummy999"',
