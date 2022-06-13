@@ -12,7 +12,7 @@ export class SqlMytbDbLocationConfig {
     public static readonly tableConfig: TableConfig = {
         key: 'location',
         tableName: 'location',
-        selectFrom: 'location_hirarchical as location ',
+        selectFrom: 'location left join location_hirarchical lh on location.l_id = lh.l_id',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN location_keyword ON location.l_id=location_keyword.l_id ' +
@@ -160,22 +160,22 @@ export class SqlMytbDbLocationConfig {
         ],
         selectFieldList: [
             '"LOCATION" AS type',
-            'location.l_typ as l_typ',
-            'CONCAT("loc_", l_typ) AS subtype',
+            'location.l_typ',
+            'CONCAT("loc_", location.l_typ) AS subtype',
             'CONCAT("LOCATION", "_", location.l_id) AS id',
-            'location.l_id as l_id',
-            'location.l_parent_id as l_parent_id',
-            'location.l_name as l_name',
-            'location.l_gesperrt as l_gesperrt',
-            'location.l_meta_shortdesc as l_meta_shortdesc',
-            'l_meta_shortdesc AS l_meta_shortdesc_md',
-            'l_calced_gps_lat AS l_geo_latdeg',
-            'l_calced_gps_lon AS l_geo_longdeg',
-            'l_calced_gps_loc AS l_gps_loc',
-            'l_geo_ele as l_geo_ele',
-            'l_calced_altMaxFacet AS altMaxFacet',
-            'l_lochirarchietxt AS l_lochirarchietxt',
-            'l_lochirarchieids AS l_lochirarchieids'],
+            'location.l_id',
+            'location.l_parent_id',
+            'location.l_name',
+            'location.l_gesperrt',
+            'location.l_meta_shortdesc',
+            'location.l_meta_shortdesc AS l_meta_shortdesc_md',
+            'location.l_calced_gps_lat',
+            'location.l_calced_gps_lon',
+            'location.l_calced_gps_loc',
+            'location.l_geo_ele',
+            'location.l_calced_altMaxFacet AS altMaxFacet',
+            'lh.l_lochirarchietxt AS l_lochirarchietxt',
+            'lh.l_lochirarchieids AS l_lochirarchieids'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -317,11 +317,11 @@ export class SqlMytbDbLocationConfig {
             'loc_lochirarchie_txt': {
                 selectSql: 'SELECT COUNT(*) AS count, GetTechName(l_name) AS value,' +
                     ' l_lochirarchietxt AS label, l_id AS id' +
-                    ' FROM location_hirarchical as location' +
+                    ' FROM location_hirarchical as lh' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
                 triggerTables: ['location'],
-                filterField: 'GetTechName(l_lochirarchietxt)',
+                filterField: 'GetTechName(lh.l_lochirarchietxt)',
                 action: AdapterFilterActions.LIKE
             },
             'month_is': {
@@ -402,33 +402,33 @@ export class SqlMytbDbLocationConfig {
             }
         },
         sortMapping: {
-            'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) ASC, l_name ASC',
-            'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) DESC, l_name ASC',
+            'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) ASC, location.l_name ASC',
+            'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) DESC, location.l_name ASC',
             'countImagesTop': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
-                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) ASC, l_name ASC',
+                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) ASC, location.l_name ASC',
             'countImagesTopDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
-                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) DESC, l_name ASC',
-            'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) ASC, l_name ASC',
-            'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) DESC, l_name ASC',
+                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) DESC, location.l_name ASC',
+            'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) ASC,location. l_name ASC',
+            'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) DESC, location.l_name ASC',
             'countInfos': '(SELECT COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id = location_info.if_id ' +
-                ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) ASC, l_name ASC',
+                ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) ASC, location.l_name ASC',
             'countInfosDesc': '(SELECT COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id = location_info.if_id ' +
-                ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) DESC, l_name ASC',
-            'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id)  tour t_sort WHERE t_sort.l_id = location.l_id) ASC, l_name ASC',
-            'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour t_sort WHERE t_sort.l_id = location.l_id) DESC, l_name ASC',
-            'dataTechMaxDesc': 'l_geo_ele DESC',
-            'dataTechMaxAsc': 'l_geo_ele ASC',
-            'distance': 'geodist ASC, l_name ASC',
-            'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC, l_name ASC',
-            'name': 'l_name ASC',
+                ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) DESC, location.l_name ASC',
+            'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id)  tour t_sort WHERE t_sort.l_id = location.l_id) ASC, location.l_name ASC',
+            'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour t_sort WHERE t_sort.l_id = location.l_id) DESC, location.l_name ASC',
+            'dataTechMaxDesc': 'location.l_geo_ele DESC',
+            'dataTechMaxAsc': 'location.l_geo_ele ASC',
+            'distance': 'geodist ASC, location.l_name ASC',
+            'forExport': 'location.l_typ ASC, location.l_parent_id ASC,location. l_id ASC, location.l_name ASC',
+            'name': 'location.l_name ASC',
             'playlistPos': 'location_playlist.lp_pos ASC',
-            'location': 'l_lochirarchietxt ASC, l_name ASC',
-            'locationDetails': 'l_lochirarchietxt ASC, l_name ASC',
-            'relevance': 'l_name ASC, l_name ASC'
+            'location': 'lh.l_lochirarchietxt ASC, location.l_name ASC',
+            'locationDetails': 'lh.l_lochirarchietxt ASC,location. l_name ASC',
+            'relevance': 'location.l_id ASC, location.l_name ASC'
         },
         spartialConfig: {
-            lat: 'l_geo_latdeg',
-            lon: 'l_geo_longdeg',
+            lat: 'location.l_geo_latdeg',
+            lon: 'location.l_geo_longdeg',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
         },
@@ -455,8 +455,8 @@ export class SqlMytbDbLocationConfig {
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',
             trip_id_is: '"666dummy999"',
-            initial_s: 'SUBSTR(UPPER(l_name), 1, 1)',
-            html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""), " ", l_lochirarchietxt)'
+            initial_s: 'SUBSTR(UPPER(location.l_name), 1, 1)',
+            html: 'CONCAT(location.l_name, " ", COALESCE(location.l_meta_shortdesc,""), " ", lh.l_lochirarchietxt)'
         },
         writeMapping: {
             'location.l_meta_shortdesc': ':desc_txt:',
@@ -485,9 +485,9 @@ export class SqlMytbDbLocationConfig {
             desc_html_txt: 'l_meta_shortdesc_html',
             blocked_i: 'l_gesperrt',
             distance: 'geodist',
-            geo_lon_s: 'l_geo_longdeg',
-            geo_lat_s: 'l_geo_latdeg',
-            geo_loc_p: 'l_gps_loc',
+            geo_lon_s: 'l_calced_gps_lon',
+            geo_lat_s: 'l_calced_gps_lat',
+            geo_loc_p: 'l_calced_gps_locc',
             gpstrack_src_s: 'l_geo_area',
             keywords_txt: 'l_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
