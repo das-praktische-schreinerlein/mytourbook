@@ -264,7 +264,7 @@ export class SqlMytbDbLocationConfig {
                 selectField: 'location.l_calced_subtype'
             },
             'blocked_is': {
-                selectField: 'l_gesperrt'
+                selectField: 'location.l_gesperrt'
             },
             'data_tech_alt_asc_facet_is': {
                 noFacet: true
@@ -408,7 +408,7 @@ export class SqlMytbDbLocationConfig {
                 ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) ASC, location.l_name ASC',
             'countImagesTopDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) DESC, location.l_name ASC',
-            'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) ASC,location. l_name ASC',
+            'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) ASC, location.l_name ASC',
             'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) DESC, location.l_name ASC',
             'countInfos': '(SELECT COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id = location_info.if_id ' +
                 ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) ASC, location.l_name ASC',
@@ -419,11 +419,11 @@ export class SqlMytbDbLocationConfig {
             'dataTechMaxDesc': 'location.l_geo_ele DESC',
             'dataTechMaxAsc': 'location.l_geo_ele ASC',
             'distance': 'geodist ASC, location.l_name ASC',
-            'forExport': 'location.l_typ ASC, location.l_parent_id ASC,location. l_id ASC, location.l_name ASC',
+            'forExport': 'location.l_typ ASC, location.l_parent_id ASC,location.l_id ASC, location.l_name ASC',
             'name': 'location.l_name ASC',
             'playlistPos': 'location_playlist.lp_pos ASC',
             'location': 'lh.l_lochirarchietxt ASC, location.l_name ASC',
-            'locationDetails': 'lh.l_lochirarchietxt ASC,location. l_name ASC',
+            'locationDetails': 'lh.l_lochirarchietxt ASC, location.l_name ASC',
             'relevance': 'location.l_id ASC, location.l_name ASC'
         },
         spartialConfig: {
@@ -445,6 +445,19 @@ export class SqlMytbDbLocationConfig {
             todoKeywords: 'keyword.kw_name',
             unrated: '"666dummy999"',
             unRatedChildren: '"666dummy999"',
+            // specific to prevent ambiguous fields
+            loc_id_parent_i: 'location.l_parent_id',
+            data_tech_alt_min_i: 'location.l_geo_ele',
+            data_tech_alt_max_i: 'location.l_geo_ele',
+            desc_txt: 'location.l_meta_shortdesc',
+            desc_md_txt: 'location.l_meta_shortdesc_md',
+            desc_html_txt: 'l_meta_shortdesc_html',
+            geo_lon_s: 'location.l_calced_gps_lon',
+            geo_lat_s: 'location.l_calced_gps_lat',
+            geo_loc_p: 'location.l_calced_gps_loc',
+            loc_lochirarchie_s: 'lh.l_lochirarchietxt',
+            loc_lochirarchie_ids_s: 'lh.l_lochirarchieids',
+            name_s: 'location.l_name',
             // common
             id: 'location.l_id',
             loc_id_i: 'location.l_id',
@@ -487,7 +500,7 @@ export class SqlMytbDbLocationConfig {
             distance: 'geodist',
             geo_lon_s: 'l_calced_gps_lon',
             geo_lat_s: 'l_calced_gps_lat',
-            geo_loc_p: 'l_calced_gps_locc',
+            geo_loc_p: 'l_calced_gps_loc',
             gpstrack_src_s: 'l_geo_area',
             keywords_txt: 'l_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
