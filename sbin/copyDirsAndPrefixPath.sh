@@ -27,6 +27,10 @@ fi
 if [ ! -d "$DESTDIR" ]; then
   mkdir -p "${DESTDIR}"
 fi
+if [ "$(ls -A $SRCDIR)" == "" ]; then
+  echo "SKIPPED: copy subdirs from $SRCDIR to $DESTDIR with $PREFIX -> bencause $SRCDIR is empty"
+  exit 0;
+fi
 
 # copy to tmp
 TMPDIR=${DESTDIR}/_tmp/

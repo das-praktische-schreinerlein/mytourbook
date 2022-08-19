@@ -1066,6 +1066,14 @@
             </ng-container>
 
         </ng-container>
-        <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+
+        <div class="card-footer text-right mt-2" style="width: 100%">
+            <div class="card-action-buttons align-bottom" role="group" aria-label="Actions">
+                <app-cdoc-object-navigation [baseSearchUrl]="'tdoc/'" [navigationobjects]="record.tdocnavigationobjects"></app-cdoc-object-navigation>
+                <app-tdoc-simple-search-navigation [record]="record"></app-tdoc-simple-search-navigation>
+            </div>
+
+            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+        </div>
     </div>
 </div>

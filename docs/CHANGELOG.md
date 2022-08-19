@@ -9,6 +9,8 @@
 - added sectionDetails
 - use location-view to get optimized hierarchical-data
 - optimized model
+- improved import-scripts
+- added gpx-track-edit
  
 ### new features
 - frontend/backend: added sectionDetails
@@ -17,14 +19,17 @@
 - frontend: added additional groupby track+trip+location for image/track/trip/video/route-list
 - frontend: added layoutOptions noCount, noHeader
 - frontend: config - show download-icon only in popup
-- solr: improved selection of teaser-image
+- solr: improved selection of teaser-image, data-import
 - backend: improved sql-filter
 - backend: added imagemagic-installer
 - backend: use location-view to get optimized hierarchical-data
 - backend: optimized model
+- scripts: improved import-scripts
+- frontend: added gpx-track-edit
 
 ### bug fixes
 - backend: fixed track-filter for route
+- frontend: fixed admin-area display of result-messages 
 
 ### breaking changes
 - none

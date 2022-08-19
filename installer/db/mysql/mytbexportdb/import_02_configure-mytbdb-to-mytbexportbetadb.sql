@@ -6,7 +6,7 @@ CREATE VIEW importmytbdb_playlist AS SELECT * FROM testmytbdb.playlist;
 DROP VIEW IF EXISTS importmytbdb_keyword;
 CREATE VIEW importmytbdb_keyword AS SELECT * FROM testmytbdb.keyword;
 DROP VIEW IF EXISTS importmytbdb_location;
-CREATE VIEW importmytbdb_location AS SELECT * FROM testmytbdb.location;
+CREATE VIEW importmytbdb_location AS SELECT * FROM testmytbdb.location_hirarchical;
 DROP VIEW IF EXISTS importmytbdb_location_keyword;
 CREATE VIEW importmytbdb_location_keyword AS SELECT * FROM testmytbdb.location_keyword;
 DROP VIEW IF EXISTS importmytbdb_location_playlist;

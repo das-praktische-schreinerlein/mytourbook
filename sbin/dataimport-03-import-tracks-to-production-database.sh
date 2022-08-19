@@ -77,8 +77,13 @@ done
 
 echo "now: import into production-database"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json --backend ${CONFIG_BASEDIR}backend.dev.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
-mv ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json
+node dist/backend/serverAdmin.js --debug --renameFileAfterSuccess true --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json --backend ${CONFIG_BASEDIR}backend.dev.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+
+# fallback if importdir is a symlink and file cant be renamed
+if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" ]; then
+  IMPORTDATE="$(date +"import-%Y%m%d-%H%M%S-%s")"
+  mv ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump-${IMPORTDATE}.json
+fi
 cd $CWD
 
 echo "YOUR TODO: update appIds after check"

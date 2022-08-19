@@ -27,7 +27,8 @@ source installer/db/mysql/mytbexportdb/init_02_create-user.sql
 ```bash
 bash
 cd sbin
-./dataimport-01-prepare-tracks-for-import-database.sh IMPORTKEY
+./prepare-environment.sh IMPORTKEY
+./dataimport-01-integrated-prepare-for-import-database.sh IMPORTKEY
 ./dataimport-02-import-tracks-to-import-database.sh IMPORTKEY
 ```
 ## manage data in import-database

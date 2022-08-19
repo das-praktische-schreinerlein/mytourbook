@@ -12,6 +12,10 @@
             <button (click)="fixMap()" i18n="fixGpsTrackSrc label|Label for button: fixGpsTrackSrc@@label.editareaform.tdoc.fixGpsTrackSrc">Fix errors</button>
             <label class="col-xs-3 col-form-label mr-2" i18n="mergeNewTracks label|Label for field: mergeNewTracks@@label.editareaform.tdoc.mergeNewTracks">Merge:</label>
             <input formControlName="mergeNewTracks" type="checkbox" [checked]="mergeNewTracks" class="form-control">
+            <button (click)="createNewGpx()" type="button"
+                    i18n="createNewGpx label|Label for button: createNewGpx@@label.editform.tdoc.createNewGpx">Neuer Gpx-Tack</button>
+            <button (click)="updateGpsTrackFromMap()" type="button"
+                    i18n="updateGpxFromMap label|Label for button: updateGpxFromMap@@label.editform.tdoc.updateGpxFromMap">Karte -> Daten</button>
         </div>
     </div>
 
@@ -75,7 +79,9 @@
                     <app-tdoc-map [mapId]="'showMap'"
                                   [height]="'400px'"
                                   [mapZoom]="'9'"
+                                  [editable]="true"
                                   [tdocs]="editTrackRecords"
+                                  (mapCreated)="onGeoMapCreated($event)"
                                   (mapElementsFound)="setMapElementsRendered($event)"
                                   [trackColors]="trackColors"
                                   [showImageTrackAndGeoPos]="'true'"

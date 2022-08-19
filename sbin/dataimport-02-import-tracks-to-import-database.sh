@@ -45,9 +45,16 @@ done
 echo "now: load import-files"
 if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json" ]; then
   echo "now: load image-import-file"
+
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
-  mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-images.json
+  node dist/backend/serverAdmin.js --debug --renameFileAfterSuccess true --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
+
+  # fallback if importdir is a symlink and file cant be renamed
+  if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json" ]; then
+    IMPORTDATE="$(date +"import-%Y%m%d-%H%M%S-%s")"
+    mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-images-${IMPORTDATE}.json
+  fi
+
   cd $CWD
 else
   echo "WARNING: image-import-file not exists '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json'?"
@@ -65,8 +72,14 @@ fi
 if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json" ]; then
   echo "now: load video-import-file"
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
-  mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-videos.json
+  node dist/backend/serverAdmin.js --debug --renameFileAfterSuccess true --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
+
+  # fallback if importdir is a symlink and file cant be renamed
+  if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json" ]; then
+    IMPORTDATE="$(date +"import-%Y%m%d-%H%M%S-%s")"
+    mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-videos-${IMPORTDATE}.json
+  fi
+
   cd $CWD
 else
   echo "WARNING: video-import-file not exists '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json'?"

@@ -98,6 +98,10 @@ export class TourDocMediaFileImportManager  {
         const me = this;
         const funcs = [];
         const records: TourDocRecord[] = [];
+        if (this.skipCheckForExistingFilesInDataBase) {
+            console.warn('SKIP databasecheck', this.skipCheckForExistingFilesInDataBase);
+        }
+
         for (let path in container.FILES) {
             if (!container.FILES.hasOwnProperty(path)) {
                 continue;
@@ -247,7 +251,7 @@ export class TourDocMediaFileImportManager  {
                 query = {
                     where: {
                         i_fav_url_txt: {
-                            'in': [path]
+                            'in': [path, path.toLowerCase()]
                         },
                         type_txt: {
                             'in': ['image']
@@ -259,7 +263,7 @@ export class TourDocMediaFileImportManager  {
                 query = {
                     where: {
                         v_fav_url_txt: {
-                            'in': [path]
+                            'in': [path, path.toLowerCase()]
                         },
                         type_txt: {
                             'in': ['video']

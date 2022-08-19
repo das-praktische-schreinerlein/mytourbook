@@ -11,9 +11,11 @@ import {GpsTrackValidationRule} from '@dps/mycms-commons/dist/search-commons/mod
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {DefaultTrackColors, TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {DOCUMENT} from '@angular/common';
-import {GeoElementType} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
+import {GeoElementType, LatLngTime} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
+import * as L from 'leaflet';
+import {LatLng} from 'leaflet';
 
 @Component({
     selector: 'app-gpx-editarea',
@@ -22,9 +24,14 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GpxEditAreaComponent extends AbstractInlineComponent {
+    public static readonly _DEFAULT_ALT = -99999;
+    public static readonly _DEFAULT_TIMESTAMP = new Date(0);
+
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
     private lastGpx = '';
+    private lastName = '';
+    private geoMap: L.Map;
 
     trackColors = new DefaultTrackColors();
     trackRecords: TourDocRecord[] = [];
@@ -136,28 +143,41 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 switch (geoElement.type) {
                     case GeoElementType.TRACK:
                         type = 'TRACK';
+                        this.lastName = geoElement.name;
                         trackSrc = '<trk><trkseg>';
                         trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+
                         trackSrc += geoElement.points.map(value => {
-                            return '<trkpt lat="' + value.lat + '" lon="' + value.lng + '"><ele>' + value.alt + '</ele></trkpt>';
+                            return '<trkpt lat="' + value.lat + '" lon="' + value.lng + '">' +
+                                '<ele>' + value.alt + '</ele>' +
+                                (value['time'] ? '<time>' + value['time'].toISOString() + '</time>' : '') +
+                                '</trkpt>';
                         }).join('\n');
                         trackSrc += '</trkseg></trk>';
+
                         break;
                     case GeoElementType.ROUTE:
                         type = 'ROUTE';
+                        this.lastName = geoElement.name;
                         trackSrc = '<rte>';
                         trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+
                         trackSrc += geoElement.points.map(value => {
                             return '<rtept lat="' + value.lat + '" lon="' + value.lng + '"><ele>' + value.alt + '</ele></rtept>';
                         }).join('\n');
+
                         trackSrc += '</rte>';
+
                         break;
                     case GeoElementType.WAYPOINT:
                         type = 'LOCATION';
+                        this.lastName = geoElement.name;
                         trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+
                         trackSrc += geoElement.points.map(value => {
                             return '<wpt lat="' + value.lat + '" lon="' + value.lng + '"></wpt>';
                         }).join('\n');
+
                         break;
                 }
 
@@ -247,6 +267,83 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
         return this.updateMap();
     }
 
+    onGeoMapCreated(map: L.Map) {
+        this.geoMap = map;
+    }
+
+    updateGpsTrackFromMap(): boolean {
+        if (this.geoMap) {
+            let newGpx = '';
+            const segments = [];
+
+            this.geoMap.eachLayer(layer => {
+                let points: LatLng[] = [];
+                if (layer['getLatLngs']) {
+                    // @ts-ignore
+                    points = layer.getLatLngs();
+                } else if (layer['getPoints']) {
+                    // @ts-ignore
+                    const markers: L.Marker[] = layer.getPoints();
+                    if (markers) {
+                        markers.forEach(marker => {
+                            points.push(marker.getLatLng());
+                        });
+                    }
+                }
+
+                if (points) {
+                    if (this.type === 'TRACK') {
+                        segments.push(
+                            GpxEditAreaComponent.createGpxTrackSegment(points));
+                    } else {
+                        newGpx += GpxEditAreaComponent.createGpxRoute(this.lastName, this.type, points);
+                    }
+                }
+            });
+
+            if (this.type === 'TRACK') {
+                newGpx += GpxEditAreaComponent.createGpxTrack(this.lastName, this.type, segments);
+            }
+
+            newGpx = GeoGpxParser.fixXml(newGpx);
+            newGpx = GeoGpxParser.fixXmlExtended(newGpx);
+            newGpx = GeoGpxParser.reformatXml(newGpx);
+
+            this.setCurrentGpx(newGpx);
+            this.fixMap();
+            this.updateData();
+        }
+
+        return false;
+    }
+
+    createNewGpx(): boolean {
+        const me = this;
+
+        const points: LatLng[] = [];
+        const lat = 51.9746413082;
+        const lon = 13.8;
+        const factor = 0.01;
+        points.push(new LatLngTime(lat - factor, lon - factor, GpxEditAreaComponent._DEFAULT_ALT, GpxEditAreaComponent._DEFAULT_TIMESTAMP),
+            new LatLngTime(lat - factor, lon + factor, GpxEditAreaComponent._DEFAULT_ALT, GpxEditAreaComponent._DEFAULT_TIMESTAMP),
+            new LatLngTime(lat + factor, lon - factor, GpxEditAreaComponent._DEFAULT_ALT, GpxEditAreaComponent._DEFAULT_TIMESTAMP));
+
+
+        let track = '';
+        if (this.type === 'TRACK') {
+            track = GpxEditAreaComponent.createGpxTrack(this.lastName, this.type, [
+                GpxEditAreaComponent.createGpxTrackSegment(points)
+            ]);
+        } else {
+            track = GpxEditAreaComponent.createGpxRoute(this.lastName, this.type, points)
+        }
+
+        me.setCurrentGpx(GeoGpxParser.reformatXml(track));
+
+        return me.fixMap();
+    }
+
+
     protected prepareSubmitValues(values: {}): void {
         if (values['gpxSrc'] !== undefined && values['gpxSrc'] !== null) {
             values['gpxSrc'] = values['gpxSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
@@ -278,5 +375,60 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
 
     protected getCurrentGpx(): string {
         return this.editGpxFormGroup.getRawValue()['gpxSrc'];
+    }
+
+    // TODO move to geogpx.parser
+    public static createGpxTrack(name: string, type: string, segments: string[]): string {
+        let newGpx = '<trk><type>' + type + '</type><name>' + name + '</name>';
+        if (segments) {
+            for (let i = 0; i < segments.length; i++) {
+                const segment = segments[i];
+                newGpx = newGpx + segment;
+            }
+        }
+
+        newGpx = newGpx + '</trk>';
+
+        return newGpx;
+    }
+
+    // TODO move to geogpx.parser
+    public static createGpxTrackSegment(points: L.LatLng[]): string {
+        if (!points || points.length <= 0) {
+            return '';
+        }
+
+        let newGpx = '<trkseg>';
+        for (let i = 0; i < points.length; i++) {
+            const point = points[i];
+            newGpx = newGpx + '<trkpt lat="' + point.lat + '" lon="' + point.lng + '">' +
+                '<ele>' + (point['alt'] ? point['alt'] : GpxEditAreaComponent._DEFAULT_ALT) + '</ele>' +
+                '<time>' + (point['time'] ? point['time'].toISOString() : GpxEditAreaComponent._DEFAULT_TIMESTAMP.toISOString()) + '</time>' +
+                '</trkpt>';
+        }
+
+        newGpx = newGpx + '</trkseg>';
+
+        return newGpx;
+    }
+
+    // TODO move to geogpx.parser
+    public static createGpxRoute(name: string, type: string, points: L.LatLng[]): string {
+        if (!points || points.length <= 0) {
+            return '';
+        }
+
+        let newGpx = '<rte><type>' + type + '</type><name>' + name + '</name>';
+        for (let i = 0; i < points.length; i++) {
+            const point = points[i];
+            newGpx = newGpx + '<rtept lat="' + point.lat + '" lon="' + point.lng + '">' +
+                '<ele>' + (point['alt'] ? point['alt'] : GpxEditAreaComponent._DEFAULT_ALT) + '</ele>' +
+                '<time>' + (point['time'] ?  point['time'].toISOString() : GpxEditAreaComponent._DEFAULT_TIMESTAMP.toISOString()) + '</time>' +
+                '</rtept>';
+        }
+
+        newGpx = newGpx + '</rte>';
+
+        return newGpx;
     }
 }
