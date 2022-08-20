@@ -67,7 +67,7 @@ export class TourDocExporterCommand extends CommonAdminCommand {
             }
 
             const newFile = dataFileName + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-export.MOVED';
-            fileCheckPromise = FileUtils.moveFile(dataFileName, newFile, false);
+            fileCheckPromise = FileUtils.moveFile(dataFileName, newFile, false, true, false);
         } else {
             fileCheckPromise = Promise.resolve();
         }

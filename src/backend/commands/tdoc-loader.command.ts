@@ -61,7 +61,7 @@ export class TourDocLoaderCommand extends CommonAdminCommand {
             let promise: Promise<any>;
             if (renameFileOption) {
                 const newFile = dataFileName + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-import.DONE';
-                promise = FileUtils.moveFile(dataFileName, newFile, false);
+                promise = FileUtils.moveFile(dataFileName, newFile, false, true, false);
             } else {
                 promise = Promise.resolve();
             }

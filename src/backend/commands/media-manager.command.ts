@@ -245,7 +245,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     }
 
                     const newFile = outputFile + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-export.MOVED';
-                    fileCheckPromise2 = FileUtils.moveFile(outputFile, newFile, false);
+                    fileCheckPromise2 = FileUtils.moveFile(outputFile, newFile, false, true, false);
                 } else {
                     fileCheckPromise2 = Promise.resolve();
                 }
@@ -291,7 +291,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     }
 
                     const newFile = outputFile + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-export.MOVED';
-                    fileCheckPromise = FileUtils.moveFile(outputFile, newFile, false);
+                    fileCheckPromise = FileUtils.moveFile(outputFile, newFile, false, true, false);
                 } else {
                     fileCheckPromise = Promise.resolve();
                 }
