@@ -13,6 +13,7 @@
 - added gpx-track-edit
 - added admin-db-commands
 - fixed import for mysql
+- use commons 5.5.0
  
 ### new features
 - frontend/backend: added sectionDetails
