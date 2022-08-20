@@ -130,28 +130,6 @@
                     }
                 ]
             },
-            "exportImportDataToDevDatabase": {
-                "description": "export data to dev-database",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "exportTourDoc",
-                            "action": "exportDocs",
-                            "backend": "config/backend.import.json",
-                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "loadTourDoc",
-                            "action": "loadDocs",
-                            "backend": "config/backend.dev.json",
-                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json",
-                            "renameFileAfterSuccess": true
-                        }
-                    }
-                ]
-            },
             "dbPublish_beta_sqlite": {
                 "description": "publish database mytbexportbetadb sqlite",
                 "commands": [
@@ -245,6 +223,19 @@
                             "publishConfigFile": "config/dbpublish.json",
                             "profile": "sqlite",
                             "target": "mytbexportproddb"
+                        }
+                    }
+                ]
+            },
+            "prepareDataExportToDevDatabase": {
+                "description": "prepare export data to dev-database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "exportTourDoc",
+                            "action": "exportDocs",
+                            "backend": "config/backend.import.json",
+                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json"
                         }
                     }
                 ]

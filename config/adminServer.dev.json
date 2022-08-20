@@ -83,6 +83,20 @@
                     }
                 ]
             },
+            "importDataFromImportDatabase": {
+                "description": "import data from import-database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "loadTourDoc",
+                            "action": "loadDocs",
+                            "backend": "config/backend.dev.json",
+                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json",
+                            "renameFileAfterSuccess": true
+                        }
+                    }
+                ]
+            },
             "dbFixTourMinDates": {
                 "description": "fix tour-min-dates on database",
                 "commands": [
