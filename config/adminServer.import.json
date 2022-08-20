@@ -130,105 +130,64 @@
                     }
                 ]
             },
-            "dbPublish_beta_mysql": {
-                "description": "publish database mytbexportbetadb mysql",
+            "dbPublish_beta_sqlite": {
+                "description": "publish database mytbexportbetadb sqlite",
                 "commands": [
                     {
                         "parameters": {
                             "command": "dbPublish",
                             "action": "publishDB",
                             "publishConfigFile": "config/dbpublish.json",
-                            "profile": "mysql",
+                            "profile": "sqlite",
                             "target": "mytbexportbetadb"
                         }
                     }
                 ]
             },
-            "solrPublish_beta_mysql": {
-                "description": "publish solr mytbexportbeta mysql",
+            "solrPublish_beta_sqlite": {
+                "description": "publish solr mytbexportbeta sqlite",
                 "commands": [
                     {
                         "parameters": {
                             "command": "solrPublish",
                             "action": "publishSolr",
                             "publishConfigFile": "config/dbpublish.json",
-                            "profile": "mysql",
+                            "profile": "sqlite",
                             "target": "mytbexportbetadb"
                         }
                     }
                 ]
             },
-            "dbPublish_prod_mysql": {
-                "description": "publish mytbexportproddb mysql",
+            "dbPublish_prod_sqlite": {
+                "description": "publish mytbexportproddb sqlite",
                 "commands": [
                     {
                         "parameters": {
                             "command": "dbPublish",
                             "action": "publishDB",
                             "publishConfigFile": "config/dbpublish.json",
-                            "profile": "mysql",
+                            "profile": "sqlite",
                             "target": "mytbexportproddb"
                         }
                     }
                 ]
             },
-            "solrPublish_prod_mysql": {
-                "description": "publish solr mytbexportprod mysql",
+            "solrPublish_prod_sqlite": {
+                "description": "publish solr mytbexportprod sqlite",
                 "commands": [
                     {
                         "parameters": {
                             "command": "solrPublish",
                             "action": "publishSolr",
                             "publishConfigFile": "config/dbpublish.json",
-                            "profile": "mysql",
-                            "target": "mytbexportproddb"
-                        }
-                    }
-                ]
-            },
-            "publish_beta/prod_mysql": {
-                "description": "publish mytbexportbetadb+mytbexportproddb mysql",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "dbPublish",
-                            "action": "publishDB",
-                            "publishConfigFile": "config/dbpublish.json",
-                            "profile": "mysql",
-                            "target": "mytbexportbetadb"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "solrPublish",
-                            "action": "publishSolr",
-                            "publishConfigFile": "config/dbpublish.json",
-                            "profile": "mysql",
-                            "target": "mytbexportbetadb"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "dbPublish",
-                            "action": "publishDB",
-                            "publishConfigFile": "config/dbpublish.json",
-                            "profile": "mysql",
-                            "target": "mytbexportproddb"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "solrPublish",
-                            "action": "publishSolr",
-                            "publishConfigFile": "config/dbpublish.json",
-                            "profile": "mysql",
+                            "profile": "sqlite",
                             "target": "mytbexportproddb"
                         }
                     }
                 ]
             },
             "publish_beta/prod_sqlite": {
-                "description": "publish mytbexportproddb+mytbexportproddb sqlite",
+                "description": "publish mytbexportbetadb+mytbexportproddb sqlite",
                 "commands": [
                     {
                         "parameters": {
