@@ -11,9 +11,12 @@
 - optimized model
 - improved import-scripts
 - added gpx-track-edit
+- added admin-db-commands
+- fixed import for mysql
  
 ### new features
 - frontend/backend: added sectionDetails
+- backend: added admin-db-command
 
 ### improvements
 - frontend: added additional groupby track+trip+location for image/track/trip/video/route-list
@@ -26,10 +29,12 @@
 - backend: optimized model
 - scripts: improved import-scripts
 - frontend: added gpx-track-edit
+- backend: added admin-commands to config
 
 ### bug fixes
 - backend: fixed track-filter for route
 - frontend: fixed admin-area display of result-messages 
+- backend: fixed import for mysql
 
 ### breaking changes
 - none

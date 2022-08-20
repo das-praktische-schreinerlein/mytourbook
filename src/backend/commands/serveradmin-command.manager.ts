@@ -10,6 +10,7 @@ import {CacheInitializerCommand} from './cache-initializer.command';
 import {SolrPublishCommand} from './solrpublish.command';
 import {TourDocLoaderCommand} from './tdoc-loader.command';
 import {TourDocExporterCommand} from './tdoc-exporter.command';
+import {DbAdminCommand} from './dbadmin.command';
 
 export interface ServerAdminCommandConfigType extends CommonServerAdminCommandConfigType, AdminCommandConfigType {
     importDir: string,
@@ -30,14 +31,20 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
                 'exportTourDoc': new TourDocExporterCommand(),
                 'mediaManager': new MediaManagerCommand(),
                 'objectDetectionManager': new ObjectDetectionManagerCommand(),
+                'dbAdmin': new DbAdminCommand(),
                 'dbPublish': new DbPublishCommand(),
                 'solrPublish': new SolrPublishCommand()
             },
             adminCommandConfig,
             // only allow a subset of actions
-            ['initCache', 'sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests',
-                'readImageDates', 'scaleImages', 'scaleVideos',
-                'publishDB', 'publishSolr'
+            [
+                'initCache',
+                'sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests',
+                'syncMedia',
+                'readMediaDates', 'readImageDates', 'readVideoDates',
+                'scaleMedia', 'scaleImages', 'scaleVideos',
+                'publishDB', 'publishSolr',
+                'fixture-fix-gpx-timecorrector', 'fixture-fix-track_image-blocked-default', 'fixture-update-tour-min-dates', 'action-update-coor-by-gpstrackpoints'
                 ]);
     }
 

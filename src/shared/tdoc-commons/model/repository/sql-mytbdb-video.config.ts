@@ -489,6 +489,7 @@ export class SqlMytbDbVideoConfig {
             info_id_is: '"666dummy999"',
             video_id_i: 'video.v_id',
             video_id_is: 'video.v_id',
+            v_fav_url_txt: 'video.v_calced_path',
             route_id_i: 'kategorie.t_id',
             route_id_is: 'kategorie.t_id',
             track_id_i: 'video.k_id',

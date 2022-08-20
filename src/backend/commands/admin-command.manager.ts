@@ -14,7 +14,9 @@ import {
 } from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin-command.manager';
 import {SolrPublishCommand} from './solrpublish.command';
 import {ExtendedConfigInitializerCommand} from './extendedconfig-initializer.command';
+import {DbAdminCommand} from './dbadmin.command';
 
+// tslint:disable-next-line:no-empty-interface
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
 }
 
@@ -30,6 +32,7 @@ export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandC
             'mediaManager': new MediaManagerCommand(),
             'objectDetectionManager': new ObjectDetectionManagerCommand(),
             'facetCacheManager': new FacetCacheManagerCommand(),
+            'dbAdmin': new DbAdminCommand(),
             'dbMigrate': new DbMigrateCommand(),
             'dbPublish': new DbPublishCommand(),
             'solrPublish': new SolrPublishCommand()

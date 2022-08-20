@@ -2,8 +2,8 @@
     "commandConfig": {
         "adminWritable": true,
         "preparedCommands": {
-            "importMedia": {
-                "description": "import media from media-directory",
+            "syncMedia": {
+                "description": "sync media in media-directory",
                 "commands": [
                     {
                         "parameters": {
@@ -42,25 +42,30 @@
                             "file": "F:/playground/mytb-test/mytbbase/import/video_full/mytbdb_import-import-videos.json",
                             "renameFileAfterSuccess": true
                         }
-                    },
+                    }
+                ]
+            },
+            "readMediaDates": {
+                "description": "read media-dates from media-directory",
+                "commands": [
                     {
                         "parameters": {
                             "command": "mediaManager",
-                            "action": "scaleImages",
+                            "action": "readImageDates",
                             "backend": "config/backend.import.json"
                         }
                     },
                     {
                         "parameters": {
                             "command": "mediaManager",
-                            "action": "scaleVideos",
+                            "action": "readVideoDates",
                             "backend": "config/backend.import.json"
                         }
                     }
                 ]
             },
             "scaleMedia": {
-                "description": "export media-favorites from export-media-directory",
+                "description": "scale media from media-directory",
                 "commands": [
                     {
                         "parameters": {
@@ -78,8 +83,20 @@
                     }
                 ]
             },
+            "dbFixTourMinDates": {
+                "description": "fix tour-min-dates on database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-update-tour-min-dates",
+                            "backend": "config/backend.import.json"
+                        }
+                    }
+                ]
+            },
             "exportMediaFavorites": {
-                "description": "export media-favorites from export-media-directory",
+                "description": "export media-favorites to export-media-directory",
                 "commands": [
                     {
                         "parameters": {
@@ -87,7 +104,7 @@
                             "action": "exportImageFiles",
                             "backend": "config/backend.import.json",
                             "exportName": "favorites-top",
-                            "exportDir": "F:\\playground\\mytb-test\\export\\favorites\\",
+                            "exportDir": "F:/playground/mytb-test/export/favorites/",
                             "directoryProfile": "default",
                             "fileNameProfile": "default",
                             "playlists": "",
@@ -102,7 +119,7 @@
                             "action": "exportVideoFiles",
                             "backend": "config/backend.import.json",
                             "exportName": "favorites-top",
-                            "exportDir": "F:\\playground\\mytb-test\\export\\favorites\\",
+                            "exportDir": "F:/playground/mytb-test/export/favorites/",
                             "directoryProfile": "default",
                             "fileNameProfile": "default",
                             "playlists": "",

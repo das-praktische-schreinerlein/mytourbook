@@ -2,16 +2,16 @@
     "commandConfig": {
         "adminWritable": true,
         "preparedCommands": {
-            "importMedia": {
-                "description": "import media from media-directory",
+            "syncMedia": {
+                "description": "syncMedia media in media-directory",
                 "commands": [
                     {
                         "parameters": {
                             "command": "mediaManager",
                             "action": "generateTourDocsFromMediaDir",
                             "backend": "config/backend.dev.json",
-                            "importDir": "F:\\playground\\mytb-test\\mytbmediabase\\pics_full\\",
-                            "outputFile": "F:\\playground\\mytb-test\\mytbmediabase\\pics_full\\mytbdb_import-import-images.json",
+                            "importDir": "F:/playground/mytb-test/mytbmediabase/pics_full/",
+                            "outputFile": "F:/playground/mytb-test/mytbmediabase/pics_full/mytbdb_import-import-images.json",
                             "renameFileIfExists": "true"
                         }
                     },
@@ -20,8 +20,8 @@
                             "command": "mediaManager",
                             "action": "generateTourDocsFromMediaDir",
                             "backend": "config/backend.dev.json",
-                            "importDir": "F:\\playground\\mytb-test\\mytbmediabase\\video_full\\",
-                            "outputFile": "F:\\playground\\mytb-test\\mytbmediabase\\video_full\\mytbdb_import-import-videos.json",
+                            "importDir": "F:/playground/mytb-test/mytbmediabase/video_full/",
+                            "outputFile": "F:/playground/mytb-test/mytbmediabase/video_full/mytbdb_import-import-videos.json",
                             "renameFileIfExists": "true"
                         }
                     },
@@ -30,7 +30,7 @@
                             "command": "loadTourDoc",
                             "action": "loadDocs",
                             "backend": "config/backend.dev.json",
-                            "file": "F:\\playground\\mytb-test\\mytbmediabase\\pics_full\\mytbdb_import-import-images.json",
+                            "file": "F:/playground/mytb-test/mytbmediabase/pics_full/mytbdb_import-import-images.json",
                             "renameFileAfterSuccess": true
                         }
                     },
@@ -39,28 +39,33 @@
                             "command": "loadTourDoc",
                             "action": "loadDocs",
                             "backend": "config/backend.dev.json",
-                            "file": "F:\\playground\\mytb-test\\mytbmediabase\\video_full\\mytbdb_import-import-videos.json",
+                            "file": "F:/playground/mytb-test/mytbmediabase/video_full/mytbdb_import-import-videos.json",
                             "renameFileAfterSuccess": true
                         }
-                    },
+                    }
+                ]
+            },
+            "readMediaDates": {
+                "description": "read media-dates from media-directory",
+                "commands": [
                     {
                         "parameters": {
                             "command": "mediaManager",
-                            "action": "scaleImages",
+                            "action": "readImageDates",
                             "backend": "config/backend.dev.json"
                         }
                     },
                     {
                         "parameters": {
                             "command": "mediaManager",
-                            "action": "scaleVideos",
+                            "action": "readVideoDates",
                             "backend": "config/backend.dev.json"
                         }
                     }
                 ]
             },
             "scaleMedia": {
-                "description": "export media-favorites from export-media-directory",
+                "description": "scale media on media-directory",
                 "commands": [
                     {
                         "parameters": {
@@ -78,8 +83,58 @@
                     }
                 ]
             },
+            "dbFixTourMinDates": {
+                "description": "fix tour-min-dates on database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-update-tour-min-dates",
+                            "backend": "config/backend.dev.json"
+                        }
+                    }
+                ]
+            },
+            "dbFixGpxTimeCorrector": {
+                "description": "fix gpx-time-corrector on database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-fix-gpx-timecorrector",
+                            "backend": "config/backend.dev.json"
+                        }
+                    }
+                ]
+            },
+            "dbExtractMediaCoorFromGpsTrackPoints": {
+                "description": "extract image/video-coor from trackpoints",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "action-update-media-coor-by-gpstrackpoints",
+                            "backend": "config/backend.dev.json"
+                        }
+                    }
+                ]
+            },
+            "sendQueueRequests": {
+                "description": "do object-detection on media in media-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "objectDetectionManager",
+                            "action": "sendImageQueueRequests",
+                            "detector": "tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,faceapi,picasafile",
+                            "maxPerRun": "2000",
+                            "backend": "config/backend.dev.json"
+                        }
+                    }
+                ]
+            },
             "exportMediaFavorites": {
-                "description": "export media-favorites from export-media-directory",
+                "description": "export media-favorites to export-media-directory",
                 "commands": [
                     {
                         "parameters": {
@@ -87,7 +142,7 @@
                             "action": "exportImageFiles",
                             "backend": "config/backend.dev.json",
                             "exportName": "favorites-top",
-                            "exportDir": "F:\\playground\\mytb-test\\export\\favorites\\",
+                            "exportDir": "F:/playground/mytb-test/export/favorites/",
                             "directoryProfile": "default",
                             "fileNameProfile": "default",
                             "playlists": "",
@@ -102,7 +157,7 @@
                             "action": "exportVideoFiles",
                             "backend": "config/backend.dev.json",
                             "exportName": "favorites-top",
-                            "exportDir": "F:\\playground\\mytb-test\\export\\favorites\\",
+                            "exportDir": "F:/playground/mytb-test/export/favorites/",
                             "directoryProfile": "default",
                             "fileNameProfile": "default",
                             "playlists": "",

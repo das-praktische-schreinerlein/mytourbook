@@ -582,6 +582,7 @@ export class SqlMytbDbImageConfig {
             image_id_i: 'image.i_id',
             image_similar_id_i: 'image_similar.i_id',
             image_id_is: 'image.i_id',
+            i_fav_url_txt: 'image.i_calced_path',
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',
             video_id_is: '"666dummy999"',

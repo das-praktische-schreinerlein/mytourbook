@@ -117,7 +117,7 @@ export class TourDocMediaFileImportManager  {
             }
 
             funcs.push(function () {
-                return new Promise<string>((processorResolve) => {
+                return new Promise<string>((processorResolve, processorReject) => {
                     return me.checkMediaFile(path, type).then(checkFileResult => {
                         if (!checkFileResult.readyToImport) {
                             console.warn('SKIPPING file: ' + path, checkFileResult);
@@ -132,8 +132,8 @@ export class TourDocMediaFileImportManager  {
                         });
                     }).catch(err => {
                         console.error('error while checking file: ' + path, err);
-                        processorResolve(path);
-                        return Promise.resolve();
+                        processorReject(err);
+                        return Promise.reject();
                     });
                 });
             });
