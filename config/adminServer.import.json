@@ -146,7 +146,7 @@
                             "command": "loadTourDoc",
                             "action": "loadDocs",
                             "backend": "config/backend.dev.json",
-                            "file":"F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json",
+                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json",
                             "renameFileAfterSuccess": true
                         }
                     }
