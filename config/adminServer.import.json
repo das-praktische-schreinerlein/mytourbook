@@ -2,7 +2,49 @@
     "commandConfig": {
         "adminWritable": true,
         "preparedCommands": {
-            "syncMedia": {
+            "MEDIAIMPORT: prepareMediaFiles": {
+                "description": "prepare media in media-import-directory: import/SOURCE -> afterwards check import/images/GROUPED to import/images/READY",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaImportManager",
+                            "action": "copyFilesToDateFolder",
+                            "backend": "config/backend.import.json",
+                            "sourceDir": "F:/playground/mytb-test/mytbbase/import/import/SOURCE",
+                            "groupedDir": "F:/playground/mytb-test/mytbbase/import/import/images/GROUPED",
+                            "archiveImageDir": "F:/playground/mytb-test/mytbbase/import/archive"
+                        }
+                    }
+                ]
+            },
+            "MEDIAIMPORT: importMediaFiles": {
+                "description": "import media from media-import-directory: import/images/READY into in media-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaImportManager",
+                            "action": "moveVideosToVideoFolder",
+                            "backend": "config/backend.import.json",
+                            "readyImageDir": "F:/playground/mytb-test/mytbbase/import/import/images/READY",
+                            "readyVideoDir": "F:/playground/mytb-test/mytbbase/import/import/videos/READY"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaImportManager",
+                            "action": "copyDirsWithPrefixPathAndBackup",
+                            "backend": "config/backend.import.json",
+                            "readyImageDir": "F:/playground/mytb-test/mytbbase/import/import/images/READY",
+                            "readyVideoDir": "F:/playground/mytb-test/mytbbase/import/import/videos/READY",
+                            "targetImageDir":  "F:/playground/mytb-test/mytbbase/import/pics_full/",
+                            "targetVideoDir": "F:/playground/mytb-test/mytbbase/import/video_full/",
+                            "archiveImageDir": "F:/playground/mytb-test/mytbbase/import/archive",
+                            "archiveVideoDir": "F:/playground/mytb-test/mytbbase/import/archive"
+                        }
+                    }
+                ]
+            },
+            "MEDIAIMPORT: syncMedia": {
                 "description": "sync media in media-directory",
                 "commands": [
                     {
@@ -45,7 +87,7 @@
                     }
                 ]
             },
-            "readMediaDates": {
+            "MEDIAIMPORT: readMediaDates": {
                 "description": "read media-dates from media-directory",
                 "commands": [
                     {
@@ -64,7 +106,7 @@
                     }
                 ]
             },
-            "scaleMedia": {
+            "MEDIAIMPORT: scaleMedia": {
                 "description": "scale media from media-directory",
                 "commands": [
                     {
@@ -83,7 +125,7 @@
                     }
                 ]
             },
-            "dbFixTourMinDates": {
+            "DATA: dbFixTourMinDates": {
                 "description": "fix tour-min-dates on database",
                 "commands": [
                     {
@@ -95,7 +137,7 @@
                     }
                 ]
             },
-            "exportMediaFavorites": {
+            "EXPORT: exportMediaFavorites": {
                 "description": "export media-favorites to export-media-directory",
                 "commands": [
                     {
@@ -130,7 +172,20 @@
                     }
                 ]
             },
-            "dbPublish_beta_sqlite": {
+            "EXPORT: prepareExportToDevDatabase": {
+                "description": "prepare export data to dev-database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "exportTourDoc",
+                            "action": "exportDocs",
+                            "backend": "config/backend.import.json",
+                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json"
+                        }
+                    }
+                ]
+            },
+            "PUBLISH: dbPublish_beta_sqlite": {
                 "description": "publish database mytbexportbetadb sqlite",
                 "commands": [
                     {
@@ -144,7 +199,7 @@
                     }
                 ]
             },
-            "solrPublish_beta_sqlite": {
+            "PUBLISH: solrPublish_beta_sqlite": {
                 "description": "publish solr mytbexportbeta sqlite",
                 "commands": [
                     {
@@ -158,7 +213,7 @@
                     }
                 ]
             },
-            "dbPublish_prod_sqlite": {
+            "PUBLISH: dbPublish_prod_sqlite": {
                 "description": "publish mytbexportproddb sqlite",
                 "commands": [
                     {
@@ -172,7 +227,7 @@
                     }
                 ]
             },
-            "solrPublish_prod_sqlite": {
+            "PUBLISH: solrPublish_prod_sqlite": {
                 "description": "publish solr mytbexportprod sqlite",
                 "commands": [
                     {
@@ -186,7 +241,7 @@
                     }
                 ]
             },
-            "publish_beta/prod_sqlite": {
+            "PUBLISH: publish_beta/prod_sqlite": {
                 "description": "publish mytbexportbetadb+mytbexportproddb sqlite",
                 "commands": [
                     {
@@ -226,19 +281,6 @@
                         }
                     }
                 ]
-            },
-            "prepareDataExportToDevDatabase": {
-                "description": "prepare export data to dev-database",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "exportTourDoc",
-                            "action": "exportDocs",
-                            "backend": "config/backend.import.json",
-                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json"
-                        }
-                    }
-                ]
             }
         },
         "constantParameters": {
@@ -258,16 +300,6 @@
             "sitemap": "config/sitemap-de.json"
         }
     },
-    "importDir": "notexists",
-    "exportDir": "notexists",
-    "exportName": "notexists",
-    "outputDir": "notexists",
-    "outputFile": "notexists",
-    "publishConfigFile": "notexists",
-    "srcBaseUrl": "notexists",
-    "destBaseUrl": "notexists",
-    "backend": "config/backend.import.json",
-    "sitemap": "config/sitemap-de.json",
     "port": 4900,
     "bindIp": "127.0.0.1",
     "corsOrigin": true

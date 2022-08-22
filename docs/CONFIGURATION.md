@@ -270,7 +270,6 @@ Configure the mapping of the section-page-ids to specifiv filters a "berge -> KW
 - the flag that admin is available and the available predefined admin-commands to execute via web
 ```
     "commandConfig": {
-    "commandConfig": {
         "adminWritable": true,
         "preparedCommands": {
             "importMedia": {

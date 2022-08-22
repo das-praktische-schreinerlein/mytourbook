@@ -15,6 +15,7 @@ import {
 import {SolrPublishCommand} from './solrpublish.command';
 import {ExtendedConfigInitializerCommand} from './extendedconfig-initializer.command';
 import {DbAdminCommand} from './dbadmin.command';
+import {MediaImportManagerCommand} from './media-import-manager.command';
 
 // tslint:disable-next-line:no-empty-interface
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
@@ -30,6 +31,7 @@ export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandC
             'loadTourDoc': new TourDocLoaderCommand(),
             'exportTourDoc': new TourDocExporterCommand(),
             'mediaManager': new MediaManagerCommand(),
+            'mediaImportManager': new MediaImportManagerCommand(),
             'objectDetectionManager': new ObjectDetectionManagerCommand(),
             'facetCacheManager': new FacetCacheManagerCommand(),
             'dbAdmin': new DbAdminCommand(),

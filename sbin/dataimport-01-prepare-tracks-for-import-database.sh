@@ -21,6 +21,9 @@ echo "start - prepare track import: ${IMPORTKEY}"
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
 
+echo "now: configure import linux vars: run sbin/configure-import-environment.sh"
+source ${SCRIPTPATH}/configure-import-environment.bash ${IMPORTKEY}
+
 echo "now: prepare image-import-folder"
 if [ ! -d "${DIGIFOTOS_BASEDIR}OFFEN/${IMPORTKEY}" ]; then
   mkdir -p ${DIGIFOTOS_BASEDIR}OFFEN/${IMPORTKEY}
@@ -95,7 +98,7 @@ else
 fi
 
 echo "OPTIONAL YOUR TODO: fix exif-date run this command in a windows-shell 'F:\\ProgrammePortable\\exiftool\\exiftool -ext jpg -overwrite_original_in_place -preserve -DateTimeOriginal-=\"0:0:0 7:40:0\" ${W_DIGIFOTOS_BASEDIR}import-READY\\${IMPORTKEY}_Blablum\\CIMG6228.JPG'"
-echo "OPEN: Can we poceed the next steps ?"
+echo "OPEN: Can we proceed the next steps ?"
 select yn in "Yes"; do
     case $yn in
         Yes ) break;;
@@ -139,7 +142,7 @@ cd $CWD
 
 echo "now: rotate mp4-videos"
 echo "OPTIONAL YOUR TODO: rotate mp4-videos run this command in a shell 'cd ${MYTB} && node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/${IMPORTKEY}_Blablum/CIMG6228.MOV.MP4 && cd $CWD'"
-echo "OPEN: Can we poceed the next steps ?"
+echo "OPEN: Can we proceed the next steps ?"
 select yn in "Yes"; do
     case $yn in
         Yes ) break;;

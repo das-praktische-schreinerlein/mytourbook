@@ -32,11 +32,14 @@ select yn in "Yes" "No"; do
     esac
 done
 
-echo "now: prepare environment for '${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}'"
-source ${SCRIPTPATH}/prepare-environment.sh ${IMPORTKEY}
+echo "now: configure import linux vars: run sbin/configure-import-environment.sh"
+source ${SCRIPTPATH}/configure-import-environment.bash ${IMPORTKEY}
 
 echo "now: set workingdir to '${IMPORTKEY_BASEDIR}'"
 ${SCRIPTPATH}/setImportDirectory.sh $IMPORTKEY
+
+echo "now: prepare environment for '${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}'"
+source ${SCRIPTPATH}/prepare-environment.sh ${IMPORTKEY}
 
 echo ""
 echo ""
@@ -51,10 +54,7 @@ select yn in "Yes" "No"; do
     esac
 done
 
-IMPORTDIR="$(date +"import-%Y%m%d")"
-if [ -d "${IMPORT_BASEDIR_IMAGES_DONE}/SRC_${IMPORTDIR}" ] || [ -d "${IMPORT_BASEDIR_IMAGES_DONE}/READY_${IMPORTDIR}" ]; then
-   IMPORTDIR="$(date +"import-%Y%m%d-%H%M%S-%s")"
-fi
+${SCRIPTPATH}/prepare-media-for-import.sh ${IMPORTKEY}
 
 # do copy and imports
 echo "now: copy media to import-folder and group in by date into subfolder '${IMPORT_BASEDIR_SRC} ${IMPORT_BASEDIR_IMAGES_GROUPED}/'"
@@ -79,47 +79,11 @@ ${MYTBTOOLS}moveVideosToVideoFolder.sh ${IMPORT_BASEDIR_IMAGES_READY} ${IMPORT_B
 echo ""
 echo ""
 echo "##########################"
-echo "YOUR TODO: autorotate images in import-folder"
+echo "now: this will be imported in next steps"
 echo "##########################"
-echo "OPEN: Did you run this command in a windows-shell '${W_MYTBTOOLS}autorotateImagesInFolder.bat ${W_IMPORT_BASEDIR_IMAGES_READY}'?"
-select yn in "Yes"; do
-    case $yn in
-        Yes ) break;;
-    esac
-done
-
-echo ""
-echo ""
-echo "##########################"
-echo "OPTIONAL YOUR TODO: fix exif-date run this command in a windows-shell 'F:\\ProgrammePortable\\exiftool\\exiftool -ext jpg -overwrite_original_in_place -preserve -DateTimeOriginal-=\"0:0:0 7:40:0\" ${W_IMPORT_BASEDIR_IMAGES_READY}\\Blablum\\CIMG6228.JPG'"
-echo "##########################"
-echo "OPEN: Can we poceed the next steps ?"
-select yn in "Yes"; do
-    case $yn in
-        Yes ) break;;
-    esac
-done
-
-echo "now: convert videos: avi/mov... to mp4"
-cd ${MYTB}
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir ${IMPORT_BASEDIR_VIDEOS_READY}/ --outputDir ${IMPORT_BASEDIR_VIDEOS_READY}/ --debug true
-cd $CWD
-
-echo ""
-echo ""
-echo "##########################"
-echo "now: rotate mp4-videos"
-echo "OPTIONAL YOUR TODO: rotate mp4-videos run this command in a shell 'cd ${MYTB} && node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile ${IMPORT_BASEDIR_VIDEOS_READY}/Blablum/CIMG6228.MOV.MP4 && cd $CWD'"
-echo "##########################"
-echo "OPEN: Can we poceed the next steps ?"
-select yn in "Yes"; do
-    case $yn in
-        Yes ) break;;
-    esac
-done
-
 ls -l ${IMPORT_BASEDIR_IMAGES_READY}
 ls -l ${IMPORT_BASEDIR_VIDEOS_READY}
+
 echo ""
 echo ""
 echo "##########################"
@@ -130,6 +94,11 @@ select yn in "Yes" "No"; do
         No ) exit;;
     esac
 done
+
+IMPORTDIR="$(date +"import-%Y%m%d")"
+if [ -d "${IMPORT_BASEDIR_IMAGES_DONE}/SRC_${IMPORTDIR}" ] || [ -d "${IMPORT_BASEDIR_IMAGES_DONE}/READY_${IMPORTDIR}" ]; then
+   IMPORTDIR="$(date +"import-%Y%m%d-%H%M%S-%s")"
+fi
 
 echo "now: copy images and prefix path '${IMPORT_BASEDIR_IMAGES_READY} ${IMPORTKEY_BASEDIR}/pics_full ${IMPORTDIR}_'"
 ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${IMPORT_BASEDIR_IMAGES_READY} ${IMPORTKEY_BASEDIR}/pics_full ${IMPORTDIR}_

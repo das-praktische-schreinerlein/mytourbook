@@ -2,7 +2,21 @@
     "commandConfig": {
         "adminWritable": true,
         "preparedCommands": {
-            "syncMedia": {
+            "DATAIMPORT: importDataFromImportDatabase": {
+                "description": "import data from import-database: F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "loadTourDoc",
+                            "action": "loadDocs",
+                            "backend": "config/backend.dev.json",
+                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json",
+                            "renameFileAfterSuccess": true
+                        }
+                    }
+                ]
+            },
+            "MEDIAIMPORT: syncMedia": {
                 "description": "syncMedia media in media-directory",
                 "commands": [
                     {
@@ -45,7 +59,7 @@
                     }
                 ]
             },
-            "readMediaDates": {
+            "MEDIAIMPORT: readMediaDates": {
                 "description": "read media-dates from media-directory",
                 "commands": [
                     {
@@ -64,7 +78,7 @@
                     }
                 ]
             },
-            "scaleMedia": {
+            "MEDIAIMPORT: scaleMedia": {
                 "description": "scale media on media-directory",
                 "commands": [
                     {
@@ -83,21 +97,7 @@
                     }
                 ]
             },
-            "importDataFromImportDatabase": {
-                "description": "import data from import-database",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "loadTourDoc",
-                            "action": "loadDocs",
-                            "backend": "config/backend.dev.json",
-                            "file": "F:/playground/mytb-test/mytbbase/import/mytbdb_import-dump.json",
-                            "renameFileAfterSuccess": true
-                        }
-                    }
-                ]
-            },
-            "dbFixTourMinDates": {
+            "DATA: dbFixTourMinDates": {
                 "description": "fix tour-min-dates on database",
                 "commands": [
                     {
@@ -109,7 +109,7 @@
                     }
                 ]
             },
-            "dbFixGpxTimeCorrector": {
+            "DATA: dbFixGpxTimeCorrector": {
                 "description": "fix gpx-time-corrector on database",
                 "commands": [
                     {
@@ -121,7 +121,7 @@
                     }
                 ]
             },
-            "dbExtractMediaCoorFromGpsTrackPoints": {
+            "DATA: dbExtractMediaCoorFromGpsTrackPoints": {
                 "description": "extract image/video-coor from trackpoints",
                 "commands": [
                     {
@@ -133,7 +133,7 @@
                     }
                 ]
             },
-            "sendQueueRequests": {
+            "DATA: sendQueueRequests": {
                 "description": "do object-detection on media in media-directory",
                 "commands": [
                     {
@@ -147,7 +147,7 @@
                     }
                 ]
             },
-            "exportMediaFavorites": {
+            "EXPORT: exportMediaFavorites": {
                 "description": "export media-favorites to export-media-directory",
                 "commands": [
                     {
@@ -182,7 +182,7 @@
                     }
                 ]
             },
-            "dbPublish_beta_mysql": {
+            "PUBLISH: dbPublish_beta_mysql": {
                 "description": "publish database mytbexportbetadb mysql",
                 "commands": [
                     {
@@ -196,7 +196,7 @@
                     }
                 ]
             },
-            "solrPublish_beta_mysql": {
+            "PUBLISH:solrPublish_beta_mysql": {
                 "description": "publish solr mytbexportbeta mysql",
                 "commands": [
                     {
@@ -210,7 +210,7 @@
                     }
                 ]
             },
-            "dbPublish_prod_mysql": {
+            "PUBLISH:dbPublish_prod_mysql": {
                 "description": "publish mytbexportproddb mysql",
                 "commands": [
                     {
@@ -224,7 +224,7 @@
                     }
                 ]
             },
-            "solrPublish_prod_mysql": {
+            "PUBLISH:solrPublish_prod_mysql": {
                 "description": "publish solr mytbexportprod mysql",
                 "commands": [
                     {
@@ -238,7 +238,7 @@
                     }
                 ]
             },
-            "publish_beta/prod_mysql": {
+            "PUBLISH:publish_beta/prod_mysql": {
                 "description": "publish mytbexportbetadb+mytbexportproddb mysql",
                 "commands": [
                     {
@@ -297,16 +297,6 @@
             "sitemap": "config/sitemap-de.json"
         }
     },
-    "importDir": "notexists",
-    "exportDir": "notexists",
-    "exportName": "notexists",
-    "outputDir": "notexists",
-    "outputFile": "notexists",
-    "publishConfigFile": "notexists",
-    "srcBaseUrl": "notexists",
-    "destBaseUrl": "notexists",
-    "backend": "config/backend.dev.json",
-    "sitemap": "config/sitemap-de.json",
     "port": 4900,
     "bindIp": "127.0.0.1",
     "corsOrigin": true
