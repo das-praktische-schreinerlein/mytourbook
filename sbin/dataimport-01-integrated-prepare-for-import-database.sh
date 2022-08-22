@@ -57,8 +57,15 @@ done
 ${SCRIPTPATH}/prepare-media-for-import.sh ${IMPORTKEY}
 
 # do copy and imports
-echo "now: copy media to import-folder and group in by date into subfolder '${IMPORT_BASEDIR_SRC} ${IMPORT_BASEDIR_IMAGES_GROUPED}/'"
-${MYTBTOOLS}copyFilesToDateFolder.sh ${IMPORT_BASEDIR_SRC} ${IMPORT_BASEDIR_IMAGES_GROUPED}
+echo "now: copy media to import-folder, group in by date into subfolder '${IMPORT_BASEDIR_SRC} ${IMPORT_BASEDIR_IMAGES_GROUPED}/' and do backup to archive"
+node dist/backend/serverAdmin.js \
+  --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json \
+  --backend ${CONFIG_BASEDIR}backend.import.json \
+  --command mediaImportManager \
+  --action copyFilesToDateFolder \
+  --sourceDir ${IMPORT_BASEDIR_SRC} \
+  --groupedDir ${IMPORT_BASEDIR_IMAGES_GROUPED} \
+  --archiveImageDir ${IMPORT_BASEDIR_DONE}
 
 echo ""
 echo ""
@@ -74,7 +81,13 @@ select yn in "Yes"; do
 done
 
 echo "now: move videos to videofolder '${IMPORT_BASEDIR_IMAGES_READY} ${IMPORT_BASEDIR_VIDEOS_READY}'"
-${MYTBTOOLS}moveVideosToVideoFolder.sh ${IMPORT_BASEDIR_IMAGES_READY} ${IMPORT_BASEDIR_VIDEOS_READY}
+node dist/backend/serverAdmin.js \
+  --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json \
+  --backend ${CONFIG_BASEDIR}backend.import.json \
+  --command mediaImportManager \
+  --action moveVideosToVideoFolder \
+  --readyImageDir ${IMPORT_BASEDIR_IMAGES_READY} \
+  --readyVideoDir ${IMPORT_BASEDIR_VIDEOS_READY}
 
 echo ""
 echo ""
@@ -95,36 +108,39 @@ select yn in "Yes" "No"; do
     esac
 done
 
-IMPORTDIR="$(date +"import-%Y%m%d")"
-if [ -d "${IMPORT_BASEDIR_IMAGES_DONE}/SRC_${IMPORTDIR}" ] || [ -d "${IMPORT_BASEDIR_IMAGES_DONE}/READY_${IMPORTDIR}" ]; then
-   IMPORTDIR="$(date +"import-%Y%m%d-%H%M%S-%s")"
-fi
-
-echo "now: copy images and prefix path '${IMPORT_BASEDIR_IMAGES_READY} ${IMPORTKEY_BASEDIR}/pics_full ${IMPORTDIR}_'"
-${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${IMPORT_BASEDIR_IMAGES_READY} ${IMPORTKEY_BASEDIR}/pics_full ${IMPORTDIR}_
-
-echo "now: move media from import-folder '${IMPORT_BASEDIR_SRC}' to archive- '${IMPORT_BASEDIR_IMAGES_DONE}/SOURCE_${IMPORTDIR}/'"
-mkdir -p "${IMPORT_BASEDIR_SRC_DONE}/SOURCE_${IMPORTDIR}/"
-touch ${IMPORT_BASEDIR_SRC}/DONE.flag
-mv ${IMPORT_BASEDIR_SRC}/* ${IMPORT_BASEDIR_SRC_DONE}/SOURCE_${IMPORTDIR}/
-
-echo "now: move image-import '${IMPORT_BASEDIR_IMAGES_READY}' to archive '${IMPORT_BASEDIR_IMAGES_DONE}/READY_${IMPORTDIR}'"
-mkdir ${IMPORT_BASEDIR_IMAGES_DONE}/READY_${IMPORTDIR}
-touch ${IMPORT_BASEDIR_IMAGES_READY}/DONE.flag
-mv ${IMPORT_BASEDIR_IMAGES_READY}/* ${IMPORT_BASEDIR_IMAGES_DONE}/READY_${IMPORTDIR}/
-
-echo "now: copy videos and prefix path '${IMPORT_BASEDIR_VIDEOS_READY} ${IMPORTKEY_BASEDIR}/video_full ${IMPORTDIR}_'"
-${MYTBTOOLS}copyDirsAndPrefixPath.sh ${IMPORT_BASEDIR_VIDEOS_READY} ${IMPORTKEY_BASEDIR}/video_full ${IMPORTDIR}_
-
-echo "now: move video-import '${IMPORT_BASEDIR_VIDEOS_READY}' to archive '${IMPORT_BASEDIR_VIDEOS_DONE}/READY_${IMPORTDIR}'"
-mkdir ${IMPORT_BASEDIR_VIDEOS_DONE}/READY_${IMPORTDIR}
-touch ${IMPORT_BASEDIR_VIDEOS_READY}/DONE.flag
-mv ${IMPORT_BASEDIR_VIDEOS_READY}/* ${IMPORT_BASEDIR_VIDEOS_DONE}/READY_${IMPORTDIR}/
+echo "now: copy images+video and prefix path"
+node dist/backend/serverAdmin.js \
+  --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json \
+  --backend ${CONFIG_BASEDIR}backend.import.json \
+  --command mediaImportManager \
+  --action copyDirsWithPrefixPathAndBackup \
+  --readyImageDir ${IMPORT_BASEDIR_IMAGES_READY} \
+  --readyVideoDir ${IMPORT_BASEDIR_VIDEOS_READY} \
+  --targetImageDir ${IMPORTKEY_BASEDIR}/pics_full \
+  --targetVideoDir ${IMPORTKEY_BASEDIR}/video_full \
+  --archiveImageDir ${IMPORT_BASEDIR_DONE} \
+  --archiveVideoDir ${IMPORT_BASEDIR_DONE}
 
 echo "now: generate import-files: '${IMPORTKEY_BASEDIR}/mytbdb_import-import-images.json' + '${IMPORTKEY_BASEDIR}/mytbdb_import-import-videos.json'"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${IMPORTKEY_BASEDIR}/pics_full/ --debug true --renameFileIfExists true --outputFile ${IMPORTKEY_BASEDIR}/mytbdb_import-import-images.json > "${IMPORTKEY_BASEDIR}/mytbdb_import-import-images.log"
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${IMPORTKEY_BASEDIR}/video_full/ --debug true --renameFileIfExists true --outputFile ${IMPORTKEY_BASEDIR}/mytbdb_import-import-videos.json > "${IMPORTKEY_BASEDIR}/mytbdb_import-import-videos.log"
+node dist/backend/serverAdmin.js \
+  --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json \
+  --backend ${CONFIG_BASEDIR}backend.import.json \
+  --command mediaManager \
+  --action generateTourDocsFromMediaDir \
+  --importDir ${IMPORTKEY_BASEDIR}/pics_full/ \
+  --debug true \
+  --renameFileIfExists true \
+  --outputFile ${IMPORTKEY_BASEDIR}/mytbdb_import-import-images.json > "${IMPORTKEY_BASEDIR}/mytbdb_import-import-images.log"
+node dist/backend/serverAdmin.js \
+  --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json \
+  --backend ${CONFIG_BASEDIR}backend.import.json \
+  --command mediaManager \
+  --action generateTourDocsFromMediaDir \
+  --importDir ${IMPORTKEY_BASEDIR}/video_full/ \
+  --debug true \
+  --renameFileIfExists true \
+  --outputFile ${IMPORTKEY_BASEDIR}/mytbdb_import-import-videos.json > "${IMPORTKEY_BASEDIR}/mytbdb_import-import-videos.log"
 
 echo ""
 echo ""
