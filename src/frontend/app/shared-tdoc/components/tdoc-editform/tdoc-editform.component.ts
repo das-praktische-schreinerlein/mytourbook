@@ -35,6 +35,29 @@ import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-c
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {Router} from '@angular/router';
 
+// TODO move to commons
+export interface SingleEditorCommand {
+    label: string,
+    command: string
+}
+
+// TODO move to commons
+export interface RangeEditorCommand {
+    label: string,
+    commandStart: string,
+    commandEnd: string
+}
+
+// TODO move to commons
+export interface CommonDocEditorCommandComponentConfig {
+    singleCommands: SingleEditorCommand[];
+    rangeCommands: RangeEditorCommand[];
+}
+
+export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
+    editorCommands: CommonDocEditorCommandComponentConfig;
+}
+
 @Component({
     selector: 'app-tdoc-editform',
     templateUrl: './tdoc-editform.component.html',
@@ -143,6 +166,10 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
     personTagSuggestions: string[] = [];
     joinIndexes: {[key: string]: any[]} = {};
+    editorCommands: CommonDocEditorCommandComponentConfig = {
+        singleCommands: [],
+        rangeCommands: []
+    };
 
     // TODO add modal to commons
     @Input()
@@ -190,6 +217,59 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.setValue('descTxt', '');
             this.renderRecommendedDesc(true);
         });
+    }
+
+    addSingleCommand(command: SingleEditorCommand): void {
+        if (!this.platformService.isClient()) {
+            return;
+        }
+
+        const textarea = <HTMLTextAreaElement> document.querySelector('#descTxt');
+        if (!textarea || textarea === undefined || textarea === null) {
+            return;
+        }
+
+        const oldString = textarea.value;
+        const startPos = textarea.selectionStart || 0;
+
+        const newString = oldString.substring(0, startPos)
+            + command.command
+            + oldString.substring(startPos, oldString.length);
+
+        this.setValue('descTxt', newString);
+        this.renderRecommendedDesc(true);
+
+        textarea.focus();
+        textarea.selectionStart = startPos;
+        textarea.selectionEnd = startPos;
+    }
+
+    addRangeCommand(command: RangeEditorCommand): void {
+        if (!this.platformService.isClient()) {
+            return;
+        }
+
+        const textarea = <HTMLTextAreaElement> document.querySelector('#descTxt');
+        if (!textarea || textarea === undefined || textarea === null) {
+            return;
+        }
+
+        const oldString = textarea.value;
+        const startPos = textarea.selectionStart || 0;
+        const endPos = textarea.selectionEnd || 0;
+
+        const newString = oldString.substring(0, startPos)
+            + command.commandStart
+            + oldString.substring(startPos, endPos)
+            +  command.commandEnd
+            + oldString.substring(endPos, oldString.length);
+
+        this.setValue('descTxt', newString);
+        this.renderRecommendedDesc(true);
+
+        textarea.focus();
+        textarea.selectionStart = startPos;
+        textarea.selectionEnd = startPos;
     }
 
     renderRecommendedDesc(force: boolean): string {
@@ -446,7 +526,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return TourDocRecordValidator.instance.validateValues(record);
     }
 
-    protected getComponentConfig(config: {}): CommonDocEditformComponentConfig {
+    protected getComponentConfig(config: {}): TurDocEditformComponentConfig {
         let prefix = '';
         let suggestionConfig = [];
         if (BeanUtils.getValue(config, 'components.tdoc-keywords.keywordSuggestions')) {
@@ -454,7 +534,19 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             prefix = BeanUtils.getValue(config, 'components.tdoc-keywords.editPrefix');
         }
 
-        const defaultConfig: CommonDocEditformComponentConfig = {
+        const editorCommands: CommonDocEditorCommandComponentConfig = {
+            rangeCommands: [],
+            singleCommands: []
+        };
+        if (BeanUtils.getValue(config, 'components.tdoc-editor-commands.singleCommands')) {
+            editorCommands.singleCommands = BeanUtils.getValue(config, 'components.tdoc-editor-commands.singleCommands');
+        }
+        if (BeanUtils.getValue(config, 'components.tdoc-editor-commands.rangeCommands')) {
+            editorCommands.rangeCommands = BeanUtils.getValue(config, 'components.tdoc-editor-commands.rangeCommands');
+        }
+
+        const defaultConfig: TurDocEditformComponentConfig = {
+            editorCommands: editorCommands,
             suggestionConfigs: suggestionConfig,
             editPrefix: prefix,
             numBeanFieldConfig: {
@@ -598,6 +690,13 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         };
 
         return defaultConfig;
+    }
+
+    protected configureComponent(config: {}): void {
+        super.configureComponent(config);
+
+        const componentConfig = this.getComponentConfig(config);
+        this.editorCommands = componentConfig.editorCommands;
     }
 
     protected prepareSubmitValues(values: {}): void {

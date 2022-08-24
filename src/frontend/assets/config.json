@@ -420,6 +420,122 @@
             ],
             "blacklist": []
         },
+        "tdoc-editor-commands": {
+            "singleCommands": [
+                {
+                    "label": "😃",
+                    "command": "&#128515;"
+                },
+                {
+                    "label": "😉",
+                    "command": "&#128521;"
+                },
+                {
+                    "label": "😊",
+                    "command": "&#128522;"
+                },
+                {
+                    "label": "😍",
+                    "command": "&#128525;"
+                },
+                {
+                    "label": "😲",
+                    "command": "&#128562;"
+                },
+                {
+                    "label": "😱",
+                    "command": "&#128561;"
+                },
+                {
+                    "label": "🥳",
+                    "command": "&#129395;"
+                },
+                {
+                    "label": "😰",
+                    "command": "&#128560;"
+                },
+                {
+                    "label": "😳",
+                    "command": "&#128563;"
+                },
+                {
+                    "label": "🤗",
+                    "command": "&#129303;"
+                },
+                {
+                    "label": "🤭",
+                    "command": "&#129325;"
+                },
+                {
+                    "label": "🙄",
+                    "command": "&#128580;"
+                },
+                {
+                    "label": "💪",
+                    "command": "&#128170;"
+                },
+                {
+                    "label": "👆",
+                    "command": "&#128070;"
+                },
+                {
+                    "label": "👍",
+                    "command": "&#128077;"
+                },
+                {
+                    "label": "🤞",
+                    "command": "&#129310;"
+                },
+                {
+                    "label": "🖕",
+                    "command": "&#128405;"
+                },
+                {
+                    "label": "🤥",
+                    "command": "&#129317;"
+                },
+                {
+                    "label": "👨‍🦯",
+                    "command": "&#128104;&#8205;&#129455;"
+                },
+                {
+                    "label": "🧐",
+                    "command": "&#129488;"
+                }
+            ],
+            "rangeCommands": [
+                {
+                    "label": "<h1>",
+                    "commandStart": "# ",
+                    "commandEnd": "\n"
+                },
+                {
+                    "label": "<h2>",
+                    "commandStart": "## ",
+                    "commandEnd": "\n"
+                },
+                {
+                    "label": "<h3>",
+                    "commandStart": "### ",
+                    "commandEnd": "\n"
+                },
+                {
+                    "label": "<bold>",
+                    "commandStart": "**",
+                    "commandEnd": "**"
+                },
+                {
+                    "label": "<li>",
+                    "commandStart": "   - ",
+                    "commandEnd": "\n"
+                },
+                {
+                    "label": "<ol>",
+                    "commandStart": "   1. ",
+                    "commandEnd": "\n"
+                }
+            ]
+        },
         "tdoc-actions": {
             "actionTags": [
                 {

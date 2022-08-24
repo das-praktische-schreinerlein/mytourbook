@@ -41,3 +41,10 @@ table.trackSegmentStatistics td, table.trackSegmentStatistics th {
 .trackhint {
     background: lightyellow;
 }
+
+span.singleCommand {
+    padding: 2px;
+}
+span.rangeCommand {
+    padding: 2px;
+}

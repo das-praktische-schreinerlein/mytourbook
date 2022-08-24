@@ -596,8 +596,15 @@
         <div class="col-sm-12 form-inline input-group input-group-sm recommended-desc-form-block">
             <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.tdoc.descMd">Beschreibung Markdown:</label>
             <span class="" *ngIf="recommend === true" (click)="recommendDesc()">&#x27F8; Generate</span>
+            <ng-container *ngFor="let rangeCommand of editorCommands.rangeCommands">
+                <span class="rangeCommand" (click)="addRangeCommand(rangeCommand)">{{rangeCommand.label}}</span>
+            </ng-container>
+            <ng-container *ngFor="let singleCommand of editorCommands.singleCommands">
+                <span class="singleCommand" (click)="addSingleCommand(singleCommand)">{{singleCommand.label}}</span>
+            </ng-container>
             <textarea formControlName="descTxt" class="form-control recommended-desc-form" type="text"
                       placeholder="description"
+                      id="descTxt"
                       i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.tdoc.desc"></textarea>
         </div>
         <div class="col-sm-12 form-inline input-group input-group-sm recommended-desc-preview-block">
