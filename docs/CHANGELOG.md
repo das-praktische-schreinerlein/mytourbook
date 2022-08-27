@@ -15,11 +15,13 @@
 - fixed import for mysql
 - use commons 5.5.0
 - added media-import-commands
- 
+- frontend: added simple markdown-editor
+
 ### new features
 - frontend/backend: added sectionDetails
 - backend: added admin-db-command
 - backend: added media-import-commands
+- frontend: added simple markdown-editor
 
 ### improvements
 - frontend: added additional groupby track+trip+location for image/track/trip/video/route-list
