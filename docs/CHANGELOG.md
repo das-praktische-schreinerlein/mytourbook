@@ -2,7 +2,7 @@
  
 # Versions
 
-## 7.3.0
+## 7.3.0 (2022-08-29)
 - added additional groupby track+trip+location for image/track/trip/video/route-list
 - added layoutOptions noCount, noHeader
 - improved selection of teaser-image
