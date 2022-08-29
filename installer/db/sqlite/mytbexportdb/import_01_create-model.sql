@@ -121,7 +121,7 @@ CREATE TABLE trip (
   tr_calced_dateonly VARCHAR(20) DEFAULT NULL,
   tr_calced_week tinyint DEFAULT NULL,
   tr_calced_month tinyint DEFAULT NULL,
-  tr_calced_year tinyint DEFAULT NULL,
+  tr_calced_year smallint DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
@@ -342,7 +342,7 @@ CREATE TABLE tour (
   t_calced_dateonly VARCHAR(20) DEFAULT NULL,
   t_calced_week tinyint DEFAULT NULL,
   t_calced_month tinyint DEFAULT NULL,
-  t_calced_year tinyint DEFAULT NULL,
+  t_calced_year smallint DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countInfos int(11) DEFAULT 0,
@@ -429,7 +429,7 @@ CREATE TABLE kategorie_full (
   k_calced_dateonly VARCHAR(20) DEFAULT NULL,
   k_calced_week tinyint DEFAULT NULL,
   k_calced_month tinyint DEFAULT NULL,
-  k_calced_year tinyint DEFAULT NULL,
+  k_calced_year smallint DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
@@ -493,7 +493,7 @@ CREATE TABLE image (
   i_calced_dateonly VARCHAR(20) DEFAULT NULL,
   i_calced_week tinyint DEFAULT NULL,
   i_calced_month tinyint DEFAULT NULL,
-  i_calced_year tinyint DEFAULT NULL
+  i_calced_year smallint DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS image_playlist;
@@ -542,7 +542,7 @@ CREATE TABLE video (
   v_calced_dateonly VARCHAR(20) DEFAULT NULL,
   v_calced_week tinyint DEFAULT NULL,
   v_calced_month tinyint DEFAULT NULL,
-  v_calced_year tinyint DEFAULT NULL
+  v_calced_year smallint DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS video_playlist;
