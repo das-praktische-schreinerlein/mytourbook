@@ -1,8 +1,9 @@
 window.importStaticConfigJsonP = `{
     "staticPDocsFile": "assets/staticdata/static.mytbpdocs.js",
     "staticTDocsFiles": [
-            "assets/staticdata/static.mytbtdocs_chunk0.js",
-            "assets/staticdata/static.mytbtdocs_chunk1.js"
+            "assets/staticdata/static.mytbtdocs_searchresult.js",
+            "assets/staticdata/static.mytbtdocs_export_chunk0.js",
+            "assets/staticdata/static.mytbtdocs_export_chunk1.js"
     ],
     "tracksBaseUrl": "assets/staticdata/tracks/",
     "picsBaseUrl": "assets/staticdata/",

@@ -18,16 +18,12 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         spatialSortKey: 'distance',
         searchableFields: ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
             'image_similar_id_i', 'dateshow_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
-            'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
-            'data_tech_dist_f', 'data_tech_dur_f', 'data_tech_sections_s',
             'data_info_guides_s', 'data_info_region_s', 'data_info_baseloc_s', 'data_info_destloc_s', 'data_info_section_details_s',
             'info_name_s', 'info_desc_txt', 'info_shortdesc_txt', 'info_publisher_s', 'info_reference_s', 'info_tif_linked_details_s',
             'info_lif_linked_details_s', 'info_type_s',
-            'rate_pers_ausdauer_i', 'rate_pers_bildung_i', 'rate_pers_gesamt_i', 'rate_pers_kraft_i', 'rate_pers_mental_i',
-            'rate_pers_motive_i', 'rate_pers_schwierigkeit_i', 'rate_pers_wichtigkeit_i',
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
-            'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
+            'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
             'objects_txt', 'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt', 'route_attr_ss',
             'navigation_objects_txt', 'extended_object_properties_txt', 'linkedroutes_txt', 'linkedinfos_txt', 'linkedplaylists_txt',
             'html'],
@@ -305,16 +301,28 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         for (const record of data) {
             delete record['gpstracks_basefile_s'];
 
-            if (record['type_s'] === 'IMAGE' && record['i_fav_url_txt']) {
-                images[record['i_fav_url_txt']] = record['i_fav_url_txt'];
-            } else if (!images[record['i_fav_url_txt']]) {
-                delete record['i_fav_url_txt'];
+            let mediaUrl = record['i_fav_url_txt'];
+            if (mediaUrl && record['type_s'] === 'IMAGE') {
+                images[mediaUrl] = mediaUrl;
+            } else if (mediaUrl && !images[mediaUrl]) {
+                const normalizedUrl = mediaUrl.replace(/^\//, '').replace('/', '_');
+                if (images[normalizedUrl]) {
+                    record['i_fav_url_txt'] = normalizedUrl;
+                } else {
+                    delete record['i_fav_url_txt'];
+                }
             }
 
-            if (record['type_s'] === 'VIDEO' && record['v_fav_url_txt']) {
-                videos[record['v_fav_url_txt']] = record['v_fav_url_txt'];
-            } else if (!videos[record['v_fav_url_txt']]) {
-                delete record['v_fav_url_txt'];
+            mediaUrl = record['v_fav_url_txt'];
+            if (mediaUrl && record['type_s'] === 'VIDEO') {
+                videos[mediaUrl] = mediaUrl;
+            } else if (mediaUrl && !images[mediaUrl]) {
+                const normalizedUrl = mediaUrl.replace(/^\//, '').replace('/', '_');
+                if (videos[normalizedUrl]) {
+                    record['v_fav_url_txt'] = normalizedUrl;
+                } else {
+                    delete record['v_fav_url_txt'];
+                }
             }
         }
 

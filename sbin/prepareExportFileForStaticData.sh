@@ -23,14 +23,14 @@ if [ ! -d "${DESTDIR}" ]; then
 fi
 
 
-echo "start - preparing static.mytbtdocs_chunk"
+echo "start - preparing static.mytbtdocs_export_chunk"
 echo "now: split by 100 entries: '$BASEFILE'"
 cd ${DESTDIR}
 rm -f static.mytbtdocs_chunk*.js
 #awk '/{"id":"/ { f = 1 } f' < $BASEFILE | sed -n '/dummydir","name":"dummyfile"/q;p' | awk '/"file":/ { delim++ } { file = sprintf("$BASEFILE%s.js", int(delim / 10000)); print >> file; }'
-grep $BASEFILE -e "  {\"id\":\"" | awk '/{"id":"/ { delim++ } { file = sprintf("static.mytbtdocs_chunk%s.js", int(delim / 100)); print >> file; }'
+grep $BASEFILE -e "  {\"id\":\"" | awk '/{"id":"/ { delim++ } { file = sprintf("static.mytbtdocs_export_chunk%s.js", int(delim / 100)); print >> file; }'
 
-for CHUNKFILE in static.mytbtdocs_chunk*.js; do
+for CHUNKFILE in static.mytbtdocs_export_chunk*.js; do
   sed -i '1s/^/window.importStaticDataTDocsJsonP = \`{ "mdocs": [\n/' $CHUNKFILE
   sed -i 's/\\/\\\\/g' $CHUNKFILE
   sed -i 's/\}\]\}[ \r\n]*$/},/g' $CHUNKFILE
@@ -41,4 +41,4 @@ for CHUNKFILE in static.mytbtdocs_chunk*.js; do
 done
 cd ${CWD}
 
-echo "done - preparing static.mytbtdocs_chunk"
+echo "done - preparing static.mytbtdocs_export_chunk"

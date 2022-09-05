@@ -41,7 +41,7 @@ export class TourDocLinkedLocHierarchyComponent extends AbstractInlineComponent 
     }
 
     public submitShow(event, location): boolean {
-        this.cdocRoutingService.navigateToShow(location, '');
+        this.cdocRoutingService.navigateToShow(this.generateRecord(location), '');
         return false;
     }
 
