@@ -1,4 +1,5 @@
 import {AppEnvironment} from './app-environment';
+import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export const environment: AppEnvironment = {
     production: true,
@@ -21,5 +22,7 @@ export const environment: AppEnvironment = {
     tdocMaxItemsPerAlbum: -1,
     m3uAvailable: false,
     cookieLawSeenName: 'cookieLawSeenV20180525',
-    trackingProviders: [] // Angulartics2Piwik
+    trackingProviders: [], // Angulartics2Piwik
+    startDataMode: DataMode.BACKEND,
+    availableDataModes: [DataMode.BACKEND]
 };

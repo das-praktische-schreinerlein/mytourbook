@@ -3,9 +3,8 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
-import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
-import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedroute-record';
+import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 
 @Component({
     selector: 'app-tdoc-linked-routes',
@@ -23,7 +22,7 @@ export class TourDocLinkedRoutesComponent extends AbstractInlineComponent {
     public small ? = false;
 
     constructor(private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
-                private cdocRoutingService: CommonDocRoutingService, private contentUtils: TourDocContentUtils,
+                private cdocRoutingService: TourDocRoutingService,
                 protected cd: ChangeDetectorRef) {
         super(cd);
     }
@@ -49,7 +48,7 @@ export class TourDocLinkedRoutesComponent extends AbstractInlineComponent {
     }
 
     public submitShow(event, route: TourDocLinkedRouteRecord): boolean {
-        this.commonRoutingService.navigateByUrl(this.getUrl(route));
+        this.cdocRoutingService.navigateToShow(this.generateRecord(route), '');
         return false;
     }
 
@@ -58,7 +57,10 @@ export class TourDocLinkedRoutesComponent extends AbstractInlineComponent {
     }
 
     private getUrl(route: TourDocLinkedRouteRecord): string {
-        return this.cdocRoutingService.getShowUrl(new TourDocRecord({id: 'ROUTE_' + route.refId, name: route.name, type: 'ROUTE'}), '');
+        return this.cdocRoutingService.getShowUrl(this.generateRecord(route), '');
     }
 
+    private generateRecord(route: any): TourDocRecord {
+        return new TourDocRecord(new TourDocRecord({id: 'ROUTE_' + route.refId, name: route.name, type: 'ROUTE'}));
+    }
 }

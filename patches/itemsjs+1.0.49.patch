@@ -1,0 +1,13 @@
+diff --git a/node_modules/itemsjs/lib/lib.js b/node_modules/itemsjs/lib/lib.js
+index dbeffa4..125feea 100644
+--- a/node_modules/itemsjs/lib/lib.js
++++ b/node_modules/itemsjs/lib/lib.js
+@@ -60,7 +60,7 @@ module.exports.search = function (items, input, configuration, fulltext) {
+ 
+ 
+   var facets_start_time = new Date().getTime();
+-  var aggregations = module.exports.aggregations(items, input.aggregations);
++  var aggregations = input.skipFacetting !== true ? module.exports.aggregations(items, input.aggregations) : {};
+   var facets_time = new Date().getTime() - facets_start_time;
+   return {
+     pagination: {

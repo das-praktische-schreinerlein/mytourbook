@@ -2,6 +2,22 @@
  
 # Versions
 
+## 7.4.0
+- added viewer as separate environment to view static data without backend
+
+### new features
+- viewer: added viewer as separate environment to view static data without backend
+
+### improvements
+- none
+
+### bug fixes
+- none
+
+### breaking changes
+- none
+
+
 ## 7.3.0 (2022-08-29)
 - added additional groupby track+trip+location for image/track/trip/video/route-list
 - added layoutOptions noCount, noHeader

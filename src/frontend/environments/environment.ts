@@ -4,6 +4,7 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 import {AppEnvironment} from './app-environment';
+import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export const environment: AppEnvironment = {
     production: false,
@@ -28,5 +29,7 @@ export const environment: AppEnvironment = {
     cookieLawSeenName: 'cookieLawSeenV20180525',
     trackingProviders: [], // Angulartics2Piwik
     adminBackendApiBaseUrl: 'http://localhost:4900/adminapi/v1/',
-    adminWritable: true
+    adminWritable: true,
+    startDataMode: DataMode.BACKEND,
+    availableDataModes: [DataMode.BACKEND, DataMode.STATIC]
 };

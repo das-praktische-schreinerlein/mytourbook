@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
+import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 
 @Component({
     selector: 'app-tdoc-linked-loc-hierarchy',
@@ -25,7 +25,7 @@ export class TourDocLinkedLocHierarchyComponent extends AbstractInlineComponent 
     public truncateMaxWordLength ? = undefined;
 
     constructor(private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
-                private cdocRoutingService: CommonDocRoutingService, private contentUtils: TourDocContentUtils,
+                private cdocRoutingService: TourDocRoutingService, private contentUtils: TourDocContentUtils,
                 protected cd: ChangeDetectorRef) {
         super(cd);
     }
@@ -41,7 +41,7 @@ export class TourDocLinkedLocHierarchyComponent extends AbstractInlineComponent 
     }
 
     public submitShow(event, location): boolean {
-        this.commonRoutingService.navigateByUrl(this.getUrl(location));
+        this.cdocRoutingService.navigateToShow(location, '');
         return false;
     }
 
@@ -50,7 +50,11 @@ export class TourDocLinkedLocHierarchyComponent extends AbstractInlineComponent 
     }
 
     private getUrl(location: any): string {
-        return this.cdocRoutingService.getShowUrl(new TourDocRecord({id: location[0], name: location[1], type: 'LOCATION'}), '');
+        return this.cdocRoutingService.getShowUrl(this.generateRecord(location), '');
+    }
+
+    private generateRecord(location: any): TourDocRecord {
+        return new TourDocRecord({id: location[0], name: location[1], type: 'LOCATION'});
     }
 
 }

@@ -1,4 +1,5 @@
 import {CommonEnvironment} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/common-environment';
+import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export interface AppEnvironment extends CommonEnvironment {
     assetsPathVersionSnippet: string;
@@ -14,4 +15,9 @@ export interface AppEnvironment extends CommonEnvironment {
     tdocActionTagWritable: boolean;
     tdocMaxItemsPerAlbum: number;
     m3uAvailable: boolean;
+    currentDataMode?: DataMode;
+    startDataMode?: DataMode;
+    availableDataModes?: DataMode[];
+    staticPDocsFile?: string;
+    staticTDocsFiles?: string[];
 }

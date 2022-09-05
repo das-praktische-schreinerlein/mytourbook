@@ -2,18 +2,18 @@ import {AppEnvironment} from './app-environment';
 import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export const environment: AppEnvironment = {
-    production: true,
+    production: false, // TODO set this to false for development
     assetsPathVersionSnippet: '',
     assetsPathVersionSuffix: '',
-    backendApiBaseUrl: 'http://localhost:4102/api/v1/',
-    tracksBaseUrl: 'http://localhost:4102/api/assets/trackstore/',
-    audioBaseUrl: 'http://localhost:4102/api/static/audiostore/',
-    picsBaseUrl: 'http://localhost:4102/api/static/picturestore/',
+    backendApiBaseUrl: undefined,
+    tracksBaseUrl: undefined,
+    audioBaseUrl: undefined,
+    picsBaseUrl: undefined,
     picsPreviewPathResolution: 'x300',
-    videoBaseUrl: 'http://localhost:4102/api/static/videostore/',
+    videoBaseUrl: undefined,
     defaultSearchTypes: 'route,location,track,trip,news',
     emptyDefaultSearchTypes: 'route,location,track,trip,news,image,video,info',
-    useAssetStoreUrls: true,
+    useAssetStoreUrls: false,
     useAudioAssetStoreUrls: false,
     useVideoAssetStoreUrls: false,
     tdocWritable: false,
@@ -23,14 +23,18 @@ export const environment: AppEnvironment = {
     m3uAvailable: false,
     cookieLawSeenName: 'cookieLawSeenV20180525',
     trackingProviders: [], // Angulartics2Piwik
-    startDataMode: DataMode.BACKEND,
-    availableDataModes: [DataMode.BACKEND]
+    staticPDocsFile: 'assets/staticdata/static.mytbpdocs.js',
+    staticTDocsFiles: ['assets/staticdata/static.mytbtdocs.js'],
+    startDataMode: DataMode.STATIC,
+    availableDataModes: [DataMode.STATIC]
 };
 
 // unset logger
-console.trace = function() {};
-console.debug = function() {};
-console.log = function() {};
-console.warn = function() {};
-console.error = function() {};
+if (environment.production) {
+    console.trace = function() {};
+    console.debug = function() {};
+    console.log = function() {};
+    console.warn = function() {};
+    console.error = function() {};
+}
 

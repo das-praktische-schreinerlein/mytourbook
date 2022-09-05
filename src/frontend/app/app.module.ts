@@ -42,7 +42,9 @@ import {CookieLawModule} from 'angular2-cookie-law';
 import {TourDocActionTagService} from './shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocPlaylistService} from './shared-tdoc/services/tdoc-playlist.service';
 import {environment} from '../environments/environment';
-import {TourDocObjectDetectionObjectKeyEditFormComponent} from './shared-tdoc/components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
+import {
+    TourDocObjectDetectionObjectKeyEditFormComponent
+} from './shared-tdoc/components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
 import {TourDocReplaceFormComponent} from './shared-tdoc/components/tdoc-replaceform/tdoc-replaceform.component';
 import {TourDocAssignFormComponent} from './shared-tdoc/components/tdoc-assignform/tdoc-assignform.component';
 import {TourDocKeywordTagFormComponent} from './shared-tdoc/components/tdoc-keywordtagform/tdoc-keywordtagform.component';
@@ -57,6 +59,7 @@ import {TourDocTrackDescSuggesterService} from './shared-tdoc/services/tdoc-trac
 import CustomUrlSerializer from './services/custom-url-serializer';
 import {UrlSerializer} from '@angular/router';
 import {TourDocAssignPlaylistFormComponent} from './shared-tdoc/components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
+import {FallbackHttpClient} from './services/fallback-http-client';
 
 registerLocaleData(localeDe);
 
@@ -117,6 +120,7 @@ const customUrlSerializerProvider = {
         // customUrlSerializerProvider, // activate this to get parenthes in parameters running, but then suburls dont run anymore
         CommonRoutingService,
         { provide: GenericAppService, useClass: AppService },
+        FallbackHttpClient,
         DynamicComponentService,
         TourDocDynamicComponentService,
         TourDocTeamFilterConfig,

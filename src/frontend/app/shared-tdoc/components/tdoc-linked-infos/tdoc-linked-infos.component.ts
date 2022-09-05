@@ -3,9 +3,8 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
-import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
-import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
+import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 
 @Component({
     selector: 'app-tdoc-linked-infos',
@@ -23,7 +22,7 @@ export class TourDocLinkedInfosComponent extends AbstractInlineComponent {
     public small ? = false;
 
     constructor(private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
-                private cdocRoutingService: CommonDocRoutingService, private contentUtils: TourDocContentUtils,
+                private cdocRoutingService: TourDocRoutingService,
                 protected cd: ChangeDetectorRef) {
         super(cd);
     }
@@ -37,7 +36,7 @@ export class TourDocLinkedInfosComponent extends AbstractInlineComponent {
     }
 
     public submitShow(event, info: TourDocLinkedInfoRecord): boolean {
-        this.commonRoutingService.navigateByUrl(this.getUrl(info));
+        this.cdocRoutingService.navigateToShow(this.generateRecord(info), '');
         return false;
     }
 
@@ -46,7 +45,10 @@ export class TourDocLinkedInfosComponent extends AbstractInlineComponent {
     }
 
     private getUrl(info: TourDocLinkedInfoRecord): string {
-        return this.cdocRoutingService.getShowUrl(new TourDocRecord({id: 'INFO_' + info.refId, name: info.name, type: 'INFO'}), '');
+        return this.cdocRoutingService.getShowUrl(this.generateRecord(info), '');
     }
 
+    private generateRecord(info: any): TourDocRecord {
+        return new TourDocRecord({id: 'INFO_' + info.refId, name: info.name, type: 'INFO'});
+    }
 }
