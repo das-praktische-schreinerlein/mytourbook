@@ -30,6 +30,8 @@ import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentuti
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
+import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
 
 describe('TourDocShowpageComponent', () => {
     let component: TourDocShowpageComponent;
@@ -52,6 +54,7 @@ describe('TourDocShowpageComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonDocRoutingService,
                 TourDocRoutingService,
+                { provide: TourDocDataService, useValue: new TourDocDataServiceStub() },
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
                 NgxMdService,
