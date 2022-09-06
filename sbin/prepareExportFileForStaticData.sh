@@ -26,7 +26,7 @@ fi
 echo "start - preparing static.mytbtdocs_export_chunk"
 echo "now: split by 100 entries: '$BASEFILE'"
 cd ${DESTDIR}
-rm -f static.mytbtdocs_chunk*.js
+rm -f static.mytbtdocs_export_chunk*.js
 #awk '/{"id":"/ { f = 1 } f' < $BASEFILE | sed -n '/dummydir","name":"dummyfile"/q;p' | awk '/"file":/ { delim++ } { file = sprintf("$BASEFILE%s.js", int(delim / 10000)); print >> file; }'
 grep $BASEFILE -e "  {\"id\":\"" | awk '/{"id":"/ { delim++ } { file = sprintf("static.mytbtdocs_export_chunk%s.js", int(delim / 100)); print >> file; }'
 
