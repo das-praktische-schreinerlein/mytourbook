@@ -9,10 +9,11 @@ import {AdapterQuery} from '@dps/mycms-commons/src/search-commons/services/mappe
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/src/search-commons/services/generic-adapter-response.mapper';
 import {isNumeric} from 'rxjs/internal-compatibility';
 import {ItemsJsSelectQueryData} from '@dps/mycms-commons/src/search-commons/services/itemsjs-query.builder';
+import {ItemJsResult} from '@dps/mycms-commons/src/search-commons/services/generic-itemsjs.adapter';
 
 export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public static aggregationFields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
-        'image_similar_id_i'];
+        'image_similar_id_i', 'loc_parent_id_i'];
     public static itemsJsConfig: ItemsJsConfig = {
         spatialField: 'geo_loc_p',
         spatialSortKey: 'distance',
@@ -28,189 +29,241 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             'navigation_objects_txt', 'extended_object_properties_txt', 'linkedroutes_txt', 'linkedinfos_txt', 'linkedplaylists_txt',
             'html'],
         aggregations: {
+            'loc_parent_id_i': {
+                conjunction: false,
+                field: 'loc_id_parent_i',
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
+                size: 1000
+            },
             'actiontype_ss': {
                 conjunction: false,
                 field: 'actiontype_ss',
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'data_tech_alt_asc_facet_is': {
-                field: 'data_tech_alt_asc_i',
+                filterFunction: function(record) {
+                    return record['data_tech_alt_asc_i']
+                        ? (Math.round(record['data_tech_alt_asc_i'] / 500) * 500).toFixed(0)
+                        : undefined
+                },
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'data_tech_alt_max_facet_is': {
-                field: 'data_tech_alt_max_i',
+                filterFunction: function(record) {
+                    return record['data_tech_alt_max_i']
+                        ? (Math.round(record['data_tech_alt_max_i'] / 500) * 500).toFixed(0)
+                        : undefined
+                },
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'data_tech_dist_facets_fs': {
-                field: 'data_tech_dist_f',
+                filterFunction: function(record) {
+                    return record['data_tech_dist_f']
+                        ? (Math.round(record['data_tech_dist_f'] / 5) * 5).toFixed(0)
+                        : undefined
+                },
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'data_tech_dur_facet_fs': {
-                field: 'data_tech_dur_f',
+                filterFunction: function(record) {
+                    return record['data_tech_dur_f']
+                        ? (Math.round(record['data_tech_dur_f'] * 2) / 2).toFixed(1)
+                        : undefined
+                },
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'keywords_txt': {
+                filterFunction: function(record) {
+                    return record['keywords_txt']
+                        ? record['keywords_txt'].replace(',,', ',').split(',')
+                        : undefined
+                },
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'month_is': {
                 field: 'dateshow_dt',
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'loc_lochirarchie_txt': {
-                field: 'loc_lochirarchie_s',
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'objects_txt': {
+                filterFunction: function(record) {
+                    return record['objects_txt']
+                        ? record['objects_txt'].replace(',,', ',').split(',')
+                        : undefined
+                },
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'persons_txt': {
+                filterFunction: function(record) {
+                    return record['persons_txt']
+                        ? record['persons_txt'].replace(',,', ',').split(',')
+                        : undefined
+                },
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'playlists_txt': {
+                filterFunction: function(record) {
+                    return record['playlists_txt']
+                        ? record['playlists_txt'].replace(',,', ',').split(',')
+                        : undefined
+                },
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'rate_pers_gesamt_is': {
                 field: 'rate_pers_gesamt_i',
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'rate_pers_schwierigkeit_is': {
                 field: 'rate_pers_schwierigkeit_i',
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'rate_tech_overall_ss': {
                 field: 'rate_tech_overall_s',
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'subtype_ss': {
                 field: 'subtype_s',
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'type_txt': {
                 field: 'type_s',
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'id': {
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
-                size: 1000
-            },
-            'week_is': {
-                field: 'dateshow_dt',
-                conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             },
             'year_is': {
                 field: 'dateshow_dt',
                 conjunction: false,
-                sort: ['selected', 'count', 'key'],
-                order: ['desc', 'desc', 'asc'],
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
                 size: 1000
             }
         },
         sortings: {
             'date': {
-                'field': 'dateshow_dt',
-                'order:': 'desc'
+                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
+                order: ['desc', 'desc']
             },
             'dateAsc': {
-                'sort': 'dateshow_dt',
-                'order:': 'asc'
-            },
-            'distance': {
-                'sort': 'geodist()',
-                'order:': 'asc'
+                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
+                order: ['asc', 'desc']
             },
             'dataTechDurDesc': {
-                'sort': 'data_tech_dur_f',
-                'order:': 'desc'
+                field: ['data_tech_dur_f', 'rate_pers_gesamt_i'],
+                order: ['desc', 'desc']
             },
             'dataTechAltDesc': {
-                'sort': 'data_tech_alt_asc_i',
-                'order:': 'desc'
+                field: ['data_tech_alt_asc_i', 'rate_pers_gesamt_i'],
+                order: ['desc', 'desc']
             },
             'dataTechMaxDesc': {
-                'sort': 'data_tech_alt_max_i',
-                'order:': 'desc'
+                field: ['data_tech_alt_max_i', 'rate_pers_gesamt_i'],
+                order: ['desc', 'desc']
             },
             'dataTechDistDesc': {
-                'sort': 'data_tech_dist_f',
-                'order:': 'desc'
+                field: ['data_tech_dist_f', 'rate_pers_gesamt_i'],
+                order: ['desc', 'desc']
             },
             'dataTechDurAsc': {
-                'sort': 'data_tech_dur_f',
-                'order:': 'asc'
+                field: ['data_tech_dur_f', 'rate_pers_gesamt_i'],
+                order: ['asc', 'desc']
             },
             'dataTechAltAsc': {
-                'sort': 'data_tech_alt_asc_i',
-                'order:': 'asc'
+                field: ['data_tech_alt_asc_i', 'rate_pers_gesamt_i'],
+                order: ['asc', 'desc']
             },
             'dataTechMaxAsc': {
-                'sort': 'data_tech_alt_max_i',
-                'order:': 'asc'
+                field: ['data_tech_alt_max_i', 'rate_pers_gesamt_i'],
+                order: ['asc', 'desc']
             },
             'dataTechDistAsc': {
-                'sort': 'data_tech_dist_f',
-                'order:': 'asc'
+                field: ['data_tech_dist_f', 'rate_pers_gesamt_i'],
+                order: ['asc', 'desc']
             },
             'ratePers': {
-                'sort': 'rate_pers_gesamt_i',
-                'order:': 'desc'
+                field: ['rate_pers_gesamt_i', 'dateshow_dt'],
+                order: ['desc', 'desc']
             },
             'location': {
-                'sort': 'loc_lochirarchie_s',
-                'order:': 'asc'
+                field: ['loc_lochirarchie_s', 'rate_pers_gesamt_i'],
+                order: ['asc', 'desc']
             },
             'relevance': {
+                field: ['id', 'dateshow_dt'],
+                order: ['asc', 'desc']
             }
         },
         filterMapping: {
@@ -239,9 +292,15 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
     }
 
     public static extendAdapterDocument(values: {}) {
+        for (const filterBase of ['keywords', 'objects', 'persons', 'playlists']) {
+            values[filterBase + '_ss'] = values[filterBase + '_txt'];
+        }
+
         for (const aggreationName in TourDocItemsJsAdapter.itemsJsConfig.aggregations) {
             const aggregation = TourDocItemsJsAdapter.itemsJsConfig.aggregations[aggreationName];
-            if (aggregation['field']) {
+            if (aggregation.filterFunction) {
+                values[aggreationName] = aggregation.filterFunction.call(this, values);
+            } else if (aggregation['field']) {
                 values[aggreationName] = values[aggregation['field']];
             }
         }
@@ -257,6 +316,11 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             ? new Date(values['dateshow_dt']).getMonth() + 1
             : undefined;
 
+        if (values['loc_lochirarchie_s']) {
+            values['loc_lochirarchie_txt'] = values['loc_lochirarchie_s'].split(',,');
+        }
+
+
         for (const fieldName of TourDocItemsJsAdapter.itemsJsConfig.searchableFields) {
             if (fieldName.endsWith('_i') || fieldName.endsWith('_s')) {
                 values[fieldName + 's'] = values[fieldName];
@@ -264,8 +328,14 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         }
 
         // remap to String because itemjs is string-search-engine ;-)
+        for (const fieldName of [].concat(TourDocItemsJsAdapter.aggregationFields).concat()) {
+            if (isNumeric(values[fieldName])) {
+                values[fieldName] = values[fieldName] + '';
+            }
+        }
+
         for (const key in values) {
-            if (isNumeric(values[key])) {
+            if ((key.endsWith('_ss') || key.endsWith('_is') || key.endsWith('_fs')) && isNumeric(values[key])) {
                 values[key] = values[key] + '';
             }
         }
@@ -321,6 +391,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         }
 
         // console.debug('no matching path found - checked normalized pathes', normalizedTries);
+
         return undefined;
     }
 
@@ -330,8 +401,9 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 if (!TourDocItemsJsAdapter.itemsJsConfig.aggregations[fieldName]) {
                     TourDocItemsJsAdapter.itemsJsConfig.aggregations[fieldName] = {
                         conjunction: false,
-                        sort: ['selected', 'count', 'key'],
-                        order: ['desc', 'desc', 'asc'],
+                        sort: 'term',
+                        order: 'asc',
+                        hide_zero_doc_count: false,
                         size: 9999
                     };
                 }
@@ -339,8 +411,9 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 if (!TourDocItemsJsAdapter.itemsJsConfig.aggregations[fieldName + 's']) {
                     TourDocItemsJsAdapter.itemsJsConfig.aggregations[fieldName + 's'] = {
                         conjunction: false,
-                        sort: ['selected', 'count', 'key'],
-                        order: ['desc', 'desc', 'asc'],
+                        sort: 'term',
+                        order: 'asc',
+                        hide_zero_doc_count: false,
                         size: 9999
                     };
                 }
@@ -396,17 +469,52 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         // map html to fulltext
         const adapterQuery = <AdapterQuery> params;
         let fulltextQuery = '';
-        if (adapterQuery.where && adapterQuery.where['html']) {
-            const action = Object.getOwnPropertyNames(adapterQuery.where['html'])[0];
-            fulltextQuery = adapterQuery.where['html'][action];
-            delete adapterQuery.where['html'];
+        const specialAggregations = {};
+        if (adapterQuery.where) {
+            if (adapterQuery.where['html']) {
+                const action = Object.getOwnPropertyNames(adapterQuery.where['html'])[0];
+                fulltextQuery = adapterQuery.where['html'][action];
+                delete adapterQuery.where['html'];
+            }
+
+            for (const filterBase of []) {
+                if (adapterQuery.where[filterBase + '_txt']) {
+                    const action = Object.getOwnPropertyNames(adapterQuery.where[filterBase + '_txt'])[0];
+                    specialAggregations[filterBase + '_ss'] = adapterQuery.where[filterBase + '_txt'][action];
+                    delete adapterQuery.where[filterBase + '_txt'];
+                }
+            }
         }
 
         const queryData = super.queryTransformToAdapterQueryWithMethod(method, mapper, adapterQuery, opts);
         queryData.query = fulltextQuery;
 
+        if (!queryData.filters) {
+            queryData.filters = {};
+        }
+        queryData.filters = {...queryData.filters, ...specialAggregations};
+
+        console.log('itemsjs query:', queryData);
+
         return queryData;
     }
 
+    extractRecordsFromRequestResult(mapper: Mapper, result: ItemJsResult): TourDocRecord[] {
+        // got documents
+        const docs = result.data.items;
+        const records = [];
+        for (const doc of docs) {
+            // remap fields
+            const docCopy = {...doc};
+            for (const filterBase of ['keywords', 'objects', 'persons', 'playlists']) {
+                docCopy[filterBase + '_txt'] = docCopy[filterBase + '_ss'];
+            }
+
+            records.push(this.mapResponseDocument(mapper, docCopy, this.getItemsJsConfig()));
+        }
+        // console.log('extractRecordsFromRequestResult:', records);
+
+        return records;
+    }
 }
 
