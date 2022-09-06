@@ -16,6 +16,9 @@ import {
     MediaExportProcessingOptions,
     MediaExportResolution
 } from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-mediafile-export.service';
+import {TourDocLinkedRouteRecord} from '../shared/tdoc-commons/model/records/tdoclinkedroute-record';
+import {TourDocLinkedInfoRecord} from '../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
+import {TourDocLinkedPlaylistRecord} from '../shared/tdoc-commons/model/records/tdoclinkedplaylist-record';
 
 export enum MediaExportResolutionProfiles {
     'all' = 'all',
@@ -117,36 +120,78 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
     }
 
     protected checkIdToRead(doc: TourDocRecord, idsRead: {}): any[] {
-        for (const type of ['IMAGE', 'VIDEO', 'TRACK', 'LOCATION', 'ROUTE', 'INFO', 'TRIP', 'NEWS']) {
+        for (const type of ['IMAGE', 'VIDEO', 'TRACK', 'LOCATION', 'ROUTE', 'INFO', 'TRIP', 'NEWS', 'PLAYLIST']) {
             if (idsRead[type] === undefined) {
                 idsRead[type] = {};
             }
         }
 
         const idsToRead = [];
-        if (doc.imageId && !idsRead['IMAGE']['IMAGE_' + doc.imageId]) {
-            idsToRead.push('IMAGE_' + doc.imageId);
+        if (['IMAGE', 'VIDEO', 'TRACK', 'ROUTE', 'LOCATION', 'TRIP', 'INFO'].includes(doc.type)) {
+            if (doc.locId && !idsRead['LOCATION']['LOCATION_' + doc.locId]) {
+                idsToRead.push('LOCATION_' + doc.locId);
+            }
         }
-        if (doc.videoId && !idsRead['VIDEO']['VIDEO_' + doc.videoId]) {
-            idsToRead.push('VIDEO_' + doc.videoId);
+        if (['IMAGE', 'VIDEO', 'TRACK', 'ROUTE'].includes(doc.type)) {
+            if (doc.routeId && !idsRead['ROUTE']['ROUTE_' + doc.routeId]) {
+                idsToRead.push('ROUTE_' + doc.routeId);
+            }
         }
-        if (doc.trackId && !idsRead['TRACK']['TRACK_' + doc.trackId]) {
-            idsToRead.push('TRACK_' + doc.trackId);
+        if (['IMAGE', 'VIDEO', 'TRACK', 'TRIP', 'NEWS'].includes(doc.type)) {
+            if (doc.trackId && !idsRead['TRACK']['TRACK_' + doc.trackId]) {
+                idsToRead.push('TRACK_' + doc.trackId);
+            }
+            if (doc.tripId && !idsRead['TRIP']['TRIP_' + doc.tripId]) {
+                idsToRead.push('TRIP_' + doc.tripId);
+            }
+            if (doc.newsId && !idsRead['NEWS']['NEWS_' + doc.newsId]) {
+                idsToRead.push('NEWS_' + doc.newsId);
+            }
         }
-        if (doc.routeId && !idsRead['ROUTE']['ROUTE_' + doc.routeId]) {
-            idsToRead.push('ROUTE_' + doc.routeId);
+        if (['IMAGE'].includes(doc.type)) {
+            if (doc.imageId && !idsRead['IMAGE']['IMAGE_' + doc.imageId]) {
+                idsToRead.push('IMAGE_' + doc.imageId);
+            }
         }
-        if (doc.locId && !idsRead['LOCATION']['LOCATION_' + doc.locId]) {
-            idsToRead.push('LOCATION_' + doc.locId);
+        if (['VIDEO'].includes(doc.type)) {
+            if (doc.videoId && !idsRead['VIDEO']['VIDEO_' + doc.videoId]) {
+                idsToRead.push('VIDEO_' + doc.videoId);
+            }
         }
+
         if (doc.locIdParent && !idsRead['LOCATION']['LOCATION_' + doc.locIdParent]) {
             idsToRead.push('LOCATION_' + doc.locIdParent);
         }
-        if (doc.tripId && !idsRead['TRIP']['TRIP_' + doc.tripId]) {
-            idsToRead.push('TRIP_' + doc.tripId);
+
+        if (['TRACK'].includes(doc.type)) {
+            const routes: TourDocLinkedRouteRecord[] = doc.get('tdoclinkedroutes');
+            if (routes) {
+                for (const route of routes) {
+                    if (!idsRead['ROUTE']['ROUTE_' + route.refId]) {
+                        idsToRead.push('ROUTE_' + route.refId);
+                    }
+                }
+            }
         }
-        if (doc.newsId && !idsRead['NEWS']['NEWS_' + doc.newsId]) {
-            idsToRead.push('NEWS_' + doc.newsId);
+
+        if (['ROUTE', 'LOCATION'].includes(doc.type)) {
+            const infos: TourDocLinkedInfoRecord[] = doc.get('tdoclinkedinfos');
+            if (infos) {
+                for (const info of infos) {
+                    if (!idsRead['INFO']['INFO_' + info.refId]) {
+                        idsToRead.push('INFO_' + info.refId);
+                    }
+                }
+            }
+        }
+
+        const playlists: TourDocLinkedPlaylistRecord[] = doc.get('tdoclinkedplaylists');
+        if (playlists) {
+            for (const playlist of playlists) {
+                if (!idsRead['PLAYLIST']['PLAYLIST_' + playlist.refId]) {
+                    idsToRead.push('PLAYLIST_' + playlist.refId);
+                }
+            }
         }
 
         return idsToRead;
