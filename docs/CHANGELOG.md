@@ -4,6 +4,7 @@
 
 ## 7.4.0
 - added viewer as separate environment to view static data without backend
+- fixed media-export of dependent records
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -12,7 +13,7 @@
 - none
 
 ### bug fixes
-- none
+- backend: fixed media-export of dependent records
 
 ### breaking changes
 - none
