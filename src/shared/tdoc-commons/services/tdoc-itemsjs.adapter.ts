@@ -273,6 +273,57 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         return values;
     }
 
+    public static lazyCheckForFilePath(pathes: {}, needle: string): string {
+        const normalizedTries = [];
+        if (!needle) {
+            return undefined;
+        }
+
+        normalizedTries.push(needle);
+        if (pathes[needle]) {
+            return needle;
+        }
+
+        let normalized = needle.replace(/^\//, '');
+        normalizedTries.push(normalized);
+        if (pathes[normalized]) {
+            return normalized;
+        }
+
+        normalized = needle.replace('/', '_');
+        normalizedTries.push(normalized);
+        if (pathes[normalized]) {
+            return normalized;
+        }
+
+        normalized = '/' + needle;
+        normalizedTries.push(normalized);
+        if (pathes[normalized]) {
+            return normalized;
+        }
+
+        normalized = '/' + needle.replace('/', '_');
+        normalizedTries.push(normalized);
+        if (pathes[normalized]) {
+            return normalized;
+        }
+
+        if (needle.length === 1) {
+            // console.debug('no matching path found - checked normalized pathes', normalizedTries);
+            return undefined;
+        }
+
+        normalized = needle.substr(0, 1)
+            + needle.substr(1, needle.length).replace('/', '_');
+        normalizedTries.push(normalized);
+        if (pathes[normalized]) {
+            return normalized;
+        }
+
+        // console.debug('no matching path found - checked normalized pathes', normalizedTries);
+        return undefined;
+    }
+
     constructor(config: any, data: any) {
         for (const fieldName of TourDocItemsJsAdapter.aggregationFields) {
             if (fieldName.endsWith('_i') || fieldName.endsWith('_s')) {
@@ -301,14 +352,16 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         for (const record of data) {
             delete record['gpstracks_basefile_s'];
 
-            let mediaUrl = record['i_fav_url_txt'];
+            let mediaUrl: string = record['i_fav_url_txt'];
             if (mediaUrl && record['type_s'] === 'IMAGE') {
                 images[mediaUrl] = mediaUrl;
             } else if (mediaUrl && !images[mediaUrl]) {
-                const normalizedUrl = mediaUrl.replace(/^\//, '').replace('/', '_');
-                if (images[normalizedUrl]) {
+                const normalizedUrl = TourDocItemsJsAdapter.lazyCheckForFilePath(images, mediaUrl);
+                if (normalizedUrl && images[normalizedUrl]) {
+                    // console.debug('FavImage REMAPPED i_fav_url_txt remapped:', mediaUrl, normalizedUrl);
                     record['i_fav_url_txt'] = normalizedUrl;
                 } else {
+                    // console.debug('FavImage NOT FOUND i_fav_url_txt:', mediaUrl);
                     delete record['i_fav_url_txt'];
                 }
             }
@@ -317,10 +370,12 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             if (mediaUrl && record['type_s'] === 'VIDEO') {
                 videos[mediaUrl] = mediaUrl;
             } else if (mediaUrl && !images[mediaUrl]) {
-                const normalizedUrl = mediaUrl.replace(/^\//, '').replace('/', '_');
-                if (videos[normalizedUrl]) {
+                const normalizedUrl = TourDocItemsJsAdapter.lazyCheckForFilePath(videos, mediaUrl);
+                if (normalizedUrl && videos[normalizedUrl]) {
+                    // console.debug('FavVideo REMAPPED v_fav_url_txt remapped:', mediaUrl, normalizedUrl);
                     record['v_fav_url_txt'] = normalizedUrl;
                 } else {
+                    // console.debug('FavVideo RESET v_fav_url_txt:', mediaUrl);
                     delete record['v_fav_url_txt'];
                 }
             }
