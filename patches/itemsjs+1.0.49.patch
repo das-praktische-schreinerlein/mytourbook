@@ -1,5 +1,5 @@
 diff --git a/node_modules/itemsjs/lib/lib.js b/node_modules/itemsjs/lib/lib.js
-index dbeffa4..125feea 100644
+index dbeffa4..b4e750a 100644
 --- a/node_modules/itemsjs/lib/lib.js
 +++ b/node_modules/itemsjs/lib/lib.js
 @@ -60,7 +60,7 @@ module.exports.search = function (items, input, configuration, fulltext) {
@@ -11,3 +11,58 @@ index dbeffa4..125feea 100644
    var facets_time = new Date().getTime() - facets_start_time;
    return {
      pagination: {
+@@ -124,12 +124,20 @@ module.exports.sorted_items = function (items, sort, sortings) {
+     sort = sortings[sort];
+   }
+ 
+-  if (sort.field) {
+-    return _.orderBy(items, sort.field, sort.order || 'asc');
++  if (!sort.field) {
++    return items;
+   }
+ 
+-  return items;
+-};
++  const fields = Array.isArray(sort.field)
++      ? [i => !!i[sort.field[0]]].concat(sort.field)
++      : [i => !!i[sort.field], sort.field];
++  const orders = Array.isArray(sort.order)
++      ? ['desc'].concat(sort.order)
++      : ['desc', sort.order || 'asc'];
++
++  return _.orderBy(items, fields, orders);
++}
++
+ /**
+  * return items which pass filters (aggregations)
+  */
+@@ -277,7 +285,7 @@ module.exports.buckets = function (items, field, agg, aggregations) {
+     var elements = item[field];
+ 
+     if (agg.conjunction !== false && helpers.includes(elements, agg.filters) //|| agg.conjunction === false && helpers.includes_any(elements, agg.filters)
+-    || agg.conjunction === false) {
++        || agg.conjunction === false) {
+       // go through elements in item field
+       for (var i = 0; elements && i < elements.length; ++i) {
+         var key = elements[i];
+diff --git a/node_modules/itemsjs/src/lib.js b/node_modules/itemsjs/src/lib.js
+index 39eed73..a62bf7f 100644
+--- a/node_modules/itemsjs/src/lib.js
++++ b/node_modules/itemsjs/src/lib.js
+@@ -120,12 +120,12 @@ module.exports.sorted_items = function(items, sort, sortings) {
+   }
+ 
+   if (sort.field) {
+-    return _.orderBy(
++  }
++
++  return _.orderBy(
+       items,
+       sort.field,
+-      sort.order || 'asc'
+-    );
+-  }
++      sort);
+ 
+   return items;
+ }

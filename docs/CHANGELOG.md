@@ -3,6 +3,7 @@
 # Versions
 
 ## 7.4.0
+- use commons 5.5.0
 - added viewer as separate environment to view static data without backend
 - fixed media-export of dependent records
 
