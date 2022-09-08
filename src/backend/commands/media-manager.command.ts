@@ -23,6 +23,7 @@ import {
 import {
     KeywordValidationRule,
     NumberValidationRule,
+    SolrValidationRule,
     ValidationRule,
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
@@ -44,6 +45,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             parallel: new NumberValidationRule(false, 1, 999, 10),
             pageNum: new NumberValidationRule(false, 1, 999999999, 1),
             playlists: new KeywordValidationRule(false),
+            fulltext: new SolrValidationRule(false),
             personalRateOverall: new KeywordValidationRule(false),
             directoryProfile: new KeywordValidationRule(false),
             fileNameProfile: new KeywordValidationRule(false),
@@ -98,6 +100,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         };
         const pageNum = Number.parseInt(argv['pageNum'], 10);
         const playlists = argv['playlists'];
+        const fulltext = argv['fulltext'];
         const personalRateOverall = argv['personalRateOverall'];
         const skipCheckForExistingFilesInDataBase = argv['skipCheckForExistingFilesInDataBase'] === true
             || argv['skipCheckForExistingFilesInDataBase'] === 'true';
@@ -194,6 +197,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 searchForm = new TourDocSearchForm({
                     type: action === 'exportVideoFiles' ? 'video' : 'image',
+                    fulltext: fulltext,
                     playlists: playlists,
                     personalRateOverall: personalRateOverall,
                     sort: 'm3uExport',

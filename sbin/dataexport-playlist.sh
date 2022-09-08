@@ -11,7 +11,7 @@ function dofail {
 
 # check parameters
 if [ "$#" -lt 1 ]; then
-    dofail "USAGE: dataexport.playlist.sh EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER] \nFATAL: requires 1 parameters " 1
+    dofail "USAGE: dataexport.playlist.sh EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT] \nFATAL: requires 1 parameters " 1
     exit 1
 fi
 
@@ -24,6 +24,7 @@ DIPROFILE=${6:-default}
 FILEPROFILE=${7:-default}
 RATEMINFILTER=${8}
 SHOWNONBLOCKEDONLY=${9:showall}
+FULLTEXRFILTER=${10}
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
@@ -31,19 +32,19 @@ source ${SCRIPTPATH}/configure-environment.bash
 # check parameters
 cd ${MYTB}
 if [ ! -d "${EXPORTDIR}" ]; then
-    dofail "USAGE: dataexport.playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY \nFATAL: EXPORTDIR not exists " 1
+    dofail "USAGE: dataexport.playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY FULLTEXRFILTER\nFATAL: EXPORTDIR not exists " 1
 fi
 if [ -d "${EXPORTDIR}/${PLAYLISTFILE}" ]; then
-    dofail "USAGE: dataexport.playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY \nFATAL: PLAYLISTFILE is directory " 1
+    dofail "USAGE: dataexport.playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY FULLTEXRFILTER\nFATAL: PLAYLISTFILE is directory " 1
 fi
 
 CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
 if [ ! -f "${CONFGFILE}" ]; then
-    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY \nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
+    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY FULLTEXRFILTER\nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
 fi
 CLICONFGFILE="${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json"
 if [ ! -f "${CLICONFGFILE}" ]; then
-    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY \nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
+    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY FULLTEXRFILTER\nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
 fi
 
 echo "start - prepare file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
@@ -60,7 +61,7 @@ fi
 
 echo "now: generate export"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
+node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
+node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
 
 echo "done - file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"

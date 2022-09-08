@@ -6,12 +6,13 @@
 - use commons 5.5.0
 - added viewer as separate environment to view static data without backend
 - fixed media-export of dependent records
+- extend image-export with more filter
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
 
 ### improvements
-- none
+- backend: extend image-export with more filter
 
 ### bug fixes
 - backend: fixed media-export of dependent records
