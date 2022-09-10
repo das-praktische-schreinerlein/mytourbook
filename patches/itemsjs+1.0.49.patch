@@ -45,24 +45,3 @@ index dbeffa4..b4e750a 100644
        // go through elements in item field
        for (var i = 0; elements && i < elements.length; ++i) {
          var key = elements[i];
-diff --git a/node_modules/itemsjs/src/lib.js b/node_modules/itemsjs/src/lib.js
-index 39eed73..a62bf7f 100644
---- a/node_modules/itemsjs/src/lib.js
-+++ b/node_modules/itemsjs/src/lib.js
-@@ -120,12 +120,12 @@ module.exports.sorted_items = function(items, sort, sortings) {
-   }
- 
-   if (sort.field) {
--    return _.orderBy(
-+  }
-+
-+  return _.orderBy(
-       items,
-       sort.field,
--      sort.order || 'asc'
--    );
--  }
-+      sort);
- 
-   return items;
- }
