@@ -23,7 +23,7 @@ RESOLUTIONPROFILE=${5:-default}
 DIPROFILE=${6:-default}
 FILEPROFILE=${7:-default}
 RATEMINFILTER=${8}
-SHOWNONBLOCKEDONLY=${9:showall}
+SHOWNONBLOCKEDONLY=${9:-showall}
 FULLTEXRFILTER=${10}
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
@@ -63,5 +63,7 @@ echo "now: generate export"
 cd ${MYTB}
 node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
 node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
+${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-images.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_images_export_chunk
+${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-videos.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_videos_export_chunk
 
 echo "done - file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"

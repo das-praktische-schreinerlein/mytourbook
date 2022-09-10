@@ -10,27 +10,34 @@ function dofail {
 }
 
 # check parameters
-if [ "$#" -ne 2 ]; then
-    dofail "USAGE: prepareExportFileForStaticData.sh BASEFILE DESTDIR\nFATAL: requires 'BASEFILE' as parameters 'import-XXXX'" 1
+if [ "$#" -lt 2 ]; then
+    dofail "USAGE: prepareExportFileForStaticData.sh BASEFILE DESTDIR RESULTBASE\nFATAL: requires 'BASEFILE' as parameters 'import-XXXX'" 1
     exit 1
 fi
 BASEFILE=$1
 DESTDIR=$2
+RESULTBASE=${3:-static.mytbtdocs_export_chunk}
 
 if [ ! -d "${DESTDIR}" ]; then
     dofail "USAGE: prepareExportFileForStaticData.sh DESTDIR\nFATAL: $DESTDIR must exists" 1
     exit 1
 fi
 
+if [ "${RESULTBASE}" == "" ]; then
+    dofail "USAGE: prepareExportFileForStaticData.sh RESULTBASE\nFATAL: RESULTBASE must defined" 1
+    exit 1
+fi
 
-echo "start - preparing static.mytbtdocs_export_chunk"
+
+echo "start - preparing $RESULTBASE"
 echo "now: split by 100 entries: '$BASEFILE'"
 cd ${DESTDIR}
-rm -f static.mytbtdocs_export_chunk*.js
-#awk '/{"id":"/ { f = 1 } f' < $BASEFILE | sed -n '/dummydir","name":"dummyfile"/q;p' | awk '/"file":/ { delim++ } { file = sprintf("$BASEFILE%s.js", int(delim / 10000)); print >> file; }'
-grep $BASEFILE -e "  {\"id\":\"" | awk '/{"id":"/ { delim++ } { file = sprintf("static.mytbtdocs_export_chunk%s.js", int(delim / 100)); print >> file; }'
+rm -f ${RESULTBASE}*.js
+grep $BASEFILE -e "  {\"id\":\"" | awk -v RESULTBASE=$RESULTBASE 'BEGIN { RESULTBASE = RESULTBASE } /{"id":"/ { delim++ } { file = sprintf("%s%s.js", RESULTBASE, int(delim / 100)); print >> file; }'
+[ -s  ${RESULTBASE}0.js ] || echo "{}," > ${RESULTBASE}0.js
 
-for CHUNKFILE in static.mytbtdocs_export_chunk*.js; do
+
+for CHUNKFILE in ${RESULTBASE}*.js; do
   sed -i '1s/^/window.importStaticDataTDocsJsonP = \`{ "mdocs": [\n/' $CHUNKFILE
   sed -i 's/\\/\\\\/g' $CHUNKFILE
   sed -i 's/\}\]\}[ \r\n]*$/},/g' $CHUNKFILE
@@ -41,4 +48,4 @@ for CHUNKFILE in static.mytbtdocs_export_chunk*.js; do
 done
 cd ${CWD}
 
-echo "done - preparing static.mytbtdocs_export_chunk"
+echo "done - preparing $RESULTBASE"
