@@ -5,6 +5,7 @@ import {ToastrService} from 'ngx-toastr';
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {DataMode} from '../../../shared/tdoc-commons/model/datamode.enum';
 
 @Component({
     selector: 'app-navbar',
@@ -15,6 +16,7 @@ import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/servi
 export class NavbarComponent implements OnInit {
     private config;
     sections: PDocRecord[];
+    availableDataModes: DataMode[] = [];
     albumAllowed = false;
     public isExpanded = false;
 
@@ -29,6 +31,13 @@ export class NavbarComponent implements OnInit {
             if (appState === AppState.Ready) {
                 this.config = this.appService.getAppConfig();
                 me.cd.markForCheck();
+
+                if (this.config && this.config.availableDataModes.length > 1) {
+                    this.availableDataModes = this.config.availableDataModes;
+                } else {
+                    this.config.availableDataModes = [];
+                }
+
                 if (this.config && this.config['tdocMaxItemsPerAlbum'] > 0) {
                     this.albumAllowed = true;
                     return;

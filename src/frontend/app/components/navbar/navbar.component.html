@@ -50,26 +50,24 @@
                     </li>
                 </ng-container>
             </ng-container>
-
-<!--
             <li class="nav-item">
-                <a class="nav-link mdl-navigation__link">Settings</a>
+                <a class="nav-link mdl-navigation__link" routerLink="/pages/impress" routerLinkActive="active" i18n="link impress navBar|Link impress navBar@@a.navBar.impress">Impressum/Datenschutz</a>
             </li>
-            <li class="nav-item dropdown" ngbDropdown>
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkSettings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-                <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLinkSettings" role="menu">
-                    <li class="dropdown-item"><div class="navbar-right"><app-browser-onoffline></app-browser-onoffline></div></li>
+
+            <li class="nav-item dropdown" ngbDropdown *ngIf="availableDataModes.length > 1">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkSettings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+                <ul class="dropdown-menu dropdown-menu-left" attr.aria-labelledby="navbarDropdownMenuLinkSettings" role="menu" ngbDropdownMenu>
+                    <li class="dropdown-item">
+                        <div class="navbar-right"><app-browser-onoffline></app-browser-onoffline></div>
+                    </li>
                     <div class="dropdown-divider"></div>
                     <li class="dropdown-item"><app-switch-onoffline></app-switch-onoffline></li>
                 </ul>
             </li>
--->
-            <li class="nav-item">
-                <a class="nav-link mdl-navigation__link" routerLink="/pages/impress" routerLinkActive="active" i18n="link impress navBar|Link impress navBar@@a.navBar.impress">Impressum/Datenschutz</a>
-            </li>
         </ul>
     </div>
 </nav>
+
 <nav class="navbar-fullpage show-on-fullpage-block">
     <button type="button" class="" (click)="doEndFullPage()">
         <span>&#x25A3;</span>

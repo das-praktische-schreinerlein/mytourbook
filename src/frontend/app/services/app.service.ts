@@ -15,6 +15,7 @@ import {TourDocAdapterResponseMapper} from '../../shared/tdoc-commons/services/t
 import {FallbackHttpClient} from './fallback-http-client';
 import * as Promise_serial from 'promise-serial';
 import {DataMode} from '../../shared/tdoc-commons/model/datamode.enum';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable()
 export class AppService extends GenericAppService {
@@ -95,13 +96,13 @@ export class AppService extends GenericAppService {
                 private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
                 private http: HttpClient, private commonRoutingService: CommonRoutingService,
                 private backendHttpClient: MinimalHttpBackendClient, private platformService: PlatformService,
-                private fallBackHttpClient: FallbackHttpClient) {
+                private fallBackHttpClient: FallbackHttpClient, protected toastService: ToastrService) {
         super();
     }
 
-    initApp(): void {
+    initApp(): Promise<boolean> {
         const me = this;
-        this.initAppConfig().then(function onConfigLoaded() {
+        return this.initAppConfig().then(function onConfigLoaded() {
             if (DataMode.STATIC === me.appConfig.currentDataMode) {
                 return me.initStaticData();
             } else {
@@ -110,9 +111,11 @@ export class AppService extends GenericAppService {
         }).then(function onBackendLoaded() {
             console.log('app ready');
             me.setAppState(AppState.Ready);
+            return Promise.resolve(true);
         }).catch(function onError(reason: any) {
             console.error('loading app failed:', reason);
             me.setAppState(AppState.Failed);
+            return Promise.reject(reason);
         });
     }
 
@@ -122,21 +125,25 @@ export class AppService extends GenericAppService {
 
     doSwitchToOfflineVersion(): void {
         const me = this;
-        this.initStaticData().then(function onFullfiled() {
-            me.commonRoutingService.navigateByUrl('/');
-        }).catch(function onError(reason: any) {
-            console.error('loading app failed:', reason);
-            me.setAppState(AppState.Failed);
+        me.appConfig.currentDataMode = DataMode.STATIC;
+        me.initApp().then(() => {
+            console.log('DONE - switched to offline-version');
+            return me.commonRoutingService.navigateByUrl('/?' + (new Date()).getTime());
+        }).catch(reason => {
+            console.error('switching to offlineversion failed:', reason);
+            me.toastService.error('Es gibt leider Probleme beim Wechsel zur OfflineVersion - am besten noch einmal probieren :-(', 'Oje!');
         });
     }
 
     doSwitchToOnlineVersion(): void {
         const me = this;
-        this.initBackendData().then(function onFullfiled() {
-            me.commonRoutingService.navigateByUrl('/');
-        }).catch(function onError(reason: any) {
-            console.error('loading app failed:', reason);
-            me.setAppState(AppState.Failed);
+        me.appConfig.currentDataMode = DataMode.BACKEND;
+        me.initApp().then(() => {
+            console.log('DONE - switched to online-version');
+            return me.commonRoutingService.navigateByUrl('/?' + (new Date()).getTime());
+        }).catch(reason => {
+            console.error('switching to onlineversion failed:', reason);
+            me.toastService.error('Es gibt leider Probleme beim Wechsel zur OnlineVersion - am besten noch einmal probieren :-(', 'Oje!');
         });
     }
 
@@ -144,7 +151,7 @@ export class AppService extends GenericAppService {
         const me = this;
         if (DataMode.STATIC === me.appConfig.currentDataMode) {
             console.log('starting static app');
-            me.appConfig = me.staticAppConfig;
+            me.appConfig = {...me.staticAppConfig};
             return me.fallBackHttpClient.loadJsonPData('assets/staticdata/static.mytbconfig.js', 'importStaticConfigJsonP', 'config')
                 .then(function onDocLoaded(res: any) {
                     const config: {} = res;
@@ -164,7 +171,7 @@ export class AppService extends GenericAppService {
         }
 
         console.log('starting online app');
-        me.appConfig = me.onlineAppConfig;
+        me.appConfig = {...me.onlineAppConfig};
         return new Promise<boolean>((resolve, reject) => {
             const url = me.platformService.getAssetsUrl(
                 `./assets/config` + environment.assetsPathVersionSnippet + `.json` + environment.assetsPathVersionSuffix);
