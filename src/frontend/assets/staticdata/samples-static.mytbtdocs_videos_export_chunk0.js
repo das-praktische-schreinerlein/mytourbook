@@ -1,0 +1,3 @@
+window.importStaticDataTDocsJsonP = `{ "mdocs": [
+{},
+{}]}`;

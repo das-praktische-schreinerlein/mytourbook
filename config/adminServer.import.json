@@ -150,7 +150,7 @@
                             "directoryProfile": "default",
                             "fileNameProfile": "default",
                             "playlists": "",
-                            "rateMinFilter": "",
+                            "rateMinFilter": "1",
                             "resolutionProfile": "default",
                             "showNonBlockedOnly": "showall"
                         }
