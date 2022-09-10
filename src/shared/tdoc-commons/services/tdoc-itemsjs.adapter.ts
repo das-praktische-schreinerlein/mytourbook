@@ -5,11 +5,12 @@ import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 import {ItemsJsConfig} from '@dps/mycms-commons/dist/search-commons/services/itemsjs-query.builder';
 import {GenericItemsJsAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
 import {Mapper} from 'js-data';
-import {AdapterQuery} from '@dps/mycms-commons/src/search-commons/services/mapper.utils';
-import {GenericAdapterResponseMapper} from '@dps/mycms-commons/src/search-commons/services/generic-adapter-response.mapper';
+import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
+import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
 import {isNumeric} from 'rxjs/internal-compatibility';
-import {ItemsJsSelectQueryData} from '@dps/mycms-commons/src/search-commons/services/itemsjs-query.builder';
-import {ItemJsResult} from '@dps/mycms-commons/src/search-commons/services/generic-itemsjs.adapter';
+import {ItemsJsSelectQueryData} from '@dps/mycms-commons/dist/search-commons/services/itemsjs-query.builder';
+import {ItemJsResult} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
+import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 
 export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public static aggregationFields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
@@ -271,6 +272,22 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             },
             'relevance': {
                 field: ['id', 'dateshow_dt'],
+                order: ['asc', 'desc']
+            },
+            'trackDate': {
+                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
+                order: ['desc', 'desc']
+            },
+            'trackDateAsc': {
+                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
+                order: ['asc', 'desc']
+            },
+            'tripDate': {
+                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
+                order: ['desc', 'desc']
+            },
+            'tripDateAsc': {
+                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
                 order: ['asc', 'desc']
             }
         },
@@ -556,6 +573,25 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         // console.log('extractRecordsFromRequestResult:', records);
 
         return records;
+    }
+
+    // TODO move to super
+    extractFacetsFromRequestResult(mapper: Mapper, result: ItemJsResult): Facets {
+        const facets = super.extractFacetsFromRequestResult(mapper, result);
+        if (result.data === undefined ||
+            result.data.aggregations === undefined) {
+            return facets;
+        }
+
+        const sorts = Object.keys(this.getItemsJsConfig().sortings);
+        const facet = new Facet();
+        facet.facet = sorts.map(value => {
+            return [value, 0];
+        });
+
+        facets.facets.set('sorts', facet);
+
+        return facets;
     }
 }
 
