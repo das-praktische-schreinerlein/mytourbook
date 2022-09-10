@@ -39,7 +39,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             },
             'actiontype_ss': {
                 conjunction: false,
-                field: 'actiontype_ss',
+                field: 'actiontype_s',
                 sort: 'term',
                 order: 'asc',
                 hide_zero_doc_count: false,
@@ -261,6 +261,14 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 field: ['loc_lochirarchie_s', 'rate_pers_gesamt_i'],
                 order: ['asc', 'desc']
             },
+            'locationDetails': {
+                field: ['loc_lochirarchie_s', 'rate_pers_gesamt_i'],
+                order: ['asc', 'desc']
+            },
+            'region': {
+                field: ['data_info_region_s', 'loc_lochirarchie_s', 'rate_pers_gesamt_i'],
+                order: ['asc', 'asc', 'desc']
+            },
             'relevance': {
                 field: ['id', 'dateshow_dt'],
                 order: ['asc', 'desc']
@@ -292,6 +300,12 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
     }
 
     public static extendAdapterDocument(values: {}) {
+        // remap fields with fallbacks
+        values['actiontype_s'] = values['actiontype_s'] || values['subtype_s'];
+        values['dateshow_dt'] = values['dateshow_dt'] || values['datestart_dt']
+        values['html'] = values['name_s'] + ' ' +  values['desc_txt'];
+
+        // prepare aggregations
         for (const filterBase of ['keywords', 'objects', 'persons', 'playlists']) {
             values[filterBase + '_ss'] = values[filterBase + '_txt'];
         }
@@ -305,10 +319,10 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             }
         }
 
+        // override some aggregations
         values['type_txt'] = values['type_txt'] ? values['type_txt'] : values['type_s'];
         values['type_txt'] = values['type_txt'] ? values['type_txt'].toLowerCase() : '';
-        values['actiontype_s'] = values['subtype_s'];
-        values['html'] = values['name_s'] + ' ' +  values['desc_txt'];
+
         values['year_is'] = values['dateshow_dt']
             ? new Date(values['dateshow_dt']).getFullYear()
             : undefined;
@@ -320,7 +334,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             values['loc_lochirarchie_txt'] = values['loc_lochirarchie_s'].split(',,');
         }
 
-
+        // add aggregations for searchableFields
         for (const fieldName of TourDocItemsJsAdapter.itemsJsConfig.searchableFields) {
             if (fieldName.endsWith('_i') || fieldName.endsWith('_s')) {
                 values[fieldName + 's'] = values[fieldName];
@@ -420,9 +434,19 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             }
         }
 
+        const recordIds = {};
+        const records = [];
         const images = {};
         const videos = {};
         for (const record of data) {
+            if (recordIds[record['id']]) {
+                console.warn('SKIPPED record - id already exists id/existing/skipped', record['id'], recordIds[record['id']], record);
+                continue;
+            }
+
+            records.push(record);
+            recordIds[record['id']] = records.length - 1;
+
             delete record['gpstracks_basefile_s'];
 
             let mediaUrl: string = record['i_fav_url_txt'];
@@ -454,7 +478,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             }
         }
 
-        super(config, new TourDocAdapterResponseMapper(config), data, TourDocItemsJsAdapter.itemsJsConfig);
+        super(config, new TourDocAdapterResponseMapper(config), records, TourDocItemsJsAdapter.itemsJsConfig);
     }
 
     mapToAdapterDocument(props: any): any {
@@ -502,15 +526,32 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
     extractRecordsFromRequestResult(mapper: Mapper, result: ItemJsResult): TourDocRecord[] {
         // got documents
         const docs = result.data.items;
+        const recordIds = {};
+        const afterRecordIds = {};
         const records = [];
         for (const doc of docs) {
+            if (recordIds[doc['id']]) {
+                console.error('DUPLICATION id not unique on itemsjs-result', doc['id'], doc);
+                continue;
+            }
+
+            recordIds[doc['id']] = true;
+
             // remap fields
             const docCopy = {...doc};
             for (const filterBase of ['keywords', 'objects', 'persons', 'playlists']) {
                 docCopy[filterBase + '_txt'] = docCopy[filterBase + '_ss'];
             }
 
-            records.push(this.mapResponseDocument(mapper, docCopy, this.getItemsJsConfig()));
+            const record = this.mapResponseDocument(mapper, docCopy, this.getItemsJsConfig());
+            if (afterRecordIds[record['id']]) {
+                console.error('DUPLICATION id not unique after itemsjs-mapping', record['id'], record);
+                continue;
+            }
+
+            afterRecordIds[record['id']] = true;
+
+            records.push(record);
         }
         // console.log('extractRecordsFromRequestResult:', records);
 

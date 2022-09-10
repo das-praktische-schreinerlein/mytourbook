@@ -2,8 +2,8 @@ window.importStaticConfigJsonP = `{
     "staticPDocsFile": "assets/staticdata/static.mytbpdocs.js",
     "staticTDocsFiles": [
             "assets/staticdata/static.mytbtdocs_searchresult.js",
-            "assets/staticdata/static.mytbtdocs_export_chunk0.js",
-            "assets/staticdata/static.mytbtdocs_export_chunk1.js"
+            "assets/staticdata/top-favorites-static.mytbtdocs_images_export_chunk0.js",
+            "assets/staticdata/top-favorites-static.mytbtdocs_videos_export_chunk0.js"
     ],
     "tracksBaseUrl": "assets/staticdata/tracks/",
     "picsBaseUrl": "assets/staticdata/",
@@ -273,6 +273,7 @@ window.importStaticConfigJsonP = `{
                 "LOCATION": true,
                 "TRIP": true,
                 "PLAYLIST": true,
+                "VIDEO": true,
                 "ALL": true
             }
         },
