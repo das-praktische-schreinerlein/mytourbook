@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
+import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 
 @Component({
     selector: 'app-tdoc-routeattr',
@@ -27,6 +28,6 @@ export class TourDocRouteAttributeComponent extends AbstractInlineComponent {
             return;
         }
 
-        this.routeAttrs = this.record.linkedRouteAttr.split(/;;/);
+        this.routeAttrs = ObjectUtils.uniqueArray(this.record.linkedRouteAttr.split(/;;/));
     }
 }

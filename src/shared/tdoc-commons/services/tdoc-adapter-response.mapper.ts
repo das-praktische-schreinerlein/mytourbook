@@ -492,37 +492,37 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                         TourDocImageRecordFactory.instance, record, imageDocs));
                 break;
             case 'image_playlist':
-                record.playlists = ObjectUtils.mergePropertyValues(docs, 'i_playlists', ', ');
+                record.playlists = ObjectUtils.mergePropertyValues(docs, 'i_playlists', ', ', true);
                 break;
             case 'image_persons':
-                record.persons = ObjectUtils.mergePropertyValues(docs, 'i_persons', ', ');
+                record.persons = ObjectUtils.mergePropertyValues(docs, 'i_persons', ', ', true);
                 break;
             case 'image_objects':
-                record.objects = ObjectUtils.mergePropertyValues(docs, 'i_objects', ', ');
+                record.objects = ObjectUtils.mergePropertyValues(docs, 'i_objects', ', ', true);
                 break;
             case 'image_objectdetections':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocodimageobject'],
-                    ['i_objectdetections', 'i_objectdetections_txt'], record, docs);
+                    ['i_objectdetections', 'i_objectdetections_txt'], record, docs, true);
                 break;
             case 'navigation_objects':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocnavigationobject'],
-                    ['navigation_objects', 'navigation_objects_txt'], record, docs);
+                    ['navigation_objects', 'navigation_objects_txt'], record, docs, true);
                 break;
             case 'extended_object_properties':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocextendedobjectproperty'],
-                    ['extended_object_properties', 'extended_object_properties_txt'], record, docs);
+                    ['extended_object_properties', 'extended_object_properties_txt'], record, docs, true);
                 break;
             case 'linkedroutes':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedroute'],
-                    ['linkedroutes', 'linkedroutes_txt'], record, docs);
+                    ['linkedroutes', 'linkedroutes_txt'], record, docs, true);
                 break;
             case 'linkedinfos':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedinfo'],
-                    ['linkedinfos', 'linkedinfos_txt'], record, docs);
+                    ['linkedinfos', 'linkedinfos_txt'], record, docs, true);
                 break;
             case 'linkedplaylists':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedplaylist'],
-                    ['linkedplaylists', 'linkedplaylists_txt'], record, docs);
+                    ['linkedplaylists', 'linkedplaylists_txt'], record, docs, true);
                 break;
             case 'video':
                 const videoDocs = [];
@@ -540,16 +540,16 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     TourDocVideoRecordFactory.instance, record, videoDocs));
                 break;
             case 'video_playlist':
-                record.playlists = ObjectUtils.mergePropertyValues(docs, 'v_playlists', ', ');
+                record.playlists = ObjectUtils.mergePropertyValues(docs, 'v_playlists', ', ', true);
                 break;
             case 'video_persons':
-                record.persons = ObjectUtils.mergePropertyValues(docs, 'v_persons', ', ');
+                record.persons = ObjectUtils.mergePropertyValues(docs, 'v_persons', ', ', true);
                 break;
             case 'video_objects':
-                record.objects = ObjectUtils.mergePropertyValues(docs, 'v_objects', ', ');
+                record.objects = ObjectUtils.mergePropertyValues(docs, 'v_objects', ', ', true);
                 break;
             case 'keywords':
-                record.keywords = ObjectUtils.mergePropertyValues(docs, 'keywords', ', ');
+                record.keywords = ObjectUtils.mergePropertyValues(docs, 'keywords', ', ', true);
                 break;
         }
     }

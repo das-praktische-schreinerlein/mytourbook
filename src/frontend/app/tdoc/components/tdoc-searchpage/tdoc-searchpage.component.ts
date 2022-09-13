@@ -6,7 +6,7 @@ import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdo
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {ToastrService} from 'ngx-toastr';
-import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {Layout, LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
@@ -166,4 +166,26 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
             return;
         }
     }
+
+    protected setPageLayoutAndStyles(): void {
+        if (this.searchForm['layout'] !== undefined) {
+            this.layout = this.searchForm['layout'];
+        }
+
+        super.setPageLayoutAndStyles();
+
+        if (this.searchForm['layout'] !== this.layout) {
+            this.searchForm['layout'] = this.layout;
+        }
+    }
+
+    onLayoutChange(layout: Layout): boolean {
+        if (this.searchForm['layout'] !== layout) {
+            this.searchForm['layout'] = layout;
+            this.cdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
+        }
+
+        return super.onLayoutChange(layout);
+    }
+
 }

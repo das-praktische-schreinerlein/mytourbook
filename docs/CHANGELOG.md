@@ -7,15 +7,19 @@
 - added viewer as separate environment to view static data without backend
 - fixed media-export of dependent records
 - extend image-export with more filter
+- remove duplicates from lists
+- add list-layout to url
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
 
 ### improvements
 - backend: extend image-export with more filter
+- frontend: add list-layout to url
 
 ### bug fixes
 - backend: fixed media-export of dependent records
+- shared: remove duplicates from lists
 
 ### breaking changes
 - none

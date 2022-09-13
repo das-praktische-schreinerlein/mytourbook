@@ -7,6 +7,7 @@ import {
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TranslateService} from '@ngx-translate/core';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
+import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 
 @Injectable()
 export class TourDocSearchFormConverter implements GenericSearchFormSearchFormConverter<TourDocSearchForm> {
@@ -40,6 +41,27 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
 
     newSearchForm(values: {}): TourDocSearchForm {
         return new TourDocSearchForm(values);
+    }
+
+    parseLayoutParams(values: {}, tdocSearchForm: TourDocSearchForm): Layout {
+        if (!values || !values['layout']) {
+            return undefined;
+        }
+
+        switch (values['layout']) {
+            case 'THIN':
+                return Layout.THIN;
+            case 'FLAT':
+                return Layout.FLAT;
+            case 'SMALL':
+                return Layout.SMALL;
+            case 'BIG':
+                return Layout.BIG;
+            case 'PAGE':
+                return Layout.PAGE;
+        }
+
+        return undefined;
     }
 
     joinWhereParams(tdocSearchForm: TourDocSearchForm): string {
@@ -115,10 +137,31 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         ];
         url += params.join('/');
 
+        if (searchForm['layout'] && searchForm['layout'] !== Layout.FLAT) {
+            url += '?layout=';
+            switch (searchForm['layout']) {
+                case Layout.THIN:
+                    url += 'THIN';
+                    break;
+                case Layout.FLAT:
+                    url += 'FLAT';
+                    break;
+                case Layout.SMALL:
+                    url += 'SMALL';
+                    break;
+                case Layout.BIG:
+                    url += 'BIG';
+                    break;
+                case Layout.PAGE:
+                    url += 'PAGE';
+                    break;
+            }
+        }
+
         return url;
     }
 
-    paramsToSearchForm(params: any, defaults: {}, searchForm: TourDocSearchForm): void {
+    paramsToSearchForm(params: any, defaults: {}, searchForm: TourDocSearchForm, queryParams?: {}): void {
         params = params || {};
         defaults = defaults || {};
         const whereValues = this.searchParameterUtils.splitValuesByPrefixes(params.where, this.splitter,
@@ -140,9 +183,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
             ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techDataSections:',
-             'techRateOverall:', 'personalRateOverall:', 'personalRateDifficulty:',
-             'objectDetectionCategory:', 'objectDetectionDetector:', 'objectDetectionKey:', 'objectDetectionPrecision:',
-             'objectDetectionState:', 'routeAttr:', 'routeAttrPart:', 'dashboardFilter:']);
+                'techRateOverall:', 'personalRateOverall:', 'personalRateDifficulty:',
+                'objectDetectionCategory:', 'objectDetectionDetector:', 'objectDetectionKey:', 'objectDetectionPrecision:',
+                'objectDetectionState:', 'routeAttr:', 'routeAttrPart:', 'dashboardFilter:']);
         let moreFilter = '';
         if (moreFilterValues.has('unknown')) {
             moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');
@@ -192,7 +235,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             ? params.dashboardFilter
             : ( moreFilterValues.has('dashboardFilter:') ?
                 this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('dashboardFilter:'), 'dashboardFilter:',
-                ',')
+                    ',')
                 : ''));
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
@@ -305,6 +348,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             defaults['dashboardFilter'], '');
         searchForm.perPage = +params['perPage'] || 10;
         searchForm.pageNum = +params['pageNum'] || 1;
+
+        searchForm['layout'] = this.parseLayoutParams(queryParams, searchForm);
     }
 
     searchFormToHumanReadableText(filters: HumanReadableFilter[], textOnly: boolean, obJCache: Map<string, string>): string {
