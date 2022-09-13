@@ -137,25 +137,36 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         ];
         url += params.join('/');
 
-        if (searchForm['layout'] && searchForm['layout'] !== Layout.FLAT) {
-            url += '?layout=';
+        const queryParameter = [];
+        if (searchForm['layout'] !== undefined && searchForm['layout'] !== Layout.FLAT) {
+            let layoutUrl = 'layout=';
             switch (searchForm['layout']) {
                 case Layout.THIN:
-                    url += 'THIN';
+                    layoutUrl += 'THIN';
                     break;
                 case Layout.FLAT:
-                    url += 'FLAT';
+                    layoutUrl += 'FLAT';
                     break;
                 case Layout.SMALL:
-                    url += 'SMALL';
+                    layoutUrl += 'SMALL';
                     break;
                 case Layout.BIG:
-                    url += 'BIG';
+                    layoutUrl += 'BIG';
                     break;
                 case Layout.PAGE:
-                    url += 'PAGE';
+                    layoutUrl += 'PAGE';
                     break;
             }
+
+            queryParameter.push(layoutUrl);
+        }
+
+        if (searchForm['hideForm']) {
+            queryParameter.push('hideForm=true');
+        }
+
+        if (queryParameter.length > 0) {
+            url += '?' + queryParameter.join('&');
         }
 
         return url;
@@ -350,6 +361,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.pageNum = +params['pageNum'] || 1;
 
         searchForm['layout'] = this.parseLayoutParams(queryParams, searchForm);
+        if (queryParams !== undefined && (queryParams['hideForm'] === true || queryParams['hideForm'] === 'true')) {
+            searchForm['hideForm'] = true;
+        }
     }
 
     searchFormToHumanReadableText(filters: HumanReadableFilter[], textOnly: boolean, obJCache: Map<string, string>): string {

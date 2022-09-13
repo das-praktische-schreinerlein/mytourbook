@@ -167,6 +167,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         }
     }
 
+    // TODO move to commons
     protected setPageLayoutAndStyles(): void {
         if (this.searchForm['layout'] !== undefined) {
             this.layout = this.searchForm['layout'];
@@ -177,6 +178,10 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         if (this.searchForm['layout'] !== this.layout) {
             this.searchForm['layout'] = this.layout;
         }
+
+        if (this.searchForm['hideForm'] !== undefined) {
+            this.onShowFormChanged(!this.searchForm['hideForm']);
+        }
     }
 
     onLayoutChange(layout: Layout): boolean {
@@ -186,6 +191,15 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         }
 
         return super.onLayoutChange(layout);
+    }
+
+    onShowFormChanged(showForm: boolean) {
+        if (this.searchForm['hideForm'] !== !showForm) {
+            this.searchForm['hideForm'] = !showForm;
+            this.cdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
+        }
+
+        return super.onShowFormChanged(showForm);
     }
 
 }
