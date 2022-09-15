@@ -237,6 +237,21 @@ window.importStaticConfigJsonP = `{
             ]
         },
         "tdoc-searchpage": {
+            "defaultLayoutPerType": {
+                "ALL": "FLAT",
+                "ALL_ENTRIES": "FLAT",
+                "IMAGE": "BIG",
+                "INFO": "FLAT",
+                "ODIMGOBJECT": "BIG",
+                "DESTINATION": "FLAT",
+                "ROUTE": "FLAT",
+                "TRACK": "FLAT",
+                "LOCATION": "BIG",
+                "TRIP": "BIG",
+                "NEWS": "BIG",
+                "PLAYLIST": "FLAT",
+                "VIDEO": "BIG"
+            }
         },
         "tdoc-showpage": {
             "showBigImages": false,

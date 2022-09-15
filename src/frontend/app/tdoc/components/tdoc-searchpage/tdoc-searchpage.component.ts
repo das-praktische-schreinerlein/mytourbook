@@ -27,6 +27,10 @@ import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchf
 import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-multiaction.manager';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 
+export interface TourDocSearchpageComponentConfig extends CommonDocSearchpageComponentConfig {
+    defaultLayoutPerType: {};
+}
+
 @Component({
     selector: 'app-tdoc-searchpage',
     templateUrl: './tdoc-searchpage.component.html',
@@ -44,6 +48,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
     flgShowProfileMap = false;
     flgMapAvailable = false;
     flgProfileMapAvailable = false;
+    defaultLayoutPerType = {};
 
     constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService, errorResolver: ErrorResolver,
                 tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,
@@ -102,13 +107,20 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
     }
 
 
-    protected getComponentConfig(config: {}): CommonDocSearchpageComponentConfig {
+    protected getComponentConfig(config: {}): TourDocSearchpageComponentConfig {
         return {
             baseSearchUrl: ['tdoc'].join('/'),
             baseSearchUrlDefault: ['tdoc'].join('/'),
             maxAllowedM3UExportItems: BeanUtils.getValue(config, 'services.serverItemExport.maxAllowedM3UItems'),
-            availableCreateActionTypes: BeanUtils.getValue(config, 'components.tdoc-searchpage.availableCreateActionTypes')
+            availableCreateActionTypes: BeanUtils.getValue(config, 'components.tdoc-searchpage.availableCreateActionTypes'),
+            defaultLayoutPerType: BeanUtils.getValue(config, 'components.tdoc-searchpage.defaultLayoutPerType')
         };
+    }
+
+    protected configureComponent(config: {}): void {
+        super.configureComponent(config);
+        const componentConfig = this.getComponentConfig(config);
+        this.defaultLayoutPerType = componentConfig.defaultLayoutPerType;
     }
 
     protected doProcessAfterResolvedData(config: {}): void {
@@ -169,13 +181,22 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
 
     // TODO move to commons
     protected setPageLayoutAndStyles(): void {
+        let defaultLayout = this.searchForm.type && this.defaultLayoutPerType
+            ? TourDocSearchFormConverter.layoutFromString(this.defaultLayoutPerType[this.searchForm.type.toUpperCase()])
+            : undefined;
+        if (defaultLayout === undefined) {
+            defaultLayout = Layout.FLAT;
+        }
+
         if (this.searchForm['layout'] !== undefined) {
             this.layout = this.searchForm['layout'];
+        } else {
+            this.layout = defaultLayout;
         }
 
         super.setPageLayoutAndStyles();
 
-        if (this.searchForm['layout'] !== this.layout) {
+        if (this.searchForm['layout'] !== undefined && this.searchForm['layout'] !== this.layout) {
             this.searchForm['layout'] = this.layout;
         }
 

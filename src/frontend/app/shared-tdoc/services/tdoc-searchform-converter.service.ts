@@ -31,6 +31,48 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         destination_id_ss: 'DESTINATION',
         loc_parent_id_i: 'LOCATION'};
 
+    public static layoutToString(layout: Layout): string {
+        if (layout === undefined) {
+            return undefined;
+        }
+
+        switch (layout) {
+            case Layout.THIN:
+                return 'THIN';
+            case Layout.FLAT:
+                return 'FLAT';
+            case Layout.SMALL:
+                return 'SMALL';
+            case Layout.BIG:
+                return 'BIG';
+            case Layout.PAGE:
+                return 'PAGE';
+        }
+
+        return undefined;
+    }
+
+    public static layoutFromString(layout: string): Layout {
+        if (!layout) {
+            return undefined;
+        }
+
+        switch (layout) {
+            case 'THIN':
+                return Layout.THIN;
+            case 'FLAT':
+                return Layout.FLAT;
+            case 'SMALL':
+                return Layout.SMALL;
+            case 'BIG':
+                return Layout.BIG;
+            case 'PAGE':
+                return Layout.PAGE;
+        }
+
+        return undefined;
+    }
+
     constructor(private searchParameterUtils: SearchParameterUtils, private translateService: TranslateService,
                 private searchFormUtils: SearchFormUtils) {
     }
@@ -48,20 +90,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             return undefined;
         }
 
-        switch (values['layout']) {
-            case 'THIN':
-                return Layout.THIN;
-            case 'FLAT':
-                return Layout.FLAT;
-            case 'SMALL':
-                return Layout.SMALL;
-            case 'BIG':
-                return Layout.BIG;
-            case 'PAGE':
-                return Layout.PAGE;
-        }
-
-        return undefined;
+        return TourDocSearchFormConverter.layoutFromString(values['layout']);
     }
 
     joinWhereParams(tdocSearchForm: TourDocSearchForm): string {
@@ -139,26 +168,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
 
         const queryParameter = [];
         if (searchForm['layout'] !== undefined && searchForm['layout'] !== Layout.FLAT) {
-            let layoutUrl = 'layout=';
-            switch (searchForm['layout']) {
-                case Layout.THIN:
-                    layoutUrl += 'THIN';
-                    break;
-                case Layout.FLAT:
-                    layoutUrl += 'FLAT';
-                    break;
-                case Layout.SMALL:
-                    layoutUrl += 'SMALL';
-                    break;
-                case Layout.BIG:
-                    layoutUrl += 'BIG';
-                    break;
-                case Layout.PAGE:
-                    layoutUrl += 'PAGE';
-                    break;
-            }
-
-            queryParameter.push(layoutUrl);
+            queryParameter.push('layout=' + TourDocSearchFormConverter.layoutToString(searchForm['layout']));
         }
 
         if (searchForm['hideForm']) {
@@ -360,7 +370,11 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.perPage = +params['perPage'] || 10;
         searchForm.pageNum = +params['pageNum'] || 1;
 
-        searchForm['layout'] = this.parseLayoutParams(queryParams, searchForm);
+        const layout = this.parseLayoutParams(queryParams, searchForm);
+        if (layout !== undefined) {
+            searchForm['layout'] = layout;
+        }
+
         if (queryParams !== undefined && (queryParams['hideForm'] === true || queryParams['hideForm'] === 'true')) {
             searchForm['hideForm'] = true;
         }
