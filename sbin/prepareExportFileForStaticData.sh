@@ -42,6 +42,12 @@ for CHUNKFILE in ${RESULTBASE}*.js; do
   sed -i 's/\\/\\\\/g' $CHUNKFILE
   sed -i 's/\}\]\}[ \r\n]*$/},/g' $CHUNKFILE
   echo '{}]}`;' >> $CHUNKFILE
+  echo "var script = document.createElement('script');
+        script.type='application/json';
+        script.id = '$CHUNKFILE';
+        var text = document.createTextNode(importStaticDataTDocsJsonP);
+        script.appendChild(text);
+        document.head.appendChild(script);" >> $CHUNKFILE
   echo "head and tail of $CHUNKFILE"
   head -n 2 $CHUNKFILE
   tail -n 2 $CHUNKFILE
