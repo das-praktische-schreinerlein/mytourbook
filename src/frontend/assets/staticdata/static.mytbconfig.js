@@ -319,3 +319,10 @@ window.importStaticConfigJsonP = `{
     }
 }
 `;
+
+var script = document.createElement('script');
+script.type='application/json';
+script.id = 'assets/staticdata/static.mytbconfig.js';
+var text = document.createTextNode(importStaticConfigJsonP);
+script.appendChild(text);
+document.head.appendChild(script);

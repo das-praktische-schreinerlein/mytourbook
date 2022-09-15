@@ -12,3 +12,10 @@ window.importStaticDataTDocsJsonP = `{ "mdocs": [
   {"id":"INFO_1","loc_id_i":789,"info_id_i":1,"geo_lon_s":"10.8860953","geo_lat_s":"45.9181327","geo_loc_p":"45.9181327,10.8860953","keywords_txt":"KW_Klettern,KW_Sportklettern","loc_lochirarchie_s":"offen,,italien,,gardasee","loc_lochirarchie_ids_s":"1,,449,,789","name_s":"Kletterführer Gardasee","key_s":"kletterfuehrergardasee","techname_s":"kletterführer_gardasee","objects_txt":"","persons_txt":"","playlists_txt":"","type_s":"INFO","subtype_s":"if_2","html_txt":" Kletterführer Gardasee KW_Klettern,KW_Sportklettern INFO","info_name_s":"Kletterführer Gardasee","info_shortdesc_txt":"Kletterrouten am Gardasee","info_type_s":"if_2"},
   {"id":"LOCATION_1","loc_id_i":1,"keywords_txt":"","loc_lochirarchie_s":"offen","loc_lochirarchie_ids_s":"1","name_s":"OFFEN","key_s":"offen","techname_s":"offen","objects_txt":"","persons_txt":"","playlists_txt":"","type_s":"LOCATION","subtype_s":"loc_1","html_txt":" OFFEN  LOCATION"},
 {}]}`;
+
+var script = document.createElement('script');
+script.type='application/json';
+script.id = 'assets/staticdata/samples-static.mytbtdocs_images_export_chunk0.js';
+var text = document.createTextNode(importStaticDataTDocsJsonP);
+script.appendChild(text);
+document.head.appendChild(script);

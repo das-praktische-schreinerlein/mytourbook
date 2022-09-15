@@ -124,3 +124,10 @@ window.importStaticDataTDocsJsonP = `{
     }
 }
 `;
+
+var script = document.createElement('script');
+script.type='application/json';
+script.id = 'assets/staticdata/static.mytbtdocs_searchresult.js';
+var text = document.createTextNode(importStaticDataTDocsJsonP);
+script.appendChild(text);
+document.head.appendChild(script);

@@ -27,3 +27,10 @@ window.importStaticDataPDocsJsonP = `{
  ]
 }
 `;
+
+var script = document.createElement('script');
+script.type='application/json';
+script.id = 'assets/staticdata/static.mytbpdocs.js';
+var text = document.createTextNode(importStaticDataPDocsJsonP);
+script.appendChild(text);
+document.head.appendChild(script);

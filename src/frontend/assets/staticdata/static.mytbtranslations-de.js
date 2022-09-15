@@ -470,3 +470,10 @@ window.importStaticTranslationsJsonP = `
     "null": "Unbestimmt"
 }
 `;
+
+var script = document.createElement('script');
+script.type='application/json';
+script.id = 'assets/staticdata/static.mytbtranslations-de.js';
+var text = document.createTextNode(importStaticTranslationsJsonP);
+script.appendChild(text);
+document.head.appendChild(script);
