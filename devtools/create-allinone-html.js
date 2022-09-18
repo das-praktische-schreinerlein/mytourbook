@@ -22,12 +22,27 @@ return inlineSource.inlineSource(srcPath, {
     compress: true,
     attribute: attribute,
     rootpath: path.dirname(srcPath),
+    swallowErrors: false,
     ignore: [],
 }).then(html => {
     fs.writeFileSync(destPath, html);
     console.log('DONE - inlining:', srcPath, destPath);
     process.exit(0);
 }).catch(reason => {
-    console.error('ERROR - inlining failed:', reason, srcPath, destPath);
-    process.exit(-1);
+    console.error('WARNING - inlining failed:', reason, srcPath, destPath);
+    console.log('DO REPEAT - inlining after error:', srcPath, destPath);
+    return inlineSource.inlineSource(srcPath, {
+        compress: true,
+        attribute: attribute,
+        rootpath: path.dirname(srcPath),
+        swallowErrors: true,
+        ignore: [],
+    }).then(html => {
+        fs.writeFileSync(destPath, html);
+        console.log('DONE - inlining ignoring errors:', srcPath, destPath);
+        process.exit(0);
+    }).catch(reason => {
+        console.error('ERROR - inlining failed:', reason, srcPath, destPath);
+        process.exit(-1);
+    });
 });
