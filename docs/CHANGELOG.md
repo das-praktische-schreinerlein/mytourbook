@@ -9,9 +9,11 @@
 - extend image-export with more filter
 - remove duplicates from lists
 - add list-layout to url
+- extend mediaexport for additional types and add optional viewer for mediaexport
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
+- export: extend mediaexport for additional types and add optional viewer for mediaexport
 
 ### improvements
 - backend: extend image-export with more filter
