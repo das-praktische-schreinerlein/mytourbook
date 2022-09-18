@@ -94,20 +94,32 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
         }
         switch (tdoc.type) {
             case 'IMAGE':
-                return me.mediaFileExportManager.exportMediaRecordFiles(tdoc, mediaExportProcessingOptions).then(
-                    exportResult => {
-                        exportResults.push(exportResult);
-                        return Promise.resolve(exportResult);
-                    })
             case 'VIDEO':
                 return me.mediaFileExportManager.exportMediaRecordFiles(tdoc, mediaExportProcessingOptions).then(
                     exportResult => {
                         exportResults.push(exportResult);
                         return Promise.resolve(exportResult);
-                    })
-        }
+                    });
+            default:
+                return me.mediaFileExportManager.exportMediaRecordFiles(tdoc, mediaExportProcessingOptions).then(
+                    exportResult => {
+                        exportResults.push(exportResult);
+                        return Promise.resolve(exportResult);
+                    }).catch(reason => {
+                    console.warn('exportMediaRecordFiles of nonmedia failed - do it without media', tdoc, reason)
+                    return new Promise<ExportProcessingResult<TourDocRecord>>( function( resolve) {
+                        const exportResult: ExportProcessingResult<TourDocRecord> = {
+                            record: tdoc,
+                            exportFileEntry: undefined,
+                            mediaFileMappings: undefined,
+                            externalRecordFieldMappings: undefined
+                        }
 
-        return Promise.reject('unknown type: ' + tdoc.type + ' for id: ' + tdoc.id);
+                        exportResults.push(exportResult);
+                        return resolve(exportResult);
+                    });
+                });
+        }
     }
 
     protected generatePlaylistEntry(tdoc: TourDocRecord, file: string): string {

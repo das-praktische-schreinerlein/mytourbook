@@ -62,7 +62,8 @@ export class MediaManagerCommand extends CommonAdminCommand {
 
     protected definePossibleActions(): string[] {
         return ['readImageDates', 'readVideoDates', 'scaleImages', 'scaleVideos',
-            'exportImageFiles', 'exportVideoFiles', 'generateTourDocsFromMediaDir',
+            'exportImageFiles', 'exportRouteFiles', 'exportTrackFiles', 'exportVideoFiles',
+            'generateTourDocsFromMediaDir',
             'findCorrespondingTourDocRecordsForMedia', 'insertSimilarMatchings',
             'convertVideosFromMediaDirToMP4',
             'scaleVideosFromMediaDirToMP4',
@@ -162,6 +163,8 @@ export class MediaManagerCommand extends CommonAdminCommand {
 
                 break;
             case 'exportImageFiles':
+            case 'exportRouteFiles':
+            case 'exportTrackFiles':
             case 'exportVideoFiles':
                 const exportDir = argv['exportDir'];
                 if (exportDir === undefined) {
@@ -194,14 +197,31 @@ export class MediaManagerCommand extends CommonAdminCommand {
 
                 const exportName = argv['exportName'];
 
+                let type = 'UNKNOWN';
+                switch (action) {
+                    case 'exportImageFiles':
+                        type = 'image';
+                        break;
+                    case 'exportRouteFiles':
+                        type = 'route';
+                        break;
+                    case 'exportTrackFiles':
+                        type = 'track';
+                        break;
+                    case 'exportVideoFiles':
+                        type = 'video';
+                        break;
+                }
+
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 searchForm = new TourDocSearchForm({
-                    type: action === 'exportVideoFiles' ? 'video' : 'image',
+                    type: type,
                     fulltext: fulltext,
                     playlists: playlists,
                     personalRateOverall: personalRateOverall,
                     sort: 'm3uExport',
                     pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+
 
                 const rateMinFilter = argv['rateMinFilter'];
                 if (rateMinFilter !== undefined && Number.isInteger(rateMinFilter)) {

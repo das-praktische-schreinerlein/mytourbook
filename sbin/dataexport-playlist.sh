@@ -10,8 +10,8 @@ function dofail {
 }
 
 # check parameters
-if [ "$#" -lt 1 ]; then
-    dofail "USAGE: dataexport.playlist.sh EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT] \nFATAL: requires 1 parameters " 1
+if [ "$#" -lt 2 ]; then
+    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES] \nFATAL: requires 2 parameters " 1
     exit 1
 fi
 
@@ -25,49 +25,7 @@ FILEPROFILE=${7:-default}
 RATEMINFILTER=${8}
 SHOWNONBLOCKEDONLY=${9:-showall}
 FULLTEXRFILTER=${10}
-CREATEHTML=${11:none}
+CREATEHTML=${11:-none}
+TYPES=${12:-image,video}
 
-echo "now: configure linux vars: run sbin/configure-environment.sh"
-source ${SCRIPTPATH}/configure-environment.bash
-
-# check parameters
-cd ${MYTB}
-if [ ! -d "${EXPORTDIR}" ]; then
-    dofail "USAGE: dataexport.playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY FULLTEXRFILTER\nFATAL: EXPORTDIR not exists " 1
-fi
-if [ -d "${EXPORTDIR}/${PLAYLISTFILE}" ]; then
-    dofail "USAGE: dataexport.playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY FULLTEXRFILTER\nFATAL: PLAYLISTFILE is directory " 1
-fi
-
-CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
-if [ ! -f "${CONFGFILE}" ]; then
-    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY FULLTEXRFILTER\nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
-fi
-CLICONFGFILE="${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json"
-if [ ! -f "${CLICONFGFILE}" ]; then
-    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY FULLTEXRFILTER\nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
-fi
-
-echo "start - prepare file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
-
-if [ "${AUTOSTARTEXPORT}" != "true" ]; then
-  echo "OPEN: Do you want to start image export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' m3u='${PLAYLISTFILE}'  directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'?"
-  select yn in "Yes" "No"; do
-      case $yn in
-          Yes ) break;;
-          No ) exit;;
-      esac
-  done
-fi
-
-echo "now: generate export"
-cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
-${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-images.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_images_export_chunk
-${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-videos.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_videos_export_chunk
-if [ "${CREATEHTML}" == "createhtml" ]; then
-   ${SCRIPTPATH}/prepareViewerFileForStaticData.sh $EXPORTDIR "${PLAYLISTFILE}-static.mytbtdocs_*_export_chunk"
-fi
-
-echo "done - file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"
+${SCRIPTPATH}/mediaexport.sh "$CONFIGPROFILE" "$EXPORTDIR" "$PLAYLISTNAMEFILTER" "$PLAYLISTFILE" "$RESOLUTIONPROFILE" "$DIPROFILE" "$FILEPROFILE" "$RATEMINFILTER" "$SHOWNONBLOCKEDONLY" "$FULLTEXRFILTER" "$CREATEHTML" "$TYPES"

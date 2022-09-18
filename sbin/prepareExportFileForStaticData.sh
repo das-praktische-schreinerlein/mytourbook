@@ -30,6 +30,7 @@ fi
 
 
 echo "start - preparing $RESULTBASE"
+
 echo "now: split by 100 entries: '$BASEFILE'"
 cd ${DESTDIR}
 rm -f ${RESULTBASE}*.js
@@ -38,6 +39,7 @@ grep $BASEFILE -e "  {\"id\":\"" | awk -v RESULTBASE=$RESULTBASE 'BEGIN { RESULT
 
 
 for CHUNKFILE in ${RESULTBASE}*.js; do
+  echo "preparing $CHUNKFILE"
   sed -i '1s/^/window.importStaticDataTDocsJsonP = \`{ "mdocs": [\n/' $CHUNKFILE
   sed -i 's/\\/\\\\/g' $CHUNKFILE
   sed -i 's/\}\]\}[ \r\n]*$/},/g' $CHUNKFILE
@@ -48,9 +50,9 @@ for CHUNKFILE in ${RESULTBASE}*.js; do
         var text = document.createTextNode(importStaticDataTDocsJsonP);
         script.appendChild(text);
         document.head.appendChild(script);" >> $CHUNKFILE
-  echo "head and tail of $CHUNKFILE"
-  head -n 2 $CHUNKFILE
-  tail -n 2 $CHUNKFILE
+  #echo "head and tail of $CHUNKFILE"
+  #head -n 2 $CHUNKFILE
+  #tail -n 2 $CHUNKFILE
 done
 cd ${CWD}
 

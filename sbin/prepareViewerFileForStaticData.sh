@@ -11,11 +11,12 @@ function dofail {
 
 # check parameters
 if [ "$#" -lt 1 ]; then
-    dofail "USAGE: prepareViewerFileForStaticData.sh DESTDIR RESULTBASE\nFATAL: requires DESTDIR as parameters 'import-XXXX'" 1
+    dofail "USAGE: prepareViewerFileForStaticData.sh DESTDIR [RESULTBASE RESULTFILE]\nFATAL: requires DESTDIR as parameters 'import-XXXX'" 1
     exit 1
 fi
 DESTDIR=$1
 RESULTBASE=${2:-static.mytbtdocs_export_chunk}
+RESULTFILE=${3:-index.viewer.full.html}
 
 if [ ! -d "${DESTDIR}" ]; then
     dofail "USAGE: prepareViewerFileForStaticData.sh DESTDIR\nFATAL: $DESTDIR must exists" 1
@@ -28,13 +29,15 @@ if [ "${RESULTBASE}" == "" ]; then
 fi
 
 echo "start - preparing ${DESTDIR}/index.viewer.full for ${RESULTBASE}"
+
+echo "running - coping ${DESTDIR}/index.viewer.full"
 cp ${SCRIPTPATH}/../dist/static/mytbviewer/de/index.viewer.full.html  ${DESTDIR}/index.viewer.full.tmp
+
 echo "running - removing samples from config in ${DESTDIR}/index.viewer.full"
 sed -i "s/staticTDocsFiles\": \[.*\"tracksBaseUrl/staticTDocsFiles\": \[\"assets\/staticdata\/samples-static.mytbtdocs_videos_export_chunk0.js\"], \"tracksBaseUrl/"  ${DESTDIR}/index.viewer.full.tmp
+
 echo "running - configure assets-path ${DESTDIR}/index.viewer.full"
 sed -i "s/\"tracksBaseUrl\": .* \"videoBaseUrl\": \"assets\/staticdata\/\"/\"tracksBaseUrl\": \".\/tracks\/\",    \"picsBaseUrl\": \".\/\",    \"videoBaseUrl\": \".\/\"/"  ${DESTDIR}/index.viewer.full.tmp
-
-
 
 cd ${DESTDIR}
 for CHUNKFILE in $(/usr/bin/find ./ -name "${RESULTBASE}*.js" -printf "%f\n"); do
@@ -45,11 +48,8 @@ done
 
 echo "inline all ${DESTDIR}/index.viewer.full.html"
 cd ${SCRIPTPATH}
-node ../devtools/create-allinone-html.js ${DESTDIR}/index.viewer.full.tmp ${DESTDIR}/index.viewer.full.html inlineexport
-cd ${CWD}
-
+node ../devtools/create-allinone-html.js ${DESTDIR}/index.viewer.full.tmp ${DESTDIR}/${RESULTFILE} inlineexport
 rm ${DESTDIR}/index.viewer.full.tmp
-
 cd ${CWD}
 
 echo "done - preparing ${DESTDIR}/index.viewer.full for ${RESULTBASE}"
