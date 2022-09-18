@@ -27,6 +27,7 @@ export class AppService extends GenericAppService {
         videoBaseUrl: environment.videoBaseUrl,
         useAssetStoreUrls: environment.useAssetStoreUrls,
         useVideoAssetStoreUrls: environment.useVideoAssetStoreUrls,
+        skipMediaCheck: environment.skipMediaCheck && true,
         staticPDocsFile: undefined,
         staticTDocsFiles: undefined,
         permissions: {
@@ -53,6 +54,7 @@ export class AppService extends GenericAppService {
         staticTDocsFiles: environment.staticTDocsFiles,
         useAssetStoreUrls: environment.useAssetStoreUrls,
         useVideoAssetStoreUrls: environment.useVideoAssetStoreUrls,
+        skipMediaCheck: environment.skipMediaCheck && true,
         permissions: {
             adminWritable: environment.adminWritable,
             tdocWritable: environment.tdocWritable,
@@ -75,6 +77,7 @@ export class AppService extends GenericAppService {
         videoBaseUrl: environment.videoBaseUrl,
         useAssetStoreUrls: environment.useAssetStoreUrls,
         useVideoAssetStoreUrls: environment.useVideoAssetStoreUrls,
+        skipMediaCheck: environment.skipMediaCheck && true,
         staticPDocsFile: undefined,
         staticTDocsFiles: undefined,
         permissions: {
@@ -163,9 +166,11 @@ export class AppService extends GenericAppService {
                     me.appConfig.videoBaseUrl = config['videoBaseUrl'] ? config['videoBaseUrl'] : me.appConfig.videoBaseUrl;
                     me.appConfig.staticPDocsFile = config['staticPDocsFile'] ? config['staticPDocsFile'] : me.appConfig.staticPDocsFile;
                     me.appConfig.staticTDocsFiles = config['staticTDocsFiles'] ? config['staticTDocsFiles'] : me.appConfig.staticTDocsFiles;
+                    me.appConfig.skipMediaCheck = config['skipMediaCheck'] && true;
                     me.appConfig.useAssetStoreUrls = false;
                     me.appConfig.useVideoAssetStoreUrls = false;
                     me.appConfig.currentDataMode = DataMode.STATIC;
+
                     return Promise.resolve(true);
                 });
         }
@@ -292,7 +297,7 @@ export class AppService extends GenericAppService {
                 });
             }).then(function onDocParsed(tdocs: any[]) {
                 console.log('initially loaded tdocs from assets', tdocs);
-                const options = {};
+                const options = { skipMediaCheck: me.appConfig.skipMediaCheck};
                 const tdocAdapter = new TourDocItemsJsAdapter(options, tdocs);
                 me.tdocDataStore.setAdapter('http', tdocAdapter, '', {});
                 me.tdocDataService.setWritable(false);

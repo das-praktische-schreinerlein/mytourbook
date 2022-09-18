@@ -21,6 +21,7 @@ export const environment: AppEnvironment = {
     useAssetStoreUrls: true,
     useAudioAssetStoreUrls: false,
     useVideoAssetStoreUrls: false,
+    skipMediaCheck: false,
     tdocWritable: true,
     tdocActionTagWritable: true,
     allowAutoPlay: true,

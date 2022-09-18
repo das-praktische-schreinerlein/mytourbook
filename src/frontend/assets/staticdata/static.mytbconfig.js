@@ -1,4 +1,5 @@
 window.importStaticConfigJsonP = `{
+    "skipMediaCheck": false,
     "staticPDocsFile": "assets/staticdata/static.mytbpdocs.js",
     "staticTDocsFiles": [
             "assets/staticdata/static.mytbtdocs_searchresult.js",
