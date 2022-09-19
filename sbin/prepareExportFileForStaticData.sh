@@ -40,6 +40,7 @@ grep $BASEFILE -e "  {\"id\":\"" | awk -v RESULTBASE=$RESULTBASE 'BEGIN { RESULT
 
 for CHUNKFILE in ${RESULTBASE}*.js; do
   echo "preparing $CHUNKFILE"
+  sed -i 's/`/''/g' $CHUNKFILE
   sed -i '1s/^/window.importStaticDataTDocsJsonP = \`{ "mdocs": [\n/' $CHUNKFILE
   sed -i 's/\\/\\\\/g' $CHUNKFILE
   sed -i 's/\}\]\}[ \r\n]*$/},/g' $CHUNKFILE
