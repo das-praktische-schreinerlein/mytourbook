@@ -132,19 +132,19 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
     }
 
     protected checkIdToRead(doc: TourDocRecord, idsRead: {}): any[] {
-        for (const type of ['IMAGE', 'VIDEO', 'TRACK', 'LOCATION', 'ROUTE', 'INFO', 'TRIP', 'NEWS', 'PLAYLIST']) {
+        for (const type of ['IMAGE', 'VIDEO', 'TRACK', 'LOCATION', 'ROUTE', 'INFO', 'TRIP', 'NEWS', 'PLAYLIST', 'DESTINATION']) {
             if (idsRead[type] === undefined) {
                 idsRead[type] = {};
             }
         }
 
         const idsToRead = [];
-        if (['IMAGE', 'VIDEO', 'TRACK', 'ROUTE', 'LOCATION', 'TRIP', 'INFO'].includes(doc.type)) {
+        if (['IMAGE', 'VIDEO', 'TRACK', 'ROUTE', 'LOCATION', 'TRIP', 'INFO', 'DESTINATION'].includes(doc.type)) {
             if (doc.locId && !idsRead['LOCATION']['LOCATION_' + doc.locId]) {
                 idsToRead.push('LOCATION_' + doc.locId);
             }
         }
-        if (['IMAGE', 'VIDEO', 'TRACK', 'ROUTE'].includes(doc.type)) {
+        if (['IMAGE', 'VIDEO', 'TRACK', 'ROUTE', 'DESTINATION'].includes(doc.type)) {
             if (doc.routeId && !idsRead['ROUTE']['ROUTE_' + doc.routeId]) {
                 idsToRead.push('ROUTE_' + doc.routeId);
             }
