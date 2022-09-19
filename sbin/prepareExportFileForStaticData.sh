@@ -40,8 +40,9 @@ grep $BASEFILE -e "  {\"id\":\"" | awk -v RESULTBASE=$RESULTBASE 'BEGIN { RESULT
 
 for CHUNKFILE in ${RESULTBASE}*.js; do
   INSECURE_LINES=`grep -E '<[ ]*s[ ]*c[ ]*r[ ]*i[ ]*p[ ]*t[ ]*>|<[ ]*/[ ]*s[ ]*c[ ]*r[ ]*i[ ]*p[ ]*t[ ]*>' "$CHUNKFILE" & true`
-  if [ "$INSECURE_LINES" != "" ]; then
-    echo "INSECURE: $INSECURE_LINES"
+  INSECURE_LINES2=`grep -E '<[ ]*s[ ]*t[ ]*y[ ]*l[ ]*e[ ]*>|<[ ]*/[ ]*s[ ]*t[ ]*y[ ]*l[ ]*e[ ]*>' "$CHUNKFILE" & true`
+  if [ "$INSECURE_LINES$INSECURE_LINES2" != "" ]; then
+    echo "INSECURE: $INSECURE_LINES$INSECURE_LINES2"
     dofail "ERROR found insecure script-tag in '$CHUNKFILE" 1
     exit 1
   fi
