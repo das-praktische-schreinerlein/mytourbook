@@ -52,7 +52,7 @@
     "build-prod": "npm run build-prod-de && npm run build-prod-en && npm run build-after-copy-overrides-dist-prod",
     "build-prod-de": "ng build frontend --base-href=/mytb/de/ --configuration=prod-de --aot true --output-path dist/static/mytb/de ",
     "build-prod-en": "ng build frontend --base-href=/mytb/en/ --configuration=prod-en --aot true --output-path dist/static/mytb/en",
-    "build-viewer": "npm run build-viewer-de && npm run build-viewer-en && npm run build-after-copy-overrides-dist-dev",
+    "build-viewer": "npm run build-viewer-de && npm run build-viewer-en && npm run build-after-copy-overrides-dist-viewer",
     "build-viewer-de": "ng build viewer --configuration=prod-de --aot true --output-path dist/static/mytbviewer/de && node devtools/create-allinone-html.js dist/static/mytbviewer/de/index.viewer.html dist/static/mytbviewer/de/index.viewer.full.html",
     "build-viewer-en": "ng build viewer --configuration=prod-en --aot true --output-path dist/static/mytbviewer/en && node devtools/create-allinone-html.js dist/static/mytbviewer/en/index.viewer.html dist/static/mytbviewer/en/index.viewer.full.html",
     "build-after-copy-contrib": "cpx \"contrib/**/*\" dist/contrib/ && cpx --verbose \"installer/solr/**/*\" dist/contrib/solr/server/solr/",
