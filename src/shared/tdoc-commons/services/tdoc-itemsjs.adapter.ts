@@ -282,7 +282,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 order: ['asc', 'desc']
             },
             'region': {
-                field: ['data_info_region_s', 'loc_lochirarchie_s', 'rate_pers_gesamt_i'],
+                field: ['data_info_region_s', 'name_s', 'rate_pers_gesamt_i'],
                 order: ['asc', 'asc', 'desc']
             },
             'relevance': {
