@@ -52,14 +52,9 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
             ];
         };
 
-        const types = searchForm.type
-            ? searchForm.type.split(',')
-            : [];
-        const loadTrack = !(types.includes('image') || !types.includes('video'));
-
         return this.dataService.batchProcessSearchResult(searchForm, callback, {
             loadDetailsMode: undefined,
-            loadTrack: loadTrack,
+            loadTrack: true,
             showFacets: false,
             showForm: false
         }, processingOptions).then(() => {
