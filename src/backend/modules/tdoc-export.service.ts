@@ -19,6 +19,8 @@ import {
 import {TourDocLinkedRouteRecord} from '../shared/tdoc-commons/model/records/tdoclinkedroute-record';
 import {TourDocLinkedInfoRecord} from '../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
 import {TourDocLinkedPlaylistRecord} from '../shared/tdoc-commons/model/records/tdoclinkedplaylist-record';
+import {ProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-search.service';
+import {ExportProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-export.service';
 
 export enum MediaExportResolutionProfiles {
     'all' = 'all',
@@ -38,6 +40,33 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
                 mediaFileExportManager: TourDocMediaFileExportManager, responseMapper: TourDocAdapterResponseMapper) {
         super(backendConfig, dataService, playlistService, responseMapper);
         this.mediaFileExportManager = mediaFileExportManager;
+    }
+
+    public exportMediaFiles(searchForm: TourDocSearchForm,
+                            processingOptions: MediaExportProcessingOptions & ProcessingOptions & ExportProcessingOptions): Promise<{}> {
+        const me = this;
+        const exportResults: ExportProcessingResult<TourDocRecord>[]  = [];
+        const callback = function(mdoc: TourDocRecord): Promise<{}>[] {
+            return [
+                me.exportMediaRecordFiles(mdoc, processingOptions, exportResults)
+            ];
+        };
+
+        const types = searchForm.type
+            ? searchForm.type.split(',')
+            : [];
+        const loadTrack = !(types.includes('image') || !types.includes('video'));
+
+        return this.dataService.batchProcessSearchResult(searchForm, callback, {
+            loadDetailsMode: undefined,
+            loadTrack: loadTrack,
+            showFacets: false,
+            showForm: false
+        }, processingOptions).then(() => {
+            return me.generatePlaylistForExportResults(processingOptions, exportResults).then(() => {
+                return me.exportRelatedDocsForExportedMediaFiles(processingOptions, searchForm, exportResults);
+            });
+        });
     }
 
     public exportMediaRecordFiles(tdoc: TourDocRecord, processingOptions: MediaExportProcessingOptions,
