@@ -2,14 +2,12 @@ import {TourDocRecord, TourDocRecordRelation} from '../model/records/tdoc-record
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
-import {ItemsJsConfig} from '@dps/mycms-commons/dist/search-commons/services/itemsjs-query.builder';
-import {GenericItemsJsAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
+import {ItemsJsConfig, ItemsJsSelectQueryData} from '@dps/mycms-commons/dist/search-commons/services/itemsjs-query.builder';
+import {GenericItemsJsAdapter, ItemJsResult} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
 import {Mapper} from 'js-data';
 import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
 import {isNumeric} from 'rxjs/internal-compatibility';
-import {ItemsJsSelectQueryData} from '@dps/mycms-commons/dist/search-commons/services/itemsjs-query.builder';
-import {ItemJsResult} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
 import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 
 export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
@@ -32,18 +30,18 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         aggregations: {
             'loc_parent_id_i': {
                 conjunction: false,
-                field: 'loc_id_parent_i',
+                mapField: 'loc_id_parent_i',
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'actiontype_ss': {
                 conjunction: false,
-                field: 'actiontype_s',
+                mapField: 'actiontype_s',
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'data_tech_alt_asc_facet_is': {
@@ -55,7 +53,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'data_tech_alt_max_facet_is': {
@@ -67,7 +65,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'data_tech_dist_facets_fs': {
@@ -79,7 +77,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'data_tech_dur_facet_fs': {
@@ -88,6 +86,14 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                         ? (Math.round(record['data_tech_dur_f'] * 2) / 2).toFixed(1)
                         : undefined
                 },
+                conjunction: false,
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: true,
+                size: 1000
+            },
+            'done_ss': {
+                mapField: 'dateshow_dt',
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
@@ -103,22 +109,22 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'month_is': {
-                field: 'dateshow_dt',
+                mapField: 'dateshow_dt',
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'loc_lochirarchie_txt': {
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'objects_txt': {
@@ -130,7 +136,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'persons_txt': {
@@ -142,7 +148,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'playlists_txt': {
@@ -154,43 +160,43 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'rate_pers_gesamt_is': {
-                field: 'rate_pers_gesamt_i',
+                mapField: 'rate_pers_gesamt_i',
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'rate_pers_schwierigkeit_is': {
-                field: 'rate_pers_schwierigkeit_i',
+                mapField: 'rate_pers_schwierigkeit_i',
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'rate_tech_overall_ss': {
-                field: 'rate_tech_overall_s',
+                mapField: 'rate_tech_overall_s',
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'subtype_ss': {
-                field: 'subtype_s',
+                mapField: 'subtype_s',
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'type_txt': {
-                field: 'type_s',
+                mapField: 'type_s',
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
@@ -201,15 +207,24 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
                 size: 1000
             },
             'year_is': {
-                field: 'dateshow_dt',
+                mapField: 'dateshow_dt',
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
-                hide_zero_doc_count: false,
+                hide_zero_doc_count: true,
+                size: 1000
+            },
+            'UNDEFINED_FILTER': {
+                mapField: 'id',
+                field: 'id',
+                conjunction: true,
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: true,
                 size: 1000
             }
         },
@@ -331,8 +346,8 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             const aggregation = TourDocItemsJsAdapter.itemsJsConfig.aggregations[aggreationName];
             if (aggregation.filterFunction) {
                 values[aggreationName] = aggregation.filterFunction.call(this, values);
-            } else if (aggregation['field']) {
-                values[aggreationName] = values[aggregation['field']];
+            } else if (aggregation['mapField']) {
+                values[aggreationName] = values[aggregation['mapField']];
             }
         }
 
@@ -346,6 +361,9 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         values['month_is'] = values['dateshow_dt']
             ? new Date(values['dateshow_dt']).getMonth() + 1
             : undefined;
+        values['done_ss'] = values['dateshow_dt']
+            ? 'DONE1'
+            : 'DONE0';
 
         if (values['loc_lochirarchie_s']) {
             values['loc_lochirarchie_txt'] = values['loc_lochirarchie_s'].split(',,');
@@ -426,7 +444,43 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         return undefined;
     }
 
+    public static clearNotExistingMediaPathes(records: any[], imagePathes: {}, videoPathes: {}) {
+        // delete reference if media-path not exists in media-container
+        for (const record of records) {
+            let mediaUrl: string = record['i_fav_url_txt'];
+            if (mediaUrl && record['type_s'] !== 'IMAGE' && !imagePathes[mediaUrl]) {
+                const normalizedUrl = TourDocItemsJsAdapter.lazyCheckForFilePath(imagePathes, mediaUrl);
+                if (normalizedUrl && imagePathes[normalizedUrl]) {
+                    // console.debug('FavImage REMAPPED i_fav_url_txt remapped:', mediaUrl, normalizedUrl);
+                    record['i_fav_url_txt'] = normalizedUrl;
+                } else {
+                    // console.debug('FavImage NOT FOUND i_fav_url_txt:', mediaUrl);
+                    delete record['i_fav_url_txt'];
+                }
+            }
+
+            mediaUrl = record['v_fav_url_txt'];
+            if (mediaUrl && record['type_s'] !== 'VIDEO' && !imagePathes[mediaUrl]) {
+                const normalizedUrl = TourDocItemsJsAdapter.lazyCheckForFilePath(videoPathes, mediaUrl);
+                if (normalizedUrl && videoPathes[normalizedUrl]) {
+                    // console.debug('FavVideo REMAPPED v_fav_url_txt remapped:', mediaUrl, normalizedUrl);
+                    record['v_fav_url_txt'] = normalizedUrl;
+                } else {
+                    // console.debug('FavVideo RESET v_fav_url_txt:', mediaUrl);
+                    delete record['v_fav_url_txt'];
+                }
+            }
+        }
+    }
+
     constructor(config: any, data: any) {
+        for (const aggreationName in TourDocItemsJsAdapter.itemsJsConfig.aggregations) {
+            const aggregation = TourDocItemsJsAdapter.itemsJsConfig.aggregations[aggreationName];
+            if (!aggregation['field']) {
+                aggregation['field'] = aggreationName;
+            }
+        }
+
         for (const fieldName of TourDocItemsJsAdapter.aggregationFields) {
             if (fieldName.endsWith('_i') || fieldName.endsWith('_s')) {
                 if (!TourDocItemsJsAdapter.itemsJsConfig.aggregations[fieldName]) {
@@ -434,7 +488,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                         conjunction: false,
                         sort: 'term',
                         order: 'asc',
-                        hide_zero_doc_count: false,
+                        hide_zero_doc_count: true,
                         size: 9999
                     };
                 }
@@ -444,7 +498,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                         conjunction: false,
                         sort: 'term',
                         order: 'asc',
-                        hide_zero_doc_count: false,
+                        hide_zero_doc_count: true,
                         size: 9999
                     };
                 }
@@ -453,9 +507,15 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
 
         const recordIds = {};
         const records = [];
-        const images = {};
-        const videos = {};
+        const imagePathes = {};
+        const videoPathes = {};
+        // check for duplicates and fill media-container
         for (const record of data) {
+            if (!record['id'] || record['id'] === '') {
+                console.warn('SKIPPED record - no id', record['id'], record);
+                continue;
+            }
+
             if (recordIds[record['id']]) {
                 console.warn('SKIPPED record - id already exists id/existing/skipped', record['id'], recordIds[record['id']], record);
                 continue;
@@ -468,32 +528,20 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
 
             let mediaUrl: string = record['i_fav_url_txt'];
             if (mediaUrl && record['type_s'] === 'IMAGE') {
-                images[mediaUrl] = mediaUrl;
-            } else if (mediaUrl && !images[mediaUrl]) {
-                const normalizedUrl = TourDocItemsJsAdapter.lazyCheckForFilePath(images, mediaUrl);
-                if (normalizedUrl && images[normalizedUrl]) {
-                    // console.debug('FavImage REMAPPED i_fav_url_txt remapped:', mediaUrl, normalizedUrl);
-                    record['i_fav_url_txt'] = normalizedUrl;
-                } else {
-                    // console.debug('FavImage NOT FOUND i_fav_url_txt:', mediaUrl);
-                    delete record['i_fav_url_txt'];
-                }
+                imagePathes[mediaUrl] = mediaUrl;
             }
 
             mediaUrl = record['v_fav_url_txt'];
             if (mediaUrl && record['type_s'] === 'VIDEO') {
-                videos[mediaUrl] = mediaUrl;
-            } else if (mediaUrl && !images[mediaUrl]) {
-                const normalizedUrl = TourDocItemsJsAdapter.lazyCheckForFilePath(videos, mediaUrl);
-                if (normalizedUrl && videos[normalizedUrl]) {
-                    // console.debug('FavVideo REMAPPED v_fav_url_txt remapped:', mediaUrl, normalizedUrl);
-                    record['v_fav_url_txt'] = normalizedUrl;
-                } else {
-                    // console.debug('FavVideo RESET v_fav_url_txt:', mediaUrl);
-                    delete record['v_fav_url_txt'];
-                }
+                videoPathes[mediaUrl] = mediaUrl;
             }
         }
+
+        if (!config['skipMediaCheck']) {
+            TourDocItemsJsAdapter.clearNotExistingMediaPathes(records, imagePathes, videoPathes);
+        }
+
+        console.debug('init itemsjs with config', TourDocItemsJsAdapter.itemsJsConfig, records);
 
         super(config, new TourDocAdapterResponseMapper(config), records, TourDocItemsJsAdapter.itemsJsConfig);
     }
