@@ -167,7 +167,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         url += params.join('/');
 
         const queryParameter = [];
-        if (searchForm['layout'] !== undefined && searchForm['layout'] !== Layout.FLAT) {
+        if (searchForm['layout'] !== undefined) {
             queryParameter.push('layout=' + TourDocSearchFormConverter.layoutToString(searchForm['layout']));
         }
 

@@ -1,0 +1,16 @@
+diff --git a/node_modules/fastbitset/FastBitSet.js b/node_modules/fastbitset/FastBitSet.js
+index 98d1d0f..c1ee80e 100644
+--- a/node_modules/fastbitset/FastBitSet.js
++++ b/node_modules/fastbitset/FastBitSet.js
+@@ -484,6 +484,11 @@ FastBitSet.prototype.union = function (otherbitmap) {
+ };
+ 
+ FastBitSet.prototype.new_union = function (otherbitmap) {
++  if (!otherbitmap) {
++    console.debug('WARN: otherbitmap was empty while calling new_union', this);
++    otherbitmap = new FastBitSet();
++  }
++
+   const answer = Object.create(FastBitSet.prototype);
+   const count = Math.max(this.words.length, otherbitmap.words.length);
+   answer.words = new Array(count);

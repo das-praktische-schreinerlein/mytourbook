@@ -26,6 +26,7 @@ import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-action
 import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
 import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-multiaction.manager';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
+import {Location} from '@angular/common';
 
 export interface TourDocSearchpageComponentConfig extends CommonDocSearchpageComponentConfig {
     defaultLayoutPerType: {};
@@ -56,7 +57,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, layoutService: LayoutService, searchFormUtils: SearchFormUtils,
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService,
-                protected elRef: ElementRef) {
+                protected elRef: ElementRef, protected location: Location) {
         super(route, commonRoutingService, errorResolver, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
             tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment);
@@ -209,6 +210,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         if (this.searchForm['layout'] !== layout) {
             this.searchForm['layout'] = layout;
             this.cdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
+            this.location.go(this.cdocRoutingService.getLastSearchUrl());
         }
 
         return super.onLayoutChange(layout);
@@ -218,6 +220,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         if (this.searchForm['hideForm'] !== !showForm) {
             this.searchForm['hideForm'] = !showForm;
             this.cdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
+            this.location.go(this.cdocRoutingService.getLastSearchUrl());
         }
 
         return super.onShowFormChanged(showForm);

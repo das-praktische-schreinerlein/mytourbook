@@ -1,0 +1,50 @@
+diff --git a/node_modules/itemsjs/src/lib.js b/node_modules/itemsjs/src/lib.js
+index e5489d1..d96d11e 100644
+--- a/node_modules/itemsjs/src/lib.js
++++ b/node_modules/itemsjs/src/lib.js
+@@ -41,9 +41,18 @@ module.exports.search = function(items, input, configuration, fulltext, facets)
+   }
+ 
+   let facets_time = new Date().getTime();
+-  const facet_result = facets.search(input, {
++
++/**  const facet_result = facets.search(input, {
+     query_ids: query_ids
+   });
++**/
++  const facet_result = input.skipFacetting !== true
++      ? facets.search(input, {
++        query_ids: query_ids
++      })
++      :  facets.search(input, {
++        query_ids: query_ids
++      });
+   facets_time = new Date().getTime() - facets_time;
+ 
+   if (query_ids) {
+@@ -132,15 +141,18 @@ module.exports.sorted_items = function(items, sort, sortings) {
+     sort = sortings[sort];
+   }
+ 
+-  if (sort.field) {
+-    return _.orderBy(
+-      items,
+-      sort.field,
+-      sort.order || 'asc'
+-    );
++  if (!sort || !sort.field) {
++    return items;
+   }
+ 
+-  return items;
++  const fields = Array.isArray(sort.field)
++    ? [i => !!i[sort.field[0]]].concat(sort.field)
++    : [i => !!i[sort.field], sort.field];
++  const orders = Array.isArray(sort.order)
++    ? ['desc'].concat(sort.order)
++    : ['desc', sort.order || 'asc'];
++
++  return _.orderBy(items, fields, orders);
+ };
+ 
+ /**
