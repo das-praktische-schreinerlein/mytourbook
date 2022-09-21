@@ -18,6 +18,8 @@ DESTDIR=$1
 RESULTBASE=${2:-static.mytbtdocs_export_chunk}
 RESULTFILE=${3:-index.viewer.full.html}
 
+source ${SCRIPTPATH}/configure-environment.bash
+
 if [ ! -d "${DESTDIR}" ]; then
     dofail "USAGE: prepareViewerFileForStaticData.sh DESTDIR\nFATAL: $DESTDIR must exists" 1
     exit 1
@@ -48,7 +50,7 @@ done
 
 echo "inline all ${DESTDIR}/index.viewer.full.html"
 cd ${SCRIPTPATH}
-node ../devtools/create-allinone-html.js ${DESTDIR}/index.viewer.full.tmp ${DESTDIR}/${RESULTFILE} inlineexport
+node --max-old-space-size=8192 ../devtools/create-allinone-html.js ${DESTDIR}/index.viewer.full.tmp ${DESTDIR}/${RESULTFILE} inlineexport
 rm ${DESTDIR}/index.viewer.full.tmp
 cd ${CWD}
 
