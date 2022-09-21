@@ -151,7 +151,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             case 'linkedroutes':
                 if (props.get('tdoclinkedroutes') && props.get('tdoclinkedroutes').length > 0) {
                     const routes: TourDocLinkedRouteRecord[] = props.get('tdoclinkedroutes');
-                    const routesSrc: string [] = [];
+                    let routesSrc: string [] = [];
                     // TODO check for blacklisted input: _fieldSeparator, _objectSeparator
                     for (let idx = 0; idx < routes.length; idx++) {
                         routesSrc.push('type=' + routes[idx].type + this._fieldSeparator +
@@ -161,13 +161,15 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                             'linkedRouteAttr=' + routes[idx].linkedRouteAttr);
                     }
 
+                    routesSrc = ObjectUtils.uniqueArray(routesSrc);
+
                     result['linkedroutes_txt'] = routesSrc.join(this._objectSeparator);
                 }
                 break;
             case 'linkedinfos':
                 if (props.get('tdoclinkedinfos') && props.get('tdoclinkedinfos').length > 0) {
                     const infos: TourDocLinkedInfoRecord[] = props.get('tdoclinkedinfos');
-                    const infosSrc: string [] = [];
+                    let infosSrc: string [] = [];
                     for (let idx = 0; idx < infos.length; idx++) {
                         infosSrc.push('type=subinfo' + this._fieldSeparator +
                             'name=' + infos[idx].name + this._fieldSeparator +
@@ -175,13 +177,15 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                             'linkedDetails=' + infos[idx].linkedDetails);
                     }
 
+                    infosSrc = ObjectUtils.uniqueArray(infosSrc);
+
                     result['linkedinfos_txt'] = infosSrc.join(this._objectSeparator);
                 }
                 break;
             case 'linkedplaylists':
                 if (props.get('tdoclinkedplaylists') && props.get('tdoclinkedplaylists').length > 0) {
                     const playlists: TourDocLinkedPlaylistRecord[] = props.get('tdoclinkedplaylists');
-                    const playlistsSrc: string [] = [];
+                    let playlistsSrc: string [] = [];
                     for (let idx = 0; idx < playlists.length; idx++) {
                         playlistsSrc.push('type=playlist' + this._fieldSeparator +
                             'name=' + playlists[idx].name + this._fieldSeparator +
@@ -189,6 +193,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                             'position=' + playlists[idx].position + this._fieldSeparator +
                             'details=' + playlists[idx].details);
                     }
+
+                    playlistsSrc = ObjectUtils.uniqueArray(playlistsSrc);
 
                     result['linkedplaylists_txt'] = playlistsSrc.join(this._objectSeparator);
                 }
@@ -245,7 +251,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['gpsTrackBasefile'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstracks_basefile_s', undefined);
 
         const origKeywordsArr = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'keywords_txt', '').split(',');
-        const newKeywordsArr = [];
+        let newKeywordsArr = [];
         const allowedKeywordPatterns = BeanUtils.getValue(this.config, 'mapperConfig.allowedKeywordPatterns');
         for (let keyword of origKeywordsArr) {
             keyword = keyword.trim();
@@ -274,6 +280,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 newKeywordsArr[i] = keyword;
             }
         }
+
+        newKeywordsArr = ObjectUtils.uniqueArray(newKeywordsArr);
         values['keywords'] = newKeywordsArr.join(', ');
 
         values['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'name_s', undefined);
@@ -295,9 +303,11 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             .replace(/_/g, ' ').trim()
             .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
 
-        const refs = [this.mapperUtils.getMappedAdapterValue(mapping, doc, 'linked_route_attr_s', undefined),
+        let refs = [this.mapperUtils.getMappedAdapterValue(mapping, doc, 'linked_route_attr_s', undefined),
             this.mapperUtils.getMappedAdapterValue(mapping, doc, 'route_attr_s', undefined)
         ];
+        refs = ObjectUtils.uniqueArray(refs);
+        values['linkedRouteAttr'] = undefined;
         for (const refDetail of refs) {
             if (refDetail === undefined || refDetail === 'null' || refDetail.length === 0) {
                 continue;
@@ -307,6 +317,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 ? values['linkedRouteAttr'] + ';;' + refDetail
                 : refDetail;
         }
+
+        values['linkedRouteAttr'] = values['linkedRouteAttr']
+            ? ObjectUtils.uniqueArray(values['linkedRouteAttr'].split(';;')).join(';;')
+            : undefined
 
         // console.log('mapResponseDocument values:', values);
         const record: TourDocRecord = <TourDocRecord>mapper.createRecord(
