@@ -97,6 +97,67 @@
                     }
                 ]
             },
+            "DATA: dbRemoveDuplicates": {
+                "description": "remove duplicates on database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-keyword",
+                            "backend": "config/backend.dev.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-info",
+                            "backend": "config/backend.dev.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-location",
+                            "backend": "config/backend.dev.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-route",
+                            "backend": "config/backend.dev.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-track",
+                            "backend": "config/backend.dev.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-video",
+                            "backend": "config/backend.dev.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-image",
+                            "backend": "config/backend.dev.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-keyword",
+                            "backend": "config/backend.dev.json"
+                        }
+                    }
+                ]
+            },
             "DATA: dbFixTourMinDates": {
                 "description": "fix tour-min-dates on database",
                 "commands": [

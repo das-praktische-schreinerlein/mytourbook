@@ -10,10 +10,12 @@
 - remove duplicates from lists
 - add list-layout to url
 - extend mediaexport for additional types and add optional viewer for mediaexport
+- admin: added fixtures to remove duplicates from database to admin-ui
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
 - export: extend mediaexport for additional types and add optional viewer for mediaexport
+- admin: added fixtures to remove duplicates from database to admin-ui
 
 ### improvements
 - backend: extend image-export with more filter

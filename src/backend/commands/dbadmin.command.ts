@@ -20,6 +20,13 @@ export class DbAdminCommand extends AbstractDbCommand<DbAdminCommandOptions> {
     protected definePossibleActions(): string[] {
         return [
             'fixture-fix-gpx-timecorrector',
+            'fixture-remove-duplicates-image',
+            'fixture-remove-duplicates-info',
+            'fixture-remove-duplicates-location',
+            'fixture-remove-duplicates-route',
+            'fixture-remove-duplicates-track',
+            'fixture-remove-duplicates-video',
+            'fixture-remove-duplicates-keyword',
             'fixture-update-tour-min-dates',
             'action-update-media-coor-by-gpstrackpoints',
         ];
