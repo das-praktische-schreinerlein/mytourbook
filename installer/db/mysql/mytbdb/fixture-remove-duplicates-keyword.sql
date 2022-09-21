@@ -7,7 +7,7 @@
 select cnt, count(*)
 from (select count(*) as cnt
       from keyword as UpdateKeywords
-      group by kw_id) grouped
+      group by kw_name) grouped
 group by cnt;
 
 
@@ -47,6 +47,8 @@ WHERE KW_ID NOT IN (
     UNION
     select distinct kw_id from info_keyword
     UNION
+    select distinct kw_id from info where KW_ID IS NOT NULL
+    UNION
     select distinct kw_id from kategorie_keyword
     UNION
     select distinct kw_id from location_keyword
@@ -57,6 +59,28 @@ WHERE KW_ID NOT IN (
 )
 LIMIT 10;
 
+SELECT distinct kw_name, count(*) FROM keyword
+WHERE KW_ID NOT IN (
+    select distinct KW_PARENT_ID from keyword where KW_PARENT_ID IS NOT NULL
+    UNION
+    select distinct kw_id from image_keyword
+    UNION
+    select distinct kw_id from info_keyword
+    UNION
+    select distinct kw_id from info where KW_ID IS NOT NULL
+    UNION
+    select distinct kw_id from kategorie_keyword
+    UNION
+    select distinct kw_id from location_keyword
+    UNION
+    select distinct kw_id from tour_keyword
+    UNION
+    select distinct kw_id from video_keyword
+) GROUP BY kw_name;
+
+SELECT distinct kw_name, count(*) FROM keyword
+GROUP BY kw_name ORDER BY count(*) desc;
+
 
 DELETE FROM keyword
 WHERE KW_ID NOT IN (
@@ -65,6 +89,8 @@ WHERE KW_ID NOT IN (
     select distinct kw_id from image_keyword
     UNION
     select distinct kw_id from info_keyword
+    UNION
+    select distinct kw_id from info where KW_ID IS NOT NULL
     UNION
     select distinct kw_id from kategorie_keyword
     UNION
@@ -79,5 +105,5 @@ WHERE KW_ID NOT IN (
 select cnt, count(*)
 from (select count(*) as cnt
       from keyword as UpdateKeywords
-      group by kw_id) grouped
+      group by kw_name) grouped
 group by cnt;
