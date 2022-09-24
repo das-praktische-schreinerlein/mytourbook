@@ -133,8 +133,9 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         NEWS: true,
         ODIMGOBJECT: true
     };
+    showItemObjectsFlag = false;
+
     private layoutSize: LayoutSizeData;
-    private showItemObjectsFlag = false;
 
     @ViewChild('mainImage')
     mainImage: ElementRef;
@@ -306,9 +307,11 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         if (BeanUtils.getValue(config, 'components.tdoc-showpage.showBigImages') === true) {
             this.defaultSubImageLayout = Layout.BIG;
         }
+
         if (BeanUtils.getValue(config, 'components.tdoc-showpage.availableTabs') !== undefined) {
             me.availableTabs = BeanUtils.getValue(config, 'components.tdoc-showpage.availableTabs');
         }
+
         const allowedParams = BeanUtils.getValue(config, 'components.tdoc-showpage.allowedQueryParams');
         if (me.queryParamMap && isArray(allowedParams)) {
             for (const type in me.showResultListTrigger) {
@@ -319,6 +322,18 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
                         TourDocSearchForm.genericFields.perPage.validator.sanitize(param);
                 }
             }
+        }
+
+        if (environment.hideInternalDescLinks === true) {
+            this.pageUtils.setGlobalStyle('.show-page #desc [href*="sections/"] { cursor: not-allowed; pointer-events: none; text-decoration: none; opacity: 0.5; color: currentColor;}', 'tdocShowpageHideInternalDescLinks');
+        } else {
+            this.pageUtils.setGlobalStyle('', 'tdocShowpageHideInternalDescLinks');
+        }
+
+        if (environment.hideInternalImages === true) {
+            this.pageUtils.setGlobalStyle('.show-page #desc [src*="api/static/picturestore"] { display: none; } ', 'tdocShowpageHideInternalImages');
+        } else {
+            this.pageUtils.setGlobalStyle('', 'tdocShowpageHideInternalImages');
         }
     }
 

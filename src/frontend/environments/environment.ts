@@ -31,6 +31,8 @@ export const environment: AppEnvironment = {
     trackingProviders: [], // Angulartics2Piwik
     adminBackendApiBaseUrl: 'http://localhost:4900/adminapi/v1/',
     adminWritable: true,
+    hideInternalDescLinks: false,
+    hideInternalImages: false,
     startDataMode: DataMode.BACKEND,
     availableDataModes: [DataMode.BACKEND, DataMode.STATIC]
 };

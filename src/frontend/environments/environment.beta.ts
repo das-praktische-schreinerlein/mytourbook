@@ -23,6 +23,8 @@ export const environment: AppEnvironment = {
     m3uAvailable: false,
     cookieLawSeenName: 'cookieLawSeenV20180525',
     trackingProviders: [], // Angulartics2Piwik
+    hideInternalDescLinks: false,
+    hideInternalImages: false,
     startDataMode: DataMode.BACKEND,
     availableDataModes: [DataMode.BACKEND]
 };

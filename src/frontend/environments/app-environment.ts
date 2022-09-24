@@ -16,6 +16,8 @@ export interface AppEnvironment extends CommonEnvironment {
     tdocActionTagWritable: boolean;
     tdocMaxItemsPerAlbum: number;
     m3uAvailable: boolean;
+    hideInternalDescLinks?: boolean;
+    hideInternalImages?: boolean,
     currentDataMode?: DataMode;
     startDataMode?: DataMode;
     availableDataModes?: DataMode[];

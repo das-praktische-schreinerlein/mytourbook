@@ -26,6 +26,8 @@ export const environment: AppEnvironment = {
     trackingProviders: [], // Angulartics2Piwik
     staticPDocsFile: 'assets/staticdata/static.mytbpdocs.js',
     staticTDocsFiles: ['assets/staticdata/static.mytbtdocs.js'],
+    hideInternalDescLinks: true,
+    hideInternalImages: true,
     startDataMode: DataMode.STATIC,
     availableDataModes: [DataMode.STATIC]
 };
