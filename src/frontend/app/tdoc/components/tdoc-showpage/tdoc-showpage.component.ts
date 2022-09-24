@@ -325,13 +325,16 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         }
 
         if (environment.hideInternalDescLinks === true) {
-            this.pageUtils.setGlobalStyle('.show-page #desc [href*="sections/"] { cursor: not-allowed; pointer-events: none; text-decoration: none; opacity: 0.5; color: currentColor;}', 'tdocShowpageHideInternalDescLinks');
+            this.pageUtils.setGlobalStyle('.show-page #desc [href*="sections/"] { cursor: not-allowed; pointer-events: none; text-decoration: none; opacity: 0.5; color: currentColor; }'
+                + ' .show-page #desc a[href*="sections/"]::before { content: \'\uD83D\uDEAB\'; font-size: smaller}',
+                'tdocShowpageHideInternalDescLinks');
         } else {
             this.pageUtils.setGlobalStyle('', 'tdocShowpageHideInternalDescLinks');
         }
 
         if (environment.hideInternalImages === true) {
-            this.pageUtils.setGlobalStyle('.show-page #desc [src*="api/static/picturestore"] { display: none; } ', 'tdocShowpageHideInternalImages');
+            this.pageUtils.setGlobalStyle('.show-page #desc img[src*="api/static/picturestore"] {display:none;}',
+                'tdocShowpageHideInternalImages');
         } else {
             this.pageUtils.setGlobalStyle('', 'tdocShowpageHideInternalImages');
         }
