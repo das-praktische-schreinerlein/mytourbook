@@ -11,6 +11,7 @@
 - add list-layout to url
 - extend mediaexport for additional types and add optional viewer for mediaexport
 - admin: added fixtures to remove duplicates from database to admin-ui
+- frontend: improved desc-recommendation
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -20,6 +21,7 @@
 ### improvements
 - backend: extend image-export with more filter
 - frontend: add list-layout to url
+- frontend: improved desc-recommendation
 
 ### bug fixes
 - backend: fixed media-export of dependent records

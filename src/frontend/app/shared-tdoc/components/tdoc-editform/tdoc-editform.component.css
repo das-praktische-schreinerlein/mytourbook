@@ -13,22 +13,22 @@ textarea.nowrap {
     overflow: auto;
 }
 
-.recommended-desc-form-block {
+.desc-form-block {
     align-items: first baseline;
 }
 
 
-.recommended-desc-preview-block {
+.desc-preview-block {
     align-items: first baseline;
 }
 
 
-.recommended-desc-form {
+.desc-form, .recommended-desc-form {
     width: 100%;
     max-width: 1000px;
 }
 
-#recommendedDesc {
+#renderedDesc {
     border: 1px solid lightgray;
     width: 100%;
     max-width: 1000px;

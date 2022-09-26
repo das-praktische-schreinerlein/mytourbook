@@ -211,12 +211,16 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.tourDocDescSuggesterService.suggest(
             this.editFormGroup.getRawValue(), {}
         ).then(desc => {
-            this.setValue('descTxt', desc);
-            this.renderRecommendedDesc(true);
+            this.setValue('descTxtRecommended', desc);
         }).catch(reason => {
-            this.setValue('descTxt', '');
-            this.renderRecommendedDesc(true);
+            this.setValue('descTxtRecommended', undefined);
         });
+    }
+
+    useRecommendedDesc(): void {
+        this.setValue('descTxt', this.editFormGroup.getRawValue()['descTxtRecommended'] || '');
+        this.setValue('descTxtRecommended', undefined);
+        this.renderDesc(true);
     }
 
     addSingleCommand(command: SingleEditorCommand): void {
@@ -237,7 +241,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             + oldString.substring(startPos, oldString.length);
 
         this.setValue('descTxt', newString);
-        this.renderRecommendedDesc(true);
+        this.renderDesc(true);
 
         textarea.focus();
         textarea.selectionStart = startPos;
@@ -265,14 +269,14 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             + oldString.substring(endPos, oldString.length);
 
         this.setValue('descTxt', newString);
-        this.renderRecommendedDesc(true);
+        this.renderDesc(true);
 
         textarea.focus();
         textarea.selectionStart = startPos;
         textarea.selectionEnd = startPos;
     }
 
-    renderRecommendedDesc(force: boolean): string {
+    renderDesc(force: boolean): string {
         if ((this.flgDescRendered || !this.record) && !force) {
             return;
         }
@@ -282,7 +286,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             return desc;
         }
 
-        this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#recommendedDesc', desc, true);
+        this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#renderedDesc', desc, true);
 
         return '';
     }
@@ -761,6 +765,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
     protected createDefaultFormValueConfig(record: TourDocRecord): {} {
         const valueConfig = {
+            descTxtRecommended: [],
             dateshow: [DateUtils.dateToLocalISOString(record.dateshow)],
             datestart: [DateUtils.dateToLocalISOString(record.datestart)],
             dateend: [DateUtils.dateToLocalISOString(record.dateend)],
