@@ -179,7 +179,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else if (type === 'INFO') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'DESTINATION') {
-                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+                filters['moreFilter'] = 'destination_id_s:' + record.destinationId;
             } else if (type === 'TRACK') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'TRIP') {

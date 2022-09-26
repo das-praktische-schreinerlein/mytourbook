@@ -11,12 +11,12 @@ import {isNumeric} from 'rxjs/internal-compatibility';
 import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 
 export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
-    public static aggregationFields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
+    public static aggregationFields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'destination_id_s', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
         'image_similar_id_i', 'loc_parent_id_i'];
     public static itemsJsConfig: ItemsJsConfig = {
         spatialField: 'geo_loc_p',
         spatialSortKey: 'distance',
-        searchableFields: ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
+        searchableFields: ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'destination_id_s', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
             'image_similar_id_i', 'dateshow_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_info_guides_s', 'data_info_region_s', 'data_info_baseloc_s', 'data_info_destloc_s', 'data_info_section_details_s',
             'info_name_s', 'info_desc_txt', 'info_shortdesc_txt', 'info_publisher_s', 'info_reference_s', 'info_tif_linked_details_s',

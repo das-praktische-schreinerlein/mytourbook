@@ -16,6 +16,7 @@ export const TourDocRecordSchema = new Schema({
         tripId: {type: 'number'},
         newsId: {type: 'number'},
         videoId: {type: 'number'},
+        destinationId: {type: 'string'},
 
         blocked: {type: 'number'},
 

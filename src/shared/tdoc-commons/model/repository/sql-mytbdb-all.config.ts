@@ -357,6 +357,8 @@ export class SqlMytbDbAllConfig {
         },
         fieldMapping: {
             id: 'id',
+            destination_id_s: 'd_id',
+            destination_id_ss: 'd_id',
             image_id_i: 'i_id',
             image_id_is: 'i_id',
             video_id_i: 'v_id',

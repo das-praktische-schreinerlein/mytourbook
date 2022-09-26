@@ -189,6 +189,7 @@ export class SqlMytbDbRouteConfig {
             'tour.k_id',
             'tour.t_id',
             'tour.l_id',
+            'tour.t_calced_d_id',
             't_name',
             't_datevon AS t_date_show',
             't_datevon',
@@ -843,6 +844,8 @@ export class SqlMytbDbRouteConfig {
         },
         fieldMapping: {
             id: 'id',
+            destination_id_s: 't_calced_d_id',
+            destination_id_ss: 't_calced_d_id',
             image_id_i: 'i_id',
             image_id_is: 'i_id',
             loc_id_i: 'l_id',

@@ -13,6 +13,7 @@ import {
     GpsTrackValidationRule,
     HierarchyValidationRule,
     IdCsvValidationRule,
+    IdValidationRule,
     NameValidationRule,
     NumberValidationRule,
     StringNumberValidationRule,
@@ -64,6 +65,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
     imageId: number;
     infoId: number;
     videoId: number;
+    destinationId: string;
 
     datestart: Date;
     dateend: Date;
@@ -228,6 +230,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
         infoId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         imageId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         videoId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
+        destinationId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false)),
 
         // TODO: DateValidationRule must check if Date or String with regexp
         datestart: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
@@ -260,6 +263,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
     infoId: number;
     imageId: number;
     videoId: number;
+    destinationId: string;
 
     datestart: Date;
     dateend: Date;

@@ -39,6 +39,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['loc_id_i'] = props.locId;
         values['loc_id_parent_i'] = props.locIdParent;
         values['route_id_i'] = props.routeId;
+        values['destination_id_s'] = props.destinationId;
         values['track_id_i'] = props.trackId;
         values['trip_id_i'] = props.tripId;
         values['info_id_i'] = props.infoId;
@@ -223,6 +224,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['locId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'loc_id_i', undefined);
         values['locIdParent'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'loc_id_parent_i', undefined);
         values['routeId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'route_id_i', undefined);
+        values['destinationId'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'destination_id_s', undefined);
         values['trackId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'track_id_i', undefined);
         values['tripId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'trip_id_i', undefined);
         values['newsId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'news_id_i', undefined);
