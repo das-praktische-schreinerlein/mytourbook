@@ -21,8 +21,6 @@ import {TourDocLinkedInfoRecord} from '../shared/tdoc-commons/model/records/tdoc
 import {TourDocLinkedPlaylistRecord} from '../shared/tdoc-commons/model/records/tdoclinkedplaylist-record';
 import {ProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-search.service';
 import {ExportProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-export.service';
-import {TourDocDataInfoRecord} from '../shared/tdoc-commons/model/records/tdocdatainfo-record';
-import {createHash} from 'crypto';
 
 export enum MediaExportResolutionProfiles {
     'all' = 'all',
@@ -174,6 +172,9 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
             if (doc.routeId && !idsRead['ROUTE']['ROUTE_' + doc.routeId]) {
                 idsToRead.push('ROUTE_' + doc.routeId);
             }
+            if (doc.destinationId && !idsRead['DESTINATION']['DESTINATION_' + doc.destinationId]) {
+                idsToRead.push('DESTINATION_' + doc.destinationId);
+            }
         }
         if (['IMAGE', 'VIDEO', 'TRACK', 'TRIP', 'NEWS'].includes(doc.type)) {
             if (doc.trackId && !idsRead['TRACK']['TRACK_' + doc.trackId]) {
@@ -219,20 +220,6 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
                     if (!idsRead['INFO']['INFO_' + info.refId]) {
                         idsToRead.push('INFO_' + info.refId);
                     }
-                }
-            }
-        }
-
-        if (['ROUTE'].includes(doc.type)) {
-            const tdocdatainfo: TourDocDataInfoRecord = doc.get('tdocdatainfo');
-            if (tdocdatainfo) {
-                const destData = [doc.locId, tdocdatainfo.region, tdocdatainfo.destloc,
-                    doc.subtype
-                        ? doc.subtype.replace('ac_', '')
-                        : doc.subtype].join('_');
-                const dId = createHash('md5').update(destData).digest('hex');
-                if (!idsRead['DESTINATION']['DESTINATION_' + dId]) {
-                    idsToRead.push('DESTINATION_' + dId);
                 }
             }
         }
