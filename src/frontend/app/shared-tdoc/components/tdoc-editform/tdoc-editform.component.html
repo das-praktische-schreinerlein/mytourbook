@@ -753,6 +753,7 @@
         <div class="col-sm-12 form-inline input-group input-group-sm">
             <app-gpx-editarea [gpxSrc]="editFormGroup.getRawValue()['gpsTrackSrc']"
                     [type]="record.type"
+                    [defaultPosition]="defaultPosition"
                     (save)="updateGpsTrackSrc($event)"></app-gpx-editarea>
         </div>
     </ng-template>

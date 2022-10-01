@@ -13,6 +13,7 @@
 - admin: added fixtures to remove duplicates from database to admin-ui
 - frontend: improved desc-recommendation
 - improve handling of destinations
+- improved gpx-track-edit - use dynamic defaults
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -24,6 +25,7 @@
 - frontend: add list-layout to url
 - frontend: improved desc-recommendation
 - backend+frontend: improve handling of destinations
+- frontend: improved gpx-track-edit - use dynamic defaults
 
 ### bug fixes
 - backend: fixed media-export of dependent records

@@ -34,6 +34,8 @@ import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {Router} from '@angular/router';
+import {LatLngTime} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
+import {GpxEditAreaComponent} from '../gpx-editarea/gpx-editarea.component';
 
 // TODO move to commons
 export interface SingleEditorCommand {
@@ -161,6 +163,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         defaultTitle: '--',
         allSelected: 'alles'};
 
+    defaultPosition: LatLngTime = GpxEditAreaComponent.createDefaultPosition();
     trackRecords: TourDocRecord[] = [];
     geoLocRecords: TourDocRecord[] = [];
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
@@ -289,6 +292,30 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#renderedDesc', desc, true);
 
         return '';
+    }
+
+    updateGpxArea(): boolean {
+        this.defaultPosition = GpxEditAreaComponent.createDefaultPosition();
+        if (this.record) {
+            if (this.record.geoLat && this.record.geoLon) {
+                this.defaultPosition.lat = Number.parseFloat(this.record.geoLat);
+                this.defaultPosition.lng = Number.parseFloat(this.record.geoLon);
+            }
+
+            if (this.record.datestart) {
+                this.defaultPosition.time = this.record.datestart;
+            } else if ('ROUTE' === this.record.type.toUpperCase()) {
+                this.defaultPosition.time = undefined;
+            }
+
+            if (this.editFormGroup.getRawValue()['tdocdatatech_altMax']) {
+                this.defaultPosition.alt = this.editFormGroup.getRawValue()['tdocdatatech_altMax'];
+            }
+        }
+
+        this.cd.markForCheck();
+
+        return false;
     }
 
     doGeoLocationSearch(selector) {
@@ -852,6 +879,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     protected updateFormComponents(): void {
         this.flgDescRendered = false;
         super.updateFormComponents();
+        this.updateGpxArea();
         this.updateMap();
         this.updateGeoLocMap();
     }

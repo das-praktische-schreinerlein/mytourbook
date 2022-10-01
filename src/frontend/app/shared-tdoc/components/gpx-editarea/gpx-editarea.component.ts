@@ -24,6 +24,8 @@ import {LatLng} from 'leaflet';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GpxEditAreaComponent extends AbstractInlineComponent {
+    public static readonly _DEFAULT_LAT = 51.9746413082;
+    public static readonly _DEFAULT_LON = 13.8;
     public static readonly _DEFAULT_ALT = -99999;
     public static readonly _DEFAULT_TIMESTAMP = new Date(0);
 
@@ -51,7 +53,10 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     public gpxSrc: string;
 
     @Input()
-    public mergeNewTracks? = false;
+    public mergeNewTracks ? = false;
+
+    @Input()
+    public defaultPosition ? = GpxEditAreaComponent.createDefaultPosition();
 
     @Output()
     public save: EventEmitter<string> = new EventEmitter();
@@ -294,9 +299,9 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 if (points) {
                     if (this.type === 'TRACK') {
                         segments.push(
-                            GpxEditAreaComponent.createGpxTrackSegment(points));
+                            GpxEditAreaComponent.createGpxTrackSegment(points, this.defaultPosition));
                     } else {
-                        newGpx += GpxEditAreaComponent.createGpxRoute(this.lastName, this.type, points);
+                        newGpx += GpxEditAreaComponent.createGpxRoute(this.lastName, this.type, points, this.defaultPosition);
                     }
                 }
             });
@@ -321,21 +326,20 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
         const me = this;
 
         const points: LatLng[] = [];
-        const lat = 51.9746413082;
-        const lon = 13.8;
+        const lat = this.defaultPosition.lat;
+        const lon = this.defaultPosition.lng;
         const factor = 0.01;
-        points.push(new LatLngTime(lat - factor, lon - factor, GpxEditAreaComponent._DEFAULT_ALT, GpxEditAreaComponent._DEFAULT_TIMESTAMP),
-            new LatLngTime(lat - factor, lon + factor, GpxEditAreaComponent._DEFAULT_ALT, GpxEditAreaComponent._DEFAULT_TIMESTAMP),
-            new LatLngTime(lat + factor, lon - factor, GpxEditAreaComponent._DEFAULT_ALT, GpxEditAreaComponent._DEFAULT_TIMESTAMP));
-
+        points.push(new LatLngTime(lat - factor, lon - factor, this.defaultPosition.alt, this.defaultPosition.time),
+            new LatLngTime(lat - factor, lon + factor, this.defaultPosition.alt, this.defaultPosition.time),
+            new LatLngTime(lat + factor, lon - factor, this.defaultPosition.alt, this.defaultPosition.time));
 
         let track = '';
         if (this.type === 'TRACK') {
             track = GpxEditAreaComponent.createGpxTrack(this.lastName, this.type, [
-                GpxEditAreaComponent.createGpxTrackSegment(points)
+                GpxEditAreaComponent.createGpxTrackSegment(points, this.defaultPosition)
             ]);
         } else {
-            track = GpxEditAreaComponent.createGpxRoute(this.lastName, this.type, points)
+            track = GpxEditAreaComponent.createGpxRoute(this.lastName, this.type, points, this.defaultPosition)
         }
 
         me.setCurrentGpx(GeoGpxParser.reformatXml(track));
@@ -393,17 +397,27 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     // TODO move to geogpx.parser
-    public static createGpxTrackSegment(points: L.LatLng[]): string {
+    public static createGpxTrackSegment(points: L.LatLng[], defaultPosition: LatLngTime): string {
         if (!points || points.length <= 0) {
             return '';
         }
 
+        const defaultTime = defaultPosition.time
+            ? typeof defaultPosition.time === 'string'
+                ? defaultPosition.time
+                : defaultPosition.time.toISOString()
+            : undefined;
         let newGpx = '<trkseg>';
         for (let i = 0; i < points.length; i++) {
             const point = points[i];
+            const time = point['time']
+                ? typeof point['time'] === 'string'
+                    ? point['time']
+                    : point['time'].toISOString()
+                : defaultTime;
             newGpx = newGpx + '<trkpt lat="' + point.lat + '" lon="' + point.lng + '">' +
-                '<ele>' + (point['alt'] ? point['alt'] : GpxEditAreaComponent._DEFAULT_ALT) + '</ele>' +
-                '<time>' + (point['time'] ? point['time'].toISOString() : GpxEditAreaComponent._DEFAULT_TIMESTAMP.toISOString()) + '</time>' +
+                '<ele>' + (point['alt'] ? point['alt'] : defaultPosition.alt) + '</ele>' +
+                (time ? '<time>' + time + '</time>' : '') +
                 '</trkpt>';
         }
 
@@ -413,22 +427,38 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     // TODO move to geogpx.parser
-    public static createGpxRoute(name: string, type: string, points: L.LatLng[]): string {
+    public static createGpxRoute(name: string, type: string, points: L.LatLng[], defaultPosition: LatLngTime): string {
         if (!points || points.length <= 0) {
             return '';
         }
 
+        const defaultTime = defaultPosition.time
+            ? typeof defaultPosition.time === 'string'
+                ? defaultPosition.time
+                : defaultPosition.time.toISOString()
+            : undefined;
         let newGpx = '<rte><type>' + type + '</type><name>' + name + '</name>';
         for (let i = 0; i < points.length; i++) {
             const point = points[i];
+            const time = point['time']
+                ? typeof point['time'] === 'string'
+                    ? point['time']
+                    : point['time'].toISOString()
+                : defaultTime;
             newGpx = newGpx + '<rtept lat="' + point.lat + '" lon="' + point.lng + '">' +
-                '<ele>' + (point['alt'] ? point['alt'] : GpxEditAreaComponent._DEFAULT_ALT) + '</ele>' +
-                '<time>' + (point['time'] ?  point['time'].toISOString() : GpxEditAreaComponent._DEFAULT_TIMESTAMP.toISOString()) + '</time>' +
+                '<ele>' + (point['alt'] ? point['alt'] : defaultPosition.alt) + '</ele>' +
+                (time ? '<time>' + time + '</time>' : '') +
                 '</rtept>';
         }
 
         newGpx = newGpx + '</rte>';
 
         return newGpx;
+    }
+
+    // TODO move to geogpx.parser
+    public static createDefaultPosition(): LatLngTime {
+        return new LatLngTime(GpxEditAreaComponent._DEFAULT_LAT, GpxEditAreaComponent._DEFAULT_LON,
+            GpxEditAreaComponent._DEFAULT_ALT, GpxEditAreaComponent._DEFAULT_TIMESTAMP);
     }
 }
