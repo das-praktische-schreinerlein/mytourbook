@@ -407,6 +407,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 ? defaultPosition.time
                 : defaultPosition.time.toISOString()
             : undefined;
+        let lastTime = undefined;
         let newGpx = '<trkseg>';
         for (let i = 0; i < points.length; i++) {
             const point = points[i];
@@ -414,11 +415,15 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 ? typeof point['time'] === 'string'
                     ? point['time']
                     : point['time'].toISOString()
-                : defaultTime;
+                : lastTime
+                    ? lastTime
+                    : defaultTime;
             newGpx = newGpx + '<trkpt lat="' + point.lat + '" lon="' + point.lng + '">' +
                 '<ele>' + (point['alt'] ? point['alt'] : defaultPosition.alt) + '</ele>' +
                 (time ? '<time>' + time + '</time>' : '') +
                 '</trkpt>';
+
+            lastTime = time;
         }
 
         newGpx = newGpx + '</trkseg>';
@@ -437,6 +442,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 ? defaultPosition.time
                 : defaultPosition.time.toISOString()
             : undefined;
+        let lastTime = undefined;
         let newGpx = '<rte><type>' + type + '</type><name>' + name + '</name>';
         for (let i = 0; i < points.length; i++) {
             const point = points[i];
@@ -444,11 +450,15 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 ? typeof point['time'] === 'string'
                     ? point['time']
                     : point['time'].toISOString()
-                : defaultTime;
+                : lastTime
+                    ? lastTime
+                    : defaultTime;
             newGpx = newGpx + '<rtept lat="' + point.lat + '" lon="' + point.lng + '">' +
                 '<ele>' + (point['alt'] ? point['alt'] : defaultPosition.alt) + '</ele>' +
                 (time ? '<time>' + time + '</time>' : '') +
                 '</rtept>';
+
+            lastTime = time;
         }
 
         newGpx = newGpx + '</rte>';
