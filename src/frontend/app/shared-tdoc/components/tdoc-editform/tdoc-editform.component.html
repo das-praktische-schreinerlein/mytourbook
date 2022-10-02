@@ -754,7 +754,8 @@
             <app-gpx-editarea [gpxSrc]="editFormGroup.getRawValue()['gpsTrackSrc']"
                     [type]="record.type"
                     [defaultPosition]="defaultPosition"
-                    (save)="updateGpsTrackSrc($event)"></app-gpx-editarea>
+                    (save)="updateGpsTrackSrc($event)"
+                    (focusin)="updateGpxArea()"></app-gpx-editarea>
         </div>
     </ng-template>
 </form>

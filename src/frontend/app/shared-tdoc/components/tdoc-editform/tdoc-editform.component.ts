@@ -302,14 +302,18 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 this.defaultPosition.lng = Number.parseFloat(this.record.geoLon);
             }
 
-            if (this.record.datestart) {
-                this.defaultPosition.time = this.record.datestart;
-            } else if ('ROUTE' === this.record.type.toUpperCase()) {
+            if ('ROUTE' === this.record.type.toUpperCase()) {
                 this.defaultPosition.time = undefined;
+            } else if (this.record.datestart) {
+                this.defaultPosition.time = Array.isArray(this.editFormGroup.getRawValue()['datestart'])
+                    ? this.editFormGroup.getRawValue()['datestart'][0]
+                    : this.editFormGroup.getRawValue()['datestart'];
             }
 
             if (this.editFormGroup.getRawValue()['tdocdatatech_altMax']) {
-                this.defaultPosition.alt = this.editFormGroup.getRawValue()['tdocdatatech_altMax'];
+                this.defaultPosition.alt = Array.isArray(this.editFormGroup.getRawValue()['tdocdatatech_altMax'])
+                ? this.editFormGroup.getRawValue()['tdocdatatech_altMax'][0]
+                : this.editFormGroup.getRawValue()['tdocdatatech_altMax'];
             }
         }
 

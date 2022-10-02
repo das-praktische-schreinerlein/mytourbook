@@ -1,21 +1,37 @@
 <ng-container [formGroup]="editGpxFormGroup">
     <div class="row">
-        <div class="col-sm-10 form-inline input-group input-group-sm">
+        <div class="col-sm-9 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="gpxSrc label|Label for field: gpxSrc@@label.editareaform.tdoc.gpxSrc">Track:</label>
             <textarea formControlName="gpxSrc" id="gpxSrc" class="form-control nowrap" type="text" placeholder="gpxSrc"
                       (focusout)="updateGpsTrack()"
                       i18n-placeholder="gpsTrackSRc placeholder|Placeholder for gpxSrc@@placeholder.editareaform.tdoc.gpxSrc"></textarea>
         </div>
-        <div class="col-sm-2 form-inline input-group input-group-sm">
-            <file-drop (onFileDrop)="gpxDropped($event)" i18n-headertext="gpsFileDropZone label|Label for button: gpsFileDropZone@@label.editareaform.tdoc.gpsFileDropZone">GPX-File dropzone</file-drop>
-            <label class="col-xs-3 col-form-label mr-2" i18n="gpxSrc label|Label for field: gpxSrc@@label.editareaform.tdoc.gpxSrc">Track:</label>
-            <button (click)="fixMap()" i18n="fixGpsTrackSrc label|Label for button: fixGpsTrackSrc@@label.editareaform.tdoc.fixGpsTrackSrc">Fix errors</button>
-            <label class="col-xs-3 col-form-label mr-2" i18n="mergeNewTracks label|Label for field: mergeNewTracks@@label.editareaform.tdoc.mergeNewTracks">Merge:</label>
-            <input formControlName="mergeNewTracks" type="checkbox" [checked]="mergeNewTracks" class="form-control">
-            <button (click)="createNewGpx()" type="button"
-                    i18n="createNewGpx label|Label for button: createNewGpx@@label.editform.tdoc.createNewGpx">Neuer Gpx-Tack</button>
-            <button (click)="updateGpsTrackFromMap()" type="button"
-                    i18n="updateGpxFromMap label|Label for button: updateGpxFromMap@@label.editform.tdoc.updateGpxFromMap">Karte -> Daten</button>
+        <div class="col-sm-3">
+            <fieldset>
+                <legend i18n="trackfile label|Label for fieldset: trackfile@@label.gpxeditearea.legend.trackfile">&#x26f3; GPX-datei</legend>
+                <div class="col-sm-12 input-group input-group-sm">
+                    <file-drop (onFileDrop)="gpxDropped($event)" i18n-headertext="gpsFileDropZone label|Label for button: gpsFileDropZone@@label.editareaform.tdoc.gpsFileDropZone">GPX-File dropzone</file-drop>
+                </div>
+                <div class="col-sm-12 input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2" i18n="mergeNewTracks label|Label for field: mergeNewTracks@@label.editareaform.tdoc.mergeNewTracks">Merge:</label>
+                    <input formControlName="mergeNewTracks" type="checkbox" [checked]="mergeNewTracks" class="form-control">
+                </div>
+                <div class="col-sm-12 input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2" i18n="gpxSrc label|Label for field: gpxSrc@@label.editareaform.tdoc.gpxSrc">Track:</label>
+                    <button (click)="fixMap()" i18n="fixGpsTrackSrc label|Label for button: fixGpsTrackSrc@@label.editareaform.tdoc.fixGpsTrackSrc">Fix errors</button>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="newGpx label|Label for fieldset: newGpx@@label.gpxeditearea.legend.newGpx">&#x26f3; GPX bearbeiten</legend>
+                <div class="col-sm-12 input-group input-group-sm">
+                    <button (click)="createNewGpx()" type="button"
+                            i18n="createNewGpx label|Label for button: createNewGpx@@label.editform.tdoc.createNewGpx">Neuer Gpx-Tack</button>
+                </div>
+                <div class="col-sm-12 input-group input-group-sm">
+                    <button (click)="updateGpsTrackFromMap()" type="button"
+                            i18n="updateGpxFromMap label|Label for button: updateGpxFromMap@@label.editform.tdoc.updateGpxFromMap">Karte -> Daten</button>
+                </div>
+            </fieldset>
         </div>
     </div>
 
