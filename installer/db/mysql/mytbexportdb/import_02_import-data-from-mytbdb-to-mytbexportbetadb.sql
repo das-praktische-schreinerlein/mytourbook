@@ -11,9 +11,9 @@ INSERT INTO playlist (p_id, p_name, p_meta_desc,
 -- import location
 -- ##################
 INSERT INTO location (l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ, l_lochirarchietxt, l_lochirarchieids,
-        l_calced_id, l_calced_subtype, l_calced_gps_loc, l_calced_gps_lat, l_calced_gps_lon, l_calced_altMaxFacet)
+                      l_geo_state, l_calced_id, l_calced_subtype, l_calced_gps_loc, l_calced_gps_lat, l_calced_gps_lon, l_calced_altMaxFacet)
     SELECT l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ, l_lochirarchietxt, l_lochirarchieids,
-        CONCAT("LOCATION", "_", l_id), l_calced_subtype, l_calced_gps_loc, l_calced_gps_lat, l_calced_gps_lon, l_calced_altMaxFacet
+           l_geo_state, CONCAT("LOCATION", "_", l_id), l_calced_subtype, l_calced_gps_loc, l_calced_gps_lat, l_calced_gps_lon, l_calced_altMaxFacet
     FROM importmytbdb_location;
 
 -- no more needed UPDATE location SET l_lochirarchietxt=GetLocationNameAncestry(location.l_id, location.l_name, ' -> '), l_lochirarchieids=GetLocationIdAncestry(location.l_id, ',');
@@ -139,11 +139,11 @@ INSERT into trip_playlist (trp_id, tr_id, p_id, trp_pos)
 -- import tracks
 -- ##################
 INSERT into kategorie_full (k_id, t_id, l_id, tr_id, k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_route_attr, k_type,
-         k_calced_id, k_calced_actiontype, k_calced_altAscFacet, k_calced_altMaxFacet, k_calced_distFacet, k_calced_dur, k_calced_durFacet,
-         k_calced_dateonly, k_calced_week, k_calced_month, k_calced_year)
+                            k_gpstracks_state, k_calced_id, k_calced_actiontype, k_calced_altAscFacet, k_calced_altMaxFacet, k_calced_distFacet, k_calced_dur, k_calced_durFacet,
+                            k_calced_dateonly, k_calced_week, k_calced_month, k_calced_year)
     SELECT k_id, t_id, l_id, COALESCE(tr_id, 0), k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_route_attr, k_type,
-         CONCAT("TRACK", "_", k_id), k_calced_actiontype, k_calced_altAscFacet, k_calced_altMaxFacet, k_calced_distFacet, k_calced_dur, k_calced_durFacet,
-         DATE_FORMAT(k_datevon, GET_FORMAT(DATE, "ISO")), WEEK(k_datevon), MONTH(k_datevon), YEAR(k_datevon)
+           k_gpstracks_state, CONCAT("TRACK", "_", k_id), k_calced_actiontype, k_calced_altAscFacet, k_calced_altMaxFacet, k_calced_distFacet, k_calced_dur, k_calced_durFacet,
+           DATE_FORMAT(k_datevon, GET_FORMAT(DATE, "ISO")), WEEK(k_datevon), MONTH(k_datevon), YEAR(k_datevon)
     FROM importmytbdb_kategorie WHERE (importmytbdb_kategorie.k_gesperrt=0 OR importmytbdb_kategorie.k_gesperrt IS NULL);
 
 -- calc keywords
@@ -207,11 +207,11 @@ INSERT into kategorie_playlist(kp_id, k_id, p_id, kp_pos)
 -- import routes
 -- ##################
 INSERT into tour (t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
-        t_calced_id, t_calced_d_id, t_calced_sections, t_calced_actiontype, t_calced_altAscFacet, t_calced_altMaxFacet, t_calced_distFacet, t_calced_durFacet,
-        t_calced_dateonly, t_calced_week, t_calced_month, t_calced_year)
+                  t_gpstracks_state, t_calced_id, t_calced_d_id, t_calced_sections, t_calced_actiontype, t_calced_altAscFacet, t_calced_altMaxFacet, t_calced_distFacet, t_calced_durFacet,
+                  t_calced_dateonly, t_calced_week, t_calced_month, t_calced_year)
     SELECT t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
-        CONCAT("ROUTE", "_", t_id), t_calced_d_id, t_calced_sections, t_calced_actiontype, t_calced_altAscFacet, t_calced_altMaxFacet, t_calced_distFacet, t_calced_durFacet,
-        DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")), WEEK(t_datevon), MONTH(t_datevon), YEAR(t_datevon)
+           t_gpstracks_state, CONCAT("ROUTE", "_", t_id), t_calced_d_id, t_calced_sections, t_calced_actiontype, t_calced_altAscFacet, t_calced_altMaxFacet, t_calced_distFacet, t_calced_durFacet,
+           DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")), WEEK(t_datevon), MONTH(t_datevon), YEAR(t_datevon)
     FROM importmytbdb_tour;
 
 -- calc tour: d-ids

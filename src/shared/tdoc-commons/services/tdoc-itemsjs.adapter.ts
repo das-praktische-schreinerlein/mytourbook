@@ -100,6 +100,14 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 hide_zero_doc_count: false,
                 size: 1000
             },
+            'gpstracks_state_is': {
+                mapField: 'gpstracks_state_i',
+                conjunction: false,
+                sort: 'term',
+                order: 'asc',
+                hide_zero_doc_count: false,
+                size: 1000
+            },
             'keywords_txt': {
                 filterFunction: function(record) {
                     return record['keywords_txt']

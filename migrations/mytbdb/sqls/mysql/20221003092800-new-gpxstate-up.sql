@@ -7,6 +7,37 @@ ALTER TABLE kategorie ADD COLUMN IF NOT EXISTS k_gpstracks_state TINYINT DEFAULT
 ALTER TABLE tour ADD COLUMN IF NOT EXISTS t_gpstracks_state TINYINT DEFAULT 0;
 ALTER TABLE location ADD COLUMN IF NOT EXISTS l_geo_state TINYINT DEFAULT 0;
 
+DROP VIEW IF EXISTS location_hirarchical;
+CREATE VIEW location_hirarchical
+    AS
+    WITH RECURSIVE loc_hierarchy(
+                                 l_id,
+                                 l_parent_id,
+                                 l_name,
+                                 hirarchy,
+                                 idhirarchy)
+                       AS
+                       (SELECT l_id,
+                               l_parent_id,
+                               l_name,
+                               l_name,
+                               CAST(l_id AS CHAR(255))
+                        FROM location
+                        WHERE l_parent_id IS NULL
+                        UNION ALL
+                        SELECT l.l_id,
+                               l.l_parent_id,
+                               l.l_name,
+                               CONCAT(lh.hirarchy, ' -> ', l.l_name),
+                               CONCAT(lh.idhirarchy, ',', CAST(l.l_id AS CHAR(255)))
+                        FROM location l
+                                 JOIN loc_hierarchy lh
+                                      ON l.l_parent_id = lh.l_id
+                       )
+    SELECT location.*, loc_hierarchy.hirarchy AS l_lochirarchietxt, loc_hierarchy.idhirarchy AS l_lochirarchieids
+    FROM location INNER JOIN loc_hierarchy on location.l_id = loc_hierarchy.l_id
+    ORDER BY l_id;
+
 -- gpx-tracker
 update kategorie set k_gpstracks_state = 1
 where length(COALESCE(K_GPSTRACKS_GPX_SOURCE, '')) > 10

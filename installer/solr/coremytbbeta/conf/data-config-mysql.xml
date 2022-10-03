@@ -674,6 +674,7 @@
                            k_calced_month                                                                               AS month,
                            k_calced_year                                                                                AS year,
                            k_gpstracks_basefile,
+                           k_gpstracks_state,
                            k_keywords,
                            k_persons,
                            k_objects,
@@ -737,6 +738,7 @@
                            k_calced_month                                                                               AS month,
                            k_calced_year                                                                                AS year,
                            k_gpstracks_basefile,
+                           k_gpstracks_state,
                            k_keywords,
                            k_persons,
                            k_objects,
@@ -797,6 +799,7 @@
             <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
+            <field column="k_gpstracks_state" name="gpstracks_state_i" />
             <field column="k_datevon" name="date_dt" />
             <field column="k_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
@@ -995,6 +998,7 @@
                            t_calced_dateonly                                                     AS dateonly,
                            CONCAT('DONE', (t_datevon IS NOT NULL))                                                             AS done,
                            t_gpstracks_basefile,
+                           t_gpstracks_state,
                            t_keywords,
                            t_persons,
                            t_objects,
@@ -1064,6 +1068,7 @@
                            t_calced_dateonly                                                     AS dateonly,
                            CONCAT('DONE', (t_datevon IS NOT NULL))                                                             AS done,
                            t_gpstracks_basefile,
+                           t_gpstracks_state,
                            t_keywords,
                            t_persons,
                            t_objects,
@@ -1132,6 +1137,7 @@
             <field column="t_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_gpstracks_basefile" name="gpstracks_basefile_s" />
+            <field column="t_gpstracks_state" name="gpstracks_state_i" />
             <field column="dateonly" name="dateonly_s" />
             <field column="t_datevon" name="date_dt" />
             <field column="t_dateshow" name="dateshow_dt" />
@@ -1395,6 +1401,7 @@
                            l_gps_lat,
                            l_gps_lon,
                            l_calced_gps_loc                                                              AS l_gps_loc,
+                           l_geo_state,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            l_katids,
@@ -1426,6 +1433,7 @@
                            l_gps_lat,
                            l_gps_lon,
                            l_calced_gps_loc                                                              AS l_gps_loc,
+                           l_geo_state,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            l_katids,
@@ -1455,6 +1463,7 @@
             <field column="l_gps_lat" name="geo_lat_s" />
             <field column="l_gps_lon" name="geo_lon_s" />
             <field column="l_gps_loc" name="geo_loc_p" type="location" />
+            <field column="l_geo_state" name="gpstracks_state_i" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
             <field column="subtype" name="subtype_s" />
@@ -1687,6 +1696,7 @@
                            i_calced_dateonly                                                      AS dateonly,
                            CONCAT('DONE', (i_date IS NOT NULL))                                                              AS done,
                            k_gpstracks_basefile,
+                           k_gpstracks_state,
                            i_keywords,
                            i_persons,
                            i_objects,
@@ -1735,6 +1745,7 @@
                            i_calced_dateonly             AS dateonly,
                            CONCAT('DONE', (i_date IS NOT NULL))                     AS done,
                            k_gpstracks_basefile,
+                           k_gpstracks_state,
                            i_keywords,
                            i_persons,
                            i_objects,
@@ -1786,6 +1797,7 @@
             <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
+            <field column="k_gpstracks_state" name="gpstracks_state_i" />
             <field column="i_gps_lat" name="geo_lat_s" />
             <field column="i_gps_lon" name="geo_lon_s" />
             <field column="i_gps_loc" name="geo_loc_p" type="location" />
@@ -1862,6 +1874,7 @@
                            v_calced_dateonly                                                      AS dateonly,
                            CONCAT('DONE', (v_date IS NOT NULL))                                                              AS done,
                            k_gpstracks_basefile,
+                           k_gpstracks_state,
                            v_keywords,
                            v_persons,
                            v_objects,
@@ -1910,6 +1923,7 @@
                            v_calced_dateonly             AS dateonly,
                            CONCAT('DONE', (v_date IS NOT NULL))                     AS done,
                            k_gpstracks_basefile,
+                           k_gpstracks_state,
                            v_keywords,
                            v_persons,
                            v_objects,
@@ -1961,6 +1975,7 @@
             <field column="v_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="v_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
+            <field column="k_gpstracks_state" name="gpstracks_state_i" />
             <field column="v_gps_lat" name="geo_lat_s" />
             <field column="v_gps_lon" name="geo_lon_s" />
             <field column="v_gps_loc" name="geo_loc_p" type="location" />
