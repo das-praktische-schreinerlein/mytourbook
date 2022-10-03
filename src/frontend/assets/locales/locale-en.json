@@ -388,7 +388,7 @@
     "hrt_playlists": "playlist:",
     "hrt_routeAttr": "route attributes:",
     "hrt_routeAttrPart": "route attr parts:",
-    "hrt_gpsTrackState": "with gps-state:",
+    "hrt_gpsTrackState": "with geo-data:",
     "hrt_techDataAltitudeMax": "max ele:",
     "hrt_techDataAscent": "ascent:",
     "hrt_techDataDistance": "distance:",
