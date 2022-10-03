@@ -14,11 +14,13 @@
 - frontend: improved desc-recommendation
 - improve handling of destinations
 - improved gpx-track-edit - use dynamic defaults
+- backend+frontend: added geo-state to filter for with or without map
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
 - export: extend mediaexport for additional types and add optional viewer for mediaexport
 - admin: added fixtures to remove duplicates from database to admin-ui
+- backend+frontend: added geo-state to filter for with or without map
 
 ### improvements
 - backend: extend image-export with more filter

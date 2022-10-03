@@ -167,6 +167,7 @@ export class SqlMytbDbLocationConfig {
             'location.l_parent_id',
             'location.l_name',
             'location.l_gesperrt',
+            'location.l_geo_state',
             'location.l_meta_shortdesc',
             'location.l_meta_shortdesc AS l_meta_shortdesc_md',
             'location.l_calced_gps_lat',
@@ -283,6 +284,9 @@ export class SqlMytbDbLocationConfig {
             },
             'done_ss': {
                 noFacet: true
+            },
+            'gpstracks_state_is': {
+                selectField: 'location.l_geo_state'
             },
             'info_id_is': {
                 selectSql: 'SELECT COUNT(location_info.if_id) AS count, info.if_id AS value,' +
@@ -482,6 +486,7 @@ export class SqlMytbDbLocationConfig {
             'location.l_geo_latdeg': ':geo_lat_s:',
             'location.l_geo_poly': ':geo_loc_p:',
             'location.l_geo_area': ':gpstrack_src_s:',
+            'location.l_geo_state': ':gpstracks_state_i:',
             'location.l_key': ':key_s:',
             'location.l_name': ':name_s:',
             'location.l_typ': ':subtype_s:'
@@ -502,6 +507,7 @@ export class SqlMytbDbLocationConfig {
             geo_lat_s: 'l_calced_gps_lat',
             geo_loc_p: 'l_calced_gps_loc',
             gpstrack_src_s: 'l_geo_area',
+            gpstracks_state_i: 'l_geo_state',
             keywords_txt: 'l_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',

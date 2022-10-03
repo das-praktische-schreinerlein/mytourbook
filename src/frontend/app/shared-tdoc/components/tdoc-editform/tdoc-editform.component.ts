@@ -76,6 +76,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     private flgDescRendered = false;
 
     public optionsSelect: {
+        'gpsTrackState': IMultiSelectOption[];
         'tdocratepers.gesamt': IMultiSelectOption[];
         'tdocratepers.ausdauer': IMultiSelectOption[];
         'tdocratepers.bildung': IMultiSelectOption[];
@@ -585,6 +586,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             suggestionConfigs: suggestionConfig,
             editPrefix: prefix,
             numBeanFieldConfig: {
+                'gpsTrackState': { labelPrefix: 'label.gpstrack.state.', values: [-1, 0, 1, 2, 3]},
                 'tdocratepers.gesamt': { labelPrefix: 'label.tdocratepers.gesamt.', values: [-1, 0, 2, 5, 8, 11, 14]},
                 'tdocratepers.gesamt_image': { labelPrefix: 'label.image.tdocratepers.gesamt.', values: [-1, 0, 2, 5, 6, 8, 9, 10, 11, 14]},
                 'tdocratepers.ausdauer': { labelPrefix: 'label.tdocratepers.ausdauer.', values: [0, 2, 5, 8, 11, 14]},
@@ -701,6 +703,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 }
             },
             optionsSelect: {
+                'gpsTrackState': [],
                 'tdocratepers.gesamt': [],
                 'tdocratepers.ausdauer': [],
                 'tdocratepers.bildung': [],

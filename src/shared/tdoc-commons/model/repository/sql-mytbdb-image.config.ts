@@ -187,6 +187,7 @@ export class SqlMytbDbImageConfig {
             'MONTH(i_date) AS month',
             'YEAR(i_date) AS year',
             'k_gpstracks_basefile',
+            'k_gpstracks_state',
             'i_meta_shortdesc',
             'i_meta_shortdesc AS i_meta_shortdesc_md',
             'i_calced_gps_lat AS i_gps_lat',
@@ -322,6 +323,10 @@ export class SqlMytbDbImageConfig {
             'done_ss': {
                 selectField: 'CONCAT("DONE", (i_date IS NOT NULL))',
                 orderBy: 'value asc'
+            },
+            'gpstracks_state_is': {
+                selectField: 'kategorie.k_gpstracks_state',
+                selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id'
             },
             'initial_s': {
                 noFacet: true
@@ -656,6 +661,7 @@ export class SqlMytbDbImageConfig {
             rate_pers_schwierigkeit_i: 'k_rate_schwierigkeit',
             rate_pers_wichtigkeit_i: 'i_rate_wichtigkeit',
             gpstracks_basefile_s: 'k_gpstracks_basefile',
+            gpstracks_state_i: 'k_gpstracks_state',
             keywords_txt: 'i_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',

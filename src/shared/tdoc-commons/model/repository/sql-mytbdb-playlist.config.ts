@@ -182,6 +182,9 @@ export class SqlMytbDbPlaylistConfig {
             'done_ss': {
                 noFacet: true
             },
+            'gpstracks_state_is': {
+                noFacet: true
+            },
             'initial_s': {
                 selectSql: 'SELECT COUNT(*) as count, ' +
                     ' SUBSTR(UPPER(p_name), 1, 1) as value ' +
@@ -341,6 +344,7 @@ export class SqlMytbDbPlaylistConfig {
             loc_id_is: '"666dummy999"',
             loc_lochirarchie_ids_txt: '"666dummy999"',
             l_lochirarchietxt: '"666dummy999"',
+            gpstracks_state_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(p_name), 1, 1)',
             html: 'CONCAT(p_name, " ", COALESCE(p_meta_desc,""))'
         },

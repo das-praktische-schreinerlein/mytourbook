@@ -49,6 +49,10 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="geoData label|Label for fieldset: geoData@@label.editform.tdoc.legend.geoData">&#x26f3; Geo-Daten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'gpsTrackState', formControlName: 'gpsTrackState'}"></ng-container>
+            </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputGeoPosition;context:{key: 'tdoc.geoLoc', formControlName: 'geoLoc', recommend: trackStatistic.dist}"></ng-container>
             </div>
@@ -142,6 +146,10 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="geoData label|Label for fieldset: geoData@@label.editform.tdoc.legend.geoData">&#x26f3; Geo-Daten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'gpsTrackState', formControlName: 'gpsTrackState'}"></ng-container>
+            </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
             </div>
@@ -299,6 +307,10 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="geoData label|Label for fieldset: geoData@@label.editform.tdoc.legend.geoData">&#x26f3; Geo-Daten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'gpsTrackState', formControlName: 'gpsTrackState'}"></ng-container>
+            </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
             </div>

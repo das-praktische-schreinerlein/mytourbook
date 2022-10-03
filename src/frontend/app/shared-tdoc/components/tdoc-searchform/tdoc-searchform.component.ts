@@ -46,6 +46,7 @@ export class TourDocSearchformComponent
     public optionsSelectObjectDetectionState: IMultiSelectOption[] = [];
     public optionsSelectRouteAttr: IMultiSelectOption[] = [];
     public optionsSelectRouteAttrPart: IMultiSelectOption[] = [];
+    public optionsSelectGpsTrackState: IMultiSelectOption[] = [];
     public optionsSelectDashboardFilter: IMultiSelectOption[] = [];
 
     public settingsSelectWhen = this.defaultSeLectSettings;
@@ -76,6 +77,7 @@ export class TourDocSearchformComponent
     public settingsSelectObjectDetectionState = this.defaultSeLectSettings;
     public settingsSelectRouteAttr = this.defaultSeLectSettings;
     public settingsSelectRouteAttrPart = this.defaultSeLectSettings;
+    public settingsSelectGpsTrackState = this.defaultSeLectSettings;
     public settingsSelectDashboardFilter = {dynamicTitleMaxItems: 1,
         buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm multiselect-highlight-value',
         containerClasses: 'dropdown-inline fullwidth',
@@ -197,6 +199,13 @@ export class TourDocSearchformComponent
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'Alle'};
+    public textsSelectGpsTrackState: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Attribute ausgewählt',
+        checkedPlural: 'Attribute ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
     public textsSelectObjectDetectionCategory: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Katgorie ausgewählt',
@@ -290,6 +299,7 @@ export class TourDocSearchformComponent
             objectDetectionState: [],
             routeAttr: [],
             routeAttrPart: [],
+            gpsTrackState: [],
             actionType: [],
             type: [],
             sort: '',
@@ -357,6 +367,7 @@ export class TourDocSearchformComponent
             objectDetectionState: [(values.objectDetectionState ? values.objectDetectionState.split(/,/) : [])],
             routeAttr: [(values.routeAttr ? values.routeAttr.split(/,/) : [])],
             routeAttrPart: [(values.routeAttrPart ? values.routeAttrPart.split(/,/) : [])],
+            gpsTrackState: [(values.gpsTrackState ? values.gpsTrackState.split(/,/) : [])],
             playlists: [(values.playlists ? values.playlists.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])]
         });
@@ -435,6 +446,8 @@ export class TourDocSearchformComponent
             this.tdocSearchFormUtils.getRouteAttrValues(tdocSearchSearchResult), true, [], false);
         this.optionsSelectRouteAttrPart = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.tdocSearchFormUtils.getRouteAttrPartValues(tdocSearchSearchResult), false, [], false);
+        this.optionsSelectGpsTrackState = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.tdocSearchFormUtils.getGpsTrackStateValues(tdocSearchSearchResult), true, [], true);
 
         const values: TourDocSearchForm = tdocSearchSearchResult.searchForm;
         const [lat, lon, dist] = this.tdocSearchFormUtils.extractNearbyPos(values.nearby);
@@ -453,7 +466,7 @@ export class TourDocSearchformComponent
     }
 
     protected updateAvailabilityFlags(tdocSearchSearchResult: TourDocSearchResult) {
-        this.showWhereAvailable = (this.optionsSelectWhere.length > 0);
+        this.showWhereAvailable = (this.optionsSelectWhere.length > 0 || this.optionsSelectGpsTrackState.length > 0);
         this.showWhenAvailable = (this.optionsSelectWhen.length > 0 || this.optionsSelectTechDataDuration.length > 0);
         this.showDetailsAvailable = (this.optionsSelectWhat.length > 0 || this.optionsSelectTechRateOverall.length > 0 ||
             this.optionsSelectTechDataDistance.length > 0 || this.optionsSelectTechDataAltitudeMax.length > 0 ||

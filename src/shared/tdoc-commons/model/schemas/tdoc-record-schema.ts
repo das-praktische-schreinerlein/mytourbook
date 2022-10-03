@@ -32,6 +32,7 @@ export const TourDocRecordSchema = new Schema({
         geoLat: {type: 'string'},
         geoLoc: {type: 'string'},
         gpsTrackSrc: {type: 'string'},
+        gpsTrackState: {type: 'number'},
         gpsTrackBasefile: {type: 'string'},
         keywords: {type: 'string'},
         locHirarchie: {type: 'string'},

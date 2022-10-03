@@ -198,6 +198,7 @@ export class SqlMytbDbRouteConfig {
             'MONTH(t_datevon) AS month',
             'YEAR(t_datevon) AS year',
             't_gpstracks_basefile',
+            't_gpstracks_state',
             't_meta_shortdesc',
             't_meta_shortdesc AS t_meta_shortdesc_md',
             'l_calced_gps_lat AS t_gps_lat',
@@ -356,6 +357,9 @@ export class SqlMytbDbRouteConfig {
             'done_ss': {
                 selectField: 'CONCAT("DONE", (t_datevon IS NOT NULL))',
                 orderBy: 'value asc'
+            },
+            'gpstracks_state_is': {
+                selectField: 'tour.t_gpstracks_state'
             },
             'info_id_is': {
                 selectSql: 'SELECT COUNT(tour_info.if_id) AS count, info.if_id AS value,' +
@@ -838,6 +842,7 @@ export class SqlMytbDbRouteConfig {
             'tour.t_rate_schneeschuh': ':rate_tech_schneeschuh_s:',
             'tour.t_gpstracks_basefile': ':gpstracks_basefile_s:',
             'tour.t_gpstracks_gpx': ':gpstrack_src_s:',
+            'tour.t_gpstracks_state': ':gpstracks_state_i:',
             'tour.t_key': ':key_s:',
             'tour.t_name': ':name_s:',
             'tour.t_typ': ':subtype_s:'
@@ -898,6 +903,7 @@ export class SqlMytbDbRouteConfig {
             rate_tech_schneeschuh_s: 't_rate_schneeschuh',
             gpstracks_basefile_s: 't_gpstracks_basefile',
             gpstrack_src_s: 't_gpstracks_gpx',
+            gpstracks_state_i: 't_gpstracks_state',
             keywords_txt: 't_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',

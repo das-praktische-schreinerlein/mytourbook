@@ -49,6 +49,7 @@
         <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
             <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+            <span *ngIf="listItem.currentRecord.gpsTrackState > 0">&#x26f3;</span>
             <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
         </h5>
         <h5>{{listItem.currentRecord.subtype | translate }}</h5>

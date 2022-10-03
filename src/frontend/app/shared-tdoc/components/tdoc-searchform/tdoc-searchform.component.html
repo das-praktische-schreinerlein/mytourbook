@@ -194,6 +194,20 @@
                         <span i18n="button hide Whereform|Buttontext to hide Whereform@@button.searchform.hide.Whereform">ausblenden</span>
                         <span>&#x21D1;</span></button>
                 </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectGpsTrackState.length > 0">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('gpsTrackState').value.length > 0 ? 'label-active' : 'label-inactive')"
+                           i18n="gpsTrackState label|Label for filter: gpsTrackState@@label.searchform.tdoc.gpsTrackState">Gps-Track:</label>
+                    <ng-container *ngIf="optionsSelectGpsTrackState.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectGpsTrackState"
+                                                 [settings]="settingsSelectGpsTrackState"
+                                                 [texts]="textsSelectGpsTrackState"
+                                                 formControlName="gpsTrackState"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
             </div>
         </fieldset>
         <fieldset class="hidden-print" *ngIf="showWhat">

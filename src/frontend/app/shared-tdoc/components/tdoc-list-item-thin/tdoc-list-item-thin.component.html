@@ -11,6 +11,7 @@
             <span *ngIf="mapFlagAvailable" (click)="submitShowItemOnMap(listItem.currentRecord)"
                   [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
+            <span *ngIf="listItem.currentRecord.gpsTrackState > 0">&#x26f3;</span>
 
             <ng-container [ngSwitch]="true">
 

@@ -142,6 +142,10 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
         return splittedFacetValues;
     }
 
+    getGpsTrackStateValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'gpstracks_state_is', '', 'label.gpstrack.state.');
+    }
+
     getPersonValues(searchResult: TourDocSearchResult): any[] {
         return this.searchFormUtils.getFacetValues(searchResult, 'persons_txt', '', '');
     }

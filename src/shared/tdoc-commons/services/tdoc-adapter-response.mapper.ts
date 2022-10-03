@@ -57,6 +57,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['geo_loc_p'] = props.geoLoc;
         values['gpstrack_src_s'] = props.gpsTrackSrc;
         values['gpstracks_basefile_s'] = props.gpsTrackBasefile;
+        values['gpstracks_state_i'] = props.gpsTrackState;
         values['keywords_txt'] =
             (props.keywords ? props.keywords.split(', ').join(',') : '');
         values['loc_lochirarchie_s'] = (props.locHirarchie ? props.locHirarchie
@@ -251,6 +252,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             this.mapperUtils.mapToAdapterFieldName(mapping, 'geo_loc_p'), undefined);
         values['gpsTrackSrc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstrack_src_s', undefined);
         values['gpsTrackBasefile'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstracks_basefile_s', undefined);
+        values['gpsTrackState'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'gpstracks_state_i', undefined);
 
         const origKeywordsArr = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'keywords_txt', '').split(',');
         let newKeywordsArr = [];

@@ -121,6 +121,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         moreFilterMap.set('objectDetectionState', searchForm.objectDetectionState);
         moreFilterMap.set('routeAttr', searchForm.routeAttr);
         moreFilterMap.set('routeAttrPart', searchForm.routeAttrPart);
+        moreFilterMap.set('gpsTrackState', searchForm.gpsTrackState);
         moreFilterMap.set('dashboardFilter', searchForm.dashboardFilter);
         let moreFilter = this.searchParameterUtils.joinParamsToOneRouteParameter(moreFilterMap, this.splitter);
         if (moreFilter !== undefined && moreFilter.length > 0) {
@@ -206,7 +207,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techDataSections:',
                 'techRateOverall:', 'personalRateOverall:', 'personalRateDifficulty:',
                 'objectDetectionCategory:', 'objectDetectionDetector:', 'objectDetectionKey:', 'objectDetectionPrecision:',
-                'objectDetectionState:', 'routeAttr:', 'routeAttrPart:', 'dashboardFilter:']);
+                'objectDetectionState:', 'routeAttr:', 'routeAttrPart:', 'dashboardFilter:', 'gpsTrackState:']);
         let moreFilter = '';
         if (moreFilterValues.has('unknown')) {
             moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');
@@ -251,6 +252,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
                 ',') : '');
         const routeAttrPart: string = (moreFilterValues.has('routeAttrPart:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('routeAttrPart:'), 'routeAttrPart:',
+                ',') : '');
+        const gpsTrackState: string = (moreFilterValues.has('gpsTrackState:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('gpsTrackState:'), 'gpsTrackState:',
                 ',') : '');
         const dashboardFilter: string = (params.dashboardFilter
             ? params.dashboardFilter
@@ -361,6 +365,10 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.routeAttrPart = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(routeAttrPart, /^ungefiltert$/, ''),
             defaults['routeAttrPart'], '');
+        searchForm.gpsTrackState = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(gpsTrackState, /^ungefiltert$/, ''),
+            defaults['gpsTrackState'], '');
+
         searchForm.sort = this.searchParameterUtils.useValueDefaultOrFallback(params['sort'], defaults['sort'], '');
         searchForm.type = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '').toLowerCase();
@@ -439,6 +447,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             undefined, true, ''));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.routeAttrPart, 'hrt_routeAttrPart',
             undefined, true, ''));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.gpsTrackState, 'hrt_gpsTrackState', undefined, true, 'label.gpstrack.state.'));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.initial, 'hrt_initial', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.playlists, 'hrt_playlists', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.dashboardFilter, 'hrt_dashboardFilter',

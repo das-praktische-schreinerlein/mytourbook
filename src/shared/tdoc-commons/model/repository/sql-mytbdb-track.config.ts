@@ -212,6 +212,7 @@ export class SqlMytbDbTrackConfig {
             'MONTH(k_datevon) AS month',
             'YEAR(k_datevon) AS year',
             'k_gpstracks_basefile',
+            'k_gpstracks_state',
             'k_meta_shortdesc',
             'k_meta_shortdesc AS k_meta_shortdesc_md',
             'l_calced_gps_lat AS k_gps_lat',
@@ -384,6 +385,9 @@ export class SqlMytbDbTrackConfig {
             'done_ss': {
                 selectField: 'CONCAT("DONE", (k_datevon IS NOT NULL))',
                 orderBy: 'value asc'
+            },
+            'gpstracks_state_is': {
+                selectField: 'kategorie.k_gpstracks_state'
             },
             'initial_s': {
                 selectSql: 'SELECT COUNT(*) as count, ' +
@@ -692,6 +696,7 @@ export class SqlMytbDbTrackConfig {
             'kategorie.k_rate_wichtigkeit': ':rate_pers_wichtigkeit_i:',
             'kategorie.k_gpstracks_basefile': ':gpstracks_basefile_s:',
             'kategorie.k_gpstracks_gpx_source': ':gpstrack_src_s:',
+            'kategorie.k_gpstracks_state': ':gpstracks_state_i:',
             'kategorie.k_route_attr': ':linked_route_attr_s:',
             'kategorie.k_name': ':name_s:',
             'kategorie.k_type': ':subtype_s:'
@@ -737,6 +742,7 @@ export class SqlMytbDbTrackConfig {
             rate_pers_wichtigkeit_i: 'k_rate_wichtigkeit',
             gpstracks_basefile_s: 'k_gpstracks_basefile',
             gpstrack_src_s: 'k_gpstracks_gpx_source',
+            gpstracks_state_i: 'k_gpstracks_state',
             keywords_txt: 'k_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',

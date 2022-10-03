@@ -290,6 +290,9 @@ export class SqlMytbDbTripConfig {
                 selectField: 'CONCAT("DONE", (tr_datevon IS NOT NULL))',
                 orderBy: 'value asc'
             },
+            'gpstracks_state_is': {
+                noFacet: true
+            },
             'initial_s': {
                 selectSql: 'SELECT COUNT(*) as count, ' +
                     ' SUBSTR(UPPER(tr_name), 1, 1) as value ' +
@@ -478,6 +481,7 @@ export class SqlMytbDbTripConfig {
             loc_id_is: 'trip.l_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
+            gpstracks_state_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(tr_name), 1, 1)',
             html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc, ""), l_lochirarchietxt)'
         },

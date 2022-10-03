@@ -202,6 +202,9 @@ export class SqlMytbDbDestinationConfig {
                 selectField: 'CONCAT("DONE", (d_datevon IS NOT NULL))',
                 orderBy: 'value asc'
             },
+            'gpstracks_state_is': {
+                noFacet: true
+            },
             'info_id_is': {
                 filterFields: ['tif.if_id'],
                 action: AdapterFilterActions.IN_NUMBER
@@ -555,6 +558,7 @@ export class SqlMytbDbDestinationConfig {
             loc_id_is: 'destination.l_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
+            gpstracks_state_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(d_name), 1, 1)',
             html: 'CONCAT(d_name, " ", COALESCE(d_desc_gebiet, ""), " ", l_lochirarchietxt)'
         },

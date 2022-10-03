@@ -161,6 +161,7 @@ export class SqlMytbDbVideoConfig {
             'MONTH(v_date) AS month',
             'YEAR(v_date) AS year',
             'k_gpstracks_basefile',
+            'k_gpstracks_state',
             'v_meta_shortdesc',
             'v_meta_shortdesc AS v_meta_shortdesc_md',
             'v_calced_gps_lat AS v_gps_lat',
@@ -296,6 +297,10 @@ export class SqlMytbDbVideoConfig {
             'done_ss': {
                 selectField: 'CONCAT("DONE", (v_date IS NOT NULL))',
                 orderBy: 'value asc'
+            },
+            'gpstracks_state_is': {
+                selectField: 'kategorie.k_gpstracks_state',
+                selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=video.k_id'
             },
             'initial_s': {
                 noFacet: true
@@ -558,6 +563,7 @@ export class SqlMytbDbVideoConfig {
             rate_pers_schwierigkeit_i: 'k_rate_schwierigkeit',
             rate_pers_wichtigkeit_i: 'v_rate_wichtigkeit',
             gpstracks_basefile_s: 'k_gpstracks_basefile',
+            gpstracks_state_i: 'k_gpstracks_state',
             keywords_txt: 'v_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',

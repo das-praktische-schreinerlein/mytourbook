@@ -28,6 +28,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         personalRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         personalRateDifficulty: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         actiontype: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        gpsTrackState: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         objectDetectionCategory: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         objectDetectionDetector: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         objectDetectionKey: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
@@ -53,6 +54,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
     personalRateOverall: string;
     personalRateDifficulty: string;
     actiontype: string;
+    gpsTrackState: string;
     objectDetectionCategory: string;
     objectDetectionDetector: string;
     objectDetectionKey: string;
@@ -86,6 +88,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         this.objectDetectionState = values['objectDetectionState'] || '';
         this.routeAttr = values['routeAttr'] || '';
         this.routeAttrPart = values['routeAttrPart'] || '';
+        this.gpsTrackState = values['gpsTrackState'] || '';
         this.objects = values['objects'] || '';
         this.persons = values['persons'] || '';
         this.dashboardFilter = values['dashboardFilter'] || '';
@@ -144,6 +147,7 @@ export class TourDocSearchFormFactory {
             TourDocSearchForm.tdocFields.objectDetectionState.validator.sanitize(values['objectDetectionState']) || '';
         sanitizedValues.routeAttr = TourDocSearchForm.tdocFields.routeAttr.validator.sanitize(values['routeAttr']) || '';
         sanitizedValues.routeAttrPart = TourDocSearchForm.tdocFields.routeAttrPart.validator.sanitize(values['routeAttrPart']) || '';
+        sanitizedValues.gpsTrackState = TourDocSearchForm.tdocFields.gpsTrackState.validator.sanitize(values['gpsTrackState']) || '';
         sanitizedValues.objects = TourDocSearchForm.tdocFields.objects.validator.sanitize(values['objects']) || '';
         sanitizedValues.persons = TourDocSearchForm.tdocFields.persons.validator.sanitize(values['persons']) || '';
         sanitizedValues.dashboardFilter = TourDocSearchForm.tdocFields.dashboardFilter.validator.sanitize(values['dashboardFilter']) || '';
@@ -191,6 +195,7 @@ export class TourDocSearchFormValidator {
         state = TourDocSearchForm.tdocFields.objectDetectionState.validator.isValid(values['objectDetectionState']) && state;
         state = TourDocSearchForm.tdocFields.routeAttr.validator.isValid(values['routeAttr']) && state;
         state = TourDocSearchForm.tdocFields.routeAttrPart.validator.isValid(values['routeAttrPart']) && state;
+        state = TourDocSearchForm.tdocFields.gpsTrackState.validator.isValid(values['gpsTrackState']) && state;
         state = TourDocSearchForm.tdocFields.objects.validator.isValid(values['objects']) && state;
         state = TourDocSearchForm.tdocFields.persons.validator.isValid(values['persons']) && state;
         state = TourDocSearchForm.tdocFields.dashboardFilter.validator.isValid(values['dashboardFilter']) && state;

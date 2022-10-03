@@ -248,6 +248,9 @@ export class SqlMytbDbInfoConfig {
             'done_ss': {
                 noFacet: true
             },
+            'gpstracks_state_is': {
+                noFacet: true
+            },
             'initial_s': {
                 selectSql: 'SELECT COUNT(*) as count, ' +
                     ' SUBSTR(UPPER(if_name), 1, 1) as value ' +
@@ -430,6 +433,7 @@ export class SqlMytbDbInfoConfig {
             loc_id_is: 'info.l_id',
             loc_lochirarchie_ids_txt: 'lifl.l_id',
             l_lochirarchietxt: 'lifl.l_name',
+            gpstracks_state_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(if_name), 1, 1)',
             html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), " ", COALESCE(if_url,""))'
         },

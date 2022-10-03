@@ -249,6 +249,9 @@ export class SqlMytbDbNewsConfig {
                 selectField: 'CONCAT("DONE", (n_date IS NOT NULL))',
                 orderBy: 'value asc'
             },
+            'gpstracks_state_is': {
+                noFacet: true
+            },
             'initial_s': {
                 noFacet: true
             },
@@ -393,6 +396,7 @@ export class SqlMytbDbNewsConfig {
             route_id_is: '"666dummy999"',
             loc_lochirarchie_ids_txt: '"666dummy999"',
             l_lochirarchietxt: 'location.l_name',
+            gpstracks_state_is: '"666dummy999"',
             initial_s: '"666dummy999"',
             html: 'CONCAT(n_headline, " ", COALESCE(n_message,""))'
         },

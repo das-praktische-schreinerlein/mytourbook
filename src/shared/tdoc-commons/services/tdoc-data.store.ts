@@ -221,6 +221,12 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                 'like': searchForm.routeAttrPart.split(/,/)
             };
         }
+        if (searchForm.gpsTrackState !== undefined && searchForm.gpsTrackState.length > 0) {
+            filter = filter || {};
+            filter['gpstracks_state_is'] = {
+                'in': searchForm.gpsTrackState.split(/,/)
+            };
+        }
 
         if (searchForm.initial !== undefined && searchForm.initial.length > 0) {
             filter = filter || {};
