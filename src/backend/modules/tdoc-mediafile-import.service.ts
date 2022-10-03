@@ -186,7 +186,8 @@ export class TourDocMediaFileImportManager  {
                 loc_id_i: records.length + 1,
                 name_s: locationName,
                 keywords_txt: 'KW_TODOKEYWORDS',
-                desc_txt: 'TODODESC'
+                desc_txt: 'TODODESC',
+                gpstracks_state_i: 0
             }, {});
             records.push(location);
             container.LOCATION[locationName] = location;
@@ -205,7 +206,8 @@ export class TourDocMediaFileImportManager  {
                 desc_txt: 'TODODESC',
                 dateshow_dt: date,
                 datestart_dt: date,
-                dateend_dt: date
+                dateend_dt: date,
+                gpstracks_state_i: 0
             }, {});
             records.push(track);
             container.TRACK[trackName] = track;
