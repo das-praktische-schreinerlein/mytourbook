@@ -300,7 +300,7 @@ export class SqlMytbDbVideoConfig {
             },
             'gpstracks_state_is': {
                 selectField: 'kategorie.k_gpstracks_state',
-                selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=video.k_id'
+                selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id'
             },
             'initial_s': {
                 noFacet: true
