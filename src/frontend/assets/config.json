@@ -625,6 +625,96 @@
                     ]
                 },
                 {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "Clone Route",
+                    "shortName": "\uD83D\uDC23Route",
+                    "payload": {
+                        "type": "ROUTE"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ROUTE", "route"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "Clone Info",
+                    "shortName": "\uD83D\uDC23Info",
+                    "payload": {
+                        "type": "INFO"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["INFO", "info"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "Clone Location",
+                    "shortName": "\uD83D\uDC23Location",
+                    "payload": {
+                        "type": "LOCATION"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["LOCATION", "location"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "playlists_favorites",
                     "type": "tag",
                     "name": "F2* Favorites",

@@ -39,7 +39,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         switch (type.toLowerCase()) {
             case 'track':
             case 'route':
-                fields.push('gpsTrackSrc', 'locId', 'subtype');
+                fields.push('gpsTrackSrc', 'gpsTrackState', 'locId', 'subtype');
                 fields.push('tdocratepers.gesamt',
                     'tdocratepers.ausdauer',
                     'tdocratepers.bildung',
@@ -48,18 +48,36 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                     'tdocratepers.motive',
                     'tdocratepers.schwierigkeit',
                     'tdocratepers.wichtigkeit',
+                    'tdocratetech.overall',
+                    'tdocratetech.klettern',
+                    'tdocratetech.ks',
+                    'tdocratetech.bergtour',
+                    'tdocratetech.firn',
+                    'tdocratetech.gletscher',
+                    'tdocratetech.schneeschuh',
                     'tdocdatatech.altAsc',
                     'tdocdatatech.altDesc',
                     'tdocdatatech.altMin',
                     'tdocdatatech.altMax',
                     'tdocdatatech.dist',
-                    'tdocdatatech.dur');
+                    'tdocdatatech.dur',
+                    'tdocdatainfo.baseloc',
+                    'tdocdatainfo.destloc',
+                    'tdocdatainfo.region',
+                    'tdocdatainfo.sectionDetails',
+                    'tdoclinkedinfos'
+                    );
                 break;
             case 'trip':
-                fields.push('datestart', 'locId', 'dateend');
+                fields.push('datestart', 'dateend', 'locId');
                 break;
             case 'news':
                 fields.push('datestart', 'dateend');
+                break;
+            case 'info':
+                fields.push(
+                    'locId', 'subtype',
+                    'tdocinfo.shortDesc', 'tdocinfo.reference', 'tdocinfo.publisher');
                 break;
             case 'image':
             case 'video':
@@ -69,6 +87,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                     'tdocratepers.wichtigkeit');
                 break;
             case 'location':
+                fields.push('gpsTrackSrc', 'gpsTrackState', 'geoLon', 'geoLat', 'geoLoc', 'subtype');
                 fields.push('locIdParent');
                 break;
         }
@@ -77,25 +96,35 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
     protected copyDefaultFields(type: string, tdoc: TourDocRecord, values: {}): void {
         if (type.toLowerCase() === 'route') {
             values['trackId'] = tdoc.trackId;
-            let locHirarchie = tdoc.locHirarchie !== undefined && tdoc.locHirarchie !== null ? tdoc.locHirarchie : '';
+            let locHirarchie = tdoc.locHirarchie !== undefined && tdoc.locHirarchie !== null
+                ? tdoc.locHirarchie
+                : '';
             locHirarchie = locHirarchie.replace(/^OFFEN -> /, '');
             locHirarchie = StringUtils.doReplacements(locHirarchie, this.getLocationReplacements())
 
-            const locs = locHirarchie.split(/ -> /);
-            if (locs.length > 3) {
-                locs.splice(2, locs.length - 3);
-            }
-            values['tdocdatainfo.baseloc'] = locs.join(' - ');
-            values['tdocdatainfo.destloc'] = locs.pop();
-
-            const regions = locHirarchie.split(/ -> /);
-            if (regions.length > 1) {
-                regions.splice(regions.length - 1, 1);
-                if (regions.length > 2) {
-                    regions.splice(1, regions.length - 2);
+            if (!values['tdocdatainfo.baseloc'] || !values['tdocdatainfo.destloc']) {
+                const locs = locHirarchie.split(/ -> /);
+                if (locs.length > 3) {
+                    locs.splice(2, locs.length - 3);
                 }
+                values['tdocdatainfo.baseloc'] = values['tdocdatainfo.baseloc']
+                    ?  values['tdocdatainfo.baseloc']
+                    : locs.join(' - ');
+                values['tdocdatainfo.destloc'] = values['tdocdatainfo.destloc']
+                    ? values['tdocdatainfo.destloc']
+                    : locs.pop();
             }
-            values['tdocdatainfo.region'] = regions.join(' - ');
+
+            if (!values['tdocdatainfo.region']) {
+                const regions = locHirarchie.split(/ -> /);
+                if (regions.length > 1) {
+                    regions.splice(regions.length - 1, 1);
+                    if (regions.length > 2) {
+                        regions.splice(1, regions.length - 2);
+                    }
+                }
+                values['tdocdatainfo.region'] = regions.join(' - ');
+            }
         }
 
         switch (type.toLowerCase()) {
