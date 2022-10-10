@@ -44,16 +44,18 @@ export class TourDocDateFormatPipe implements PipeTransform {
             pattern = 'MMMM';
         } else {
             switch (tdoc.type) {
+                case 'NEWS':
+                    pattern = 'dd.MM.yyyy';
+                    break;
                 case 'IMAGE':
                 case 'VIDEO':
                 case 'TRACK':
                 case 'TRIP':
                 case 'LOCATION':
-                case 'TOUR':
-                    pattern = 'MMMM yyyy';
-                    break;
+                case 'ROUTE':
+                case 'DESTINATION':
                 default:
-                    pattern = 'dd.MM.yyyy';
+                    pattern = 'MMMM yyyy';
             }
         }
 

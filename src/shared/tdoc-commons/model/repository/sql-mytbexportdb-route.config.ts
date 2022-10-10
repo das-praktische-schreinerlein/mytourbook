@@ -48,7 +48,7 @@ export class SqlMytbExportDbRouteConfig {
             'tour.d_id',
             't_name',
             't_html_list',
-            't_datevon AS t_date_show',
+            't_datevon AS t_dateshow',
             't_datevon',
             'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
             'WEEK(t_datevon) AS week',

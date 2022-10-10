@@ -29,7 +29,7 @@ export class SqlMytbExportDbDestinationConfig {
             'destination.d_id',
             'destination.l_id',
             'd_name',
-            'd_datevon AS d_date_show',
+            'd_datevon AS d_dateshow',
             'd_datevon',
             'DATE_FORMAT(d_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
             'WEEK(d_datevon) AS week',
