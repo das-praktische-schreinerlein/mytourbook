@@ -372,6 +372,11 @@ export class SqlMytbDbPlaylistConfig {
         referenced: [],
         joins: [
             { table: 'image_playlist', fieldReference: 'p_id' },
+            { table: 'info_playlist', fieldReference: 'p_id' },
+            { table: 'kategorie_playlist', fieldReference: 'p_id' },
+            { table: 'location_playlist', fieldReference: 'p_id' },
+            { table: 'tour_playlist', fieldReference: 'p_id' },
+            { table: 'trip_playlist', fieldReference: 'p_id' },
             { table: 'video_playlist', fieldReference: 'p_id' }
         ]
     };
