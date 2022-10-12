@@ -285,7 +285,7 @@ export class SqlMytbDbAllConfig {
                 filterField: 'subtype'
             },
             'type_txt': {
-                constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info', 'playlist'],
+                constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: 'lower(all_entries.type)',
                 selectLimit: 1
             },
@@ -343,6 +343,8 @@ export class SqlMytbDbAllConfig {
             image_id_is: 'i_id',
             video_id_i: 'v_id',
             video_id_is: 'v_id',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',
             route_id_i: 't_id',

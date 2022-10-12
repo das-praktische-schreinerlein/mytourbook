@@ -22,6 +22,8 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
     static UPDATE_RELATION = [].concat(TourDocRecordRelation.hasOne ? Object.keys(TourDocRecordRelation.hasOne) : [])
         .concat(TourDocRecordRelation.hasMany ? Object.keys(TourDocRecordRelation.hasMany) : []);
     private validMoreNumberFilterNames = {
+        poi_id_i: true,
+        poi_id_is: true,
         track_id_i: true,
         track_id_is:  true,
         trip_id_i: true,

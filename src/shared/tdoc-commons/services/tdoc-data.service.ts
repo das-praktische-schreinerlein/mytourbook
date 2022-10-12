@@ -39,6 +39,7 @@ import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordRelation} from '../model
 import {TourDocLinkedInfoRecordSchema} from '../model/schemas/tdoclinkedinfo-record-schema';
 import {TourDocLinkedPlaylistRecord, TourDocLinkedPlaylistRecordRelation} from '../model/records/tdoclinkedplaylist-record';
 import {TourDocLinkedPlaylistRecordSchema} from '../model/schemas/tdoclinkedplaylist-record-schema';
+import {BaseJoinRecord} from '@dps/mycms-commons/dist/search-commons/model/records/basejoin-record';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -113,7 +114,7 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
     }
 
     protected defineIdMappings(): string[] {
-        return ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId', 'videoId', 'infoId'];
+        return ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId', 'videoId', 'infoId', 'playlistId'];
     }
 
     protected defineTypeMappings(): {} {
@@ -123,17 +124,72 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             video: 'videoId',
             track: 'trackId',
             location: 'locId',
+            playlist: 'playlistId',
             route: 'routeId',
             trip: 'tripId',
             news: 'newsId'
         };
     }
 
-    protected onImportRecordNewRecordProcessDefaults(record: TourDocRecord): void {
+    protected onImportRecordNewRecordProcessDefaults(record: TourDocRecord, recordIdMapping?: {}, recordRecoverIdMapping?: {}): void {
         record.subtype = record.subtype ? record.subtype.replace(/[-a-zA-Z_]+/g, '') : '';
         if (record.type.toLowerCase() === 'location' && record.locIdParent === undefined
             && record.locId !== this.defaultLocIdParent) {
             record.locIdParent = this.defaultLocIdParent;
         }
+
+        this.remapBaseJoins(<TourDocLinkedInfoRecord[]> record['tdoclinkedinfos'], 'infoId',
+            recordIdMapping, recordRecoverIdMapping);
+        this.remapBaseJoins(<TourDocLinkedInfoRecord[]> record['tdoclinkedroutes'], 'routeId',
+            recordIdMapping, recordRecoverIdMapping);
+        this.remapBaseJoins(<TourDocLinkedInfoRecord[]> record['tdoclinkedplaylists'], 'playlistId',
+            recordIdMapping, recordRecoverIdMapping);
     }
+
+    protected remapBaseJoins(baseJoins: BaseJoinRecord[], refIdFieldName: any, recordIdMapping?: {}, recordRecoverIdMapping?: {}): void {
+        if (baseJoins) {
+            for (const join of baseJoins) {
+                const refIdMapping = recordIdMapping[refIdFieldName];
+                const refId = join.refId;
+                if (refIdMapping && refIdMapping[refId]) {
+                    console.log('orig join: ' + join.id + ' map join ref ' + refIdFieldName + ' ' + refId
+                        + '->' + refIdMapping[refId]);
+                    join.refId = refIdMapping[refId] + '';
+                } else {
+                    console.warn('WARNING NO Id-Mapping orig join: ' + join.id + ' map baseJoin ref ' + refIdFieldName + ' ' + refId
+                        + '->' + refIdMapping[refId]);
+                }
+            }
+        }
+    }
+
+    protected generateImportRecordQuery(record: TourDocRecord): {} {
+        if ('poi' === record.type.toLowerCase() && record['tdocdatainfo'] && (<TourDocDataInfoRecord>record['tdocdatainfo']).guides) {
+            return {
+                where: {
+                    name_s: {
+                        'in': [record.name]
+                    },
+                    data_info_guides_s: {
+                        'in': [(<TourDocDataInfoRecord>record['tdocdatainfo']).guides],
+                    },
+                    type_txt: {
+                        'in': [record.type.toLowerCase()]
+                    }
+                }
+            }
+        }
+
+        return {
+            where: {
+                name_s: {
+                    'in': [record.name]
+                },
+                type_txt: {
+                    'in': [record.type.toLowerCase()]
+                }
+            }
+        };
+    }
+
 }

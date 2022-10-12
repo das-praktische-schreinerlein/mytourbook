@@ -421,7 +421,7 @@ export class SqlMytbDbOdImageObjectConfig {
                 orderBy: 'value asc'
             },
             'type_txt': {
-                constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info', 'playlist'],
+                constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"odimgobject"',
                 selectLimit: 1
             },
@@ -484,6 +484,8 @@ export class SqlMytbDbOdImageObjectConfig {
             info_id_is: '"666dummy999"',
             video_id_is: '"666dummy999"',
             video_id_i: '"666dummy999"',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             route_id_i: 'kategorie.t_id',
             route_id_is: 'kategorie.t_id',
             track_id_i: 'image.k_id',

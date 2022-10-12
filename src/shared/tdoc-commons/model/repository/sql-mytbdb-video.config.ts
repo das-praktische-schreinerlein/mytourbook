@@ -428,7 +428,7 @@ export class SqlMytbDbVideoConfig {
                 orderBy: 'value asc'
             },
             'type_txt': {
-                constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image', 'odimgobject', 'destination', 'info', 'playlist'],
+                constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image', 'odimgobject', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"video"',
                 selectLimit: 1
             },
@@ -495,6 +495,8 @@ export class SqlMytbDbVideoConfig {
             video_id_i: 'video.v_id',
             video_id_is: 'video.v_id',
             v_fav_url_txt: 'video.v_calced_path',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             route_id_i: 'kategorie.t_id',
             route_id_is: 'kategorie.t_id',
             track_id_i: 'video.k_id',

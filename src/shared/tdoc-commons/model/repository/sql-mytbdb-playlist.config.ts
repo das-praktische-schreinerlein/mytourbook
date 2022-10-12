@@ -274,7 +274,7 @@ export class SqlMytbDbPlaylistConfig {
                 filterField: '"666dummy999"'
             },
             'type_txt': {
-                constValues: ['playlist', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info'],
+                constValues: ['playlist', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'poi'],
                 filterField: '"playlist"',
                 selectLimit: 1
             },
@@ -330,6 +330,8 @@ export class SqlMytbDbPlaylistConfig {
             destination_id_ss: '"666dummy999"',
             playlist_id_i: 'playlist.p_id',
             playlist_id_is: 'playlist.p_id',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             route_id_i: '"666dummy999"',
             route_id_is: '"666dummy999"',
             track_id_i: '"666dummy999"',

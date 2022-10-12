@@ -69,7 +69,7 @@
         <app-tdoc-linked-routes [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-routes>
 
         <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
-        <ng-container *ngIf="record.type === 'ROUTE'">
+        <ng-container *ngIf="['ROUTE', 'LOCATION', 'POI'].includes(record.type)">
             <app-tdoc-linked-infos [record]="listItem.currentRecord" [small]="false"></app-tdoc-linked-infos>
         </ng-container>
 

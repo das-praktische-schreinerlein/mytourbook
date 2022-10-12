@@ -391,7 +391,7 @@ export class SqlMytbDbTripConfig {
                 noFacet: true
             },
             'type_txt': {
-                constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'playlist'],
+                constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"trip"',
                 selectLimit: 1
             },
@@ -474,6 +474,8 @@ export class SqlMytbDbTripConfig {
             video_id_i: '"666dummy999"',
             image_id_is: '"666dummy999"',
             image_id_i: '"666dummy999"',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             track_id_is: '"666dummy999"',
             track_id_i: '"666dummy999"',
             route_id_is: '"666dummy999"',

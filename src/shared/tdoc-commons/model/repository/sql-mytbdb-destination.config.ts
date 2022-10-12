@@ -320,7 +320,7 @@ export class SqlMytbDbDestinationConfig {
                 action: AdapterFilterActions.IN_NUMBER
             },
             'type_txt': {
-                constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info', 'playlist'],
+                constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"destination"',
                 selectLimit: 1
             },
@@ -546,6 +546,8 @@ export class SqlMytbDbDestinationConfig {
             image_id_i: '"666dummy999"',
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             route_id_i: 'dtour.t_id',
             route_id_is: 'dtour.t_id',
             track_id_i: 'k.k_id',

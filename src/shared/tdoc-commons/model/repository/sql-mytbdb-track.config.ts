@@ -535,7 +535,7 @@ export class SqlMytbDbTrackConfig {
                 action: AdapterFilterActions.IN_NUMBER
             },
             'type_txt': {
-                constValues: ['track', 'route', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info', 'playlist'],
+                constValues: ['track', 'route', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"track"',
                 selectLimit: 1
             },
@@ -652,6 +652,8 @@ export class SqlMytbDbTrackConfig {
             info_id_is: '"666dummy999"',
             loc_id_i: 'kategorie.l_id',
             loc_id_is: 'kategorie.l_id',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             route_id_i: 'kategorie.t_id',
             route_id_is: 'kategorie.t_id',
             track_id_i: 'kategorie.k_id',

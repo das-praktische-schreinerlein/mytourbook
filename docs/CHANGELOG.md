@@ -16,6 +16,10 @@
 - improved gpx-track-edit - use dynamic defaults
 - backend+frontend: added geo-state to filter for with or without map
 - added clone-functionality to copy entities
+- added new entity-type: POI
+- added converter to import POIs from geojson-files
+- database: added optional fix to change collation to utf8
+- backend: fix remap of basejoins on import
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -23,6 +27,8 @@
 - admin: added fixtures to remove duplicates from database to admin-ui
 - backend+frontend: added geo-state to filter for with or without map
 - frontend: added clone-functionality to copy entities
+- backend+frontend: added new entity-type: POI
+- backend: added converter to import POIs from geojson-files
 
 ### improvements
 - backend: extend image-export with more filter
@@ -34,9 +40,10 @@
 ### bug fixes
 - backend: fixed media-export of dependent records
 - shared: remove duplicates from lists
+- backend: fix remap of basejoins on import
 
 ### breaking changes
-- none
+- database: added optional fix to change collation to utf8
 
 
 ## 7.3.0 (2022-08-29)

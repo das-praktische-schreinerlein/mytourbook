@@ -32,6 +32,10 @@ export class TourDocSqlMytbDbKeywordAdapter {
         return this.setGenericKeywords('route', dbId, keywords, opts);
     }
 
+    public setPoiKeywords(dbId: number, keywords: string, opts: any): Promise<any> {
+        return this.setGenericKeywords('poi', dbId, keywords, opts);
+    }
+
     protected setGenericKeywords(table: string, dbId: number, keywords: string, opts: any): Promise<any> {
         return this.commonSqlKeywordAdapter.setGenericKeywords(table, dbId, keywords, opts, true);
     }

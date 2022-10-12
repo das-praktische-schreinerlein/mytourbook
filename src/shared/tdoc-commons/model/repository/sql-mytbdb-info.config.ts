@@ -31,6 +31,12 @@ export class SqlMytbDbInfoConfig {
                 groupByFields: ['GROUP_CONCAT(DISTINCT COALESCE(tift.tif_linked_details, "") ORDER BY tift.tif_linked_details SEPARATOR ", ") AS tif_ref_details']
             },
             {
+                from: 'LEFT JOIN poi_info poiift ON info.if_id = poiift.if_id ' +
+                    'LEFT JOIN poi poiifpoi ON poiift.poi_id = poiifpoi.poi_id',
+                triggerParams: ['poi_id_i', 'poi_id_is'],
+                groupByFields: ['GROUP_CONCAT(DISTINCT COALESCE(poiift.poiif_linked_details, "") ORDER BY poiift.poiif_linked_details SEPARATOR ", ") AS poiif_ref_details']
+            },
+            {
                 from: 'LEFT JOIN destination dt ON dt.d_id in (tiftour.t_calced_d_id)',
                 triggerParams: ['destination_id_s', 'destination_id_ss'],
                 groupByFields: []
@@ -97,6 +103,10 @@ export class SqlMytbDbInfoConfig {
                 sql: 'SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour_info.t_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM tour_info' +
                     '      WHERE tour_info.if_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=POI_COUNT:::value=", CAST(COUNT(DISTINCT poi_info.poi_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM poi_info' +
+                    '      WHERE poi_info.if_id IN (:id)' +
                     '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(COUNT(DISTINCT location.l_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM info' +
@@ -264,7 +274,7 @@ export class SqlMytbDbInfoConfig {
                     '  kw_name AS value ' +
                     'FROM' +
                     ' keyword' +
-                    ' WHERE kw_name like "KW_%"' +
+                    ' WHERE kw_name like "KW_%" or  kw_name like "SOURCE_%"' +
                     ' GROUP BY count, value' +
                     ' ORDER BY value',
                 filterField: 'kw_name',
@@ -365,7 +375,7 @@ export class SqlMytbDbInfoConfig {
                 action: AdapterFilterActions.IN_NUMBER
             },
             'type_txt': {
-                constValues: ['info', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'playlist'],
+                constValues: ['info', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'playlist', 'poi'],
                 filterField: '"info"',
                 selectLimit: 1
             },
@@ -377,6 +387,8 @@ export class SqlMytbDbInfoConfig {
             }
         },
         sortMapping: {
+            'countPois': '(SELECT COUNT(DISTINCT poi_sort.poi_id) FROM poi_info poi_sort WHERE poi_sort.if_id = info.if_id) ASC, if_name ASC',
+            'countPoisDesc': '(SELECT COUNT(DISTINCT poi_sort.poi_id) FROM poi_info poi_sort WHERE poi_sort.if_id = info.if_id) DESC, if_name ASC',
             'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour_info t_sort WHERE t_sort.if_id = info.if_id) ASC, if_name ASC',
             'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour_info t_sort WHERE t_sort.if_id = info.if_id) DESC, if_name ASC',
             'countLocations': '(SELECT COUNT(DISTINCT location.l_id) FROM location' +
@@ -421,6 +433,8 @@ export class SqlMytbDbInfoConfig {
             info_id_is: 'info.if_id',
             route_id_i: 'tift.t_id',
             route_id_is: 'tift.t_id',
+            poi_id_i: 'poiift.poi_id',
+            poi_id_is: 'poiift.poi_id',
             track_id_i: 'k.k_id',
             track_id_is: 'k.k_id',
             video_id_is: '"666dummy999"',
@@ -509,6 +523,7 @@ export class SqlMytbDbInfoConfig {
         referenced: [],
         joins: [
             { table: 'info_keyword', fieldReference: 'if_id' },
+            { table: 'poi_info', fieldReference: 'if_id' },
             { table: 'tour_info', fieldReference: 'if_id' },
             { table: 'location_info', fieldReference: 'if_id' }
         ]

@@ -14,6 +14,43 @@
             "editPrefix": "KW_",
             "possiblePrefixes": ["KW_", "", "kw_"],
             "structuredKeywords": [
+                {"name": "POI",
+                    "keywords": [
+                        "SOURCE_openstreetmap",
+                        "SOURCE_GeoJson",
+
+                        "amenity_bbq",
+                        "amenity_bench",
+                        "amenity_drinking_water",
+                        "amenity_grave_yard",
+                        "amenity_place_of_worship",
+                        "amenity_shelter",
+                        "climbing_route_top",
+                        "climbing_sport_climbing",
+                        "man_made_antenna",
+                        "man_made_borderstone",
+                        "man_made_boundary_stone",
+                        "man_made_cairn",
+                        "man_made_campanile",
+                        "man_made_cross",
+                        "man_made_flagpole",
+                        "man_made_guy_wire",
+                        "man_made_mast",
+                        "man_made_pole",
+                        "man_made_summit_cross",
+                        "man_made_survey_point",
+                        "man_made_tower",
+                        "natural_peak",
+                        "sport_climbing",
+                        "surface_asphalt",
+                        "tourism_artwork",
+                        "tourism_attraction",
+                        "tourism_information",
+                        "tourism_register",
+                        "tourism_viewpoint",
+                        "tourism_viewpointguestbook",
+                        "tourism_viewpointpicnic_site"
+                    ]},
                 {"name": "Todos",
                     "keywords": ["TODOKEYWORDS"]},
                 {"name": "Tourdauer",
@@ -2421,7 +2458,8 @@
                 "TRIP": true,
                 "NEWS": true,
                 "PLAYLIST": true,
-                "VIDEO": true
+                "VIDEO": true,
+                "POI": true
             }
         },
         "tdoc-albumpage": {
@@ -2441,6 +2479,7 @@
                 "LOCATION": true,
                 "TRIP": true,
                 "PLAYLIST": true,
+                "POI": true,
                 "ALL": true
             },
             "availableToDoDashboardRows": {
@@ -2474,8 +2513,8 @@
         },
         "cdoc-extended-object-properties":  {
             "allowedExtendedObjectProperties": {
-                "list-item-flat-big": ["IMAGE_COUNT", "IMAGE_TOP_COUNT", "IMAGE_FAV_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT", "INFO_COUNT", "LOCATION_COUNT"],
-                "show-big": ["IMAGE_COUNT", "IMAGE_TOP_COUNT", "IMAGE_FAV_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT", "INFO_COUNT", "LOCATION_COUNT"]
+                "list-item-flat-big": ["IMAGE_COUNT", "IMAGE_TOP_COUNT", "IMAGE_FAV_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT", "INFO_COUNT", "LOCATION_COUNT", "POI_COUNT"],
+                "show-big": ["IMAGE_COUNT", "IMAGE_TOP_COUNT", "IMAGE_FAV_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT", "INFO_COUNT", "LOCATION_COUNT", "POI_COUNT"]
             },
             "modes": {
                 "list-item-flat-big": "short",

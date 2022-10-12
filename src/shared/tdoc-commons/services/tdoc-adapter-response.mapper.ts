@@ -255,9 +255,28 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['gpsTrackState'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'gpstracks_state_i', undefined);
 
         const origKeywordsArr = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'keywords_txt', '').split(',');
-        let newKeywordsArr = [];
+        const replaceKeywordPatterns = BeanUtils.getValue(this.config, 'mapperConfig.replaceKeywordPatterns');
+        let srcKeywordsArr = [];
+        if (replaceKeywordPatterns && replaceKeywordPatterns.length > 0) {
+            for (let keyword of origKeywordsArr) {
+                keyword = keyword.trim();
+                if (keyword === '') {
+                    continue;
+                }
+
+                for (const pattern of replaceKeywordPatterns) {
+                    keyword = keyword.replace(new RegExp(pattern[0]), pattern[1]);
+                }
+
+                srcKeywordsArr.push(keyword);
+            }
+        } else {
+            srcKeywordsArr = [].concat(origKeywordsArr);
+        }
+
         const allowedKeywordPatterns = BeanUtils.getValue(this.config, 'mapperConfig.allowedKeywordPatterns');
-        for (let keyword of origKeywordsArr) {
+        let newKeywordsArr = [];
+        for (let keyword of srcKeywordsArr) {
             keyword = keyword.trim();
             if (keyword === '') {
                 continue;
@@ -272,16 +291,6 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 }
             } else {
                 newKeywordsArr.push(keyword);
-            }
-        }
-        const replaceKeywordPatterns = BeanUtils.getValue(this.config, 'mapperConfig.replaceKeywordPatterns');
-        if (replaceKeywordPatterns && replaceKeywordPatterns.length > 0) {
-            for (let i = 0; i < newKeywordsArr.length; i++) {
-                let keyword = newKeywordsArr[i];
-                for (const pattern of replaceKeywordPatterns) {
-                    keyword = keyword.replace(new RegExp(pattern[0]), pattern[1]);
-                }
-                newKeywordsArr[i] = keyword;
             }
         }
 

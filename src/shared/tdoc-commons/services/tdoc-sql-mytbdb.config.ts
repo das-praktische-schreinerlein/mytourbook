@@ -20,6 +20,7 @@ import {SqlMytbDbNewsConfig} from '../model/repository/sql-mytbdb-news.config';
 import {SqlMytbDbInfoConfig} from '../model/repository/sql-mytbdb-info.config';
 import {SqlMytbDbPlaylistConfig} from '../model/repository/sql-mytbdb-playlist.config';
 import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
+import {SqlMytbDbPoiConfig} from '../model/repository/sql-mytbdb-poi.config';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly tableConfigs: TableConfigs = {
@@ -30,6 +31,7 @@ export class TourDocSqlMytbDbConfig {
         'route': SqlMytbDbRouteConfig.tableConfig,
         'destination': SqlMytbDbDestinationConfig.tableConfig,
         'location': SqlMytbDbLocationConfig.tableConfig,
+        'poi': SqlMytbDbPoiConfig.tableConfig,
         'trip': SqlMytbDbTripConfig.tableConfig,
         'info': SqlMytbDbInfoConfig.tableConfig,
         'news': SqlMytbDbNewsConfig.tableConfig,
@@ -47,7 +49,8 @@ export class TourDocSqlMytbDbConfig {
             'track': SqlMytbDbTrackConfig.keywordModelConfigType,
             'route': SqlMytbDbRouteConfig.keywordModelConfigType,
             'info': SqlMytbDbInfoConfig.keywordModelConfigType,
-            'location': SqlMytbDbLocationConfig.keywordModelConfigType
+            'location': SqlMytbDbLocationConfig.keywordModelConfigType,
+            'poi': SqlMytbDbPoiConfig.keywordModelConfigType
         }
     };
 
@@ -76,6 +79,17 @@ export class TourDocSqlMytbDbConfig {
         commonSelectMaxPositionSql: 'SELECT max(pos) AS maxPos FROM all_entries_playlist_max WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?))'
     };
 
+    public static readonly poiModelConfigType: PlaylistModelConfigType = {
+        table: 'poi',
+        fieldId: 'poi_id',
+        fieldName: 'poi_name',
+        joins: {
+        },
+        commonChangeSuccessorPosSqls: [
+        ],
+        commonSelectMaxPositionSql: undefined
+    };
+
     public static readonly rateModelConfigType: RateModelConfigType = {
         tables: {
             'image': SqlMytbDbImageConfig.rateModelConfigTypeImage,
@@ -96,6 +110,7 @@ export class TourDocSqlMytbDbConfig {
             name: 'linkedinfos',
             tables: {
                 'location': SqlMytbDbLocationConfig.joinModelConfigTypeLinkedInfos,
+                'poi': SqlMytbDbPoiConfig.joinModelConfigTypeLinkedInfos,
                 'route': SqlMytbDbRouteConfig.joinModelConfigTypeLinkedInfos
             }
         }
@@ -209,7 +224,8 @@ export class TourDocSqlMytbDbConfig {
             'news': SqlMytbDbNewsConfig.actionTagReplaceConfig,
             'info': SqlMytbDbInfoConfig.actionTagReplaceConfig,
             'trip': SqlMytbDbTripConfig.actionTagReplaceConfig,
-            'playlist': SqlMytbDbPlaylistConfig.actionTagReplaceConfig
+            'playlist': SqlMytbDbPlaylistConfig.actionTagReplaceConfig,
+            'poi': SqlMytbDbPoiConfig.actionTagReplaceConfig
         }
     };
 

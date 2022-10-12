@@ -2,7 +2,9 @@ import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-q
 import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-block.adapter';
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
-import {ActionTagAssignJoinTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
+import {
+    ActionTagAssignJoinTableConfigType
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
@@ -271,7 +273,8 @@ export class SqlMytbDbLocationConfig {
                 noFacet: true
             },
             'data_tech_alt_max_facet_is': {
-                noFacet: true
+                selectField: 'location.l_calced_altMaxFacet',
+                orderBy: 'value asc'
             },
             'data_tech_dist_facets_fs': {
                 noFacet: true
@@ -394,7 +397,7 @@ export class SqlMytbDbLocationConfig {
                 noFacet: true
             },
             'type_txt': {
-                constValues: ['location', 'track', 'route', 'trip', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'playlist'],
+                constValues: ['location', 'track', 'route', 'trip', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"location"',
                 selectLimit: 1
             },
@@ -455,7 +458,7 @@ export class SqlMytbDbLocationConfig {
             data_tech_alt_max_i: 'location.l_geo_ele',
             desc_txt: 'location.l_meta_shortdesc',
             desc_md_txt: 'location.l_meta_shortdesc_md',
-            desc_html_txt: 'l_meta_shortdesc_html',
+            desc_html_txt: 'location.l_meta_shortdesc_html',
             geo_lon_s: 'location.l_calced_gps_lon',
             geo_lat_s: 'location.l_calced_gps_lat',
             geo_loc_p: 'location.l_calced_gps_loc',
@@ -471,6 +474,8 @@ export class SqlMytbDbLocationConfig {
             image_id_i: '"666dummy999"',
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             trip_id_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(location.l_name), 1, 1)',
             html: 'CONCAT(location.l_name, " ", COALESCE(location.l_meta_shortdesc,""), " ", lh.l_lochirarchietxt)'

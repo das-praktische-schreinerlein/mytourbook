@@ -970,6 +970,15 @@
                                             [showResultList]="false"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.POI"
+                                            [label]="'Ziele'"
+                                            i18n-label="label inline-searchpage POI|Label inline-searchpage POI@@linline-search.label.tdoc.POI"
+                                            [params]="getFiltersForType(record, 'POI')"
+                                            [htmlId]="'POI'"
+                                            [showForm]="false"
+                                            [showResultList]="false"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
 
             <ng-container *ngSwitchCase="'PLAYLIST'">
@@ -1065,6 +1074,53 @@
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
 
+            <ng-container *ngSwitchCase="'POI'">
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Region'"
+                                            i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.tdoc.LOCATION"
+                                            [params]="getFiltersForType(record, 'LOCATION')"
+                                            [htmlId]="'LOCATION'"
+                                            [showForm]="false"
+                                            [noCount]=true
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Routen'"
+                                            i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.tdoc.ROUTE"
+                                            [params]="getFiltersForType(record, 'ROUTE')"
+                                            [htmlId]="'ROUTE'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [showTimetable]="'true'"
+                                            [loadTrack]="'false'"
+                                            [showItemMapFlag]="false"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.ROUTE"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.INFO"
+                                            [label]="'Infos'"
+                                            i18n-label="label inline-searchpage INFO|Label inline-searchpage INFO@@linline-search.label.tdoc.INFO"
+                                            [params]="getFiltersForType(record, 'INFO')"
+                                            [htmlId]="'INFO'"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.INFO"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.TRACK"
+                                            [label]="'Tracks'"
+                                            i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.tdoc.TRACK"
+                                            [params]="getFiltersForType(record, 'TRACK')"
+                                            [htmlId]="'TRACK'"
+                                            [showForm]="false"
+                                            [showTimetable]="'true'"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.TRACK"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+            </ng-container>
         </ng-container>
 
         <div class="card-footer text-right mt-2" style="width: 100%">

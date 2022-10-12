@@ -2,7 +2,9 @@ import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-q
 import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-block.adapter';
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
-import {ActionTagAssignJoinTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
+import {
+    ActionTagAssignJoinTableConfigType
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
@@ -528,7 +530,7 @@ export class SqlMytbDbRouteConfig {
                 action: AdapterFilterActions.IN_NUMBER
             },
             'type_txt': {
-                constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info', 'playlist'],
+                constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"route"',
                 selectLimit: 1
             },
@@ -795,6 +797,8 @@ export class SqlMytbDbRouteConfig {
             image_id_i: '"666dummy999"',
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',
+            poi_id_i: '"666dummy999"',
+            poi_id_is: '"666dummy999"',
             route_id_i: 'tour.t_id',
             route_id_is: 'tour.t_id',
             video_id_is: '"666dummy999"',

@@ -34,6 +34,7 @@ export interface TourDocSectionPageComponentAvailableTabs {
     ROUTE?: boolean;
     TRACK?: boolean;
     TRIP?: boolean;
+    POI?: boolean;
     ALL?: boolean;
 }
 
@@ -71,6 +72,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         LOCATION: true,
         TRIP: true,
         VIDEO: true,
+        POI: true,
         ALL: true
     };
     availableDashboardColumns: TourDocSectionPageComponentAvailableTabs = {
@@ -82,7 +84,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         LOCATION: true,
         TRIP: true,
         NEWS: true,
-        INFO: true
+        INFO: true,
+        POI: true
     };
 
     availableToDoDashboardRows: TourDocSectionPageComponentDashboardRows = {

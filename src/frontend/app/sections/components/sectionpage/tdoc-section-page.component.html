@@ -437,6 +437,23 @@
             </ng-template>
         </ngb-tab>
 
+        <ngb-tab title="POIs" *ngIf="availableTabs.POI">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'POIs'"
+                                            i18n-label="label section-page POI|Label section-page POI@@linline-search.label.tdoc.POI"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page POI|SearchLinkLabel section-page POI@@linline-search.searchLinkLabel.tdoc.POI"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType('POI', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="false"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+
         <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Alles'"

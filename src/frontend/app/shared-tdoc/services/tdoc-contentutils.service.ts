@@ -11,7 +11,9 @@ import {
     CommonDocContentUtilsConfig,
     CommonItemData
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
-import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
+import {
+    BaseObjectDetectionImageObjectRecord
+} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
 import {ChartElement} from '../components/visjs-profilechart/visjs-profilechart.component';
 import {BaseImageRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 import {environment} from '../../../environments/environment';
@@ -294,6 +296,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
                 filters['perPage'] = 12;
             }
+        } else if (record.type === 'POI') {
+            filters['moreFilter'] = 'poi_id_is:' + record.id.replace('POI_', '');
         }
 
         if (type === 'TOPIMAGE') {

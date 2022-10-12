@@ -298,6 +298,22 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                     return allReject(reason);
                 });
             });
+        } else if (tabKey === 'poi') {
+            return new Promise<boolean>((allResolve, allReject) => {
+                const promises = [];
+                promises.push(this.keywordsAdapter.setPoiKeywords(dbId, props.keywords, opts));
+                if (props.get('tdoclinkedinfos')) {
+                    const infos: TourDocLinkedInfoRecord[] = props.get('tdoclinkedinfos');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedinfos', tabKey, dbId, infos, opts));
+                }
+
+                return Promise.all(promises).then(() => {
+                    return allResolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('setPoiDetails failed:', reason);
+                    return allReject(reason);
+                });
+            });
         }
 
 

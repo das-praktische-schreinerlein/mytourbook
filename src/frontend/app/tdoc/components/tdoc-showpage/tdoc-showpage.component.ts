@@ -45,6 +45,7 @@ export interface TourDocShowpageComponentAvailableTabs {
     TRACK?: boolean;
     TRIP?: boolean;
     TRIP_NEARBY?: boolean;
+    POI?: boolean;
     ALL?: boolean;
 }
 
@@ -68,6 +69,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TOPIMAGE?: TourDocRecord[];
         TRACK?: TourDocRecord[];
         TRIP?: TourDocRecord[];
+        POI?: TourDocRecord[];
     } = {
         IMAGE: [],
         ODIMGOBJECT: [],
@@ -78,6 +80,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TOPIMAGE: [],
         TRACK: [],
         TRIP: [],
+        POI: []
     };
     tagcloudSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
     currentMapTDocId = undefined;
@@ -101,6 +104,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         IMAGE_SIMILAR?: boolean|number;
         TRACK?: boolean|number;
         TRIP?: boolean|number;
+        POI?: boolean|number;
     } = {
         ALL_ENTRIES: true,
         IMAGE: false,
@@ -113,7 +117,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TOPIMAGE: false,
         IMAGE_SIMILAR: false,
         TRACK: false,
-        TRIP: false
+        TRIP: false,
+        POI: false
     };
     availableTabs: TourDocShowpageComponentAvailableTabs = {
         ALL_ENTRIES: false,
@@ -131,7 +136,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRIP: true,
         VIDEO: true,
         NEWS: true,
-        ODIMGOBJECT: true
+        ODIMGOBJECT: true,
+        POI: true
     };
     showItemObjectsFlag = false;
 
