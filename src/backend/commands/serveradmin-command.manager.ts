@@ -12,6 +12,7 @@ import {TourDocLoaderCommand} from './tdoc-loader.command';
 import {TourDocExporterCommand} from './tdoc-exporter.command';
 import {DbAdminCommand} from './dbadmin.command';
 import {MediaImportManagerCommand} from './media-import-manager.command';
+import {TourDocConverterCommand} from './tdoc-converter.command';
 
 export interface ServerAdminCommandConfigType extends CommonServerAdminCommandConfigType, AdminCommandConfigType {
     importDir: string,
@@ -28,6 +29,7 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
         // only define a subset of commands
         super({
                 'initCache': new CacheInitializerCommand(),
+                'convertTourDoc': new TourDocConverterCommand(),
                 'loadTourDoc': new TourDocLoaderCommand(),
                 'exportTourDoc': new TourDocExporterCommand(),
                 'mediaManager': new MediaManagerCommand(),
@@ -65,6 +67,7 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
             initializedArgs['srcFile'] = undefined;
             initializedArgs['sitemap'] = undefined;
             initializedArgs['file'] = undefined;
+            initializedArgs['mode'] = undefined;
 
             // TODO check and reset
 

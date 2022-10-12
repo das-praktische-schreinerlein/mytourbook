@@ -16,6 +16,31 @@
                     }
                 ]
             },
+            "POIIMPORT: importDataFromPoiDatabase": {
+                "description": "import data from poi-database: F:/playground/mytb-test/mytbbase/poi-import/poi_import.geojson",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "convertTourDoc",
+                            "action": "convertGeoJsonToTourDoc",
+                            "backend": "config/backend.dev.json",
+                            "srcFile": "F:/playground/mytb-test/mytbbase/poi-import/poi_import.geojson",
+                            "mode": "RESPONSE",
+                            "file": "F:/playground/mytb-test/mytbbase/poi-import/poi_import-dump.json",
+                            "renameFileIfExists": true
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "loadTourDoc",
+                            "action": "loadDocs",
+                            "backend": "config/backend.dev.json",
+                            "file": "F:/playground/mytb-test/mytbbase/poi-import/poi_import-dump.json",
+                            "renameFileAfterSuccess": true
+                        }
+                    }
+                ]
+            },
             "MEDIAIMPORT: syncMedia": {
                 "description": "syncMedia media in media-directory",
                 "commands": [

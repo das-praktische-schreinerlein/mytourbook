@@ -31,7 +31,7 @@ export class TourDocLoaderCommand extends CommonAdminCommand {
     }
 
     protected processCommandArgs(argv: {}): Promise<any> {
-        const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video'];
+        const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video', 'info', 'poi'];
 
         const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {

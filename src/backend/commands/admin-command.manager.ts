@@ -16,6 +16,7 @@ import {SolrPublishCommand} from './solrpublish.command';
 import {ExtendedConfigInitializerCommand} from './extendedconfig-initializer.command';
 import {DbAdminCommand} from './dbadmin.command';
 import {MediaImportManagerCommand} from './media-import-manager.command';
+import {TourDocConverterCommand} from './tdoc-converter.command';
 
 // tslint:disable-next-line:no-empty-interface
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
@@ -28,6 +29,7 @@ export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandC
             'initConfig': new ExtendedConfigInitializerCommand(),
             'generateSitemap': new SiteMapGeneratorCommand(),
             'generateRedirects': new RedirectGeneratorCommand(),
+            'convertTourDoc': new TourDocConverterCommand(),
             'loadTourDoc': new TourDocLoaderCommand(),
             'exportTourDoc': new TourDocExporterCommand(),
             'mediaManager': new MediaManagerCommand(),
