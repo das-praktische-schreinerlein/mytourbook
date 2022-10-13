@@ -20,6 +20,7 @@
 - added converter to import POIs from geojson-files
 - database: added optional fix to change collation to utf8
 - backend: fix remap of basejoins on import
+- frontend: improved gpx-geoloc-edit - use separate component
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -36,6 +37,7 @@
 - frontend: improved desc-recommendation
 - backend+frontend: improve handling of destinations
 - frontend: improved gpx-track-edit - use dynamic defaults
+- frontend: improved gpx-geoloc-edit - use separate component
 
 ### bug fixes
 - backend: fixed media-export of dependent records

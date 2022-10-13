@@ -22,9 +22,6 @@ import {
     CommonDocEditformComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 import {DOCUMENT} from '@angular/common';
-import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
-import * as L from 'leaflet';
-import {LatLng} from 'leaflet';
 import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedroute-record';
 import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
@@ -32,7 +29,6 @@ import {TourDocNameSuggesterService} from '../../services/tdoc-name-suggester.se
 import {TourDocDescSuggesterService} from '../../services/tdoc-desc-suggester.service';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
-import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {Router} from '@angular/router';
 import {LatLngTime} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
 import {GpxEditAreaComponent} from '../gpx-editarea/gpx-editarea.component';
@@ -68,11 +64,9 @@ export interface TurDocEditformComponentConfig extends CommonDocEditformComponen
 })
 export class TourDocEditformComponent extends CommonDocEditformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
     TourDocDataService> {
-    private geoLocationService = new GeoLocationService();
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
     private personsFound: StructuredKeywordState[] = [];
-    private geoLocMap: L.Map;
     private flgDescRendered = false;
 
     public optionsSelect: {
@@ -188,7 +182,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 protected searchFormUtils: SearchFormUtils, protected tdocDataService: TourDocDataService,
                 protected contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document,
                 protected platformService: PlatformService,
-                protected angularMarkdownService: AngularMarkdownService, protected angularHtmlService: AngularHtmlService,
+                protected angularMarkdownService: AngularMarkdownService,
                 protected tourDocNameSuggesterService: TourDocNameSuggesterService,
                 protected tourDocDescSuggesterService: TourDocDescSuggesterService,
                 protected router: Router) {
@@ -323,140 +317,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
-    doGeoLocationSearch(selector) {
-        const me = this;
-        this.geoLocationService.doLocationSearch(selector, this.editFormGroup.getRawValue()['geoLocAddress']).then((event: any) => {
-            me.editFormGroup.patchValue({'geoLoc': event.detail.lat + ',' + event.detail.lon + ',' + 0});
-            me.updateGeoLocMap();
-        }).catch(reason => {
-            console.warn('locationsearch failed', reason);
-        });
-
-        return false;
-    }
-
-    updateGeoLocMap(): boolean {
-        const me = this;
-        const geoRecords = [];
-
-        let trackSrc = this.editFormGroup.getRawValue()['gpsTrackSrc'];
-        if (trackSrc !== undefined && trackSrc !== null && trackSrc.length > 0) {
-            trackSrc = GeoGpxParser.fixXml(trackSrc);
-            trackSrc = GeoGpxParser.fixXmlExtended(trackSrc);
-            trackSrc = GeoGpxParser.reformatXml(trackSrc);
-            trackSrc = trackSrc.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
-            geoRecords.push(TourDocRecordFactory.createSanitized({
-                id: 'TMPLOC' + (new Date()).getTime(),
-                gpsTrackSrc: trackSrc,
-                gpsTrackBaseFile: 'tmp.gpx',
-                name: this.editFormGroup.getRawValue()['name'],
-                type: this.record.type,
-                datestart: new Date().toISOString(),
-                dateend: new Date().toISOString(),
-                dateshow: this.editFormGroup.getRawValue()['dateshow']
-            }));
-        }
-
-        const geoLoc = this.editFormGroup.getRawValue()['geoLoc'];
-        if (geoLoc !== undefined && geoLoc !== null && geoLoc.length > 0) {
-            const lst = geoLoc ? geoLoc.split(',') : [];
-            geoRecords.push(TourDocRecordFactory.createSanitized({
-                id: 'TMPAREA' + (new Date()).getTime(),
-                geoLoc: geoLoc,
-                geoLat: lst.length > 1 ? lst[0] : undefined,
-                geoLon: lst.length > 1 ? lst[1] : undefined,
-                name: this.editFormGroup.getRawValue()['name'],
-                type: this.record.type,
-                datestart: new Date().toISOString(),
-                dateend: new Date().toISOString(),
-                dateshow: this.editFormGroup.getRawValue()['dateshow']
-            }));
-        }
-        me.geoLocRecords = geoRecords;
-        this.cd.markForCheck();
-
-        return false;
-    }
-
-    onGeoLocMapCreated(map: L.Map) {
-        this.geoLocMap = map;
-    }
-
-    createNewGeoLocArea(): boolean {
-        const points = [];
-        const geoLoc = this.editFormGroup.getRawValue()['geoLoc'];
-        if (geoLoc !== undefined && geoLoc !== null && geoLoc.length > 0) {
-            const lst = geoLoc ? geoLoc.split(',') : [];
-            if (lst.length > 1) {
-                const lat = parseFloat(lst[0]);
-                const lon = parseFloat(lst[1]);
-                let factor;
-                let type = this.editFormGroup.getRawValue()['subtype'];
-                if (Array.isArray(type) && type.length > 0) {
-                    type = type[0];
-                }
-                switch (type ? type.toString() : '') {
-                    case '1':
-                        factor = 10;
-                        break;
-                    case '2':
-                        factor = 3;
-                        break;
-                    case '3':
-                        factor = 1;
-                        break;
-                    case '4':
-                        factor = 0.2;
-                        break;
-                    default:
-                        factor = 0.02;
-                }
-
-                points.push(new LatLng(lat - factor, lon - factor),
-                    new LatLng(lat - factor, lon + factor),
-                    new LatLng(lat + factor, lon + factor),
-                    new LatLng(lat + factor, lon - factor),
-                    new LatLng(lat - factor, lon - factor));
-            }
-        }
-
-        let newGpx = GeoGpxParser.createNewRouteGpx(this.editFormGroup.getRawValue()['name'], 'AREA', points);
-        newGpx = GeoGpxParser.fixXml(newGpx);
-        newGpx = GeoGpxParser.fixXmlExtended(newGpx);
-        newGpx = GeoGpxParser.reformatXml(newGpx);
-        this.setValue('gpsTrackSrc', newGpx);
-        this.updateGeoLocMap();
-
-        return false;
-    }
-
-    updateGeoLocArea(): boolean {
-        if (this.geoLocMap) {
-            let newGpx = '';
-            this.geoLocMap.eachLayer(layer => {
-                if (layer['getPoints']) {
-                    const points: LatLng[] = [];
-                    // @ts-ignore
-                    const markers: L.Marker[] = layer.getPoints();
-                    if (markers) {
-                        markers.forEach(marker => {
-                            points.push(marker.getLatLng());
-                        });
-                        newGpx += GeoGpxParser.createNewRouteGpx(this.editFormGroup.getRawValue()['name'], 'AREA', points);
-                    }
-                }
-            });
-
-            newGpx = GeoGpxParser.fixXml(newGpx);
-            newGpx = GeoGpxParser.fixXmlExtended(newGpx);
-            newGpx = GeoGpxParser.reformatXml(newGpx);
-            this.setValue('gpsTrackSrc', newGpx);
-            this.updateGeoLocMap();
-        }
-
-        return false;
-    }
-
     joinElementChanged(formElement: any, joinName: string, idx: number, add: boolean) {
         const indexes = this.joinIndexes[joinName];
         if (add && indexes) {
@@ -475,6 +335,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
     updateGpsTrackSrc(gpsTrackSrc: string): void {
         this.setValue('gpsTrackSrc', gpsTrackSrc);
+        this.updateMap();
+    }
+
+    updateGeoLoc(geoLoc: string): void {
+        this.setValue('geoLoc', geoLoc);
         this.updateMap();
     }
 
@@ -741,10 +606,14 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         if (values['gpsTrackSrc'] !== undefined && values['gpsTrackSrc'] !== null) {
             values['gpsTrackSrc'] = values['gpsTrackSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
         }
+
         if (values['geoLoc']) {
             const lst = values['geoLoc'].split(',');
             values['geoLat'] = lst.length > 1 ? lst[0] : undefined;
             values['geoLon'] = lst.length > 1 ? lst[1] : undefined;
+        } else {
+            values['geoLat'] = undefined;
+            values['geoLon'] = undefined;
         }
 
         this.prepareLinkedRoutesSubmitValues(values);
@@ -888,7 +757,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         super.updateFormComponents();
         this.updateGpxArea();
         this.updateMap();
-        this.updateGeoLocMap();
     }
 
     protected updateOptionValues(tdocSearchResult: TourDocSearchResult): boolean {
@@ -995,13 +863,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         }
 
         return true;
-    }
-
-    protected setSelectionRangeOnInput(input: HTMLInputElement|HTMLTextAreaElement, selectionStart: number, selectionEnd: number) {
-        if (input.setSelectionRange) {
-            input.focus();
-            input.setSelectionRange(selectionStart, selectionEnd);
-        }
     }
 
     protected getNumberFormValue(values: {}, formKey: string): number {

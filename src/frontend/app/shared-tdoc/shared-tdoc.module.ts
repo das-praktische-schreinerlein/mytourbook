@@ -59,6 +59,7 @@ import {RouterModule} from '@angular/router';
 import {TourDocLinkedInfosComponent} from './components/tdoc-linked-infos/tdoc-linked-infos.component';
 import {TourDocLinkedPlaylistsComponent} from './components/tdoc-linked-playlists/tdoc-linked-playlists.component';
 import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
+import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.component';
 
 @NgModule({
     declarations: [
@@ -107,7 +108,8 @@ import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplayli
         TourDocLinkedRoutesComponent,
         TourDocLinkedInfosComponent,
         TourDocLinkedPlaylistsComponent,
-        TourDocAssignPlaylistFormComponent
+        TourDocAssignPlaylistFormComponent,
+        GpxEditLocComponent
     ],
     imports: [
         ToastrModule,
@@ -175,7 +177,8 @@ import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplayli
         TourDocLinkedRoutesComponent,
         TourDocLinkedInfosComponent,
         TourDocLinkedPlaylistsComponent,
-        TourDocAssignPlaylistFormComponent
+        TourDocAssignPlaylistFormComponent,
+        GpxEditLocComponent
     ]
 })
 export class SharedTourDocModule {}

@@ -54,7 +54,7 @@
                 <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'gpsTrackState', formControlName: 'gpsTrackState'}"></ng-container>
             </div>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputGeoPosition;context:{key: 'tdoc.geoLoc', formControlName: 'geoLoc', recommend: trackStatistic.dist}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputGeoPosition;"></ng-container>
             </div>
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
@@ -644,41 +644,15 @@
         </div>
     </ng-template>
 
-    <ng-template #inputGeoPosition let-key="key" let-formControlName="formControlName">
-        <div class="col-sm-6">
-            <div class="input-group input-group-sm align-top">
-                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key + 'Source' | translate}}</label>
-                <input class="{{'inputGeoLocAddress' + formControlName}}" formControlName="geoLocAddress" type="text">
-                <div class="input-group-addon"><span (click)="doGeoLocationSearch('.inputGeoLocAddress' + formControlName);">&#x27A4;</span></div>
-            </div>
-            <div class="input-group input-group-sm align-top">
-                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
-                <input class="{{'inputGeoLoc' + formControlName}}" formControlName="geoLoc" type="text">
-            </div>
-            <div class="input-group input-group-sm align-top">
-                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key + 'Area' | translate}}</label>
-                <button (click)="createNewGeoLocArea()" *ngIf="editFormGroup.get('geoLoc').value && !editFormGroup.get('gpsTrackSrc').value"
-                        type="button" i18n="updateGeoLocNewArea label|Label for button: updateGeoLocNewArea@@label.editform.tdoc.updateGeoLocNewArea">*Area</button>
-                <button (click)="updateGeoLocMap()"
-                        type="button" i18n="updateGeoLocMap label|Label for button: updateGeoLocMap@@label.editform.tdoc.updateGeoLocMap">Daten -> Karte</button>
-                <button (click)="updateGeoLocArea()" type="button"
-                        i18n="updateGeoLocArea label|Label for button: updateGeoLocArea@@label.editform.tdoc.updateGeoLocArea">Karte -> Daten</button>
-            </div>
-            <div class="input-group input-group-sm align-top">
-                <textarea formControlName="gpsTrackSrc" class="form-control float-left" type="text"
-                          placeholder="geoLocArea"
-                          i18n-placeholder="geoLocArea placeholder|Placeholder for geoLocArea@@placeholder.form.tdoc.geoLocArea"></textarea>
-            </div>
-        </div>
-        <div class="col-sm-6" *ngIf="geoLocRecords.length > 0">
-            <div class="container content-container">
-                <app-tdoc-map [mapId]="'showGeoPosMap'"
-                              [height]="'400px'"
-                              [mapZoom]="'9'"
-                              [editable]="true"
-                              (mapCreated)="onGeoLocMapCreated($event)"
-                              [tdocs]="geoLocRecords"></app-tdoc-map>
-            </div>
+    <ng-template #inputGeoPosition>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <app-gpx-editloc [type]="record.type"
+                             [subtype]="record.subtype"
+                             [name]="record.name"
+                             [gpxSrc]="editFormGroup.getRawValue()['gpsTrackSrc']"
+                             [geoLoc]="editFormGroup.getRawValue()['geoLoc']"
+                             (saveTrackSrc)="updateGpsTrackSrc($event)"
+                             (saveGeoLoc)="updateGeoLoc($event)"></app-gpx-editloc>
         </div>
     </ng-template>
 
