@@ -21,6 +21,8 @@
 - database: added optional fix to change collation to utf8
 - backend: fix remap of basejoins on import
 - frontend: improved gpx-geoloc-edit - use separate component
+- frontend: improved form-handing with util-classes
+- frontend: inline-searchpage -> added own maps
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -38,6 +40,8 @@
 - backend+frontend: improve handling of destinations
 - frontend: improved gpx-track-edit - use dynamic defaults
 - frontend: improved gpx-geoloc-edit - use separate component
+- frontend: improved form-handing with util-classes
+- frontend: inline-searchpage -> added own maps
 
 ### bug fixes
 - backend: fixed media-export of dependent records

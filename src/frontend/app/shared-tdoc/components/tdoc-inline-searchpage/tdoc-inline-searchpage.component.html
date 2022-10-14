@@ -8,11 +8,16 @@
                         <ng-container *ngIf="noCount">{{ label != '' ?  label : ''}}</ng-container>
                         <ng-container *ngIf="! noCount">{{ label != '' ?  label + ':' : ''}} {{ searchResult.recordCount }}</ng-container>
                     </h5>
-                    <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined  && searchResult && searchResult.recordCount > 0" class="btn btn-action btn-sm float">{{searchLinkLabel}}</a>
-                    <a (click)="onM3UExport($event)" *ngIf="m3uExportAvailable" class="btn btn-action btn-sm float">{{m3uLinkLabel}}</a>
+                    <a href="{{getToSearchUrl()}}"
+                       (click)="onToSearchPage($event)"
+                       *ngIf="searchLinkLabel !== undefined  && searchResult && searchResult.recordCount > 0"
+                       class="btn btn-action btn-sm float">{{searchLinkLabel}}</a>
+                    <a (click)="onM3UExport($event)"
+                       *ngIf="m3uExportAvailable" class="btn btn-action btn-sm float">{{m3uLinkLabel}}</a>
                 </div>
                 <div class="col-6">
-                    <button *ngIf="!showResultList" class="btn btn-configure btn-sm float-right" (click)="showResultList = true">
+                    <button *ngIf="!showResultList" class="btn btn-configure btn-sm float-right"
+                            (click)="showResultList = true">
                         <span i18n="button show resultlist|Buttontext to show resultlist@@button.inlineSearchPage.show.resultlist">anzeigen</span>
                         <span class="btn-action-icon">&#x21D3;</span></button>
                     <button *ngIf="showResultList && searchResult && searchResult.recordCount > 0" class="btn btn-configure btn-sm float-right" (click)="showResultList = false">
@@ -24,6 +29,9 @@
         <div class="container" *ngIf="showForm">
             <app-tdoc-searchform [searchResult]="searchResult"
                                  (search)="onSearchDoc($event)"></app-tdoc-searchform>
+        </div>
+        <div class="container content-container" *ngIf="flgMapEnabled && mapState.flgShowMap && showResultList">
+            <ng-container *ngTemplateOutlet="mapContainer;context:{searchFormLayout: 0}"></ng-container>
         </div>
         <div class="container" *ngIf="showTimetable && showResultList">
             <app-cdoc-timetable [searchResult]="searchResult"></app-cdoc-timetable>
@@ -66,4 +74,40 @@
         </div>
     </div>
 </div>
+
+<ng-template #mapContainer let-searchFormLayout=searchFormLayout>
+    <div [class]="('container map-container container-fullline')" *ngIf="mapState.flgShowMap">
+        <app-tdoc-map [mapId]="(htmlId ? htmlId : '') + 'searchMap' + (searchFormLayout === 0 ? 'small' : 'big')"
+                      [height]="'300'"
+                      [mapZoom]="mapState.mapZoom"
+                      [tdocs]="searchResult.currentRecords"
+                      [currentTDocId]="mapState.currentMapTDocId"
+                      (tdocClicked)="onMapTourDocClicked($event)"
+                      (centerChanged)="onMapCenterChanged($event)"
+                      (mapElementsFound)="onMapElementsFound($event)"
+                      [mapCenterPos]="mapState.mapCenterPos"></app-tdoc-map>
+    </div>
+    <div class="container containter profile-toggler-container" *ngIf="mapState.flgShowMap">
+        <button class="btn btn-action btn-sm right" (click)="mapState.flgShowProfileMap = true"
+                *ngIf="mapState.flgMapAvailable && !mapState.flgShowProfileMap">
+            <span i18n="button show profilemap|Buttontext to show profilemap@@button.searchform.show.profilemap">Profil einblenden</span>
+            <span class="btn-action-icon">&#x21D3;</span></button>
+        <button class="btn btn-action btn-sm right" (click)="mapState.flgShowProfileMap = false"
+                *ngIf="mapState.flgShowProfileMap && mapState.flgProfileMapAvailable">
+            <span i18n="button hide profilemap|Buttontext to hide profilemap@@button.searchform.hide.profilemap">Profil ausblenden</span>
+            <span class="btn-action-icon">&#x21D1;</span></button>
+    </div>
+    <div class="container map-container" *ngIf="mapState.flgShowProfileMap">
+        <app-tdoc-profilemap [mapId]="'showProfileMap'"
+                             [height]="'300px'"
+                             (mapElementsFound)="onProfileMapElementsFound($event)"
+                             [tdocs]="searchResult.currentRecords"></app-tdoc-profilemap>
+    </div>
+    <div class="container map-container" *ngIf="mapState.flgShowProfileMap">
+        <app-tdoc-profilechart [chartId]="'showProfileChart'"
+                               [height]="'300px'"
+                               (chartElementsFound)="onProfileMapElementsFound($event)"
+                               [tdocs]="searchResult.currentRecords"></app-tdoc-profilechart>
+    </div>
+</ng-template>
 

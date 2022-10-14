@@ -119,6 +119,18 @@ export class SqlMytbDbRouteConfig {
                 parameterNames: ['id']
             },
             {
+                profile: 'linkedpois',
+                sql: 'SELECT CONCAT("type=", COALESCE(1, "null"), ":::name=", COALESCE(poi_name, "null"),' +
+                    '    ":::refId=", CAST(poi.poi_id AS CHAR), ":::poitype=", COALESCE(tour_poi.tpoi_type, "null"),' +
+                    '    ":::position=", COALESCE(tour_poi.tpoi_pos, "null"),' +
+                    '    ":::geoLoc=", CONCAT(poi_geo_latdeg, ",", poi_geo_longdeg), ":::geoEle=", COALESCE(poi_geo_ele, 0)' +
+                    '   )' +
+                    '  AS linkedpois' +
+                    '  FROM poi INNER JOIN tour_poi ON tour_poi.poi_id = poi.poi_id WHERE tour_poi.t_id IN (:id)' +
+                    '  ORDER BY tour_poi.tpoi_pos',
+                parameterNames: ['id']
+            },
+            {
                 profile: 'keywords',
                 sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM tour_keyword' +
@@ -937,6 +949,16 @@ export class SqlMytbDbRouteConfig {
         joinFieldMappings: {
             'if_id': 'refId',
             'tif_linked_details': 'linkedDetails'
+        }
+    };
+
+    public static readonly joinModelConfigTypeLinkedPois: JoinModelConfigTableType = {
+        baseTableIdField: 't_id',
+        joinTable: 'tour_poi',
+        joinFieldMappings: {
+            'poi_id': 'refId',
+            'tpoi_pos': 'position',
+            'tpoi_type': 'poitype'
         }
     };
 

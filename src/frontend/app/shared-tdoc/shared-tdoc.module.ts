@@ -59,6 +59,7 @@ import {RouterModule} from '@angular/router';
 import {TourDocLinkedInfosComponent} from './components/tdoc-linked-infos/tdoc-linked-infos.component';
 import {TourDocLinkedPlaylistsComponent} from './components/tdoc-linked-playlists/tdoc-linked-playlists.component';
 import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
+import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-linked-pois.component';
 import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.component';
 
 @NgModule({
@@ -109,6 +110,7 @@ import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.componen
         TourDocLinkedInfosComponent,
         TourDocLinkedPlaylistsComponent,
         TourDocAssignPlaylistFormComponent,
+        TourDocLinkedPoisComponent,
         GpxEditLocComponent
     ],
     imports: [
@@ -178,6 +180,7 @@ import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.componen
         TourDocLinkedInfosComponent,
         TourDocLinkedPlaylistsComponent,
         TourDocAssignPlaylistFormComponent,
+        TourDocLinkedPoisComponent,
         GpxEditLocComponent
     ]
 })

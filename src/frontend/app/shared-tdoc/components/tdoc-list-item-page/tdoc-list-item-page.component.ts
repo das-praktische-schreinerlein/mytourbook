@@ -56,7 +56,7 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
     public short ? = false;
 
     @Input()
-    public showItemObjectsFlag?: false;
+    public showItemObjectsFlag ? = false;
 
     @Output()
     public show: EventEmitter<TourDocRecord> = new EventEmitter();

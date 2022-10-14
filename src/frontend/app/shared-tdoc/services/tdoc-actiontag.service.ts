@@ -25,12 +25,20 @@ import {Subject} from 'rxjs';
 import {TourDocReplaceFormComponent} from '../components/tdoc-replaceform/tdoc-replaceform.component';
 import {ToastrService} from 'ngx-toastr';
 import * as Promise_serial from 'promise-serial';
-import {CommonDocAssignFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignform/cdoc-assignform.component';
+import {
+    CommonDocAssignFormComponentResultType
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignform/cdoc-assignform.component';
 import {TourDocAssignFormComponent} from '../components/tdoc-assignform/tdoc-assignform.component';
-import {CommonDocReplaceFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component';
-import {CommonDocKeywordTagFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywordtagform/cdoc-keywordtagform.component';
+import {
+    CommonDocReplaceFormComponentResultType
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component';
+import {
+    CommonDocKeywordTagFormComponentResultType
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywordtagform/cdoc-keywordtagform.component';
 import {TourDocKeywordTagFormComponent} from '../components/tdoc-keywordtagform/tdoc-keywordtagform.component';
-import {CommonDocAssignJoinFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component';
+import {
+    CommonDocAssignJoinFormComponentResultType
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component';
 import {TourDocAssignJoinFormComponent} from '../components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 import {TourDocAssignPlaylistFormComponent} from '../components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
 
@@ -64,6 +72,8 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
             return this.processActionTagEventConfigureAssignPlaylist(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'keyword') {
             return this.processActionTagEventKeywordTag(actionTagEvent, actionTagEventEmitter);
+        } else if (actionTagEvent.config.type === 'noop') {
+            return this.processActionTagEventNoop(actionTagEvent, actionTagEventEmitter);
         } else {
             return super.processActionTagEventUnknown(actionTagEvent, actionTagEventEmitter);
         }
@@ -80,6 +90,8 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
             return this.processMultiActionTagEventAssignJoin(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'keyword') {
             return this.processMultiActionTagEventKeywordTag(actionTagEvent, actionTagEventEmitter);
+        } else if (actionTagEvent.config.type === 'noop') {
+            return this.processActionMultiRecordTagEventNoop(actionTagEvent, actionTagEventEmitter);
         } else {
             return super.processActionMultiRecordTagEventUnknown(actionTagEvent, actionTagEventEmitter);
         }
@@ -304,6 +316,26 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
                 formResultObservable = undefined;
             });
         });
+    }
+
+    // TODO move to commons
+    protected processActionTagEventNoop(actionTagEvent: ActionTagEvent,
+                                        actionTagEventEmitter: EventEmitter<ActionTagEvent>): Promise<TourDocRecord> {
+        actionTagEvent.processed = true;
+        actionTagEvent.result = actionTagEvent.record;
+        actionTagEventEmitter.emit(actionTagEvent);
+        return Promise.resolve(<TourDocRecord>actionTagEvent.record);
+    }
+
+    // TODO move to commons
+    protected processActionMultiRecordTagEventNoop(actionTagEvent: MultiRecordActionTagEvent,
+                                                   actionTagEventEmitter: EventEmitter<MultiRecordActionTagEvent>)
+        : Promise<TourDocRecord[]> {
+        actionTagEvent.processed = true;
+        actionTagEvent.results = actionTagEvent.records;
+        actionTagEventEmitter.emit(actionTagEvent);
+        actionTagEventEmitter.error(actionTagEvent.error);
+        return Promise.resolve(<TourDocRecord[]>actionTagEvent.results);
     }
 
 }

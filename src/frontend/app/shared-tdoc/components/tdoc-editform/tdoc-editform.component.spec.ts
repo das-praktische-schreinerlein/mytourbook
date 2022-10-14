@@ -30,6 +30,9 @@ import {TourDocLocationDescSuggesterService} from '../../services/tdoc-location-
 import {TourDocNewsDescSuggesterService} from '../../services/tdoc-news-desc-suggester.service';
 import {TourDocRouteDescSuggesterService} from '../../services/tdoc-route-desc-suggester.service';
 import {TourDocTrackDescSuggesterService} from '../../services/tdoc-track-desc-suggester.service';
+import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
+import {TourDocPlaylistService} from '../../services/tdoc-playlist.service';
+import {TourDocAlbumService} from '../../services/tdoc-album.service';
 
 describe('TourDocEditformComponent', () => {
     let component: TourDocEditformComponent;
@@ -65,7 +68,10 @@ describe('TourDocEditformComponent', () => {
                 PlatformService,
                 AngularMarkdownService,
                 AngularHtmlService,
-                { provide: GenericAppService, useValue: new AppServiceStub() }
+                { provide: GenericAppService, useValue: new AppServiceStub() },
+                TourDocActionTagService,
+                TourDocPlaylistService,
+                TourDocAlbumService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

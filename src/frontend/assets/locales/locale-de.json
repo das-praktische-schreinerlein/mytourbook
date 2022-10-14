@@ -334,6 +334,8 @@
     "label.gpstrack.state.2": "manuelle Geo-Daten",
     "label.gpstrack.state.3": "Geo-Tracker Legacy TXT",
     "label.linkedInfosLinkedDetails": "Details:",
+    "label.linkedPoisPosition": "Pos:",
+    "label.linkedPoisPoitype": "Typ:",
     "label.linkedRoutesLinkedRouteAttr": "Details:",
     "label.linkedRouteAttr": "Routen-Details:",
     "label.tdoc.geoLoc": "Zentrums-Koordinate:",

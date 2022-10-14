@@ -57,6 +57,7 @@ import {
     CommonSqlActionTagAssignJoinAdapter
 } from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
+import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
@@ -273,6 +274,10 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 if (props.get('tdoclinkedinfos')) {
                     const infos: TourDocLinkedInfoRecord[] = props.get('tdoclinkedinfos');
                     promises.push(this.commonJoinAdapter.saveJoins('linkedinfos', tabKey, dbId, infos, opts));
+                }
+                if (props.get('tdoclinkedpois')) {
+                    const pois: TourDocLinkedPoiRecord[] = props.get('tdoclinkedpois');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedpois', tabKey, dbId, pois, opts));
                 }
 
                 return Promise.all(promises).then(() => {

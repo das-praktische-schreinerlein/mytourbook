@@ -17,10 +17,10 @@ import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/reco
 })
 export class TourDocListComponent extends CommonDocListComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     @Input()
-    public showItemMapFlag?: false;
+    public showItemMapFlag ? = false;
 
     @Input()
-    public showItemObjectsFlag?: false;
+    public showItemObjectsFlag ? = false;
 
     @Output()
     public showItemOnMap: EventEmitter<CommonDocRecord> = new EventEmitter();

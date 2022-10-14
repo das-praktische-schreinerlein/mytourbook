@@ -32,6 +32,7 @@ import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {Location} from '@angular/common';
+import {TourDocMapStateService} from '../../../shared-tdoc/services/tdoc-mapstate.service';
 
 describe('TourDocSearchpageComponent', () => {
     let component: TourDocSearchpageComponent;
@@ -69,7 +70,8 @@ describe('TourDocSearchpageComponent', () => {
                 TourDocActionTagService,
                 TourDocAlbumService,
                 TourDocPlaylistService,
-                TourDocContentUtils
+                TourDocContentUtils,
+                TourDocMapStateService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

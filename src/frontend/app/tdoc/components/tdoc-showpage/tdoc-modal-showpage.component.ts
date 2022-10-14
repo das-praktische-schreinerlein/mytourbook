@@ -58,8 +58,8 @@ export class TourDocModalShowpageComponent extends TourDocShowpageComponent {
         const me = this;
         super.configureProcessingOfResolvedData();
         me.availableTabs = {};
-        me.flgProfileMapAvailable = false;
-        me.flgShowProfileMap = false;
+        me.mapState.flgProfileMapAvailable = false;
+        me.mapState.flgShowProfileMap = false;
     }
 
 }

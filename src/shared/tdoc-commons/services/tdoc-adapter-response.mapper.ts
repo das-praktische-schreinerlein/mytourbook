@@ -14,6 +14,7 @@ import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record'
 import {TourDocInfoRecordFactory} from '../model/records/tdocinfo-record';
 import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
 import {TourDocLinkedPlaylistRecord} from '../model/records/tdoclinkedplaylist-record';
+import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     private readonly _objectSeparator = ';;';
@@ -103,6 +104,9 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         }
         if (props.get('tdoclinkedplaylists') && props.get('tdoclinkedplaylists').length > 0) {
             this.mapDetailDataToAdapterDocument({}, 'linkedplaylists', props, values);
+        }
+        if (props.get('tdoclinkedpois') && props.get('tdoclinkedpois').length > 0) {
+            this.mapDetailDataToAdapterDocument({}, 'linkedpois', props, values);
         }
 
         values['data_tech_alt_asc_i'] = BeanUtils.getValue(props, 'tdocdatatech.altAsc');
@@ -199,6 +203,25 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     playlistsSrc = ObjectUtils.uniqueArray(playlistsSrc);
 
                     result['linkedplaylists_txt'] = playlistsSrc.join(this._objectSeparator);
+                }
+                break;
+            case 'linkedpois':
+                if (props.get('tdoclinkedpois') && props.get('tdoclinkedpois').length > 0) {
+                    const pois: TourDocLinkedPoiRecord[] = props.get('tdoclinkedpois');
+                    let poisSrc: string [] = [];
+                    for (let idx = 0; idx < pois.length; idx++) {
+                        poisSrc.push('type=poi' + this._fieldSeparator +
+                            'name=' + pois[idx].name + this._fieldSeparator +
+                            'refId=' + pois[idx].refId + this._fieldSeparator +
+                            'position=' + pois[idx].position + this._fieldSeparator +
+                            'geoLoc=' + pois[idx].geoLoc + this._fieldSeparator +
+                            'geoEle=' + pois[idx].geoEle + this._fieldSeparator +
+                            'poitype=' + pois[idx].poitype);
+                    }
+
+                    poisSrc = ObjectUtils.uniqueArray(poisSrc);
+
+                    result['linkedpois_txt'] = poisSrc.join(this._objectSeparator);
                 }
                 break;
         }
@@ -367,6 +390,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             ObjectUtils.mapValueToObjects(
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedplaylists_txt')],
                 'linkedplaylists_txt'));
+        this.mapDetailResponseDocuments(mapper, 'linkedpois', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedpois_txt')],
+                'linkedpois_txt'));
 
 
         const dataTechValues = {};
@@ -550,6 +577,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             case 'linkedplaylists':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedplaylist'],
                     ['linkedplaylists', 'linkedplaylists_txt'], record, docs, true);
+                break;
+            case 'linkedpois':
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedpoi'],
+                    ['linkedpois', 'linkedpois_txt'], record, docs, true);
                 break;
             case 'video':
                 const videoDocs = [];

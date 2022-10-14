@@ -60,6 +60,7 @@ import CustomUrlSerializer from './services/custom-url-serializer';
 import {UrlSerializer} from '@angular/router';
 import {TourDocAssignPlaylistFormComponent} from './shared-tdoc/components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
 import {FallbackHttpClient} from './services/fallback-http-client';
+import {TourDocMapStateService} from './shared-tdoc/services/tdoc-mapstate.service';
 
 registerLocaleData(localeDe);
 
@@ -145,7 +146,8 @@ const customUrlSerializerProvider = {
         TourDocNewsDescSuggesterService,
         TourDocRouteDescSuggesterService,
         TourDocTrackDescSuggesterService,
-        TourDocTripDescSuggesterService
+        TourDocTripDescSuggesterService,
+        TourDocMapStateService
     ],
     bootstrap: [AppComponent]
 })

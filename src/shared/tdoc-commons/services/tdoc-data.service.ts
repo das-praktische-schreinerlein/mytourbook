@@ -40,6 +40,8 @@ import {TourDocLinkedInfoRecordSchema} from '../model/schemas/tdoclinkedinfo-rec
 import {TourDocLinkedPlaylistRecord, TourDocLinkedPlaylistRecordRelation} from '../model/records/tdoclinkedplaylist-record';
 import {TourDocLinkedPlaylistRecordSchema} from '../model/schemas/tdoclinkedplaylist-record-schema';
 import {BaseJoinRecord} from '@dps/mycms-commons/dist/search-commons/model/records/basejoin-record';
+import {TourDocLinkedPoiRecord, TourDocLinkedPoiRecordRelation} from '../model/records/tdoclinkedpoi-record';
+import {TourDocLinkedPoiRecordSchema} from '../model/schemas/tdoclinkedpoi-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -105,6 +107,8 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             TourDocLinkedInfoRecordSchema, TourDocLinkedInfoRecordRelation);
         this.dataStore.defineMapper('tdoclinkedplaylist', TourDocLinkedPlaylistRecord,
             TourDocLinkedPlaylistRecordSchema, TourDocLinkedPlaylistRecordRelation);
+        this.dataStore.defineMapper('tdoclinkedpoi', TourDocLinkedPoiRecord,
+            TourDocLinkedPoiRecordSchema, TourDocLinkedPoiRecordRelation);
     }
 
     protected defineIdMappingAlliases(): {} {
@@ -143,6 +147,8 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
         this.remapBaseJoins(<TourDocLinkedInfoRecord[]> record['tdoclinkedroutes'], 'routeId',
             recordIdMapping, recordRecoverIdMapping);
         this.remapBaseJoins(<TourDocLinkedInfoRecord[]> record['tdoclinkedplaylists'], 'playlistId',
+            recordIdMapping, recordRecoverIdMapping);
+        this.remapBaseJoins(<TourDocLinkedInfoRecord[]> record['tdoclinkedpois'], 'poiId',
             recordIdMapping, recordRecoverIdMapping);
     }
 

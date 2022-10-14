@@ -54,6 +54,7 @@ import {
     TourDocLinkedPlaylistRecordFactory,
     TourDocLinkedPlaylistRecordValidator
 } from './tdoclinkedplaylist-record';
+import {TourDocLinkedPoiRecord, TourDocLinkedPoiRecordFactory, TourDocLinkedPoiRecordValidator} from './tdoclinkedpoi-record';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
     locId: number;
@@ -205,6 +206,15 @@ export let TourDocRecordRelation: BaseEntityRecordRelationsType = {
             mapperKey: 'tdoclinkedplaylist',
             factory: TourDocLinkedPlaylistRecordFactory.instance,
             validator: TourDocLinkedPlaylistRecordValidator.instance
+        },
+        tdoclinkedpoi: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdoclinkedpois',
+            mapperKey: 'tdoclinkedpoi',
+            factory: TourDocLinkedPoiRecordFactory.instance,
+            validator: TourDocLinkedPoiRecordValidator.instance
         }
     }
 };
@@ -367,6 +377,8 @@ export class TourDocRecordFactory extends CommonDocRecordFactory {
                 return TourDocLinkedInfoRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdoclinkedplaylists':
                 return TourDocLinkedPlaylistRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdoclinkedpois':
+                return TourDocLinkedPoiRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocnavigationobjects':
@@ -426,6 +438,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocLinkedInfoRecordValidator.instance.validate(<TourDocLinkedInfoRecord>doc, errFieldPrefix);
             case 'tdoclinkedplaylists':
                 return TourDocLinkedPlaylistRecordValidator.instance.validate(<TourDocLinkedPlaylistRecord>doc, errFieldPrefix);
+            case 'tdoclinkedpois':
+                return TourDocLinkedPoiRecordValidator.instance.validate(<TourDocLinkedPoiRecord>doc, errFieldPrefix);
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validate(<TourDocObjectDetectionImageObjectRecord>doc,
                     errFieldPrefix);
@@ -460,6 +474,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocLinkedInfoRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdoclinkedplaylists':
                 return TourDocLinkedPlaylistRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdoclinkedpois':
+                return TourDocLinkedPoiRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocnavigationobjects':

@@ -27,6 +27,7 @@ import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchf
 import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-multiaction.manager';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {Location} from '@angular/common';
+import {MapState, TourDocMapStateService} from '../../../shared-tdoc/services/tdoc-mapstate.service';
 
 export interface TourDocSearchpageComponentConfig extends CommonDocSearchpageComponentConfig {
     defaultLayoutPerType: {};
@@ -40,15 +41,19 @@ export interface TourDocSearchpageComponentConfig extends CommonDocSearchpageCom
 })
 export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
     TourDocDataService> {
-    mapCenterPos: L.LatLng = undefined;
-    mapZoom = 9;
-    mapElements: MapElement[] = [];
-    currentMapTDocId = undefined;
-    profileMapElements: MapElement[] = [];
-    flgShowMap = false;
-    flgShowProfileMap = false;
-    flgMapAvailable = false;
-    flgProfileMapAvailable = false;
+    mapState: MapState = {
+        mapCenterPos: undefined,
+        mapZoom: 9,
+        mapElements: [],
+        currentMapTDocId: undefined,
+        profileMapElements: [],
+        flgMapEnabled: true,
+        flgShowMap: false,
+        flgShowProfileMap: false,
+        flgMapAvailable: false,
+        flgProfileMapAvailable: false,
+    }
+
     defaultLayoutPerType = {};
 
     constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService, errorResolver: ErrorResolver,
@@ -57,7 +62,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, layoutService: LayoutService, searchFormUtils: SearchFormUtils,
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService,
-                protected elRef: ElementRef, protected location: Location) {
+                protected elRef: ElementRef, protected location: Location, protected mapStateService: TourDocMapStateService) {
         super(route, commonRoutingService, errorResolver, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
             tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment);
@@ -72,9 +77,9 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
     }
 
     onShowItemOnMap(tdoc: TourDocRecord) {
-        this.currentMapTDocId = undefined;
+        this.mapState.currentMapTDocId = undefined;
         if (tdoc) {
-            this.currentMapTDocId = tdoc.id;
+            this.mapState.currentMapTDocId = tdoc.id;
             this.pageUtils.scrollToTopOfElement(this.elRef);
             this.cd.markForCheck();
         }
@@ -86,22 +91,14 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
     }
 
     onMapElementsFound(mapElements: MapElement[]) {
-        this.mapElements = [];
-        this.mapElements = mapElements;
-        this.flgMapAvailable = this.mapElements.length > 0;
-        this.flgProfileMapAvailable = this.flgProfileMapAvailable && this.flgMapAvailable;
-        this.flgShowMap = this.flgMapAvailable && this.flgShowMap;
-        this.calcShowMaps();
+        this.mapStateService.onMapElementsFound(this.mapState, mapElements)
         this.cd.markForCheck();
 
         return false;
     }
 
     onProfileMapElementsFound(mapElements: MapElement[]) {
-        this.profileMapElements = mapElements;
-        this.flgProfileMapAvailable = this.profileMapElements.length > 0;
-        this.flgShowProfileMap = this.flgProfileMapAvailable && this.flgShowProfileMap;
-        this.calcShowMaps();
+        this.mapStateService.onProfileMapElementsFound(this.mapState, mapElements);
         this.cd.markForCheck();
 
         return false;
@@ -128,9 +125,9 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         super.doProcessAfterResolvedData(config);
         if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {
             const [lat, lon] = this.searchForm.nearby.split('_');
-            this.mapCenterPos = new L.LatLng(+lat, +lon);
+            this.mapState.mapCenterPos = new L.LatLng(+lat, +lon);
         } else {
-            this.mapCenterPos = undefined;
+            this.mapState.mapCenterPos = undefined;
         }
     }
 
@@ -148,36 +145,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
     protected doCheckSearchResultAfterSearch(searchResult: TourDocSearchResult): void {
         super.doCheckSearchResultAfterSearch(searchResult);
 
-        if (searchResult === undefined) {
-            // console.log('empty searchResult', tdocSearchResult);
-            this.flgMapAvailable = false;
-            this.flgProfileMapAvailable = false;
-            this.flgShowProfileMap = this.flgProfileMapAvailable;
-        } else {
-            // console.log('update searchResult', tdocSearchResult);
-            this.flgMapAvailable = this.mapCenterPos !== undefined || this.searchResult.recordCount > 0;
-            this.flgProfileMapAvailable = this.flgMapAvailable;
-        }
-
-        this.flgShowMap = this.flgMapAvailable;
-        this.flgShowProfileMap = this.flgShowProfileMap && this.flgProfileMapAvailable;
-        this.calcShowMaps();
-    }
-
-    private calcShowMaps() {
-        if (this.layoutService.isSpider() || this.layoutService.isServer()) {
-            this.flgShowProfileMap = false;
-            this.flgShowMap = false;
-            return;
-        }
-        if (!this.flgProfileMapAvailable) {
-            this.flgShowProfileMap = false;
-            return;
-        }
-        if (!this.layoutService.isDesktop() && this.profileMapElements && this.profileMapElements.length > 10) {
-            this.flgShowProfileMap = false;
-            return;
-        }
+        this.mapStateService.doCheckSearchResultAfterSearch(this.mapState, searchResult)
     }
 
     // TODO move to commons

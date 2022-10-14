@@ -85,6 +85,7 @@
 
                 <app-tdoc-routeattr [record]="record" [small]="false"></app-tdoc-routeattr>
                 <app-tdoc-linked-routes [record]="record" [small]="false"></app-tdoc-linked-routes>
+                <app-tdoc-linked-pois [record]="record" [small]="false"></app-tdoc-linked-pois>
 
                 <ng-container *ngIf="record.type !== 'INFO'">
                     <app-tdoc-info [record]="record"></app-tdoc-info>
@@ -132,7 +133,8 @@
     </div>
 
     <div>
-        <div [class]="('container content-container map-container container-fullline')" *ngIf="flgShowMap">
+        <div [class]="('container content-container map-container container-fullline')"
+             *ngIf="mapState.flgShowMap">
             <app-tdoc-map [mapId]="'showMap'"
                           [height]="'400px'"
                           [mapZoom]="'9'"
@@ -141,30 +143,37 @@
                           [showImageTrackAndGeoPos]="false"
                           [mapCenterPos]="undefined"></app-tdoc-map>
             <div class="container profile-toggler-container">
-                <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = true" *ngIf="flgMapAvailable && !flgShowProfileMap">
+                <button class="btn btn-action btn-sm right"
+                        (click)="mapState.flgShowProfileMap = true"
+                        *ngIf="mapState.flgMapAvailable && !mapState.flgShowProfileMap">
                     <span i18n="button show profilemap|Buttontext to show profilemap@@button.searchform.show.profilemap">Profil einblenden</span>
                     <span class="btn-action-icon">&#x21D3;</span></button>
             </div>
         </div>
 
-        <div class="container content-container map-container" *ngIf="flgShowProfileMap">
+        <div class="container content-container map-container" *ngIf="mapState.flgShowProfileMap">
             <app-tdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
                                  [tdocs]="tracks"></app-tdoc-profilemap>
             <div class="container profile-toggler-container">
-                <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = false" *ngIf="flgShowProfileMap && flgProfileMapAvailable">
+                <button class="btn btn-action btn-sm right"
+                        (click)="mapState.flgShowProfileMap = false"
+                        *ngIf="mapState.flgShowProfileMap && mapState.flgProfileMapAvailable">
                     <span i18n="button hide profilemap|Buttontext to hide profilemap@@button.searchform.hide.profilemap">Profil ausblenden</span>
                     <span class="btn-action-icon">&#x21D1;</span></button>
             </div>
         </div>
-        <div class="container content-container map-container" *ngIf="flgShowProfileMap">
+        <div class="container content-container map-container"
+             *ngIf="mapState.flgShowProfileMap">
             <app-tdoc-profilechart [chartId]="'showProfileChart'"
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
                                  [tdocs]="tracks"></app-tdoc-profilechart>
             <div class="container profile-toggler-container">
-                <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = false" *ngIf="flgShowProfileMap && flgProfileMapAvailable">
+                <button class="btn btn-action btn-sm right"
+                        (click)="mapState.flgShowProfileMap = false"
+                        *ngIf="mapState.flgShowProfileMap && mapState.flgProfileMapAvailable">
                     <span i18n="button hide profilemap|Buttontext to hide profilemap@@button.searchform.hide.profilemap">Profil ausblenden</span>
                     <span class="btn-action-icon">&#x21D1;</span></button>
             </div>
@@ -258,6 +267,15 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.INFO"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.POI"
+                                            [label]="'POIs'"
+                                            i18n-label="label inline-searchpage POI|Label inline-searchpage POI@@linline-search.label.tdoc.POI"
+                                            [params]="getFiltersForType(record, 'POI')"
+                                            [htmlId]="'POI'"
+                                            [showForm]="false"
+                                            [showResultList]="false"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
                                             [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.tdoc.TRIP"
@@ -340,7 +358,16 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.INFO"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
-                <app-tdoc-inline-searchpage  *ngIf="availableTabs.TRIP"
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.POI"
+                                            [label]="'POIs'"
+                                            i18n-label="label inline-searchpage POI|Label inline-searchpage POI@@linline-search.label.tdoc.POI"
+                                            [params]="getFiltersForType(record, 'POI')"
+                                            [htmlId]="'POI'"
+                                            [showForm]="false"
+                                            [showResultList]="false"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
                                             [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.tdoc.TRIP"
                                             [params]="getFiltersForType(record, 'TRIP')"
@@ -555,6 +582,15 @@
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.INFO"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.POI"
+                                            [label]="'POIs'"
+                                            i18n-label="label inline-searchpage POI|Label inline-searchpage POI@@linline-search.label.tdoc.POI"
+                                            [params]="getFiltersForType(record, 'POI')"
+                                            [htmlId]="'POI'"
+                                            [showForm]="false"
+                                            [showResultList]="false"
+                                            [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
 
@@ -971,7 +1007,7 @@
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.POI"
-                                            [label]="'Ziele'"
+                                            [label]="'POIs'"
                                             i18n-label="label inline-searchpage POI|Label inline-searchpage POI@@linline-search.label.tdoc.POI"
                                             [params]="getFiltersForType(record, 'POI')"
                                             [htmlId]="'POI'"

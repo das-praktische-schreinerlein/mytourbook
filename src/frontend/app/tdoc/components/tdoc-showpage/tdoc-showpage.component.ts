@@ -25,6 +25,8 @@ import {
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-showpage.component';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {environment} from '../../../../environments/environment';
+import {MapState} from '../../../shared-tdoc/services/tdoc-mapstate.service';
+import {TourDocJoinUtils} from '../../../shared-tdoc/services/tdoc-join.utils';
 
 export interface TourDocShowpageComponentAvailableTabs {
     ALL_ENTRIES?: boolean;
@@ -84,12 +86,22 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     };
     tagcloudSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
     currentMapTDocId = undefined;
-    flgShowMap = false;
-    flgShowProfileMap = false;
     flgShowTopImages = true;
-    flgMapAvailable = false;
-    flgProfileMapAvailable = false;
     flgTopImagesAvailable = false;
+
+    mapState: MapState = {
+        mapCenterPos: undefined,
+        mapZoom: 9,
+        mapElements: [],
+        currentMapTDocId: undefined,
+        profileMapElements: [],
+        flgMapEnabled: true,
+        flgShowMap: false,
+        flgShowProfileMap: false,
+        flgMapAvailable: false,
+        flgProfileMapAvailable: false,
+    }
+
     defaultSubImageLayout = Layout.SMALL;
     showResultListTrigger: {
         ALL_ENTRIES?: boolean|number;
@@ -174,10 +186,10 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
                 typeTracks.push(record);
                 if (record.gpsTrackBasefile || record.geoLoc !== undefined
                     || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20)) {
-                    this.flgMapAvailable = true;
-                    this.flgProfileMapAvailable = true;
+                    this.mapState.flgMapAvailable = true;
+                    this.mapState.flgProfileMapAvailable = true;
 
-                    this.flgShowMap = this.flgMapAvailable;
+                    this.mapState.flgShowMap = this.mapState.flgMapAvailable;
                     this.calcShowMaps();
                 }
             }
@@ -185,7 +197,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         this.geoTracks[type] = typeTracks;
 
         let allTracks = [];
-        for (const key of ['ROUTE', 'TRACK', 'IMAGE', 'VIDEO', 'LOCATION']) {
+        for (const key of ['ROUTE', 'TRACK', 'IMAGE', 'VIDEO', 'LOCATION', 'POI']) {
             if (this.geoTracks[key] !== undefined) {
                 allTracks = allTracks.concat(this.geoTracks[key]);
             }
@@ -363,17 +375,22 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20)) {
             me.tracks = [me.record];
             me.geoTracks = {};
-            me.flgMapAvailable = true;
-            me.flgProfileMapAvailable = (me.record.gpsTrackBasefile !== undefined
+            me.mapState.flgMapAvailable = true;
+            me.mapState.flgProfileMapAvailable = (me.record.gpsTrackBasefile !== undefined
                 || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20));
         } else {
             me.tracks = [];
             me.geoTracks = {};
-            me.flgMapAvailable = false;
-            me.flgProfileMapAvailable = false;
+            me.mapState.flgMapAvailable = false;
+            me.mapState.flgProfileMapAvailable = false;
         }
 
-        me.flgShowMap = this.flgMapAvailable;
+        const dummySearchResult: TourDocSearchResult =
+            new TourDocSearchResult(undefined, 0, TourDocJoinUtils.preparePoiMapValuesFromRecord(this.record), undefined
+        );
+        this.onGeoTracksFound(dummySearchResult, 'POI');
+
+        me.mapState.flgShowMap = this.mapState.flgMapAvailable;
         me.calcShowMaps();
         me.flgTopImagesAvailable = true;
         me.flgShowTopImages = true;
@@ -381,20 +398,20 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
 
     private calcShowMaps() {
         if (this.layoutService.isSpider() || this.layoutService.isServer()) {
-            this.flgShowProfileMap = false;
-            this.flgShowMap = false;
+            this.mapState.flgShowProfileMap = false;
+            this.mapState.flgShowMap = false;
             return;
         }
-        if (!this.flgProfileMapAvailable) {
-            this.flgShowProfileMap = false;
+        if (!this.mapState.flgProfileMapAvailable) {
+            this.mapState.flgShowProfileMap = false;
             return;
         }
         if (!this.layoutService.isDesktop() &&
             (this.record.type === 'LOCATION' || this.record.type === 'TRIP' || this.record.type === 'NEWS')) {
-            this.flgShowProfileMap = false;
+            this.mapState.flgShowProfileMap = false;
             return;
         }
 
-        this.flgShowProfileMap = true;
+        this.mapState.flgShowProfileMap = true;
     }
 }

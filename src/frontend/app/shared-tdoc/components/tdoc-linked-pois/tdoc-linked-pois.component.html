@@ -1,0 +1,13 @@
+<ng-container *ngIf="linkedPois !== undefined && linkedPois.length > 0">
+    <table class="techvaluetable">
+        <tr *ngIf="!small"><th class="label" colspan="2">Pois:</th></tr>
+        <ng-container *ngFor="let linkedPoi of linkedPois; let i = index">
+            <tr>
+                <td class="entry">{{ linkedPoi.poitype }}</td>
+                <td class="entry">
+                    <a [href]="getShowUrl(linkedPoi)" (click)="submitShow($event, linkedPoi)" [title]="linkedPoi.name">{{ linkedPoi.name }}</a>
+                </td>
+            </tr>
+        </ng-container>
+    </table>
+</ng-container>

@@ -34,7 +34,6 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     private geoMap: L.Map;
 
     trackColors = new DefaultTrackColors();
-    trackRecords: TourDocRecord[] = [];
     editTrackRecords: TourDocRecord[] = [];
     renderedMapElements: MapElement[] = [];
     trackSegmentStatistics: TrackStatistic[] = [];
@@ -108,19 +107,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
         this.trackColors.setCurrent(0);
         if (track !== undefined && track !== null && track.length > 0) {
             track = track.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
-            this.trackRecords = [TourDocRecordFactory.createSanitized({
-                id: 'TMP' + (new Date()).getTime(),
-                gpsTrackSrc: track,
-                gpsTrackBaseFile: 'tmp.gpx',
-                name: new Date().toISOString(),
-                type: this.type,
-                datestart: new Date().toISOString(),
-                dateend: new Date().toISOString(),
-                dateshow: new Date().toISOString()
-            })];
             this.setCurrentGpx(GeoGpxParser.reformatXml(track));
-        } else {
-            this.trackRecords = [];
         }
 
         this.generateTrackSegments(track);

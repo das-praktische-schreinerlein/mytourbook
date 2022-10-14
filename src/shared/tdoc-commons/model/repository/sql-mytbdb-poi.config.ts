@@ -22,6 +22,11 @@ export class SqlMytbDbPoiConfig {
                 triggerParams: ['id', 'info_id_i', 'info_id_is'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT poiif.if_id ORDER BY poiif.if_id SEPARATOR ", ") AS poi_if_ids']
             },
+            {
+                from: 'LEFT JOIN tour_poi ON poi.poi_id=tour_poi.poi_id',
+                triggerParams: ['route_id_i', 'route_id_is'],
+                groupByFields: ['tour_poi.t_id']
+            },
         ],
         groupbBySelectFieldList: true,
         groupbBySelectFieldListIgnore: ['poi_keywords'],
@@ -42,6 +47,17 @@ export class SqlMytbDbPoiConfig {
                     '  AS linkedinfos' +
                     '  FROM info INNER JOIN poi_info ON poi_info.if_id = info.if_id WHERE poi_info.poi_id IN (:id)' +
                     '  ORDER BY if_name',
+                parameterNames: ['id']
+            },
+            {
+                profile: 'extended_object_properties',
+                sql: 'SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie_poi.k_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM kategorie_poi' +
+                    '      WHERE kategorie_poi.poi_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour_poi.t_id) AS CHAR)) AS extended_object_properties' +
+                    '       FROM tour_poi ' +
+                    '       WHERE tour_poi.poi_id IN (:id)',
                 parameterNames: ['id']
             },
             {
@@ -251,6 +267,10 @@ export class SqlMytbDbPoiConfig {
             }
         },
         sortMapping: {
+            'countRoutes': '(SELECT COUNT(DISTINCT poi_sort.t_id) FROM tour_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) ASC, poi_name ASC',
+            'countRoutesDesc': '(SELECT COUNT(DISTINCT poi_sort.t_id) FROM tour_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) DESC, poi_name ASC',
+            'countTracks': '(SELECT COUNT(DISTINCT poi_sort.k_id) FROM kategorie_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) ASC, poi_name ASC',
+            'countTracksDesc': '(SELECT COUNT(DISTINCT poi_sort.k_id) FROM kategorie_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) DESC, poi_name ASC',
             'name': 'poi_name ASC',
             'forExport': 'poi.poi_id ASC, poi_name ASC',
             'relevance': 'poi.poi_id DESC, poi_name ASC'
@@ -292,8 +312,8 @@ export class SqlMytbDbPoiConfig {
             info_id_is: 'poiif.if_id',
             poi_id_i: 'poi.poi_id',
             poi_id_is: 'poi.poi_id',
-            route_id_i: '"666dummy999"',
-            route_id_is: '"666dummy999"',
+            route_id_i: 'tour_poi.t_id',
+            route_id_is: 'tour_poi.t_id',
             track_id_i: '"666dummy999"',
             track_id_is: '"666dummy999"',
             video_id_is: '"666dummy999"',
@@ -359,7 +379,9 @@ export class SqlMytbDbPoiConfig {
         referenced: [],
         joins: [
             { table: 'poi_keyword', fieldReference: 'poi_id' },
-            { table: 'poi_info', fieldReference: 'poi_id' }
+            { table: 'poi_info', fieldReference: 'poi_id' },
+            { table: 'kategorie_poi', fieldReference: 'poi_id' },
+            { table: 'tour_poi', fieldReference: 'poi_id' }
         ]
     };
 }

@@ -1,6 +1,8 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
-import {CommonDocListItemComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-list-item/cdoc-list-item.component';
+import {
+    CommonDocListItemComponent
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-list-item/cdoc-list-item.component';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
@@ -16,10 +18,10 @@ export class TourDocListItemComponent  extends CommonDocListItemComponent {
     protected mapFlagAvailable = false;
 
     @Input()
-    public showItemMapFlag?: false;
+    public showItemMapFlag ? = false;
 
     @Input()
-    public showItemObjectsFlag?: false;
+    public showItemObjectsFlag ? = false;
 
     @Output()
     public showItemOnMap: EventEmitter<CommonDocRecord> = new EventEmitter();
