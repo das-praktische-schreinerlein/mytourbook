@@ -316,9 +316,15 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend i18n="dataPoi label|Label for fieldset: dataPoi@@label.editform.tdoc.legend.dataPoi">&#x26f3; POIs</legend>
+            <legend i18n="dataPoi label|Label for fieldset: dataPoi@@label.editform.tdoc.legend.dataPois">&#x26f3; POIs bearbeiten</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputPoiList"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="dataPoi label|Label for fieldset: dataPoi@@label.editform.tdoc.legend.newPois">&#x26f3; POIs hinzufügen</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputNewPois"></ng-container>
             </div>
         </fieldset>
     </ng-template>
@@ -410,11 +416,17 @@
         <a (click)="onCreateNewLink(key, id)" *ngIf="modal === false">🐣</a>
     </ng-template>
 
-    <ng-template #linkShowEntity let-key="key" let-formElementName="formElementName">
+    <ng-template #linkShowSelectEntity let-key="key" let-formElementName="formElementName">
         <a (click)="onShowEntityLink(key, editFormGroup.getRawValue()[formElementName][0])"
            *ngIf="editFormGroup.getRawValue()[formElementName] !== undefined
             && editFormGroup.getRawValue()[formElementName] !== null
             && editFormGroup.getRawValue()[formElementName].length === 1">🔎</a>
+    </ng-template>
+
+    <ng-template #linkShowEntity let-key="key" let-formElementName="formElementName">
+        <a (click)="onShowEntityLink(key, editFormGroup.getRawValue()[formElementName][0])"
+           *ngIf="editFormGroup.getRawValue()[formElementName] !== undefined
+            && editFormGroup.getRawValue()[formElementName] !== null">🔎</a>
     </ng-template>
 
     <ng-template #inputName>
@@ -466,7 +478,7 @@
                                      formControlName="locId"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'LOCATION', id: record.id}"></ng-container>
-            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'LOCATION', formElementName: 'locId'}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowSelectEntity;context:{key: 'LOCATION', formElementName: 'locId'}"></ng-container>
         </div>
     </ng-template>
 
@@ -481,7 +493,7 @@
                                      formControlName="locIdParent"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'LOCATION', id: record.id}"></ng-container>
-            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'LOCATION', formElementName: 'locIdParent'}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowSelectEntity;context:{key: 'LOCATION', formElementName: 'locIdParent'}"></ng-container>
         </div>
     </ng-template>
 
@@ -535,7 +547,7 @@
                                      formControlName="routeId"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'ROUTE', id: record.id}"></ng-container>
-            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'ROUTE', formElementName: 'routeId'}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowSelectEntity;context:{key: 'ROUTE', formElementName: 'routeId'}"></ng-container>
         </div>
     </ng-template>
 
@@ -553,7 +565,7 @@
                                      formControlName="{{joinName + 'Id' + idx}}"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'ROUTE', id: record.id}"></ng-container>
-            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'ROUTE', formElementName: joinName + 'Id' + idx}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowSelectEntity;context:{key: 'ROUTE', formElementName: joinName + 'Id' + idx}"></ng-container>
         </div>
         <ng-container *ngTemplateOutlet="inputTextTech;context:{key: joinName + 'LinkedRouteAttr', formControlName: joinName + 'LinkedRouteAttr'  + idx}"></ng-container>
         <div class="col-sm-3 input-group input-group-sm">
@@ -577,7 +589,7 @@
                                      formControlName="{{joinName + 'Id' + idx}}"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'INFO', id: record.id}"></ng-container>
-            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'INFO', formElementName: joinName + 'Id' + idx}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowSelectEntity;context:{key: 'INFO', formElementName: joinName + 'Id' + idx}"></ng-container>
         </div>
         <ng-container *ngTemplateOutlet="inputText;context:{key: joinName + 'LinkedDetails', formControlName: joinName + 'LinkedDetails'  + idx}"></ng-container>
     </ng-template>
@@ -606,7 +618,7 @@
                                      formControlName="tripId"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'TRIP', id: record.id}"></ng-container>
-            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'TRIP', formElementName: 'tripId'}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowSelectEntity;context:{key: 'TRIP', formElementName: 'tripId'}"></ng-container>
         </div>
     </ng-template>
 
@@ -751,20 +763,29 @@
     </ng-template>
 
     <ng-template #inputLinkedPoi let-idx="idx" let-joinName="joinName">
-        <div class="col-sm-12">
-            <div class="col-sm-6 input-group input-group-sm">
-                <label class="col-xs-3 col-form-label mr-2"
-                       i18n="linkedPoisId label|Label for filter: linkedPoisId@@label.searchform.tdoc.linkedPoisId">LinkedPoi:</label>
-                {{editFormGroup.getRawValue()[ joinName + 'Name' + idx]}}  {{editFormGroup.getRawValue()[ joinName + 'GeoLoc' + idx]}}
+        <div class="col-sm-12  form-inline">
+            <div class="col-sm-3 input-group input-group-sm form-inline">
+                <ss-multiselect-dropdown [options]="optionsSelect['poiJoinType']"
+                                         [settings]="settingsSelectPoiJoinType"
+                                         [texts]="textsSelectPoiJoinType"
+                                         required="required"
+                                         formControlName="{{joinName + 'Poitype'  + idx}}"
+                                         ngDefaultControl
+                                         class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+            </div>
+            <div class="col-sm-5 input-group input-group-sm form-inline">
+                {{editFormGroup.getRawValue()[ joinName + 'Name' + idx]}}
                 <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'POI', formElementName: joinName + 'Id' + idx}"></ng-container>
             </div>
             <ng-container *ngTemplateOutlet="inputNumber;context:{key: joinName + 'Position', formControlName: joinName + 'Position'  + idx}"></ng-container>
-            <ng-container *ngTemplateOutlet="inputNumber;context:{key: joinName + 'Poitype', formControlName: joinName + 'Poitype'  + idx}"></ng-container>
+            <div class="col-sm-1 input-group input-group-sm form-inline">
+                <a (click)="onRemovePoiFromForm(idx)">🗑</a>
+            </div>
         </div>
     </ng-template>
 
     <ng-template #inputPoiList>
-        <div class="container content-container edit-map-container">
+        <div class="container">
             <app-tdoc-map [mapId]="'showPoiMap'"
                           [height]="'400px'"
                           [mapZoom]="'9'"
@@ -775,10 +796,19 @@
                 <ng-container *ngTemplateOutlet="inputLinkedPoi;context:{idx: idx, joinName: 'linkedPois'}"></ng-container>
             </ng-container>
         </div>
+    </ng-template>
 
-        <div class="container content-container">
-            <button (click)="appendSelectedPois()">Append Ziele</button>
-            <app-tdoc-inline-searchpage [label]="'Ziele'"
+    <ng-template #inputNewPois>
+        <div class="container">
+            <div class="col-sm-12" style="width: 100%">
+                <div class="col-sm-6 input-group input-group-sm">
+                    <button (click)="onAppendSelectedPois()"
+                            *ngIf="poiMultiActionManager.getSelectedRecords().length > 0"
+                            type="button"
+                            i18n="appendPois label|Label for button: appendPois@@label.editform.tdoc.appendPois">POIs hinzufügen</button>
+                </div>
+            </div>
+            <app-tdoc-inline-searchpage [label]="'POIs'"
                                         i18n-label="label inline-searchpage POI|Label inline-searchpage POI@@linline-search.label.tdoc.POI"
                                         [params]="getPoiFiltersForType(record)"
                                         [alternativeMultiActionmanager]="poiMultiActionManager"

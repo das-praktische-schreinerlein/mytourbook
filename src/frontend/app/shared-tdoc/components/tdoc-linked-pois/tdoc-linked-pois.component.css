@@ -14,7 +14,6 @@ td.entry, td.value {
     overflow: hidden;
     text-overflow: ellipsis;
     overflow-wrap: normal;
-    white-space: pre;
 }
 td.entry {
     width: 70%;

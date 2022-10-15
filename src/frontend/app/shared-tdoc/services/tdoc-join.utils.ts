@@ -8,7 +8,7 @@ export class TourDocJoinUtils {
 
     public static prepareLinkedPoiSubmitValues(record: TourDocRecord, values: {}, joinName: string, joinIndexes: any[]): {}[] {
         const joins: {}[] = [];
-        for (let idx = 1; idx <= joinIndexes.length; idx ++) {
+        for (const idx of joinIndexes) {
             const refId = FormUtils.getStringFormValue(values, joinName + 'Id' + idx);
             const position = FormUtils.getNumberFormValue(values, joinName + 'Position' + idx);
             const poitype = FormUtils.getNumberFormValue(values, joinName + 'Poitype' + idx);
@@ -139,7 +139,7 @@ export class TourDocJoinUtils {
             valueConfig[joinName + 'Id' + idx] = [joinRecord.refId];
             valueConfig[joinName + 'Name' + idx] = [joinRecord.name];
             valueConfig[joinName + 'Position' + idx] = [joinRecord.position];
-            valueConfig[joinName + 'Poitype' + idx] = [joinRecord.poitype];
+            valueConfig[joinName + 'Poitype' + idx] = [joinRecord.poitype + ''];
             valueConfig[joinName + 'GeoLoc' + idx] = [joinRecord.geoLoc];
             valueConfig[joinName + 'GeoEle' + idx] = [joinRecord.geoEle];
         }
@@ -152,7 +152,7 @@ export class TourDocJoinUtils {
         const joinName = 'linkedPois';
 
         const poiJoinIndexes = joinIndexes[joinName];
-        for (let idx = 1; idx <= poiJoinIndexes.length; idx ++) {
+        for (const idx of poiJoinIndexes) {
             const refId = FormUtils.getStringFormValue(values, joinName + 'Id' + idx);
             const name = FormUtils.getStringFormValue(values, joinName + 'Name' + idx);
             const geoLoc = FormUtils.getStringFormValue(values, joinName + 'GeoLoc' + idx);

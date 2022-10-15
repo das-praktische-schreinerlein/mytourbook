@@ -89,6 +89,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         'locIdParent': IMultiSelectOption[];
         'routeId': IMultiSelectOption[];
         'infoId': IMultiSelectOption[];
+        'poiJoinType': IMultiSelectOption[];
         'subType': IMultiSelectOption[];
         'subTypeActiontype': IMultiSelectOption[];
         'subTypeLocType': IMultiSelectOption[];
@@ -104,6 +105,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     public settingsSelectTrack = this.defaultSelectSetting;
     public settingsSelectTrip = this.defaultSelectSetting;
     public settingsSelectInfo = this.defaultSelectSetting;
+    public settingsSelectPoiJoinType = this.defaultSelectSetting;
 
     public textsSelectWhere: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
@@ -158,6 +160,13 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         uncheckAll: 'Alle abwählen',
         checked: 'Info ausgewählt',
         checkedPlural: 'Info ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '--',
+        allSelected: 'alles'};
+    public textsSelectPoiJoinType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Typ ausgewählt',
+        checkedPlural: 'Typ ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: '--',
         allSelected: 'alles'};
@@ -452,8 +461,25 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
+    onRemovePoiFromForm(idx: string): boolean {
+        const joinName = 'linkedPois'
+        this.editFormGroup.removeControl(joinName + 'Id' + idx);
+        this.editFormGroup.removeControl(joinName + 'Name' + idx);
+        this.editFormGroup.removeControl(joinName + 'Position' + idx);
+        this.editFormGroup.removeControl(joinName + 'Poitype' + idx);
+        this.editFormGroup.removeControl(joinName + 'GeoLoc' + idx);
+        this.editFormGroup.removeControl(joinName + 'GeoEle' + idx);
+
+        this.joinIndexes[joinName].splice(this.joinIndexes[joinName].indexOf(idx), 1);
+        this.poiGeoRecords = TourDocJoinUtils.preparePoiMapValuesFromForm(this.editFormGroup.getRawValue(), this.joinIndexes);
+
+        this.cd.markForCheck();
+
+        return false;
+    }
+
     // TODO move to separate component
-    appendSelectedPois(): boolean {
+    onAppendSelectedPois(): boolean {
         const selectedPois = this.poiMultiActionManager.getSelectedRecords();
 
         const joinName = 'linkedPois'
@@ -472,7 +498,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.editFormGroup.registerControl(joinName + 'Position' + idx, this.fb.control(undefined, undefined));
             this.setValue(joinName + 'Position' + idx, idx);
             this.editFormGroup.registerControl(joinName + 'Poitype' + idx, this.fb.control(undefined, undefined));
-            this.setValue(joinName + 'Poitype' + idx, 2);
+            this.setValue(joinName + 'Poitype' + idx, 60 + '');
             this.editFormGroup.registerControl(joinName + 'GeoLoc' + idx, this.fb.control(undefined, undefined));
             this.setValue(joinName + 'GeoLoc' + idx, poi.geoLoc);
             this.editFormGroup.registerControl(joinName + 'GeoEle' + idx, this.fb.control(undefined, undefined));
@@ -550,6 +576,10 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tripId': {}
             },
             stringBeanFieldConfig: {
+                'poiJoinType': {
+                    labelPrefix: 'poijoin_',
+                    values: [0, 10, 20, 30, 40, 50, 60, 99]
+                },
                 'subtype': {},
                 'subTypeActiontype': {
                     labelPrefix: 'ac_',
@@ -659,6 +689,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'locIdParent': [],
                 'routeId': [],
                 'infoId': [],
+                'poiJoinType': [],
                 'subType': [],
                 'subTypeActiontype': [],
                 'subTypeLocType': [],
