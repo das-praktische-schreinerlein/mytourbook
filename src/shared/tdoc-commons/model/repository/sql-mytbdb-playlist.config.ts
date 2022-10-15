@@ -201,8 +201,7 @@ export class SqlMytbDbPlaylistConfig {
                 noFacet: true
             },
             'loc_lochirarchie_txt': {
-                constValues: ['loc_lochirarchie_txt'],
-                filterField: '"666dummy999"'
+                noFacet: true
             },
             'month_is': {
                 noFacet: true

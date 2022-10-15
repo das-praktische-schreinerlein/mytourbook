@@ -76,7 +76,7 @@
             </div>
         </div>
         <div class="row hidden-print" *ngIf="showWhereAvailable">
-            <div [class]="(width4 + ' input-group input-group-sm')">
+            <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectWhere && optionsSelectWhere.length > 0">
                 <label [class]="'col-xs-3 col-form-label mr-2' + (searchFormGroup.get('where').value.length > 0 ? ' label-active' : ' lael-inactive')" i18n="where label|Label for filter: where@@label.searchform.tdoc.where">Where:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectWhere"
                                          [settings]="settingsSelectWhere"
@@ -102,7 +102,7 @@
             </div>
         </div>
         <div class="row hidden-print">
-            <div [class]="(width4 + ' input-group input-group-sm')">
+            <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectWhen && optionsSelectWhen.length > 0">
                 <label [class]="'col-form-label ' + (searchFormGroup.get('when').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="when label|Label for filter: when@@label.searchform.tdoc.when">When:</label>
                 <ng-container *ngIf="optionsSelectWhen.length > 0; else noFilterValues">
                     <ss-multiselect-dropdown [options]="optionsSelectWhen"
@@ -115,7 +115,7 @@
                                              (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                 </ng-container>
             </div>
-            <div [class]="(width4 + ' input-group input-group-sm')">
+            <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectActionType && optionsSelectActionType.length > 0">
                 <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('actiontype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
                 <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
                     <ss-multiselect-dropdown [options]="optionsSelectActionType"
@@ -165,7 +165,7 @@
         <fieldset class="hidden-print" *ngIf="showWhere && showWhereAvailable">
             <legend i18n="where label|Label for fieldset: where@@label.searchform.tdoc.legend.where">&#x26f3; Wo</legend>
             <div class="row">
-                <div [class]="(width4 + ' input-group input-group-sm')">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectWhere && optionsSelectWhere.length > 0">
                     <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('where').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="where label|Label for filter: where@@label.searchform.tdoc.where">Where:</label>
                     <ss-multiselect-dropdown [options]="optionsSelectWhere"
                                              [settings]="settingsSelectWhere"
@@ -213,7 +213,7 @@
         <fieldset class="hidden-print" *ngIf="showWhat">
             <legend i18n="what label|Label for fieldset: what@@label.searchform.tdoc.legend.what">&#x26bd; Was</legend>
             <div class="row">
-                <div [class]="(width4 + ' input-group input-group-sm')">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectActionType && optionsSelectActionType.length > 0">
                     <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('actiontype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
                     <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectActionType"
@@ -264,7 +264,7 @@
         <fieldset class="hidden-print" *ngIf="showWhen && showWhenAvailable">
             <legend i18n="when label|Label for fieldset: when@@label.searchform.tdoc.legend.when">&#x231a; Zeit</legend>
             <div class="row">
-                <div [class]="(width4 + ' input-group input-group-sm')">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectWhen && optionsSelectWhen.length > 0">
                     <label [class]="'col-form-label ' + (searchFormGroup.get('when').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="when label|Label for filter: when@@label.searchform.tdoc.when">When:</label>
                     <ng-container *ngIf="optionsSelectWhen.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectWhen"
@@ -277,7 +277,7 @@
                                                  (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                     </ng-container>
                 </div>
-                <div [class]="(width4 + ' input-group input-group-sm')">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectTechDataDuration && optionsSelectTechDataDuration.length > 0">
                     <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataDuration').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataDuration label|Label for filter: techDataDuration@@label.searchform.tdoc.techDataDuration">Dauer:</label>
                     <ng-container *ngIf="optionsSelectTechDataDuration.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectTechDataDuration"
@@ -380,7 +380,7 @@
         <fieldset class="hidden-print" *ngIf="showDetails && showDetailsAvailable">
             <legend i18n="details label|Label for fieldset: details@@label.searchform.tdoc.legend.details">&#x231b; Details</legend>
             <div class="row">
-                <div [class]="(width4 + ' input-group input-group-sm')">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectWhat && optionsSelectWhat.length > 0">
                     <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('what').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="what label|Label for filter: what@@label.searchform.tdoc.what">What:</label>
                     <ng-container *ngIf="optionsSelectWhat.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectWhat"
@@ -393,7 +393,7 @@
                                                  (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                     </ng-container>
                 </div>
-                <div [class]="(width4 + ' input-group input-group-sm')">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectTechRateOverall && optionsSelectTechRateOverall.length > 0">
                     <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techRateOverall').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techRateOverall label|Label for filter: techRateOverall@@label.searchform.tdoc.techRateOverall">Bewertung:</label>
                     <ng-container *ngIf="optionsSelectTechRateOverall.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectTechRateOverall"

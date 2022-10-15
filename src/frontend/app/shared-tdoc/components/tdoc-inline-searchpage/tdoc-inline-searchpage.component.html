@@ -28,6 +28,7 @@
         </div>
         <div class="container" *ngIf="showForm">
             <app-tdoc-searchform [searchResult]="searchResult"
+                                 [short]="showShortForm"
                                  (search)="onSearchDoc($event)"></app-tdoc-searchform>
         </div>
         <div class="container content-container" *ngIf="flgMapEnabled && mapState.flgShowMap && showResultList">

@@ -397,7 +397,7 @@ export class SqlMytbDbNewsConfig {
             route_id_i: '"666dummy999"',
             route_id_is: '"666dummy999"',
             loc_lochirarchie_ids_txt: '"666dummy999"',
-            l_lochirarchietxt: 'location.l_name',
+            l_lochirarchietxt: '"666dummy999"',
             gpstracks_state_is: '"666dummy999"',
             initial_s: '"666dummy999"',
             html: 'CONCAT(n_headline, " ", COALESCE(n_message,""))'

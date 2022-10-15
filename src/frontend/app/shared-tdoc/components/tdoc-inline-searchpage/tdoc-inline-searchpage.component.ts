@@ -35,6 +35,9 @@ export class TourDocInlineSearchpageComponent extends
     public showItemMapFlag ? = false;
 
     @Input()
+    showShortForm ? = false;
+
+    @Input()
     public baseSearchUrl ? = 'tdoc/';
 
     @Input()

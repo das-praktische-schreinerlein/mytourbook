@@ -181,6 +181,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         singleCommands: [],
         rangeCommands: []
     };
+    poiSelectFilter: {} = undefined;
 
     protected poiMultiActionManager = new CommonDocMultiActionManager(this.appService, this.actionService);
 
@@ -475,6 +476,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
         this.cd.markForCheck();
 
+        return false;
+    }
+
+    onChangePoiSelectFilter(): boolean {
+        this.poiSelectFilter = this.getPoiFiltersForType(this.record);
         return false;
     }
 

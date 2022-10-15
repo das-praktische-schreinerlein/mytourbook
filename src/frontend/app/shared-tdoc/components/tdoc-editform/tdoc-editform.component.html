@@ -800,22 +800,28 @@
 
     <ng-template #inputNewPois>
         <div class="container">
-            <div class="col-sm-12" style="width: 100%">
-                <div class="col-sm-6 input-group input-group-sm">
-                    <button (click)="onAppendSelectedPois()"
-                            *ngIf="poiMultiActionManager.getSelectedRecords().length > 0"
-                            type="button"
-                            i18n="appendPois label|Label for button: appendPois@@label.editform.tdoc.appendPois">POIs hinzufügen</button>
-                </div>
+            <div class="col-sm-6 input-group input-group-sm">
+                <button (click)="onChangePoiSelectFilter()"
+                        type="button"
+                        i18n="changePoiFilter label|Label for button: changePoiFilter@@label.editform.tdoc.changePoiFilter">POIs suchen</button>
             </div>
-            <app-tdoc-inline-searchpage [label]="'POIs'"
+            <div class="col-sm-6 input-group input-group-sm">
+                <button (click)="onAppendSelectedPois()"
+                        *ngIf="poiMultiActionManager.getSelectedRecords().length > 0"
+                        type="button"
+                        i18n="appendPois label|Label for button: appendPois@@label.editform.tdoc.appendPois">POIs hinzufügen</button>
+            </div>
+            <app-tdoc-inline-searchpage *ngIf="poiSelectFilter"
+                                        [label]="'POIs'"
                                         i18n-label="label inline-searchpage POI|Label inline-searchpage POI@@linline-search.label.tdoc.POI"
-                                        [params]="getPoiFiltersForType(record)"
+                                        [params]="poiSelectFilter"
                                         [alternativeMultiActionmanager]="poiMultiActionManager"
                                         [htmlId]="'POI'"
-                                        [showForm]="false"
+                                        [showForm]="true"
+                                        [showShortForm]="true"
+                                        [showLayout]="true"
                                         [flgMapEnabled]="true"
-                                        [showResultList]="false"
+                                        [showResultList]="true"
                                         [layout]="Layout.THIN"
                                         [showItemMapFlag]="true"
                                         (tdocClicked)="onPoiClickedOnMap($event)"
