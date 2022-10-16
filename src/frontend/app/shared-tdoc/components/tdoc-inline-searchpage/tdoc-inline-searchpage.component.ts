@@ -35,7 +35,7 @@ export class TourDocInlineSearchpageComponent extends
     public showItemMapFlag ? = false;
 
     @Input()
-    showShortForm ? = false;
+    public showShortForm ? = false;
 
     @Input()
     public baseSearchUrl ? = 'tdoc/';
@@ -81,7 +81,7 @@ export class TourDocInlineSearchpageComponent extends
     }
 
     constructor(appService: GenericAppService, commonRoutingService: CommonRoutingService,
-                tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,
+                tdocDataService: TourDocDataService, protected searchFormConverter: TourDocSearchFormConverter,
                 cdocRoutingService: TourDocRoutingService, toastr: ToastrService,
                 cd: ChangeDetectorRef, elRef: ElementRef, pageUtils: PageUtils, searchFormUtils: SearchFormUtils,
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService,
@@ -137,4 +137,18 @@ export class TourDocInlineSearchpageComponent extends
 
         super.updateData();
     }
+
+    // TODO convert searchform on super too
+    protected doSearch() {
+        this.searchFormConverter.paramsToSearchForm(
+            this.searchFormConverter.searchFormToValueMap(this.searchForm),
+            {},
+            this.searchForm,
+            {});
+        super.doSearch();
+
+        return false;
+    }
+
+
 }

@@ -11,7 +11,9 @@ import {ToastrService} from 'ngx-toastr';
 import {TourDocDataCacheService} from '../../services/tdoc-datacache.service';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
-import {CommonDocSearchformComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-searchform/cdoc-searchform.component';
+import {
+    CommonDocSearchformComponent
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-searchform/cdoc-searchform.component';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 
@@ -243,6 +245,7 @@ export class TourDocSearchformComponent
         allSelected: 'Alle'};
 
     public showWhereAvailable = true;
+    public flgPoiSearch = false;
     public showWhenAvailable = true;
     public showObjectDetectionAvailable = true;
     public showDashboardFilterAvailable = true;
@@ -466,7 +469,9 @@ export class TourDocSearchformComponent
     }
 
     protected updateAvailabilityFlags(tdocSearchSearchResult: TourDocSearchResult) {
-        this.showWhereAvailable = (this.optionsSelectWhere.length > 0 || this.optionsSelectGpsTrackState.length > 0);
+        this.flgPoiSearch = tdocSearchSearchResult.searchForm.type === 'poi';
+        this.showWhereAvailable = (this.optionsSelectWhere.length > 0 || this.optionsSelectGpsTrackState.length > 0
+            || this.flgPoiSearch);
         this.showWhenAvailable = (this.optionsSelectWhen.length > 0 || this.optionsSelectTechDataDuration.length > 0);
         this.showDetailsAvailable = (this.optionsSelectWhat.length > 0 || this.optionsSelectTechRateOverall.length > 0 ||
             this.optionsSelectTechDataDistance.length > 0 || this.optionsSelectTechDataAltitudeMax.length > 0 ||

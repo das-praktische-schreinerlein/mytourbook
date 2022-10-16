@@ -444,8 +444,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         const filters = {};
         filters['type'] = 'POI';
         filters['sort'] = 'distance';
-        filters['where'] = undefined;
-        filters['moreFilter'] = 'id_notin_is:' + record.id;
         filters['where'] = this.createNearByFilter(record);
 
         return filters;

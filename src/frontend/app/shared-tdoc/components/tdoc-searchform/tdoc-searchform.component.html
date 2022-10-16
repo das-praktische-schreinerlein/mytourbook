@@ -102,32 +102,49 @@
             </div>
         </div>
         <div class="row hidden-print">
-            <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectWhen && optionsSelectWhen.length > 0">
-                <label [class]="'col-form-label ' + (searchFormGroup.get('when').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="when label|Label for filter: when@@label.searchform.tdoc.when">When:</label>
-                <ng-container *ngIf="optionsSelectWhen.length > 0; else noFilterValues">
-                    <ss-multiselect-dropdown [options]="optionsSelectWhen"
-                                             [settings]="settingsSelectWhen"
-                                             [texts]="textsSelectWhen"
-                                             class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
-                                             formControlName="when"
-                                             ngDefaultControl
-                                             (onAdded)="onChangeSelect()"
-                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-                </ng-container>
-            </div>
-            <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectActionType && optionsSelectActionType.length > 0">
-                <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('actiontype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
-                <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
-                    <ss-multiselect-dropdown [options]="optionsSelectActionType"
-                                             [settings]="settingsSelectActionType"
-                                             [texts]="textsSelectActionType"
-                                             formControlName="actiontype"
-                                             ngDefaultControl
-                                             class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
-                                             (onAdded)="onChangeSelect()"
-                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-                </ng-container>
-            </div>
+            <ng-container *ngIf="flgPoiSearch">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectWhat && optionsSelectWhat.length > 0">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('what').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="what label|Label for filter: what@@label.searchform.tdoc.what">What:</label>
+                    <ng-container *ngIf="optionsSelectWhat.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectWhat"
+                                                 [settings]="settingsSelectWhat"
+                                                 [texts]="textsSelectWhat"
+                                                 formControlName="what"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="flgPoiSearch">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectWhen && optionsSelectWhen.length > 0">
+                    <label [class]="'col-form-label ' + (searchFormGroup.get('when').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="when label|Label for filter: when@@label.searchform.tdoc.when">When:</label>
+                    <ng-container *ngIf="optionsSelectWhen.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectWhen"
+                                                 [settings]="settingsSelectWhen"
+                                                 [texts]="textsSelectWhen"
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 formControlName="when"
+                                                 ngDefaultControl
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectActionType && optionsSelectActionType.length > 0">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('actiontype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
+                    <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectActionType"
+                                                 [settings]="settingsSelectActionType"
+                                                 [texts]="textsSelectActionType"
+                                                 formControlName="actiontype"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+            </ng-container>
             <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
                 <button class="btn btn-action btn-sm" type="submit" i18n="button search tdoc|Buttontext to search tdoc@@button.searchform.tdoc.search">Search</button>
                 <button class="btn btn-configure btn-sm" (click)="showForm = false">
