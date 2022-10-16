@@ -124,7 +124,8 @@ describe('TourDocAdapterResponseMapper', () => {
                 'tdocextendedobjectproperties': [],
                 'tdoclinkedroutes': [],
                 'tdoclinkedinfos': [],
-                'tdoclinkedplaylists': []
+                'tdoclinkedplaylists': [],
+                'tdoclinkedpois': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues,
                 TourDocSqlMytbDbConfig.tableConfigs.track.fieldMapping);
@@ -246,7 +247,8 @@ describe('TourDocAdapterResponseMapper', () => {
                     }
                 ],
                 'tdoclinkedinfos': [],
-                'tdoclinkedplaylists': []
+                'tdoclinkedplaylists': [],
+                'tdoclinkedpois': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues, {});
 
