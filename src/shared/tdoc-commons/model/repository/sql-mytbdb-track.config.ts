@@ -131,6 +131,18 @@ export class SqlMytbDbTrackConfig {
                 parameterNames: ['id']
             },
             {
+                profile: 'linkedpois',
+                sql: 'SELECT CONCAT("type=", COALESCE(1, "null"), ":::name=", COALESCE(poi_name, "null"),' +
+                    '    ":::refId=", CAST(poi.poi_id AS CHAR), ":::poitype=", COALESCE(kategorie_poi.kpoi_type, "null"),' +
+                    '    ":::position=", COALESCE(kategorie_poi.kpoi_pos, "null"),' +
+                    '    ":::geoLoc=", CONCAT(poi_geo_latdeg, ",", poi_geo_longdeg), ":::geoEle=", COALESCE(poi_geo_ele, 0)' +
+                    '   )' +
+                    '  AS linkedpois' +
+                    '  FROM poi INNER JOIN kategorie_poi ON kategorie_poi.poi_id = poi.poi_id WHERE kategorie_poi.k_id IN (:id)' +
+                    '  ORDER BY kategorie_poi.kpoi_pos',
+                parameterNames: ['id']
+            },
+            {
                 profile: 'keywords',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM kategorie_keyword' +
@@ -773,6 +785,16 @@ export class SqlMytbDbTrackConfig {
             't_id': 'refId',
             'kt_full': 'full',
             'kt_route_attr': 'linkedRouteAttr'
+        }
+    };
+
+    public static readonly joinModelConfigTypeLinkedPois: JoinModelConfigTableType = {
+        baseTableIdField: 'k_id',
+        joinTable: 'kategorie_poi',
+        joinFieldMappings: {
+            'poi_id': 'refId',
+            'kpoi_pos': 'position',
+            'kpoi_type': 'poitype'
         }
     };
 

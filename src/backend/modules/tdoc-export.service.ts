@@ -21,6 +21,7 @@ import {TourDocLinkedInfoRecord} from '../shared/tdoc-commons/model/records/tdoc
 import {TourDocLinkedPlaylistRecord} from '../shared/tdoc-commons/model/records/tdoclinkedplaylist-record';
 import {ProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-search.service';
 import {ExportProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-export.service';
+import {TourDocLinkedPoiRecord} from '../shared/tdoc-commons/model/records/tdoclinkedpoi-record';
 
 export enum MediaExportResolutionProfiles {
     'all' = 'all',
@@ -213,12 +214,23 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
             }
         }
 
-        if (['ROUTE', 'LOCATION'].includes(doc.type)) {
+        if (['ROUTE', 'LOCATION', 'POI'].includes(doc.type)) {
             const infos: TourDocLinkedInfoRecord[] = doc.get('tdoclinkedinfos');
             if (infos) {
                 for (const info of infos) {
                     if (!idsRead['INFO']['INFO_' + info.refId]) {
                         idsToRead.push('INFO_' + info.refId);
+                    }
+                }
+            }
+        }
+
+        if (['ROUTE', 'TRACK'].includes(doc.type)) {
+            const pois: TourDocLinkedPoiRecord[] = doc.get('tdoclinkedpois');
+            if (pois) {
+                for (const info of pois) {
+                    if (!idsRead['POI']['POI_' + info.refId]) {
+                        idsToRead.push('POI_' + info.refId);
                     }
                 }
             }

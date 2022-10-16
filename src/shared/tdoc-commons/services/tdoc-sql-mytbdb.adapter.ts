@@ -223,6 +223,10 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                     const routes: TourDocLinkedRouteRecord[] = props.get('tdoclinkedroutes');
                     promises.push(this.commonJoinAdapter.saveJoins('linkedroutes', tabKey, dbId, routes, opts));
                 }
+                if (props.get('tdoclinkedpois')) {
+                    const pois: TourDocLinkedPoiRecord[] = props.get('tdoclinkedpois');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedpois', tabKey, dbId, pois, opts));
+                }
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);

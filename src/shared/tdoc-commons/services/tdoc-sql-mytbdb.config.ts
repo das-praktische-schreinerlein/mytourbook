@@ -117,7 +117,8 @@ export class TourDocSqlMytbDbConfig {
         'linkedpois': {
             name: 'linkedpois',
             tables: {
-                'route': SqlMytbDbRouteConfig.joinModelConfigTypeLinkedPois
+                'route': SqlMytbDbRouteConfig.joinModelConfigTypeLinkedPois,
+                'track': SqlMytbDbTrackConfig.joinModelConfigTypeLinkedPois
             }
         }
     };
