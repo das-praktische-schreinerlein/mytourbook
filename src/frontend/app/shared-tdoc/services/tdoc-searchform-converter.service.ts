@@ -146,6 +146,28 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         return this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
     }
 
+    searchFormToValueMap(tdocSearchForm: TourDocSearchForm): {[key: string]: string } {
+        const searchForm = (tdocSearchForm ? tdocSearchForm : new TourDocSearchForm({}));
+
+        const where = this.joinWhereParams(searchForm);
+        const moreFilter = this.joinMoreFilterParams(searchForm);
+        const what = this.joinWhatParams(searchForm);
+
+        const params: {[key: string]: string } = {
+            when: this.searchParameterUtils.joinAndUseValueOrDefault(searchForm.when, 'jederzeit'),
+            where: this.searchParameterUtils.joinAndUseValueOrDefault(where, 'ueberall'),
+            what: this.searchParameterUtils.joinAndUseValueOrDefault(what, 'alles'),
+            fulltext: this.searchParameterUtils.joinAndUseValueOrDefault(searchForm.fulltext, 'egal'),
+            moreFilter: this.searchParameterUtils.joinAndUseValueOrDefault(moreFilter, 'ungefiltert'),
+            sort: this.searchParameterUtils.joinAndUseValueOrDefault(searchForm.sort, 'relevance'),
+            type: this.searchParameterUtils.joinAndUseValueOrDefault(searchForm.type, 'alle'),
+            perPage: (+searchForm.perPage || 10) + '',
+            pageNum: (+searchForm.pageNum || 1) + ''
+        };
+
+        return params;
+    }
+
     searchFormToUrl(baseUrl: string, tdocSearchForm: TourDocSearchForm): string {
         let url = baseUrl + 'search/';
         const searchForm = (tdocSearchForm ? tdocSearchForm : new TourDocSearchForm({}));
@@ -155,13 +177,13 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         const what = this.joinWhatParams(searchForm);
 
         const params: Object[] = [
-            this.searchParameterUtils.useValueOrDefault(searchForm.when, 'jederzeit'),
-            this.searchParameterUtils.useValueOrDefault(where, 'ueberall'),
-            this.searchParameterUtils.useValueOrDefault(what, 'alles'),
-            this.searchParameterUtils.useValueOrDefault(searchForm.fulltext, 'egal'),
-            this.searchParameterUtils.useValueOrDefault(moreFilter, 'ungefiltert'),
-            this.searchParameterUtils.useValueOrDefault(searchForm.sort, 'relevance'),
-            this.searchParameterUtils.useValueOrDefault(searchForm.type, 'alle'),
+            this.searchParameterUtils.joinAndUseValueOrDefault(searchForm.when, 'jederzeit'),
+            this.searchParameterUtils.joinAndUseValueOrDefault(where, 'ueberall'),
+            this.searchParameterUtils.joinAndUseValueOrDefault(what, 'alles'),
+            this.searchParameterUtils.joinAndUseValueOrDefault(searchForm.fulltext, 'egal'),
+            this.searchParameterUtils.joinAndUseValueOrDefault(moreFilter, 'ungefiltert'),
+            this.searchParameterUtils.joinAndUseValueOrDefault(searchForm.sort, 'relevance'),
+            this.searchParameterUtils.joinAndUseValueOrDefault(searchForm.type, 'alle'),
             +searchForm.perPage || 10,
             +searchForm.pageNum || 1
         ];
@@ -186,6 +208,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
     paramsToSearchForm(params: any, defaults: {}, searchForm: TourDocSearchForm, queryParams?: {}): void {
         params = params || {};
         defaults = defaults || {};
+
         const whereValues = this.searchParameterUtils.splitValuesByPrefixes(params.where, this.splitter,
             ['locId:', 'loc:', 'nearby:', 'nearbyAddress:']);
         let where = '';
@@ -202,7 +225,6 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('nearbyAddress:'), 'nearbyAddress:', ',') : '');
         const locId: string = (whereValues.has('locId:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('locId:'), 'locId:', ',') : '');
-
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
             ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techDataSections:',
                 'techRateOverall:', 'personalRateOverall:', 'personalRateDifficulty:',
@@ -278,101 +300,101 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         const initial: string = (whatFilterValues.has('initial:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('initial:'), 'initial:', ',') : '');
 
-        searchForm.theme = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.theme = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
             defaults['theme'], '');
-        searchForm.when = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.when = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['when'], /^jederzeit$/, ''),
             defaults['when'], '');
-        searchForm.where = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.where = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(where, /^ueberall$/, ''),
             defaults['where'], '');
-        searchForm.locId = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.locId = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(locId, /^ueberall$/, ''),
             defaults['locId'], '');
-        searchForm.nearby = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.nearby = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(nearby, /^ueberall$/, ''),
             defaults['nearby'], '');
-        searchForm.nearbyAddress = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.nearbyAddress = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(nearbyAddress, /^ueberall$/, ''),
             defaults['nearbyAddress'], '');
-        searchForm.what = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.what = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(what, /^alles$/, ''),
             defaults['what'], '');
-        searchForm.actiontype = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.actiontype = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(actiontype, /^alles$/, ''),
             defaults['actiontype'], '');
-        searchForm.playlists = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.playlists = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(playlists, /^alles$/, ''),
             defaults['playlists'], '');
-        searchForm.persons = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.persons = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(persons, /^alles$/, ''),
             defaults['persons'], '');
-        searchForm.objects = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.objects = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(objects, /^alles$/, ''),
             defaults['objects'], '');
-        searchForm.initial = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.initial = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(initial, /^alles$/, ''),
             defaults['initial'], '');
-        searchForm.fulltext = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.fulltext = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['fulltext'], /^egal$/, ''),
             defaults['fulltext'], '');
-        searchForm.moreFilter = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.moreFilter = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(moreFilter, /^ungefiltert$/, ''),
             defaults['moreFilter'], '');
-        searchForm.techRateOverall = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.techRateOverall = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techRateOverall, /^ungefiltert$/, ''),
             defaults['techRateOverall'], '');
-        searchForm.personalRateOverall = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.personalRateOverall = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(personalRateOverall, /^ungefiltert$/, ''),
             defaults['personalRateOverall'], '');
-        searchForm.personalRateDifficulty = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.personalRateDifficulty = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(personalRateDifficulty, /^ungefiltert$/, ''),
             defaults['personalRateDifficulty'], '');
-        searchForm.techDataAscent = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.techDataAscent = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataAscent, /^ungefiltert$/, ''),
             defaults['techDataAscent'], '');
-        searchForm.techDataDuration = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.techDataDuration = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataDuration, /^ungefiltert$/, ''),
             defaults['techDataDuration'], '');
-        searchForm.techDataSections = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.techDataSections = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataSections, /^ungefiltert$/, ''),
             defaults['techDataSections'], '');
-        searchForm.techDataDistance = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.techDataDistance = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataDistance, /^ungefiltert$/, ''),
             defaults['techDataDistance'], '');
-        searchForm.techDataAltitudeMax = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.techDataAltitudeMax = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataAltitudeMax, /^ungefiltert$/, ''),
             defaults['techDataAltitudeMax'], '');
-        searchForm.objectDetectionCategory = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.objectDetectionCategory = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(objectDetectionCategory, /^ungefiltert$/, ''),
             defaults['objectDetectionCategory'], '');
-        searchForm.objectDetectionDetector = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.objectDetectionDetector = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(objectDetectionDetector, /^ungefiltert$/, ''),
             defaults['objectDetectionDetector'], '');
-        searchForm.objectDetectionKey = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.objectDetectionKey = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(objectDetectionKey, /^ungefiltert$/, ''),
             defaults['objectDetectionKey'], '');
-        searchForm.objectDetectionPrecision = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.objectDetectionPrecision = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(objectDetectionPrecision, /^ungefiltert$/, ''),
             defaults['objectDetectionPrecision'], '');
-        searchForm.objectDetectionState = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.objectDetectionState = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(objectDetectionState, /^ungefiltert$/, ''),
             defaults['objectDetectionState'], '');
-        searchForm.routeAttr = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.routeAttr = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(routeAttr, /^ungefiltert$/, ''),
             defaults['routeAttr'], '');
-        searchForm.routeAttrPart = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.routeAttrPart = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(routeAttrPart, /^ungefiltert$/, ''),
             defaults['routeAttrPart'], '');
-        searchForm.gpsTrackState = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.gpsTrackState = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(gpsTrackState, /^ungefiltert$/, ''),
             defaults['gpsTrackState'], '');
 
-        searchForm.sort = this.searchParameterUtils.useValueDefaultOrFallback(params['sort'], defaults['sort'], '');
-        searchForm.type = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.sort = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(params['sort'], defaults['sort'], '');
+        searchForm.type = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '').toLowerCase();
-        searchForm.dashboardFilter = this.searchParameterUtils.useValueDefaultOrFallback(
+        searchForm.dashboardFilter = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(dashboardFilter, /^alles$/, ''),
             defaults['dashboardFilter'], '');
         searchForm.perPage = +params['perPage'] || 10;

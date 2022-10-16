@@ -176,12 +176,12 @@ export class SqlMytbDbPoiConfig {
                 noFacet: true
             },
             'keywords_txt': {
-                selectSql: 'SELECT 0 AS count, ' +
+                selectSql: 'SELECT count(keyword.kw_id) AS count, ' +
                     '  kw_name AS value ' +
                     'FROM' +
-                    ' keyword' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                    ' keyword inner join poi_keyword on keyword.kw_id=poi_keyword.kw_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY count desc',
                 filterField: 'kw_name',
                 action: AdapterFilterActions.LIKEIN
             },

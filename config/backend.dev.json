@@ -44,10 +44,13 @@
         "facetCacheUsage": {
             "active": true,
             "entities": {
+                "image": {
+                    "facetKeyPatterns": [".*"]
+                },
                 "odimgobject": {
                     "facetKeyPatterns": [".*"]
                 },
-                "image": {
+                "poi": {
                     "facetKeyPatterns": [".*"]
                 }
             }

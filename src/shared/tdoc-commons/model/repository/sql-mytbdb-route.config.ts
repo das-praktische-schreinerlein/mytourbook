@@ -393,13 +393,13 @@ export class SqlMytbDbRouteConfig {
                     'ORDER BY value',
             },
             'keywords_txt': {
-                selectSql: 'SELECT 0 AS count, ' +
+                selectSql: 'SELECT count(keyword.kw_id) AS count, ' +
                     '  kw_name AS value ' +
                     'FROM' +
-                    ' keyword' +
+                    ' keyword left join tour_keyword on keyword.kw_id=tour_keyword.kw_id' +
                     ' WHERE kw_name like "KW_%"' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                    ' GROUP BY value' +
+                    ' ORDER BY count desc',
                 filterField: 'kw_name',
                 action: AdapterFilterActions.LIKEIN
             },
