@@ -54,3 +54,30 @@ select useIt, typ, t_name, poi_name, distance, tour_poi_name, insertMain, insert
          and abs(l.l_geo_latdeg - poi.poi_geo_latdeg) < 0.5
          and not exists (select poi_id from tour_poi tpoi where tpoi.t_id= t.t_id and tpoi.tpoi_type in (20, 30))
 ) matched_pois order by t_name, distance;
+
+-- add todo-keywords for tracks/routes without poi
+insert into tour_keyword (kw_id, t_id)
+select (select kw_id from keyword where kw_name='KW_TODOPOISTART') as kw_id,
+       t_id from
+                tour where t_id not in (select t_id from tour_poi where tour_poi.tpoi_type in (10));
+insert into tour_keyword (kw_id, t_id)
+select (select kw_id from keyword where kw_name='KW_TODOPOIMAIN') as kw_id,
+       t_id from
+                tour where t_id not in (select t_id from tour_poi where tour_poi.tpoi_type in (20));
+insert into tour_keyword (kw_id, t_id)
+select (select kw_id from keyword where kw_name='KW_TODOPOIEND') as kw_id,
+       t_id from
+                tour where t_id not in (select t_id from tour_poi where tour_poi.tpoi_type in (90));
+
+insert into kategorie_keyword (kw_id, k_id)
+select (select kw_id from keyword where kw_name='KW_TODOPOISTART') as kw_id,
+       k_id from
+                kategorie where k_id not in (select k_id from kategorie_poi where kategorie_poi.kpoi_type in (10));
+insert into kategorie_keyword (kw_id, k_id)
+select (select kw_id from keyword where kw_name='KW_TODOPOIMAIN') as kw_id,
+       k_id from
+                kategorie where k_id not in (select k_id from kategorie_poi where kategorie_poi.kpoi_type in (20));
+insert into kategorie_keyword (kw_id, k_id)
+select (select kw_id from keyword where kw_name='KW_TODOPOIEND') as kw_id,
+       k_id from
+                kategorie where k_id not in (select k_id from kategorie_poi where kategorie_poi.kpoi_type in (90));
