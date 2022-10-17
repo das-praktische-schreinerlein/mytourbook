@@ -66,7 +66,7 @@ export class SqlMytbDbRouteConfig {
                 groupByFields: ['kt_trip.tr_id']
             },
             {
-                from: 'LEFT JOIN tour_poi ON poi.poi_id=tour_poi.poi_id',
+                from: 'LEFT JOIN tour_poi ON tour.t_id=tour_poi.t_id',
                 triggerParams: ['poi_id_i', 'poi_id_is'],
                 groupByFields: ['tour_poi.poi_id']
             },

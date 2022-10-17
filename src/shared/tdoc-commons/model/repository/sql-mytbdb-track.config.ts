@@ -45,7 +45,7 @@ export class SqlMytbDbTrackConfig {
                 groupByFields: ['news.n_id']
             },
             {
-                from: 'LEFT JOIN kategorie_poi ON poi.poi_id=kategorie_poi.poi_id',
+                from: 'LEFT JOIN kategorie_poi ON kategorie.k_id=kategorie_poi.k_id',
                 triggerParams: ['poi_id_i', 'poi_id_is'],
                 groupByFields: ['kategorie_poi.poi_id']
             },
