@@ -157,7 +157,7 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
     }
 
     protected checkIdToRead(doc: TourDocRecord, idsRead: {}): any[] {
-        for (const type of ['IMAGE', 'VIDEO', 'TRACK', 'LOCATION', 'ROUTE', 'INFO', 'TRIP', 'NEWS', 'PLAYLIST', 'DESTINATION']) {
+        for (const type of ['IMAGE', 'VIDEO', 'TRACK', 'LOCATION', 'ROUTE', 'INFO', 'TRIP', 'NEWS', 'PLAYLIST', 'DESTINATION', 'POI']) {
             if (idsRead[type] === undefined) {
                 idsRead[type] = {};
             }
