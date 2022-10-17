@@ -1133,6 +1133,7 @@
                                             [showItemMapFlag]="false"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            (searchResultFound)="onRouteTracksFound($event)"
                                             [showResultList]="showResultListTrigger.ROUTE"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.INFO"
