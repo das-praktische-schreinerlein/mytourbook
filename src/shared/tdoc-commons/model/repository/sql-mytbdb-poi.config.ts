@@ -27,6 +27,11 @@ export class SqlMytbDbPoiConfig {
                 triggerParams: ['route_id_i', 'route_id_is'],
                 groupByFields: ['tour_poi.t_id']
             },
+            {
+                from: 'LEFT JOIN kategorie_poi ON poi.poi_id=kategorie_poi.poi_id',
+                triggerParams: ['track_id_i', 'track_id_is'],
+                groupByFields: ['kategorie_poi.k_id']
+            }
         ],
         groupbBySelectFieldList: true,
         groupbBySelectFieldListIgnore: ['poi_keywords'],
@@ -313,8 +318,8 @@ export class SqlMytbDbPoiConfig {
             poi_id_is: 'poi.poi_id',
             route_id_i: 'tour_poi.t_id',
             route_id_is: 'tour_poi.t_id',
-            track_id_i: '"666dummy999"',
-            track_id_is: '"666dummy999"',
+            track_id_i: 'kategorie_poi.k_id',
+            track_id_is: 'kategorie_poi.k_id',
             video_id_is: '"666dummy999"',
             video_id_i: '"666dummy999"',
             image_id_is: '"666dummy999"',

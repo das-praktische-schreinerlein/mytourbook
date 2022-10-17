@@ -34,9 +34,9 @@ export interface BackendConfigType extends CommonBackendConfigType<KeywordMapper
     ObjectDetectionManagerBackendConfig {
     tdocDataStoreAdapter: string,
     tdocWritable: boolean,
+    tdocImportConverterAdditionalKeywords?: string[],
     TourDocSqlMytbDbAdapter: SqlConnectionConfigType
     TourDocSqlMytbExportDbAdapter: SqlConnectionConfigType,
-    // TODO
     TourDocItemsJsAdapter: {
         dataFile: string
     },

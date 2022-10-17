@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
-import {TourDocConverterModule} from '../modules/tdoc-converter.module';
+import {TourDocImportConverterModule} from '../modules/tdoc-converter.module';
 import {TourDocSolrAdapter} from '../shared/tdoc-commons/services/tdoc-solr.adapter';
 import {ValidationRule, WhiteListValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {
@@ -42,7 +42,7 @@ export class TourDocConverterCommand extends CommonAdminCommand {
             dataService.setWritable(true);
         }
 
-        const tdocConverterModule = new TourDocConverterModule(backendConfig, dataService);
+        const tdocConverterModule = new TourDocImportConverterModule(backendConfig, dataService);
 
         let promise: Promise<any>;
         switch (action) {

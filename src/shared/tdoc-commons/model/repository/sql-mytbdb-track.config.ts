@@ -45,6 +45,11 @@ export class SqlMytbDbTrackConfig {
                 groupByFields: ['news.n_id']
             },
             {
+                from: 'LEFT JOIN kategorie_poi ON poi.poi_id=kategorie_poi.poi_id',
+                triggerParams: ['poi_id_i', 'poi_id_is'],
+                groupByFields: ['kategorie_poi.poi_id']
+            },
+            {
                 from: 'INNER JOIN (SELECT k_id AS id FROM kategorie WHERE k_name IN' +
                     '                (SELECT DISTINCT k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
@@ -162,6 +167,10 @@ export class SqlMytbDbTrackConfig {
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=ADDITIONAL_ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT kategorie_tour.t_id) AS CHAR))' +
                     '        AS extended_object_properties' +
                     '    FROM kategorie_tour WHERE kategorie_tour.k_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=POI_COUNT:::value=", CAST(COUNT(DISTINCT kategorie_poi.poi_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM kategorie_poi' +
+                    '      WHERE kategorie_poi.k_id IN (:id)' +
                     '   UNION ' +
                     /**
                      'SELECT CONCAT("category=ENTITYCOUNT:::name=ADDITIONAL_ROUTE_IDS:::value=",' +
@@ -609,6 +618,8 @@ export class SqlMytbDbTrackConfig {
         sortMapping: {
             'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.k_id = kategorie.k_id) ASC, k_name ASC',
             'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.k_id = kategorie.k_id) DESC, k_name ASC',
+            'countPois': '(SELECT COUNT(DISTINCT poi_sort.poi_id) FROM kategorie_poi poi_sort WHERE poi_sort.k_id = kategorie.k_id) ASC, k_name ASC',
+            'countPoisDesc': '(SELECT COUNT(DISTINCT poi_sort.poi_id) FROM kategorie_poi poi_sort WHERE poi_sort.k_id = kategorie.k_id) DESC, k_name ASC',
             'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM kategorie k_sort' +
                 '      LEFT JOIN kategorie_tour kt_sort ON kt_sort.k_id = k_sort.k_id' +
                 '      INNER JOIN tour t_sort ON t_sort.t_id = k_sort.t_id OR t_sort.t_id = kt_sort.t_id' +
@@ -664,8 +675,8 @@ export class SqlMytbDbTrackConfig {
             info_id_is: '"666dummy999"',
             loc_id_i: 'kategorie.l_id',
             loc_id_is: 'kategorie.l_id',
-            poi_id_i: '"666dummy999"',
-            poi_id_is: '"666dummy999"',
+            poi_id_i: 'kategorie_poi.poi_id',
+            poi_id_is: 'kategorie_poi.poi_id',
             route_id_i: 'kategorie.t_id',
             route_id_is: 'kategorie.t_id',
             track_id_i: 'kategorie.k_id',

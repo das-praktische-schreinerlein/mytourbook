@@ -66,6 +66,11 @@ export class SqlMytbDbRouteConfig {
                 groupByFields: ['kt_trip.tr_id']
             },
             {
+                from: 'LEFT JOIN tour_poi ON poi.poi_id=tour_poi.poi_id',
+                triggerParams: ['poi_id_i', 'poi_id_is'],
+                groupByFields: ['tour_poi.poi_id']
+            },
+            {
                 from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE t_key' +
                     '              IN (SELECT DISTINCT t_key AS name' +
                     '                  FROM tour GROUP BY name HAVING COUNT(*) > 1)' +
@@ -149,6 +154,10 @@ export class SqlMytbDbRouteConfig {
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(COUNT(DISTINCT tour_info.if_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM tour_info' +
                     '      WHERE tour_info.t_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=POI_COUNT:::value=", CAST(COUNT(DISTINCT tour_poi.poi_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM tour_poi' +
+                    '      WHERE tour_poi.t_id IN (:id)' +
                     '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS extended_object_properties' +
                     '       FROM kategorie LEFT JOIN kategorie_tour ON kategorie.k_id = kategorie_tour.k_id' +
@@ -737,6 +746,8 @@ export class SqlMytbDbRouteConfig {
                 '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC, t_name ASC',
             'countInfos': '(SELECT COUNT(DISTINCT if_sort.if_id) FROM tour_info if_sort WHERE if_sort.t_id = tour.t_id) ASC, t_name ASC',
             'countInfosDesc': '(SELECT COUNT(DISTINCT if_sort.if_id) FROM tour_info if_sort WHERE if_sort.t_id = tour.t_id) DESC, t_name ASC',
+            'countPois': '(SELECT COUNT(DISTINCT poi_sort.poi_id) FROM tour_poi poi_sort WHERE poi_sort.t_id = tour.t_id) ASC, t_name ASC',
+            'countPoisDesc': '(SELECT COUNT(DISTINCT poi_sort.poi_id) FROM tour_poi poi_sort WHERE poi_sort.t_id = tour.t_id) DESC, t_name ASC',
             'countTracks': '(SELECT COUNT(DISTINCT k_sort.k_id) FROM kategorie k_sort ' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
                 '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC, t_name ASC',
@@ -809,8 +820,8 @@ export class SqlMytbDbRouteConfig {
             image_id_i: '"666dummy999"',
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',
-            poi_id_i: '"666dummy999"',
-            poi_id_is: '"666dummy999"',
+            poi_id_i: 'tour_poi.poi_id',
+            poi_id_is: 'tour_poi.poi_id',
             route_id_i: 'tour.t_id',
             route_id_is: 'tour.t_id',
             video_id_is: '"666dummy999"',

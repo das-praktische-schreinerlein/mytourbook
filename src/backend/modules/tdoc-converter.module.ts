@@ -5,15 +5,32 @@ import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc
 import * as fs from 'fs';
 import {ServerLogUtils} from '@dps/mycms-server-commons/dist/server-commons/serverlog.utils';
 import {Feature, FeatureCollection} from 'geojson';
+import {BackendConfigType} from './backend.commons';
+import {isArray} from 'util';
 
-export class TourDocConverterModule {
+export class TourDocImportConverterModule {
     private dataService: TourDocDataService;
-    private backendConfig: {};
-    private keywordSrcLst = ['natural', 'tourism', 'surface', 'condition', 'man_made', 'amenity', 'sport', 'climbing'];
+    private backendConfig: BackendConfigType;
+    private keywordSrcLst = [
+        'amenity',
+        'aerialway',
+        'climbing',
+        'condition',
+        'man_made',
+        'mountain_pass',
+        'natural',
+        'place',
+        'sport',
+        'surface',
+        'tourism'
+    ];
 
-    constructor(backendConfig, dataService: TourDocDataService) {
+    constructor(backendConfig: BackendConfigType, dataService: TourDocDataService) {
         this.dataService = dataService;
-        this.backendConfig = backendConfig;
+        this.backendConfig = backendConfig
+        if (isArray(backendConfig.tdocImportConverterAdditionalKeywords)) {
+            this.keywordSrcLst = this.keywordSrcLst.concat(backendConfig.tdocImportConverterAdditionalKeywords);
+        }
     }
 
     public convertGeoJSONOTourDoc(srcFile: string): Promise<TourDocRecord[]> {
@@ -162,9 +179,9 @@ export class TourDocConverterModule {
                     geo_lat_s: coordinate['lat'],
                     geo_lon_s: coordinate['lon'],
                     geo_loc_p: coordinate['loc'],
-                    data_info_guides_s: osmUrl
-                        ? osmUrl
-                        : feature.id,
+                    data_info_guides_s: flgOsmImport
+                        ? 'SOURCE_OSM/' +  feature.id
+                        : 'SOURCE_GEOJSON/' +  feature.id,
                     desc_txt: desc,
                     linkedinfos_txt: linkedInfos.join(';;'),
                     data_tech_alt_max_i: coordinate['ele'],
