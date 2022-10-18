@@ -74,6 +74,7 @@
         <div class="row">
             <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
         </div>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
     </ng-template>
 
     <ng-template #formTrack>
@@ -145,6 +146,7 @@
                 <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
         </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
             <legend i18n="geoData label|Label for fieldset: geoData@@label.editform.tdoc.legend.geoData">&#x26f3; Geo-Daten</legend>
             <div class="row">
@@ -166,6 +168,7 @@
                 <ng-container *ngTemplateOutlet="inputNewPois"></ng-container>
             </div>
         </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
     </ng-template>
 
     <ng-template #formImage>
@@ -198,6 +201,7 @@
                 <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
             </div>
         </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
     </ng-template>
 
     <ng-template #formVideo>
@@ -230,6 +234,7 @@
                 <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
             </div>
         </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
     </ng-template>
 
     <ng-template #formRoute>
@@ -318,6 +323,7 @@
                 <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
         </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
             <legend i18n="geoData label|Label for fieldset: geoData@@label.editform.tdoc.legend.geoData">&#x26f3; Geo-Daten</legend>
             <div class="row">
@@ -339,6 +345,7 @@
                 <ng-container *ngTemplateOutlet="inputNewPois"></ng-container>
             </div>
         </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
     </ng-template>
 
     <ng-template #formTrip>
@@ -407,6 +414,7 @@
                 <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
             </div>
         </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
     </ng-template>
 
     <ng-template #formPlaylist>

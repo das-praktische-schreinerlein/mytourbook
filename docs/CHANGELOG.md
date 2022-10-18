@@ -23,6 +23,7 @@
 - frontend: improved gpx-geoloc-edit - use separate component
 - frontend: improved form-handing with util-classes
 - frontend: inline-searchpage -> added own maps
+- frontend+backend: use fulltext as LIKEIN with OR-splitter
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -42,6 +43,7 @@
 - frontend: improved gpx-geoloc-edit - use separate component
 - frontend: improved form-handing with util-classes
 - frontend: inline-searchpage -> added own maps
+- frontend+backend: use fulltext as LIKEIN with OR-splitter
 
 ### bug fixes
 - backend: fixed media-export of dependent records

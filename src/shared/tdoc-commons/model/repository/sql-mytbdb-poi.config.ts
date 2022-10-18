@@ -275,6 +275,7 @@ export class SqlMytbDbPoiConfig {
             'countRoutesDesc': '(SELECT COUNT(DISTINCT poi_sort.t_id) FROM tour_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) DESC, poi_name ASC',
             'countTracks': '(SELECT COUNT(DISTINCT poi_sort.k_id) FROM kategorie_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) ASC, poi_name ASC',
             'countTracksDesc': '(SELECT COUNT(DISTINCT poi_sort.k_id) FROM kategorie_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) DESC, poi_name ASC',
+            'distance': 'geodist ASC, poi_name ASC',
             'name': 'poi_name ASC',
             'forExport': 'poi.poi_id ASC, poi_name ASC',
             'relevance': 'poi.poi_id DESC, poi_name ASC'

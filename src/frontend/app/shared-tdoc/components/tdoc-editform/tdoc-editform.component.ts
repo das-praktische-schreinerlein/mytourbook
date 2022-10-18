@@ -35,6 +35,7 @@ import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/fron
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 import {MultiActionTagConfig} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {TourDocJoinUtils} from '../../services/tdoc-join.utils';
+import {FormUtils} from '../../services/form.utils';
 
 // TODO move to commons
 export interface SingleEditorCommand {
@@ -446,6 +447,30 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         filters['sort'] = 'distance';
         filters['where'] = this.createNearByFilter(record);
 
+        const fullText: string = [].concat(
+            ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(name => {
+                return FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), name);
+            }))
+            .map(value => {
+                return value && value.length > 0
+                    ? value.split(' -> ')
+                        .pop()
+                        .trim()
+                    : undefined
+            })
+            .map(value => {
+                return value && value.length > 0
+                    ? value.split(' - ')
+                        .pop()
+                        .trim()
+                    : undefined
+            })
+            .filter(value => value !== undefined && value.length > 0)
+            .join(' OR ');
+        if (fullText) {
+            filters['fulltext'] = fullText;
+        }
+
         return filters;
     }
 
@@ -582,7 +607,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             stringBeanFieldConfig: {
                 'poiJoinType': {
                     labelPrefix: 'poijoin_',
-                    values: [0, 10, 20, 30, 40, 50, 60, 99]
+                    values: [0, 10, 20, 30, 40, 50, 60, 70, 99]
                 },
                 'subtype': {},
                 'subTypeActiontype': {

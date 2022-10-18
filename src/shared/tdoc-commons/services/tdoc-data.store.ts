@@ -82,9 +82,10 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         if (searchForm.fulltext !== undefined && searchForm.fulltext.length > 0) {
             filter = filter || {};
             filter['html'] = {
-                'likei': '%' + searchForm.fulltext + '%'
+                'likein': searchForm.fulltext.split(' OR ')
             };
         }
+
         if (searchForm.when !== undefined && searchForm.when.length > 0) {
             const keys = ['week', 'month', 'year'];
             const whenValues = this.searchParameterUtils.splitValuesByPrefixes(searchForm.when, ',', keys);
