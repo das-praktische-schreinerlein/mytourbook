@@ -364,6 +364,17 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.updateMap();
     }
 
+    updateGeoAdditionalFields(additionalFields: { }): void {
+        if (additionalFields && additionalFields['keywords'] && additionalFields['keywords'].length > 0) {
+            const currentKeywords = this.editFormGroup.getRawValue()['keywords'];
+            this.setValue('keywords', currentKeywords && currentKeywords.length > 0
+                    ? currentKeywords + ', ' + additionalFields['keywords']
+                    : additionalFields['keywords']);
+        }
+
+        this.cd.markForCheck();
+    }
+
     updateMap(): boolean {
         let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
         if (track !== undefined && track !== null && track.length > 0) {
@@ -472,6 +483,22 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         }
 
         return filters;
+    }
+
+    onCreateNewPOI(id: string): boolean {
+        const me = this;
+        // open modal dialog
+        me.router.navigate([{ outlets: { 'modaledit': ['modaledit', 'create', 'POI', id] } }]).then(value => {
+            // check for closing modal dialog and routechange -> update facets
+            const subscription = me.router.events.subscribe((val) => {
+                subscription.unsubscribe();
+            });
+        });
+
+
+        this.onChangePoiSelectFilter();
+
+        return false;
     }
 
     // TODO move to separate component

@@ -8,8 +8,9 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
 import {DOCUMENT} from '@angular/common';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import * as L from 'leaflet';
-import {LatLng} from 'leaflet';
+import {LatLng, LeafletMouseEvent} from 'leaflet';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
+import {FormUtils} from '../../services/form.utils';
 
 @Component({
     selector: 'app-gpx-editloc',
@@ -42,16 +43,25 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
     @Input()
     public geoLoc: string;
 
+    @Input()
+    public flgShowArea ? = true;
+
     @Output()
     public saveTrackSrc: EventEmitter<string> = new EventEmitter();
 
     @Output()
     public saveGeoLoc: EventEmitter<string> = new EventEmitter();
 
+    @Output()
+    public saveAdditionalFields: EventEmitter<{}> = new EventEmitter();
+
     public editGpxLocFormGroup: FormGroup = this.fb.group({
         gpxSrc: this.gpxSrc,
         geoLoc: this.geoLoc,
-        geoLocAddress: this.name
+        geoLocAddress: this.name,
+        geoLocUseMapClickPos: false,
+        keywords: '',
+        infos: ''
     });
 
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
@@ -63,6 +73,16 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
     doGeoLocationSearch(selector) {
         const me = this;
         this.geoLocationService.doLocationSearch(selector, this.editGpxLocFormGroup.getRawValue()['geoLocAddress']).then((event: any) => {
+            me.editGpxLocFormGroup.patchValue({
+                'keywords': event.detail.raw
+                    ? event.detail.raw.class + '_' +  event.detail.raw.type
+                    : ''
+            });
+            me.editGpxLocFormGroup.patchValue({
+                'infos': event.detail.raw
+                    ? 'https://www.openstreetmap.org/' + event.detail.raw.osm_type + '/' +  event.detail.raw.osm_id
+                    : ''
+            });
             me.editGpxLocFormGroup.patchValue({'geoLoc': event.detail.lat + ',' + event.detail.lon + ',' + 0});
             me.updateGeoData();
         }).catch(reason => {
@@ -74,6 +94,17 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
 
     onGeoLocMapCreated(map: L.Map) {
         this.geoLocMap = map;
+        const me = this;
+        map.on('click', function (event: LeafletMouseEvent) {
+            return me.onGeoLocMapClicked(event.latlng);
+        });
+    }
+
+    onGeoLocMapClicked(position: L.LatLng) {
+        if (position && FormUtils.getStringFormValue(this.editGpxLocFormGroup.getRawValue(), 'geoLocUseMapClickPos') === 'true') {
+            this.editGpxLocFormGroup.patchValue({'geoLoc': position.lat + ',' + position.lng + ',' + 0});
+            this.cd.markForCheck();
+        }
     }
 
     createNewGeoLocArea(): boolean {
@@ -157,11 +188,11 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
         return false;
     }
 
-    updateMap(): boolean {
+    updateMap(values: {}): boolean {
         const me = this;
         const geoRecords = [];
 
-        let trackSrc = this.editGpxLocFormGroup.getRawValue()['gpxSrc'];
+        let trackSrc = values['gpxSrc'];
         if (trackSrc !== undefined && trackSrc !== null && trackSrc.length > 0) {
             trackSrc = GeoGpxParser.fixXml(trackSrc);
             trackSrc = GeoGpxParser.fixXmlExtended(trackSrc);
@@ -171,15 +202,15 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
                 id: 'TMPLOC' + (new Date()).getTime(),
                 gpsTrackSrc: trackSrc,
                 gpsTrackBaseFile: 'tmp.gpx',
-                name: this.editGpxLocFormGroup.getRawValue()['name'],
+                name: values['name'],
                 type: this.type,
                 datestart: new Date().toISOString(),
                 dateend: new Date().toISOString(),
-                dateshow: this.editGpxLocFormGroup.getRawValue()['dateshow']
+                dateshow: values['dateshow']
             }));
         }
 
-        const geoLoc = this.editGpxLocFormGroup.getRawValue()['geoLoc'];
+        const geoLoc = values['geoLoc'];
         if (geoLoc !== undefined && geoLoc !== null && geoLoc.length > 0) {
             const lst = geoLoc ? geoLoc.split(',') : [];
             geoRecords.push(TourDocRecordFactory.createSanitized({
@@ -187,11 +218,11 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
                 geoLoc: geoLoc,
                 geoLat: lst.length > 1 ? lst[0] : undefined,
                 geoLon: lst.length > 1 ? lst[1] : undefined,
-                name: this.editGpxLocFormGroup.getRawValue()['name'],
+                name: values['name'],
                 type: this.type,
                 datestart: new Date().toISOString(),
                 dateend: new Date().toISOString(),
-                dateshow: this.editGpxLocFormGroup.getRawValue()['dateshow']
+                dateshow: values['dateshow']
             }));
         }
         me.geoLocRecords = geoRecords;
@@ -219,8 +250,9 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
         this.prepareSubmitValues(values);
         this.saveTrackSrc.emit(values['gpxSrc']);
         this.saveGeoLoc.emit(values['geoLoc']);
+        this.saveAdditionalFields.emit(values);
 
-        return this.updateMap();
+        return this.updateMap(this.editGpxLocFormGroup.getRawValue());
     }
 
     protected prepareSubmitValues(values: {}): void {

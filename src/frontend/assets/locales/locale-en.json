@@ -475,6 +475,7 @@
     "label.tdoc.geoLoc": "center-coordinate:",
     "label.tdoc.geoLocArea": "area-coordinates (ppx):",
     "label.tdoc.geoLocSource": "location search:",
+    "label.tdoc.geoLocUseMapClickPos": "use clickpos on map",
     "label.navtype.PREDECESSOR": "\uD83E\uDCA6",
     "label.navtype.SUCCESSOR": "\uD83E\uDCA7",
     "null": "unknown"

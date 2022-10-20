@@ -177,6 +177,15 @@ export class SqlMytbDbPoiConfig {
             'gpstracks_state_is': {
                 noFacet: true
             },
+            'info_id_is': {
+                selectSql: 'SELECT COUNT(poi_info.if_id) AS count, info.if_id AS value,' +
+                    ' info.if_name AS label, info.if_id AS id' +
+                    ' FROM info LEFT JOIN poi_info ON poi_info.if_id = info.if_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                filterFields: ['poiif.if_id'],
+                action: AdapterFilterActions.IN_NUMBER
+            },
             'initial_s': {
                 noFacet: true
             },

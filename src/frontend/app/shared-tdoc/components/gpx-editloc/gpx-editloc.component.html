@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-6">
             <fieldset>
-                <legend i18n="trackfile label|Label for fieldset: trackfile@@label.gpxeditearea.legend.trackfile">&#x26f3; Point</legend>
+                <legend i18n="geoPoint label|Label for fieldset: geoPoint@@label.gpxediteloc.legend.geoPoint">&#x26f3; Point</legend>
                 <div class="col-sm-12 input-group input-group-sm align-top">
                     <label class="col-xs-3 col-form-label mr-2">{{ 'label.tdoc.geoLocSource' | translate}}</label>
                     <input class="{{'inputGeoLocAddress'}}" formControlName="geoLocAddress" type="text">
@@ -12,9 +12,13 @@
                     <label class="col-xs-3 col-form-label mr-2">{{ 'label.tdoc.geoLoc' | translate}}</label>
                     <input class="{{'inputGeoLoc'}}" formControlName="geoLoc" type="text" (ngModelChange)="updateGeoLoc()">
                 </div>
+                <div class="col-sm-12 input-group input-group-sm align-top">
+                    <label class="col-xs-3 col-form-label mr-2">{{ 'label.tdoc.geoLocUseMapClickPos' | translate}}</label>
+                    <input class="" type="checkbox" formControlName="geoLocUseMapClickPos" (ngModelChange)="updateGeoLoc()">
+                </div>
             </fieldset>
-            <fieldset>
-                <legend i18n="trackfile label|Label for fieldset: trackfile@@label.gpxeditearea.legend.trackfile">&#x26f3; Area</legend>
+            <fieldset *ngIf="flgShowArea">
+                <legend i18n="geoArea label|Label for fieldset: geoArea@@label.gpxediteloc.legend.geoArea">&#x26f3; Area</legend>
                 <div class="col-sm-12 input-group input-group-sm align-top">
                     <label class="col-xs-3 col-form-label mr-2">{{ 'label.tdoc.geoLocArea' | translate}}</label>
                     <button (click)="createNewGeoLocArea()" *ngIf="editGpxLocFormGroup.get('geoLoc').value && !editGpxLocFormGroup.get('gpxSrc').value"
