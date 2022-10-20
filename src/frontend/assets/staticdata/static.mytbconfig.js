@@ -208,7 +208,6 @@ window.importStaticConfigJsonP = `{
                         "place_town",
                         "place_village",
                         "place_yes",
-                        "SOURCE_openstreetmap",
                         "sport_climbing",
                         "sport_free_flying",
                         "sport_ice_skating",
