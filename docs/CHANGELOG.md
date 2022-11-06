@@ -24,6 +24,10 @@
 - frontend: improved form-handing with util-classes
 - frontend: inline-searchpage -> added own maps
 - frontend+backend: use fulltext as LIKEIN with OR-splitter
+- backend: fixed sql for ODIMGOBJECT, POI
+- backend+frontend: added support to edit ODIMGOBJECT
+- frontend: moved functionality to new component text-editor
+- frontend: moved functionality to new component tdoc-selectsearch
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -33,6 +37,7 @@
 - frontend: added clone-functionality to copy entities
 - backend+frontend: added new entity-type: POI
 - backend: added converter to import POIs from geojson-files
+- backend+frontend: added support to edit ODIMGOBJECT
 
 ### improvements
 - backend: extend image-export with more filter
@@ -44,11 +49,15 @@
 - frontend: improved form-handing with util-classes
 - frontend: inline-searchpage -> added own maps
 - frontend+backend: use fulltext as LIKEIN with OR-splitter
+- frontend: moved functionality to new component text-editor
+- frontend: moved functionality to new component tdoc-selectsearch
+- backend: fixed sql for ODIMGOBJECT, POI
 
 ### bug fixes
 - backend: fixed media-export of dependent records
 - shared: remove duplicates from lists
 - backend: fix remap of basejoins on import
+- backend+frontend: added support to edit ODIMGOBJECT
 
 ### breaking changes
 - database: added optional fix to change collation to utf8
