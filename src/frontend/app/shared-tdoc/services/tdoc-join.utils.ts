@@ -3,6 +3,8 @@ import {TourDocLinkedPoiRecord} from '../../../../shared/tdoc-commons/model/reco
 import {FormUtils} from './form.utils';
 import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedroute-record';
 import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
+import {TourDocObjectDetectionImageObjectRecord} from '../../../shared/tdoc-commons/model/records/tdocobjectdetectectionimageobject-record';
+import {TourDocImageRecord} from '../../../shared/tdoc-commons/model/records/tdocimage-record';
 
 export class TourDocJoinUtils {
 
@@ -64,6 +66,36 @@ export class TourDocJoinUtils {
                     type: 'dummy'
                 })
             }
+        }
+
+        return joins;
+    }
+
+    public static prepareLinkedObjectDetectionSubmitValues(record: TourDocRecord, values: {}, joinName: string, joinIndexes: any[]): {}[] {
+        const images: TourDocImageRecord[] = record.get('tdocimages') || [];
+        const imageFileName = images.length > 0
+            ? images[0].fileName
+            : 'dummyfile.jpg';
+
+        const joins: {}[] = [];
+        for (const idx of joinIndexes) {
+            joins.push({
+                tdoc_id: record.id,
+                ioId: record.id,
+                name: imageFileName,
+                fileName: imageFileName,
+                category: FormUtils.getStringFormValue(values, joinName + 'category' + idx),
+                detector: FormUtils.getStringFormValue(values, joinName + 'detector' + idx),
+                imgHeight: FormUtils.getNumberFormValue(values, joinName + 'imgHeight' + idx),
+                imgWidth: FormUtils.getNumberFormValue(values, joinName + 'imgWidth' + idx),
+                key: FormUtils.getStringFormValue(values, joinName + 'key' + idx),
+                objHeight: FormUtils.getNumberFormValue(values, joinName + 'objHeight' + idx),
+                objWidth: FormUtils.getNumberFormValue(values, joinName + 'objWidth' + idx),
+                objX: FormUtils.getNumberFormValue(values, joinName + 'objX' + idx),
+                objY: FormUtils.getNumberFormValue(values, joinName + 'objY' + idx),
+                precision: FormUtils.getNumberFormValue(values, joinName + 'precision' + idx),
+                state: FormUtils.getStringFormValue(values, joinName + 'state' + idx),
+            })
         }
 
         return joins;
@@ -143,6 +175,31 @@ export class TourDocJoinUtils {
             valueConfig[joinName + 'GeoLoc' + idx] = [joinRecord.geoLoc];
             valueConfig[joinName + 'GeoEle' + idx] = [joinRecord.geoEle];
         }
+
+        return indexes;
+    }
+
+    public static appendLinkedObjectDetectionsToDefaultFormValueConfig(record: TourDocRecord, valueConfig: {}, joinName: string): any[] {
+        const joinRecords: TourDocObjectDetectionImageObjectRecord[] = record.get('tdocodimageobjects') || [];
+
+        const indexes = [];
+        const idx = '';
+        indexes.push(idx);
+        const joinRecord = joinRecords.length > 0
+            ? joinRecords[0]
+            : undefined;
+
+        valueConfig[joinName + 'category' + idx] = joinRecord ? [joinRecord.category] : [];
+        valueConfig[joinName + 'detector' + idx] = joinRecord ? [joinRecord.detector] : [];
+        valueConfig[joinName + 'imgHeight' + idx] = joinRecord ? [joinRecord.imgHeight] : [];
+        valueConfig[joinName + 'imgWidth' + idx] = joinRecord ? [joinRecord.imgWidth] : [];
+        valueConfig[joinName + 'key' + idx] = joinRecord ? [joinRecord.key] : [];
+        valueConfig[joinName + 'objHeight' + idx] = joinRecord ? [joinRecord.objHeight] : [];
+        valueConfig[joinName + 'objWidth' + idx] = joinRecord ? [joinRecord.objWidth] : [];
+        valueConfig[joinName + 'objX' + idx] = joinRecord ? [joinRecord.objX] : [];
+        valueConfig[joinName + 'objY' + idx] = joinRecord ? [joinRecord.objY] : [];
+        valueConfig[joinName + 'precision' + idx] = joinRecord ? [joinRecord.precision] : [];
+        valueConfig[joinName + 'state' + idx] = joinRecord ? [joinRecord.state] : [];
 
         return indexes;
     }

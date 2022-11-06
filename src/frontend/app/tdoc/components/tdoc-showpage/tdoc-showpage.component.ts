@@ -157,7 +157,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
 
     @ViewChild('mainImage')
     mainImage: ElementRef;
-    imageWidth = 600;
+    imageWidth = 0;
 
     constructor(route: ActivatedRoute, cdocRoutingService: TourDocRoutingService,
                 toastr: ToastrService, contentUtils: TourDocContentUtils,

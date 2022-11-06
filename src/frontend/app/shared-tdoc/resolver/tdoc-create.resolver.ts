@@ -90,6 +90,9 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                 fields.push('gpsTrackSrc', 'gpsTrackState', 'geoLon', 'geoLat', 'geoLoc', 'subtype');
                 fields.push('locIdParent');
                 break;
+            case 'odimgobject':
+                fields.push('datestart', 'imageId', 'tdocimages');
+                break;
         }
     }
 

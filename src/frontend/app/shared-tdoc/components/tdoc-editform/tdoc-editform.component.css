@@ -8,32 +8,6 @@ textarea:focus {
     max-height: 1000px;
 }
 
-textarea.nowrap {
-    white-space: pre;
-    overflow: auto;
-}
-
-.desc-form-block {
-    align-items: first baseline;
-}
-
-
-.desc-preview-block {
-    align-items: first baseline;
-}
-
-
-.desc-form, .recommended-desc-form {
-    width: 100%;
-    max-width: 1000px;
-}
-
-#renderedDesc {
-    border: 1px solid lightgray;
-    width: 100%;
-    max-width: 1000px;
-}
-
 table.trackSegmentStatistics td, table.trackSegmentStatistics th {
     border: 1px solid black;
 }
@@ -42,9 +16,3 @@ table.trackSegmentStatistics td, table.trackSegmentStatistics th {
     background: lightyellow;
 }
 
-span.singleCommand {
-    padding: 2px;
-}
-span.rangeCommand {
-    padding: 2px;
-}

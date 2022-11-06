@@ -4,9 +4,6 @@
             <h6><app-tdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h6>
             <div class="picture-small" style="float: left; margin-right: 10px">
                 <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
-                <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
-                    <img class="picture-small" width="300px" [src]="contentUtils.getPreviewUrl(record.tdocimages[0])" alt="{{record.tdocimages[0].name}}">
-                </ng-container>
             </div>
             <h5><span class="fx-bg-name">{{record.name}}</span></h5>
         </div>

@@ -1,4 +1,14 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, Output} from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Inject,
+    Input,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {TourDocRecord, TourDocRecordFactory, TourDocRecordValidator} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {TourDocRecordSchema} from '../../../../shared/tdoc-commons/model/schemas/tdoc-record-schema';
@@ -25,36 +35,21 @@ import {DOCUMENT} from '@angular/common';
 import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import {TourDocNameSuggesterService} from '../../services/tdoc-name-suggester.service';
 import {TourDocDescSuggesterService} from '../../services/tdoc-desc-suggester.service';
-import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
-import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {Router} from '@angular/router';
 import {LatLngTime} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
 import {GpxEditAreaComponent} from '../gpx-editarea/gpx-editarea.component';
 import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
-import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-multiaction.manager';
-import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
-import {MultiActionTagConfig} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {TourDocJoinUtils} from '../../services/tdoc-join.utils';
 import {FormUtils} from '../../services/form.utils';
-
-// TODO move to commons
-export interface SingleEditorCommand {
-    label: string,
-    command: string
-}
-
-// TODO move to commons
-export interface RangeEditorCommand {
-    label: string,
-    commandStart: string,
-    commandEnd: string
-}
-
-// TODO move to commons
-export interface CommonDocEditorCommandComponentConfig {
-    singleCommands: SingleEditorCommand[];
-    rangeCommands: RangeEditorCommand[];
-}
+import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
+import {
+    TourDocObjectDetectionImageObjectRecord,
+    TourDocObjectDetectionImageObjectRecordValidator
+} from '../../../../shared/tdoc-commons/model/records/tdocobjectdetectectionimageobject-record';
+import {TourDocImageRecord} from '../../../../shared/tdoc-commons/model/records/tdocimage-record';
+import {LatLng} from 'leaflet';
+import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
+import {CommonDocEditorCommandComponentConfig} from '../text-editor/text-editor.component';
 
 export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
     editorCommands: CommonDocEditorCommandComponentConfig;
@@ -71,7 +66,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
     private personsFound: StructuredKeywordState[] = [];
-    private flgDescRendered = false;
 
     public Layout = Layout;
     public optionsSelect: {
@@ -182,9 +176,16 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         singleCommands: [],
         rangeCommands: []
     };
-    poiSelectFilter: {} = undefined;
 
-    protected poiMultiActionManager = new CommonDocMultiActionManager(this.appService, this.actionService);
+    poiSearchBasePosition: LatLng = undefined;
+    poiSearchNames: string[] = [];
+
+    descTxtRecommended  = '';
+
+    @ViewChild('mainImage')
+    mainImage: ElementRef;
+    imageWidth = 0;
+    mainImageObject: TourDocObjectDetectionImageObjectRecord = undefined;
 
     // TODO add modal to commons
     @Input()
@@ -197,13 +198,19 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocSearchFormUtils: TourDocSearchFormUtils,
                 protected searchFormUtils: SearchFormUtils, protected tdocDataService: TourDocDataService,
-                protected contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document,
-                protected platformService: PlatformService, protected actionService: TourDocActionTagService,
-                protected angularMarkdownService: AngularMarkdownService,
+                public contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document,
                 protected tourDocNameSuggesterService: TourDocNameSuggesterService,
                 protected tourDocDescSuggesterService: TourDocDescSuggesterService,
                 protected router: Router) {
         super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
+    }
+
+    onInputChanged(value: any, field: string): boolean {
+        if (field.startsWith('tdocimgobj.')) {
+            this.updateImageObject();
+        }
+
+        return false;
     }
 
     setPersonsFound(persons: StructuredKeywordState[]) {
@@ -226,86 +233,12 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.tourDocDescSuggesterService.suggest(
             this.editFormGroup.getRawValue(), {}
         ).then(desc => {
-            this.setValue('descTxtRecommended', desc);
+            this.descTxtRecommended = desc;
+            this.cd.markForCheck();
         }).catch(reason => {
-            this.setValue('descTxtRecommended', undefined);
+            this.descTxtRecommended = undefined;
+            this.cd.markForCheck();
         });
-    }
-
-    useRecommendedDesc(): void {
-        this.setValue('descTxt', this.editFormGroup.getRawValue()['descTxtRecommended'] || '');
-        this.setValue('descTxtRecommended', undefined);
-        this.renderDesc(true);
-    }
-
-    // TODO move to separate component
-    addSingleCommand(command: SingleEditorCommand): void {
-        if (!this.platformService.isClient()) {
-            return;
-        }
-
-        const textarea = <HTMLTextAreaElement> document.querySelector('#descTxt');
-        if (!textarea || textarea === undefined || textarea === null) {
-            return;
-        }
-
-        const oldString = textarea.value;
-        const startPos = textarea.selectionStart || 0;
-
-        const newString = oldString.substring(0, startPos)
-            + command.command
-            + oldString.substring(startPos, oldString.length);
-
-        this.setValue('descTxt', newString);
-        this.renderDesc(true);
-
-        textarea.focus();
-        textarea.selectionStart = startPos;
-        textarea.selectionEnd = startPos;
-    }
-
-    // TODO move to separate component
-    addRangeCommand(command: RangeEditorCommand): void {
-        if (!this.platformService.isClient()) {
-            return;
-        }
-
-        const textarea = <HTMLTextAreaElement> document.querySelector('#descTxt');
-        if (!textarea || textarea === undefined || textarea === null) {
-            return;
-        }
-
-        const oldString = textarea.value;
-        const startPos = textarea.selectionStart || 0;
-        const endPos = textarea.selectionEnd || 0;
-
-        const newString = oldString.substring(0, startPos)
-            + command.commandStart
-            + oldString.substring(startPos, endPos)
-            +  command.commandEnd
-            + oldString.substring(endPos, oldString.length);
-
-        this.setValue('descTxt', newString);
-        this.renderDesc(true);
-
-        textarea.focus();
-        textarea.selectionStart = startPos;
-        textarea.selectionEnd = startPos;
-    }
-
-    renderDesc(force: boolean): string {
-        if ((this.flgDescRendered || !this.record) && !force) {
-            return;
-        }
-
-        const desc = this.editFormGroup.getRawValue()['descTxt'] || '';
-        if (!this.platformService.isClient()) {
-            return desc;
-        }
-
-        this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#renderedDesc', desc, true);
-
-        return '';
     }
 
     updateGpxArea(): boolean {
@@ -412,6 +345,38 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
+    updateImageObject(): boolean {
+        if (this.record && this.record.type.toLowerCase() === 'odimgobject') {
+            const images: TourDocImageRecord[] = this.record.get('tdocimages') || [];
+            if (images.length > 0 && this.record.id === undefined) {
+                images[0].tdoc_id = 'IMAGE_' + this.record.imageId;
+            }
+
+            const imageObjectValues = TourDocJoinUtils.prepareLinkedObjectDetectionSubmitValues(this.record,
+                this.editFormGroup.getRawValue(), 'tdocimgobj.', this.joinIndexes['imageObjects']);
+            if (imageObjectValues.length > 0) {
+                this.mainImageObject = new TourDocObjectDetectionImageObjectRecord(imageObjectValues[0]);
+            } else {
+                this.mainImageObject = new TourDocObjectDetectionImageObjectRecord({
+                    fileName: images.length > 0
+                        ? images[0].fileName
+                        : undefined
+                });
+            }
+
+            if (this.mainImage && this.mainImage.nativeElement['width']) {
+                if (!BeanUtils.getValue(this.editFormGroup.getRawValue(), 'tdocimgobj.imgWidth')) {
+                    this.setValue('tdocimgobj.imgWidth', this.mainImage.nativeElement['width']);
+                }
+                if (!BeanUtils.getValue(this.editFormGroup.getRawValue(), 'tdocimgobj.imgHeight')) {
+                    this.setValue('tdocimgobj.imgHeight', this.mainImage.nativeElement['height']);
+                }
+            }
+        }
+
+        return false;
+    }
+
     // TODO add cancel to commons
     submitCancel(event: Event): boolean {
         this.cancel.emit(false);
@@ -451,67 +416,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
-    // TODO move to separate component
-    getPoiFiltersForType(record: TourDocRecord): any {
-        const filters = {};
-        filters['type'] = 'POI';
-        filters['sort'] = 'distance';
-        filters['where'] = this.createNearByFilter(record);
-
-        const fullText: string = [].concat(
-            ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(name => {
-                return FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), name);
-            }))
-            .map(value => {
-                return value && value.length > 0
-                    ? value.split(' -> ')
-                        .pop()
-                        .trim()
-                    : undefined
-            })
-            .map(value => {
-                return value && value.length > 0
-                    ? value.split(' - ')
-                        .pop()
-                        .trim()
-                    : undefined
-            })
-            .filter(value => value !== undefined && value.length > 0)
-            .join(' OR ');
-        if (fullText) {
-            filters['fulltext'] = fullText;
-        }
-
-        return filters;
-    }
-
-    onCreateNewPOI(id: string): boolean {
-        const me = this;
-        // open modal dialog
-        me.router.navigate([{ outlets: { 'modaledit': ['modaledit', 'create', 'POI', id] } }]).then(value => {
-            // check for closing modal dialog and routechange -> update facets
-            const subscription = me.router.events.subscribe((val) => {
-                subscription.unsubscribe();
-            });
-        });
-
-
-        this.onChangePoiSelectFilter();
-
-        return false;
-    }
-
-    // TODO move to separate component
-    onPoiClickedOnMap(tdoc: TourDocRecord): boolean {
-        if (!this.poiMultiActionManager.isRecordOnMultiActionTag(tdoc)) {
-            this.poiMultiActionManager.appendRecordToMultiActionTag(tdoc);
-        } else {
-            this.poiMultiActionManager.removeRecordFromMultiActionTag(tdoc);
-        }
-
-        return false;
-    }
-
     onRemovePoiFromForm(idx: string): boolean {
         const joinName = 'linkedPois'
         this.editFormGroup.removeControl(joinName + 'Id' + idx);
@@ -529,15 +433,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
-    onChangePoiSelectFilter(): boolean {
-        this.poiSelectFilter = this.getPoiFiltersForType(this.record);
-        return false;
-    }
-
-    // TODO move to separate component
-    onAppendSelectedPois(): boolean {
-        const selectedPois = this.poiMultiActionManager.getSelectedRecords();
-
+    onAppendSelectedPois(selectedPois: CommonDocRecord[]): boolean {
         const joinName = 'linkedPois'
         const indexes = this.joinIndexes[joinName];
         let idx = 0;
@@ -556,8 +452,9 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.editFormGroup.registerControl(joinName + 'Poitype' + idx, this.fb.control(undefined, undefined));
             this.setValue(joinName + 'Poitype' + idx, 60 + '');
             this.editFormGroup.registerControl(joinName + 'GeoLoc' + idx, this.fb.control(undefined, undefined));
-            this.setValue(joinName + 'GeoLoc' + idx, poi.geoLoc);
+            this.setValue(joinName + 'GeoLoc' + idx, poi['geoLoc']);
             this.editFormGroup.registerControl(joinName + 'GeoEle' + idx, this.fb.control(undefined, undefined));
+            this.setValue(joinName + 'GeoEle' + idx, poi['geoEle']);
             indexes.push(idx);
         }
 
@@ -569,12 +466,19 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
-    // TODO move to separate component
-    protected createNearByFilter(record: TourDocRecord): string {
-        return record.geoLat !== undefined
-            ? 'nearby:' + [record.geoLat, record.geoLon, 10].join('_') +
-            '_,_nearbyAddress:' + record.locHirarchie.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
-            : 'blimblamblummichgibtesnicht';
+    onResizeMainImage(): false {
+        if (this.mainImage !== undefined && this.mainImage.nativeElement['width'] !== this.imageWidth) {
+            this.imageWidth = this.mainImage.nativeElement['width'];
+            this.updateImageObject();
+            this.cd.markForCheck();
+        }
+
+        return false;
+    }
+
+    onClickMainImage(event: MouseEvent): boolean {
+        // TODO do painting
+        return false;
     }
 
     protected validateSchema(record: TourDocRecord): SchemaValidationError[] {
@@ -582,7 +486,15 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected validateValues(record: TourDocRecord): string[] {
-        return TourDocRecordValidator.instance.validateValues(record);
+        let errors = [];
+        if (this.record.type.toLowerCase() === 'odimgobject') {
+            const joinRecords: TourDocObjectDetectionImageObjectRecord[] = record['tdocodimageobjects'] || [];
+            if (joinRecords.length > 0) {
+                errors = errors.concat(TourDocObjectDetectionImageObjectRecordValidator.instance.validateValues(joinRecords[0], undefined, 'tdocimgobj.'));
+            }
+        }
+
+        return errors.concat(TourDocRecordValidator.instance.validateValues(record));
     }
 
     protected getComponentConfig(config: {}): TurDocEditformComponentConfig {
@@ -628,6 +540,13 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocdatatech.altMax': {},
                 'tdocdatatech.dist': {},
                 'tdocdatatech.dur': {},
+                'tdocimgobj.imgWidth': {},
+                'tdocimgobj.imgHeight': {},
+                'tdocimgobj.objX': {},
+                'tdocimgobj.objY': {},
+                'tdocimgobj.objWidth': {},
+                'tdocimgobj.objHeight': {},
+                'tdocimgobj.precision': {},
                 'trackId': {},
                 'tripId': {}
             },
@@ -661,7 +580,12 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocratetech.klettern': {},
                 'tdocratetech.ks': {},
                 'tdocratetech.overall': {},
-                'tdocratetech.schneeschuh': {}
+                'tdocratetech.schneeschuh': {},
+                'tdocimgobj.category': {},
+                // TODO check for static value: manual
+                'tdocimgobj.detector': {},
+                'tdocimgobj.key': {},
+                'tdocimgobj.state': { labelPrefix: 'label.odimgobject.state.', values: Object.values(ObjectDetectionState)}
             },
             stringArrayBeanFieldConfig: {
                 'persons': {},
@@ -727,6 +651,15 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 },
                 'linkedRoutesLinkedRouteAttr7': {
                     'facetName': 'route_attr_ss'
+                },
+                'tdocimgobj.category': {
+                    'facetName': 'odcategory_all_txt'
+                },
+                'tdocimgobj.key': {
+                    'facetName': 'odkeys_all_txt'
+                },
+                'tdocimgobj.detector': {
+                    'facetName': 'oddetectors_txt'
                 }
             },
             optionsSelect: {
@@ -763,26 +696,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
         const componentConfig = this.getComponentConfig(config);
         this.editorCommands = componentConfig.editorCommands;
-
-        const actionTag: MultiActionTagConfig =  {
-            configAvailability: [],
-            flgUseInput: false,
-            flgUseSelect: false,
-            recordAvailability: [],
-            shortName: '',
-            showFilter: [],
-            name: 'noo',
-            key: 'noop',
-            type: 'noop',
-            multiRecordTag: true
-        };
-        actionTag['active'] = true;
-        actionTag['available'] = true;
-
-        this.poiMultiActionManager.setSelectedMultiActionTags(
-            [
-                actionTag
-            ]);
     }
 
     protected prepareSubmitValues(values: {}): void {
@@ -803,11 +716,17 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         values['tdoclinkedinfos'] = TourDocJoinUtils.prepareLinkedInfosSubmitValues(this.record, values, 'linkedInfos', this.joinIndexes['linkedInfos']);
         values['tdoclinkedpois'] = TourDocJoinUtils.prepareLinkedPoiSubmitValues(this.record, values, 'linkedPois', this.joinIndexes['linkedPois']);
 
+        if (this.record.type.toLowerCase() === 'odimgobject') {
+            values['tdocodimageobjects'] = TourDocJoinUtils.prepareLinkedObjectDetectionSubmitValues(this.record, values, 'tdocimgobj.', this.joinIndexes['imageObjects']);
+        } else {
+            delete values['tdocodimageobjects'];
+        }
+
         return super.prepareSubmitValues(values);
     }
 
-    // TODO move to separate component
     protected createDefaultFormValueConfig(record: TourDocRecord): {} {
+        this.mainImageObject = undefined;
         const valueConfig = {
             descTxtRecommended: [],
             dateshow: [DateUtils.dateToLocalISOString(record.dateshow)],
@@ -821,6 +740,12 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.joinIndexes['linkedRoutes'] = TourDocJoinUtils.appendLinkedRoutesToDefaultFormValueConfig(record, valueConfig, 'linkedRoutes');
         this.joinIndexes['linkedInfos'] = TourDocJoinUtils.appendLinkedInfosToDefaultFormValueConfig(record, valueConfig, 'linkedInfos');
         this.joinIndexes['linkedPois'] = TourDocJoinUtils.appendLinkedPoisToDefaultFormValueConfig(record, valueConfig, 'linkedPois');
+
+        if (this.record.type.toLowerCase() === 'odimgobject') {
+            this.joinIndexes['imageObjects'] = TourDocJoinUtils.appendLinkedObjectDetectionsToDefaultFormValueConfig(record, valueConfig, 'tdocimgobj.');
+        } else {
+            this.joinIndexes['imageObjects'] = [];
+        }
 
         return valueConfig;
     }
@@ -836,10 +761,20 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected updateFormComponents(): void {
-        this.flgDescRendered = false;
         super.updateFormComponents();
         this.updateGpxArea();
         this.updateMap();
+        this.updateImageObject();
+        this.preparePoiFiltersForType(this.record);
+    }
+
+    protected preparePoiFiltersForType(record: TourDocRecord): void {
+        this.poiSearchNames = ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(name => {
+            return FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), name);
+        });
+        this.poiSearchBasePosition = record.geoLat !== undefined
+            ? new LatLng(Number(record.geoLat), Number(record.geoLon))
+            : undefined;
     }
 
     protected updateOptionValues(tdocSearchResult: TourDocSearchResult): boolean {
@@ -884,6 +819,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             } else {
                 ordinaryRoutes = selectableRouteValues;
             }
+
             const sortedRoutes: IMultiSelectOption[] = [].concat(suggestedRoutes).concat(ordinaryRoutes);
             me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(sortedRoutes, rawValues['routeId']);
 
