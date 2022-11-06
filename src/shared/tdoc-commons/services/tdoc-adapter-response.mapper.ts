@@ -15,6 +15,7 @@ import {TourDocInfoRecordFactory} from '../model/records/tdocinfo-record';
 import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
 import {TourDocLinkedPlaylistRecord} from '../model/records/tdoclinkedplaylist-record';
 import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
+import {TourDocObjectDetectionImageObjectRecord} from '../model/records/tdocobjectdetectectionimageobject-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     private readonly _objectSeparator = ';;';
@@ -107,6 +108,9 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         }
         if (props.get('tdoclinkedpois') && props.get('tdoclinkedpois').length > 0) {
             this.mapDetailDataToAdapterDocument({}, 'linkedpois', props, values);
+        }
+        if (props.get('tdocodimageobjects') && props.get('tdocodimageobjects').length > 0) {
+            this.mapDetailDataToAdapterDocument({}, 'odimageobjects', props, values);
         }
 
         values['data_tech_alt_asc_i'] = BeanUtils.getValue(props, 'tdocdatatech.altAsc');
@@ -222,6 +226,34 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     poisSrc = ObjectUtils.uniqueArray(poisSrc);
 
                     result['linkedpois_txt'] = poisSrc.join(this._objectSeparator);
+                }
+                break;
+            case 'odimageobjects':
+                if (props.get('tdocodimageobjects') && props.get('tdocodimageobjects').length > 0) {
+                    const pois: TourDocObjectDetectionImageObjectRecord[] = props.get('tdocodimageobjects');
+                    let poisSrc: string [] = [];
+                    for (let idx = 0; idx < pois.length; idx++) {
+                        poisSrc.push('ioId=' + pois[idx].tdoc_id + this._fieldSeparator +
+                        'key=' + pois[idx].key + this._fieldSeparator +
+                        'detector=' + pois[idx].detector + this._fieldSeparator +
+                        'imgWidth=' + pois[idx].imgWidth + this._fieldSeparator +
+                        'imgHeight=' + pois[idx].imgHeight + this._fieldSeparator +
+                        'objX=' + pois[idx].objX + this._fieldSeparator +
+                        'objY=' + pois[idx].objY + this._fieldSeparator +
+                        'objWidth=' + pois[idx].objWidth + this._fieldSeparator +
+                        'objHeight=' + pois[idx].objHeight + this._fieldSeparator +
+                        'name=' + pois[idx].name + this._fieldSeparator +
+                        'fileName=' + pois[idx].fileName + this._fieldSeparator +
+                        'category=' + pois[idx].category + this._fieldSeparator +
+                        'precision=' + pois[idx].precision + this._fieldSeparator +
+                        'state=' + pois[idx].state
+                    );
+                    }
+
+
+                    poisSrc = ObjectUtils.uniqueArray(poisSrc);
+
+                    result['i_objectdetections'] = poisSrc.join(this._objectSeparator);
                 }
                 break;
         }
@@ -394,7 +426,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             ObjectUtils.mapValueToObjects(
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedpois_txt')],
                 'linkedpois_txt'));
-
+        this.mapDetailResponseDocuments(mapper, 'image_objectdetections', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_objectdetections')],
+                'i_objectdetections'));
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);

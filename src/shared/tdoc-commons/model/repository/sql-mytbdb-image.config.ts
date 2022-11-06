@@ -114,18 +114,19 @@ export class SqlMytbDbImageConfig {
             },
             {
                 profile: 'image_objectdetections',
-                sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", image_object.io_id, ":::key=", image_object.io_obj_type,' +
-                    ' ":::detector=", image_object.io_detector,' +
-                    ' ":::imgWidth=", image_object.io_img_width,' +
-                    ' ":::imgHeight=", image_object.io_img_height,' +
-                    ' ":::objX=", image_object.io_obj_x1,' +
-                    ' ":::objY=", image_object.io_obj_y1,' +
-                    ' ":::objWidth=", image_object.io_obj_width,' +
-                    ' ":::objHeight=", image_object.io_obj_height,' +
+                sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", COALESCE(image_object.io_id, ""),' +
+                    ' ":::key=", COALESCE(image_object.io_obj_type, ""),' +
+                    ' ":::detector=", COALESCE(image_object.io_detector, ""),' +
+                    ' ":::imgWidth=", COALESCE(image_object.io_img_width, ""),' +
+                    ' ":::imgHeight=", COALESCE(image_object.io_img_height, ""),' +
+                    ' ":::objX=", COALESCE(image_object.io_obj_x1, ""),' +
+                    ' ":::objY=", COALESCE(image_object.io_obj_y1, ""),' +
+                    ' ":::objWidth=", COALESCE(image_object.io_obj_width, ""),' +
+                    ' ":::objHeight=", COALESCE(image_object.io_obj_height, ""),' +
                     ' ":::name=", objects.o_name,' +
                     ' ":::category=", objects.o_category,' +
-                    ' ":::precision=", image_object.io_precision,' +
-                    ' ":::state=", image_object.io_state) SEPARATOR ";;") AS i_objectdetections ' +
+                    ' ":::precision=", COALESCE(image_object.io_precision, ""),' +
+                    ' ":::state=", COALESCE(image_object.io_state, "")) SEPARATOR ";;") AS i_objectdetections ' +
                     'FROM image_object' +
                     ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                     '            AND image_object.io_detector=objects_key.ok_detector ' +

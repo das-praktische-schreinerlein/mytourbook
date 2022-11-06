@@ -58,6 +58,7 @@ import {
 } from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
+import {TourDocObjectDetectionImageObjectRecord} from '../model/records/tdocobjectdetectectionimageobject-record';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
@@ -168,6 +169,10 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
 
     protected queryTransformToAdapterWriteQuery(method: string, mapper: Mapper, props: any, opts: any): WriteQueryData {
         const query = super.queryTransformToAdapterWriteQuery(method, mapper, props, opts);
+        if (!query && !query.tableConfig && !query.tableConfig.key) {
+            return query;
+        }
+
         if (query.tableConfig.key === 'image') {
             let file = null;
             let dir = null;
@@ -188,6 +193,24 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             }
             query.fields['v_dir'] = dir;
             query.fields['v_file'] = file;
+        } else if (query.tableConfig.key === 'odimgobject') {
+            let imageObject: TourDocObjectDetectionImageObjectRecord = new TourDocObjectDetectionImageObjectRecord();
+            if (props.get('tdocodimageobjects') && props.get('tdocodimageobjects').length > 0) {
+                imageObject = props.get('tdocodimageobjects')[0];
+            }
+
+            query.fields['io_obj_type'] = imageObject.key || null;
+            query.fields['io_detector'] = imageObject.detector || null;
+            query.fields['io_img_width'] = imageObject.imgWidth || null;
+            query.fields['io_img_height'] = imageObject.imgHeight || null;
+            query.fields['io_obj_x1'] = imageObject.objX || null;
+            query.fields['io_obj_y1'] = imageObject.objY || null;
+            query.fields['io_obj_width'] = imageObject.objWidth || null;
+            query.fields['io_obj_height'] = imageObject.objHeight || null;
+            query.fields['io_precision'] = imageObject.precision || null;
+            query.fields['io_state'] = imageObject.state || null;
+
+            // TODO check for saving object.key, object.detector, object.category
         }
 
         return query;
@@ -239,6 +262,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setImageKeywords(dbId, props.keywords, opts));
+                // TODO check for odimgobject -> Do we need/want this here??
+                // this.actionTagODAdapter.executeActionTagObjects(table, id, <ObjectsActionTagForm> actionTagForm, opts);
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
@@ -324,6 +349,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 });
             });
         }
+        // TODO check for saving object.key, object.detector, object.category
 
 
         return utils.resolve(true);

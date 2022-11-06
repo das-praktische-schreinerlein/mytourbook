@@ -7,9 +7,9 @@ export class SqlMytbDbOdImageObjectConfig {
         key: 'odimgobject',
         tableName: 'image_object',
         selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
-            'LEFT JOIN objects persons ON image_object.io_obj_type=persons.o_key AND LOWER(persons.o_category) LIKE "person" ' +
+            'LEFT JOIN objects persons ON image_object.io_obj_type=persons.o_key AND persons.o_category = "person" ' +
             'LEFT JOIN objects realobjects ON image_object.io_obj_type=realobjects.o_key' +
-            '     AND LOWER(realobjects.o_category) NOT LIKE "person" ' +
+            '     AND realobjects.o_category <> "person" ' +
             'LEFT JOIN kategorie ON kategorie.k_id=image.k_id ' +
             'LEFT JOIN location_hirarchical as location ON location.l_id = kategorie.l_id ',
         optionalGroupBy: [
@@ -27,27 +27,27 @@ export class SqlMytbDbOdImageObjectConfig {
             },
             {
                 from: 'INNER JOIN (SELECT io_id AS id FROM image_object' +
-                    '                     WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                    ' ":::detector=", image_object.io_detector,' +
-                    ' ":::objX=", image_object.io_obj_x1,' +
-                    ' ":::objY=", image_object.io_obj_y1,' +
-                    ' ":::objWidth=", image_object.io_obj_width,' +
-                    ' ":::objHeight=", image_object.io_obj_height,' +
-                    ' ":::precision=", image_object.io_precision) IN' +
-                    '    (SELECT DISTINCT CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                    ' ":::detector=", image_object.io_detector,' +
-                    ' ":::objX=", image_object.io_obj_x1,' +
-                    ' ":::objY=", image_object.io_obj_y1,' +
-                    ' ":::objWidth=", image_object.io_obj_width,' +
-                    ' ":::objHeight=", image_object.io_obj_height,' +
-                    ' ":::precision=", image_object.io_precision)' +
-                    '     FROM image_object GROUP BY CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                    ' ":::detector=", image_object.io_detector,' +
-                    ' ":::objX=", image_object.io_obj_x1,' +
-                    ' ":::objY=", image_object.io_obj_y1,' +
-                    ' ":::objWidth=", image_object.io_obj_width,' +
-                    ' ":::objHeight=", image_object.io_obj_height,' +
-                    ' ":::precision=", image_object.io_precision)' +
+                    '                     WHERE CONCAT(image_object.i_id, ":::key=", COALESCE(image_object.io_obj_type, ""),' +
+                    ' ":::detector=", COALESCE(image_object.io_detector, ""),' +
+                    ' ":::objX=", COALESCE(image_object.io_obj_x1, ""),' +
+                    ' ":::objY=", COALESCE(image_object.io_obj_y1, ""),' +
+                    ' ":::objWidth=", COALESCE(image_object.io_obj_width, ""),' +
+                    ' ":::objHeight=", COALESCE(image_object.io_obj_height, ""),' +
+                    ' ":::precision=", COALESCE(image_object.io_precision, "")) IN' +
+                    '    (SELECT DISTINCT CONCAT(image_object.i_id, ":::key=", COALESCE(image_object.io_obj_type, ""),' +
+                    ' ":::detector=", COALESCE(image_object.io_detector, ""),' +
+                    ' ":::objX=", COALESCE(image_object.io_obj_x1, ""),' +
+                    ' ":::objY=", COALESCE(image_object.io_obj_y1, ""),' +
+                    ' ":::objWidth=", COALESCE(image_object.io_obj_width, ""),' +
+                    ' ":::objHeight=", COALESCE(image_object.io_obj_height, ""),' +
+                    ' ":::precision=", COALESCE(image_object.io_precision, ""))' +
+                    '     FROM image_object GROUP BY CONCAT(image_object.i_id, ":::key=", COALESCE(image_object.io_obj_type, ""),' +
+                    ' ":::detector=", COALESCE(image_object.io_detector, ""),' +
+                    ' ":::objX=", COALESCE(image_object.io_obj_x1, ""),' +
+                    ' ":::objY=", COALESCE(image_object.io_obj_y1, ""),' +
+                    ' ":::objWidth=", COALESCE(image_object.io_obj_width, ""),' +
+                    ' ":::objHeight=", COALESCE(image_object.io_obj_height, ""),' +
+                    ' ":::precision=", COALESCE(image_object.io_precision, ""))' +
                     '                    HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON image_object.io_id=doublettes.id',
@@ -67,19 +67,19 @@ export class SqlMytbDbOdImageObjectConfig {
             },
             {
                 profile: 'image_objectdetections',
-                sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", image_object.io_id,' +
-                    ' ":::key=", image_object.io_obj_type,' +
-                    ' ":::detector=", image_object.io_detector,' +
-                    ' ":::imgWidth=", image_object.io_img_width,' +
-                    ' ":::imgHeight=", image_object.io_img_height,' +
-                    ' ":::objX=", image_object.io_obj_x1,' +
-                    ' ":::objY=", image_object.io_obj_y1,' +
-                    ' ":::objWidth=", image_object.io_obj_width,' +
-                    ' ":::objHeight=", image_object.io_obj_height,' +
+                sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", COALESCE(image_object.io_id, ""),' +
+                    ' ":::key=", COALESCE(image_object.io_obj_type, ""),' +
+                    ' ":::detector=", COALESCE(image_object.io_detector, ""),' +
+                    ' ":::imgWidth=", COALESCE(image_object.io_img_width, ""),' +
+                    ' ":::imgHeight=", COALESCE(image_object.io_img_height, ""),' +
+                    ' ":::objX=", COALESCE(image_object.io_obj_x1, ""),' +
+                    ' ":::objY=", COALESCE(image_object.io_obj_y1, ""),' +
+                    ' ":::objWidth=", COALESCE(image_object.io_obj_width, ""),' +
+                    ' ":::objHeight=", COALESCE(image_object.io_obj_height, ""),' +
                     ' ":::name=", objects.o_name,' +
                     ' ":::category=", objects.o_category,' +
-                    ' ":::precision=", image_object.io_precision,' +
-                    ' ":::state=", image_object.io_state) SEPARATOR ";;") AS i_objectdetections ' +
+                    ' ":::precision=", COALESCE(image_object.io_precision, ""),' +
+                    ' ":::state=", COALESCE(image_object.io_state, "")) SEPARATOR ";;") AS i_objectdetections ' +
                     'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
                     ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                     '       AND image_object.io_detector=objects_key.ok_detector ' +
@@ -497,10 +497,8 @@ export class SqlMytbDbOdImageObjectConfig {
             l_lochirarchietxt: 'location.l_name',
             html: 'CONCAT(COALESCE(i_meta_name,""), " ", COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""),  " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", location.l_lochirarchietxt)'
         },
-        // TODO: for import
         writeMapping: {
-            'image_object.i_id': ':image_id_i:',
-            'image_object.i_rate': ':rate_pers_gesamt_i:'
+            'image_object.i_id': ':image_id_i:'
         },
         fieldMapping: {
             id: 'id',
