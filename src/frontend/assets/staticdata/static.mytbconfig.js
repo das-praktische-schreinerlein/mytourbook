@@ -365,6 +365,7 @@ window.importStaticConfigJsonP = `{
                 "TRIP": "BIG",
                 "NEWS": "BIG",
                 "PLAYLIST": "FLAT",
+                "POI": "FLAT",
                 "VIDEO": "BIG"
             }
         },
@@ -384,7 +385,7 @@ window.importStaticConfigJsonP = `{
                 "NEWS": true,
                 "PLAYLIST": true,
                 "VIDEO": true,
-                "POI": true,
+                "POI": true
             }
         },
         "tdoc-albumpage": {

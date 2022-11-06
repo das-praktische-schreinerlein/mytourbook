@@ -667,7 +667,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info", "PLAYLIST", "playlist", "POI", "poi"]
+                            "expectedValues": ["LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info", "PLAYLIST", "playlist", "POI", "poi", "ODIMGOBJECT", "odimgobject"]
                         }
                     ],
                     "configAvailability": [
@@ -1465,6 +1465,36 @@
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "New ImageObject for Image",
+                    "shortName": "\uD83D\uDC23ImageObject",
+                    "payload": {
+                        "type": "ODIMGOBJECT"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
                         }
                     ],
                     "configAvailability": [
