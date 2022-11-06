@@ -34,7 +34,6 @@ export interface BackendConfigType extends CommonBackendConfigType<KeywordMapper
     tdocWritable: boolean,
     TourDocSqlMytbDbAdapter: SqlConnectionConfigType
     TourDocSqlMytbExportDbAdapter: SqlConnectionConfigType,
-    // TODO
     TourDocItemsJsAdapter: {
         dataFile: string
     },

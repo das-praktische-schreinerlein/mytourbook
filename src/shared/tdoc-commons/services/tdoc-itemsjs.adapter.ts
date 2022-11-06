@@ -632,23 +632,5 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         return records;
     }
 
-    // TODO move to super
-    extractFacetsFromRequestResult(mapper: Mapper, result: ItemJsResult): Facets {
-        const facets = super.extractFacetsFromRequestResult(mapper, result);
-        if (result.data === undefined ||
-            result.data.aggregations === undefined) {
-            return facets;
-        }
-
-        const sorts = Object.keys(this.getItemsJsConfig().sortings);
-        const facet = new Facet();
-        facet.facet = sorts.map(value => {
-            return [value, 0];
-        });
-
-        facets.facets.set('sorts', facet);
-
-        return facets;
-    }
 }
 
