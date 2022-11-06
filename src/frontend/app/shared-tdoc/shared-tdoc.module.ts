@@ -61,6 +61,8 @@ import {TourDocLinkedPlaylistsComponent} from './components/tdoc-linked-playlist
 import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
 import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-linked-pois.component';
 import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.component';
+import {TourDocSelectSearchComponent} from './components/tdoc-selectsearch/tdoc-selectsearch.component';
+import {TextEditorComponent} from './components/text-editor/text-editor.component';
 
 @NgModule({
     declarations: [
@@ -111,7 +113,9 @@ import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.componen
         TourDocLinkedPlaylistsComponent,
         TourDocAssignPlaylistFormComponent,
         TourDocLinkedPoisComponent,
-        GpxEditLocComponent
+        GpxEditLocComponent,
+        TourDocSelectSearchComponent,
+        TextEditorComponent
     ],
     imports: [
         ToastrModule,
@@ -181,7 +185,9 @@ import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.componen
         TourDocLinkedPlaylistsComponent,
         TourDocAssignPlaylistFormComponent,
         TourDocLinkedPoisComponent,
-        GpxEditLocComponent
+        GpxEditLocComponent,
+        TourDocSelectSearchComponent,
+        TextEditorComponent
     ]
 })
 export class SharedTourDocModule {}
