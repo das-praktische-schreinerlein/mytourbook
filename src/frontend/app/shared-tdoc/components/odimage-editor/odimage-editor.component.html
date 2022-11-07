@@ -1,0 +1,59 @@
+<ng-container [formGroup]="editFormGroup">
+    <div class="row">
+        <div class="">
+            <div class="float-left image-container">
+                <ng-container *ngIf="mainImageUrl">
+                    <div class="picture-with-objects-container"
+                         [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
+                        <canvas #mainImageCanvas class="picture-big" width="600px"
+                             (mousedown)="onMouseDown($event)"
+                             (mouseup)="onMouseUp($event)"
+                             (mousemove)="onMouseMove($event)"
+                             (resize)="onResizeMainImage()"></canvas>
+                        <img #mainImage
+                             alt="{{mainImageObject.key}}"
+                             [src]="mainImageUrl"
+                             style="display: none"
+                             (load)="onLoadMainImage()">
+                        <app-cdoc-odobjectrectangles [objects]="mainImageObject ? [mainImageObject] : []"
+                                                     [width]="imageWidth"></app-cdoc-odobjectrectangles>
+                    </div>
+                </ng-container>
+            </div>
+            <ng-container *ngTemplateOutlet="showNumber;context:{key: 'imgobj.imgWidth', formControlName: 'imgobj_imgWidth'}"></ng-container>
+            <ng-container *ngTemplateOutlet="showNumber;context:{key: 'imgobj.imgHeight', formControlName: 'imgobj_imgHeight'}"></ng-container>
+            <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'imgobj.objX', formControlName: 'imgobj_objX', min: 0, max: 9000}"></ng-container>
+            <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'imgobj.objY', formControlName: 'imgobj_objY', min: 0, max: 9000}"></ng-container>
+            <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'imgobj.objWidth', formControlName: 'imgobj_objWidth', min: 0, max: 9000}"></ng-container>
+            <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'imgobj.objHeight', formControlName: 'imgobj_objHeight', min: 0, max: 9000}"></ng-container>
+            <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'imgobj.precision', formControlName: 'imgobj_precision', step: '0.01', min: 0, max: 1}"></ng-container>
+        </div>
+    </div>
+
+    <ng-template #inputNumber let-key="key" let-formControlName="formControlName" let-recommend="recommend" let-step="step" let-min="min" let-max="max">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}"
+                   class="form-control"
+                   type="number"
+                   step="{{step ? step : '1'}}"
+                   min="{{min ? min : ''}}"
+                   max="{{max ? max : ''}}"
+                   placeholder="{{key}}"
+                   (ngModelChange)="onInputChanged($event, formControlName)">
+            <span class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend"
+                  (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</span>
+        </div>
+    </ng-template>
+
+    <ng-template #showNumber let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input class="form-control"
+                   type="number"
+                   value="{{editFormGroup.getRawValue()[formControlName] ? editFormGroup.getRawValue()[formControlName] : ''}}"
+                   disabled="disabled">
+        </div>
+    </ng-template>
+</ng-container>
+

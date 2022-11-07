@@ -1,14 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    EventEmitter,
-    Inject,
-    Input,
-    Output,
-    ViewChild
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, Output} from '@angular/core';
 import {TourDocRecord, TourDocRecordFactory, TourDocRecordValidator} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {TourDocRecordSchema} from '../../../../shared/tdoc-commons/model/schemas/tdoc-record-schema';
@@ -50,6 +40,9 @@ import {TourDocImageRecord} from '../../../../shared/tdoc-commons/model/records/
 import {LatLng} from 'leaflet';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {CommonDocEditorCommandComponentConfig} from '../text-editor/text-editor.component';
+import {SafeUrl} from '@angular/platform-browser';
+import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/src/commons/model/objectdetection-model';
+import {OdImageEditorComponent} from '../odimage-editor/odimage-editor.component';
 
 export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
     editorCommands: CommonDocEditorCommandComponentConfig;
@@ -182,9 +175,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
     descTxtRecommended  = '';
 
-    @ViewChild('mainImage')
-    mainImage: ElementRef;
-    imageWidth = 0;
+    mainImageUrl: SafeUrl   = undefined;
     mainImageObject: TourDocObjectDetectionImageObjectRecord = undefined;
 
     // TODO add modal to commons
@@ -206,11 +197,21 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     onInputChanged(value: any, field: string): boolean {
-        if (field.startsWith('tdocimgobj.')) {
+        if (field.startsWith('tdocimgobj_')) {
             this.updateImageObject();
         }
 
         return false;
+    }
+
+    onChangedOdImageObject(values: ObjectDetectionDetectedObjectType): boolean {
+        if (values) {
+            for (const key of OdImageEditorComponent.EDITABLE_FIELDS) {
+                this.setValue('tdocimgobj_' + key, values[key]);
+            }
+        }
+
+        return this.updateImageObject();
     }
 
     setPersonsFound(persons: StructuredKeywordState[]) {
@@ -259,8 +260,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
             if (this.editFormGroup.getRawValue()['tdocdatatech_altMax']) {
                 this.defaultPosition.alt = Array.isArray(this.editFormGroup.getRawValue()['tdocdatatech_altMax'])
-                ? this.editFormGroup.getRawValue()['tdocdatatech_altMax'][0]
-                : this.editFormGroup.getRawValue()['tdocdatatech_altMax'];
+                    ? this.editFormGroup.getRawValue()['tdocdatatech_altMax'][0]
+                    : this.editFormGroup.getRawValue()['tdocdatatech_altMax'];
             }
         }
 
@@ -301,8 +302,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         if (additionalFields && additionalFields['keywords'] && additionalFields['keywords'].length > 0) {
             const currentKeywords = this.editFormGroup.getRawValue()['keywords'];
             this.setValue('keywords', currentKeywords && currentKeywords.length > 0
-                    ? currentKeywords + ', ' + additionalFields['keywords']
-                    : additionalFields['keywords']);
+                ? currentKeywords + ', ' + additionalFields['keywords']
+                : additionalFields['keywords']);
         }
 
         this.cd.markForCheck();
@@ -348,29 +349,25 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     updateImageObject(): boolean {
         if (this.record && this.record.type.toLowerCase() === 'odimgobject') {
             const images: TourDocImageRecord[] = this.record.get('tdocimages') || [];
-            if (images.length > 0 && this.record.id === undefined) {
-                images[0].tdoc_id = 'IMAGE_' + this.record.imageId;
+            let imageFileName = undefined;
+            this.mainImageUrl = undefined;
+            if (images.length > 0) {
+                if (this.record.id === undefined) {
+                    images[0].tdoc_id = 'IMAGE_' + this.record.imageId;
+                }
+
+                imageFileName = images[0].fileName
+                this.mainImageUrl = this.contentUtils.getFullUrl(images[0]);
             }
 
             const imageObjectValues = TourDocJoinUtils.prepareLinkedObjectDetectionSubmitValues(this.record,
-                this.editFormGroup.getRawValue(), 'tdocimgobj.', this.joinIndexes['imageObjects']);
+                this.editFormGroup.getRawValue(), 'tdocimgobj_', this.joinIndexes['imageObjects']);
             if (imageObjectValues.length > 0) {
                 this.mainImageObject = new TourDocObjectDetectionImageObjectRecord(imageObjectValues[0]);
             } else {
                 this.mainImageObject = new TourDocObjectDetectionImageObjectRecord({
-                    fileName: images.length > 0
-                        ? images[0].fileName
-                        : undefined
+                    fileName: imageFileName
                 });
-            }
-
-            if (this.mainImage && this.mainImage.nativeElement['width']) {
-                if (!BeanUtils.getValue(this.editFormGroup.getRawValue(), 'tdocimgobj.imgWidth')) {
-                    this.setValue('tdocimgobj.imgWidth', this.mainImage.nativeElement['width']);
-                }
-                if (!BeanUtils.getValue(this.editFormGroup.getRawValue(), 'tdocimgobj.imgHeight')) {
-                    this.setValue('tdocimgobj.imgHeight', this.mainImage.nativeElement['height']);
-                }
             }
         }
 
@@ -466,21 +463,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
-    onResizeMainImage(): false {
-        if (this.mainImage !== undefined && this.mainImage.nativeElement['width'] !== this.imageWidth) {
-            this.imageWidth = this.mainImage.nativeElement['width'];
-            this.updateImageObject();
-            this.cd.markForCheck();
-        }
-
-        return false;
-    }
-
-    onClickMainImage(event: MouseEvent): boolean {
-        // TODO do painting
-        return false;
-    }
-
     protected validateSchema(record: TourDocRecord): SchemaValidationError[] {
         return TourDocRecordSchema.validate(record);
     }
@@ -490,7 +472,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         if (this.record.type.toLowerCase() === 'odimgobject') {
             const joinRecords: TourDocObjectDetectionImageObjectRecord[] = record['tdocodimageobjects'] || [];
             if (joinRecords.length > 0) {
-                errors = errors.concat(TourDocObjectDetectionImageObjectRecordValidator.instance.validateValues(joinRecords[0], undefined, 'tdocimgobj.'));
+                errors = errors.concat(TourDocObjectDetectionImageObjectRecordValidator.instance.validateValues(joinRecords[0], undefined, 'tdocimgobj_'));
             }
         }
 
@@ -540,13 +522,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocdatatech.altMax': {},
                 'tdocdatatech.dist': {},
                 'tdocdatatech.dur': {},
-                'tdocimgobj.imgWidth': {},
-                'tdocimgobj.imgHeight': {},
-                'tdocimgobj.objX': {},
-                'tdocimgobj.objY': {},
-                'tdocimgobj.objWidth': {},
-                'tdocimgobj.objHeight': {},
-                'tdocimgobj.precision': {},
                 'trackId': {},
                 'tripId': {}
             },
@@ -581,10 +556,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocratetech.ks': {},
                 'tdocratetech.overall': {},
                 'tdocratetech.schneeschuh': {},
-                'tdocimgobj.category': {},
-                // TODO check for static value: manual
-                'tdocimgobj.detector': {},
-                'tdocimgobj.key': {},
+                // must be set to get option-values
                 'tdocimgobj.state': { labelPrefix: 'label.odimgobject.state.', values: Object.values(ObjectDetectionState)}
             },
             stringArrayBeanFieldConfig: {
@@ -717,7 +689,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         values['tdoclinkedpois'] = TourDocJoinUtils.prepareLinkedPoiSubmitValues(this.record, values, 'linkedPois', this.joinIndexes['linkedPois']);
 
         if (this.record.type.toLowerCase() === 'odimgobject') {
-            values['tdocodimageobjects'] = TourDocJoinUtils.prepareLinkedObjectDetectionSubmitValues(this.record, values, 'tdocimgobj.', this.joinIndexes['imageObjects']);
+            values['tdocodimageobjects'] = TourDocJoinUtils.prepareLinkedObjectDetectionSubmitValues(
+                this.record, values, 'tdocimgobj_', this.joinIndexes['imageObjects']);
         } else {
             delete values['tdocodimageobjects'];
         }
@@ -742,7 +715,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.joinIndexes['linkedPois'] = TourDocJoinUtils.appendLinkedPoisToDefaultFormValueConfig(record, valueConfig, 'linkedPois');
 
         if (this.record.type.toLowerCase() === 'odimgobject') {
-            this.joinIndexes['imageObjects'] = TourDocJoinUtils.appendLinkedObjectDetectionsToDefaultFormValueConfig(record, valueConfig, 'tdocimgobj.');
+            this.joinIndexes['imageObjects'] = TourDocJoinUtils.appendLinkedObjectDetectionsToDefaultFormValueConfig(record, valueConfig, 'tdocimgobj_');
         } else {
             this.joinIndexes['imageObjects'] = [];
         }
@@ -757,6 +730,20 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                     .replace(/ac_/g, '')
                     .replace(/loc_/g, '')
                     .replace(/if_/g, '');
+        }
+
+        if (this.record.type.toLowerCase() === 'odimgobject') {
+            if (formValueConfig['tdocimgobj_state']) {
+                const joinRecords: TourDocObjectDetectionImageObjectRecord[] = record.get('tdocodimageobjects');
+                if (joinRecords && joinRecords.length > 0) {
+                    // patch state because its overridden by default config to get options
+                    formValueConfig['tdocimgobj_state'][0] = joinRecords[0].state;
+                }
+            }
+
+            if (!record.id && formValueConfig['tdocimgobj_detector']) {
+                formValueConfig['tdocimgobj_detector'][0] = 'manual';
+            }
         }
     }
 

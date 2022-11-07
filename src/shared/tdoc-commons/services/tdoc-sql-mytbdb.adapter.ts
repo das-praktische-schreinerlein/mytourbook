@@ -59,6 +59,7 @@ import {
 import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
 import {TourDocObjectDetectionImageObjectRecord} from '../model/records/tdocobjectdetectectionimageobject-record';
+import {TourDocSqlMytbDbObjectDetectionProcessingAdapter} from './tdoc-sql-mytbdb-objectdetection-processing.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
@@ -75,6 +76,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     private readonly commonRateAdapter: CommonSqlRateAdapter;
     private readonly commonJoinAdapter: CommonSqlJoinAdapter;
     private readonly commonObjectDetectionAdapter: CommonSqlObjectDetectionAdapter;
+    private readonly commonSqlObjectDetectionProcessingAdapter: TourDocSqlMytbDbObjectDetectionProcessingAdapter;
     private readonly dbModelConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
 
     constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
@@ -102,6 +104,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.actionTagPlaylistAdapter = new CommonSqlActionTagPlaylistAdapter(this.commonPlaylistAdapter);
         this.actionTagRateAdapter = new CommonSqlActionTagRateAdapter(this.commonRateAdapter);
         this.actionTagODAdapter = new CommonSqlActionTagObjectDetectionAdapter(this.commonObjectDetectionAdapter);
+        this.commonSqlObjectDetectionProcessingAdapter =
+            new TourDocSqlMytbDbObjectDetectionProcessingAdapter(config, this.knex, this.sqlQueryBuilder);
     }
 
     protected isActiveLoadDetailsMode(tableConfig: TableConfig, loadDetailDataConfig: LoadDetailDataConfig,
@@ -262,8 +266,6 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setImageKeywords(dbId, props.keywords, opts));
-                // TODO check for odimgobject -> Do we need/want this here??
-                // this.actionTagODAdapter.executeActionTagObjects(table, id, <ObjectsActionTagForm> actionTagForm, opts);
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
@@ -348,8 +350,27 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                     return allReject(reason);
                 });
             });
+        } else if (tabKey === 'odimgobject') {
+            return new Promise<boolean>((allResolve, allReject) => {
+                const promises = [];
+                const joinRecords: TourDocObjectDetectionImageObjectRecord[] = props.get('tdocodimageobjects');
+                if (joinRecords && joinRecords.length > 0) {
+                    promises.push(this.commonSqlObjectDetectionProcessingAdapter.createObjectKey(
+                        joinRecords[0].detector,
+                        this.commonSqlObjectDetectionProcessingAdapter.generateKey(joinRecords[0].key),
+                        this.commonSqlObjectDetectionProcessingAdapter.generateKey(joinRecords[0].category),
+                        TourDocSqlMytbDbConfig.objectDetectionModelConfigType.detectionTables['image']
+                    ));
+                }
+
+                return Promise.all(promises).then(() => {
+                    return allResolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('setPoiDetails failed:', reason);
+                    return allReject(reason);
+                });
+            });
         }
-        // TODO check for saving object.key, object.detector, object.category
 
 
         return utils.resolve(true);

@@ -475,43 +475,18 @@
         <fieldset>
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
 
+            <app-odimage-editor
+                [mainImageObject]="mainImageObject"
+                [mainImageUrl]="mainImageUrl"
+                (changeValue)="onChangedOdImageObject($event)"></app-odimage-editor>
 
             <div class="row">
-                <div class="">
-                    <div class="float-left image-container">
-                        <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
-                                <div class="picture-with-objects-container"
-                                 [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
-                                <img #mainImage class="picture-big" width="600px"
-                                     [src]="contentUtils.getFullUrl(record.tdocimages[0])"
-                                     alt="{{record.tdocimages[0].name}}"
-                                     (click)="onClickMainImage($event)"
-                                     (resize)="onResizeMainImage()"
-                                     (loaded)="onResizeMainImage()"
-                                     (load)="onResizeMainImage()">
-                                <app-cdoc-odobjectrectangles [objects]="mainImageObject ? [mainImageObject] : []"
-                                                             [width]="imageWidth"></app-cdoc-odobjectrectangles>
-                            </div>
-                        </ng-container>
-                    </div>
-                    <ng-container *ngTemplateOutlet="showNumber;context:{key: 'tdocimgobj.imgWidth', formControlName: 'tdocimgobj.imgWidth'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="showNumber;context:{key: 'tdocimgobj.imgHeight', formControlName: 'tdocimgobj.imgHeight'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocimgobj.objX', formControlName: 'tdocimgobj.objX', min: 0, max: 9000}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocimgobj.objY', formControlName: 'tdocimgobj.objY', min: 0, max: 9000}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocimgobj.objWidth', formControlName: 'tdocimgobj.objWidth', min: 0, max: 9000}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocimgobj.objHeight', formControlName: 'tdocimgobj.objHeight', min: 0, max: 9000}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocimgobj.precision', formControlName: 'tdocimgobj.precision', step: '0.01', min: 0, max: 1}"></ng-container>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- TODO check for Selects from database as asugestions-->
-                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocimgobj.category', formControlName: 'tdocimgobj.category'}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocimgobj.key', formControlName: 'tdocimgobj.key'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocimgobj.category', formControlName: 'tdocimgobj_category'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocimgobj.key', formControlName: 'tdocimgobj_key'}"></ng-container>
             </div>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocimgobj.detector', formControlName: 'tdocimgobj.detector'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocimgobj.state', formControlName: 'tdocimgobj.state'}"></ng-container>
+                <ng-container *ngTemplateOutlet="showText;context:{key: 'tdocimgobj.detector', formControlName: 'tdocimgobj_detector'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocimgobj.state', formControlName: 'tdocimgobj_state'}"></ng-container>
             </div>
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
@@ -521,10 +496,6 @@
 
     <ng-template #linkCreateNew let-key="key" let-id="id">
         <a (click)="onCreateNewLink(key, id)" *ngIf="modal === false">🐣</a>
-    </ng-template>
-
-    <ng-template #linkCreateNewPOI let-key="key" let-id="id">
-        <a (click)="onCreateNewPOI(id)" *ngIf="modal === false">🐣</a>
     </ng-template>
 
     <ng-template #linkShowSelectEntity let-key="key" let-formElementName="formElementName">
@@ -793,16 +764,6 @@
                    (ngModelChange)="onInputChanged($event, formControlName)">
             <span class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend"
                   (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</span>
-        </div>
-    </ng-template>
-
-    <ng-template #showNumber let-key="key" let-formControlName="formControlName">
-        <div class="col-sm-3 form-inline input-group input-group-sm">
-            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
-            <input class="form-control"
-                   type="number"
-                   value="{{editFormGroup.getRawValue()[formControlName] ? editFormGroup.getRawValue()[formControlName] : ''}}"
-                   disabled="disabled">
         </div>
     </ng-template>
 

@@ -128,7 +128,7 @@ export class TextEditorComponent extends AbstractInlineComponent {
         const newString = oldString.substring(0, startPos)
             + command.commandStart
             + oldString.substring(startPos, endPos)
-            +  command.commandEnd
+            + command.commandEnd
             + oldString.substring(endPos, oldString.length);
 
         this.setValue('descTxt', newString);
@@ -137,6 +137,12 @@ export class TextEditorComponent extends AbstractInlineComponent {
         textarea.focus();
         textarea.selectionStart = startPos;
         textarea.selectionEnd = startPos;
+    }
+
+    setValue(field: string, value: any): void {
+        const config = {};
+        config[field] = value;
+        this.editFormGroup.patchValue(config);
     }
 
     renderDesc(force: boolean): string {
@@ -157,12 +163,6 @@ export class TextEditorComponent extends AbstractInlineComponent {
     protected updateData(): void {
         this.setValue('descTxtRecommended', this.descTxtRecommended);
         this.setValue('descTxt', this.descTxt);
-    }
-
-    setValue(field: string, value: any): void {
-        const config = {};
-        config[field] = value;
-        this.editFormGroup.patchValue(config);
     }
 
 }

@@ -63,6 +63,7 @@ import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-lin
 import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.component';
 import {TourDocSelectSearchComponent} from './components/tdoc-selectsearch/tdoc-selectsearch.component';
 import {TextEditorComponent} from './components/text-editor/text-editor.component';
+import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor.component';
 
 @NgModule({
     declarations: [
@@ -115,7 +116,8 @@ import {TextEditorComponent} from './components/text-editor/text-editor.componen
         TourDocLinkedPoisComponent,
         GpxEditLocComponent,
         TourDocSelectSearchComponent,
-        TextEditorComponent
+        TextEditorComponent,
+        OdImageEditorComponent
     ],
     imports: [
         ToastrModule,
@@ -187,7 +189,8 @@ import {TextEditorComponent} from './components/text-editor/text-editor.componen
         TourDocLinkedPoisComponent,
         GpxEditLocComponent,
         TourDocSelectSearchComponent,
-        TextEditorComponent
+        TextEditorComponent,
+        OdImageEditorComponent
     ]
 })
 export class SharedTourDocModule {}

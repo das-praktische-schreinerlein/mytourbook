@@ -5,6 +5,7 @@ import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/re
 import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
 import {TourDocObjectDetectionImageObjectRecord} from '../../../shared/tdoc-commons/model/records/tdocobjectdetectectionimageobject-record';
 import {TourDocImageRecord} from '../../../shared/tdoc-commons/model/records/tdocimage-record';
+import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/src/commons/model/objectdetection-model';
 
 export class TourDocJoinUtils {
 
@@ -189,7 +190,14 @@ export class TourDocJoinUtils {
             ? joinRecords[0]
             : undefined;
 
-        valueConfig[joinName + 'category' + idx] = joinRecord ? [joinRecord.category] : [];
+        TourDocJoinUtils.appendLinkedObjectDetectionToDefaultFormValueConfig(joinRecord, valueConfig, joinName, idx);
+
+        return indexes;
+    }
+
+    public static appendLinkedObjectDetectionToDefaultFormValueConfig(joinRecord: ObjectDetectionDetectedObjectType,
+                                                                      valueConfig: {}, joinName: string, idx: string): void {
+        valueConfig[joinName + 'category' + idx] = joinRecord ? [joinRecord['category']] : [];
         valueConfig[joinName + 'detector' + idx] = joinRecord ? [joinRecord.detector] : [];
         valueConfig[joinName + 'imgHeight' + idx] = joinRecord ? [joinRecord.imgHeight] : [];
         valueConfig[joinName + 'imgWidth' + idx] = joinRecord ? [joinRecord.imgWidth] : [];
@@ -200,8 +208,6 @@ export class TourDocJoinUtils {
         valueConfig[joinName + 'objY' + idx] = joinRecord ? [joinRecord.objY] : [];
         valueConfig[joinName + 'precision' + idx] = joinRecord ? [joinRecord.precision] : [];
         valueConfig[joinName + 'state' + idx] = joinRecord ? [joinRecord.state] : [];
-
-        return indexes;
     }
 
     public static preparePoiMapValuesFromForm(values: {}, joinIndexes: {[key: string]: any[]}): TourDocRecord[] {

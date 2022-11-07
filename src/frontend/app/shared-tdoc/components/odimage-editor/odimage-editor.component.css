@@ -1,0 +1,43 @@
+:host {
+    width: 100%;
+}
+
+textarea:focus {
+    height:60vh;
+    min-height: 300px;
+    max-height: 1000px;
+}
+
+textarea.nowrap {
+    white-space: pre;
+    overflow: auto;
+}
+
+.desc-form-block {
+    align-items: first baseline;
+}
+
+
+.desc-preview-block {
+    align-items: first baseline;
+}
+
+
+.desc-form, .recommended-desc-form {
+    width: 100%;
+    max-width: 1000px;
+}
+
+#renderedDesc {
+    border: 1px solid lightgray;
+    width: 100%;
+    max-width: 1000px;
+}
+
+span.singleCommand {
+    padding: 2px;
+}
+
+span.rangeCommand {
+    padding: 2px;
+}

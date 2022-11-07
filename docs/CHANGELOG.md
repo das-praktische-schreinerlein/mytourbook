@@ -28,6 +28,7 @@
 - backend+frontend: added support to edit ODIMGOBJECT
 - frontend: moved functionality to new component text-editor
 - frontend: moved functionality to new component tdoc-selectsearch
+- frontend: added new component odimage-editor
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -38,6 +39,7 @@
 - backend+frontend: added new entity-type: POI
 - backend: added converter to import POIs from geojson-files
 - backend+frontend: added support to edit ODIMGOBJECT
+- frontend: added new component odimage-editor
 
 ### improvements
 - backend: extend image-export with more filter
