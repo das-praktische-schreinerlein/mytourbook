@@ -411,6 +411,32 @@ UPDATE image toupdate,
 SET toupdate.i_objects=grouped.i_objects
 WHERE toupdate.i_id=grouped.i_id;
 
+-- HINT: SEPARATOR must be manually replaced because semicolon is used as separator
+UPDATE image toupdate,
+    (SELECT GROUP_CONCAT(DISTINCT CONCAT('ioId=', COALESCE(importmytbdb_image_object.io_id, ''),
+                ':::key=', COALESCE(importmytbdb_image_object.io_obj_type, ''),
+                ':::detector=', COALESCE(importmytbdb_image_object.io_detector, ''),
+                ':::imgWidth=', COALESCE(importmytbdb_image_object.io_img_width, ''),
+                ':::imgHeight=', COALESCE(importmytbdb_image_object.io_img_height, ''),
+                ':::objX=', COALESCE(importmytbdb_image_object.io_obj_x1, ''),
+                ':::objY=', COALESCE(importmytbdb_image_object.io_obj_y1, ''),
+                ':::objWidth=', COALESCE(importmytbdb_image_object.io_obj_width, ''),
+                ':::objHeight=', COALESCE(importmytbdb_image_object.io_obj_height, ''),
+                ':::name=', importmytbdb_objects.o_name,
+                ':::category=', importmytbdb_objects.o_category,
+                ':::precision=', COALESCE(importmytbdb_image_object.io_precision, ''),
+                ':::state=', COALESCE(importmytbdb_image_object.io_state, '')) ORDER BY importmytbdb_objects.o_name SEPARATOR 'SEPARATOR') AS i_objectdetections, image.i_id AS i_id
+     FROM image INNER JOIN importmytbdb_image_object ON image.i_id=importmytbdb_image_object.i_id
+                INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
+                INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+     WHERE LOWER(o_category) NOT LIKE 'person'
+       AND (importmytbdb_image_object.io_precision = 1
+         OR importmytbdb_image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
+                                                   'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
+     GROUP BY image.i_id) grouped
+SET toupdate.i_objectdetections=grouped.i_objectdetections
+WHERE toupdate.i_id=grouped.i_id;
+
 -- remove todos
 UPDATE image SET i_keywords=REPLACE(i_keywords, 'KW_TODOKEYWORDS,', '');
 UPDATE image SET i_keywords=REPLACE(i_keywords, ',KW_TODOKEYWORDS', '');

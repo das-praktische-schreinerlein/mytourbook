@@ -1703,6 +1703,7 @@
                            i_keywords,
                            i_persons,
                            i_objects,
+                           i_objectdetections,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
                            k_meta_shortdesc_html                                                                             AS k_meta_shortdesc_html2,
@@ -1752,6 +1753,7 @@
                            i_keywords,
                            i_persons,
                            i_objects,
+                           i_objectdetections,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
                            k_meta_shortdesc_html                                    AS k_meta_shortdesc_html2,
@@ -1799,6 +1801,7 @@
             <field column="i_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
+            <field column="i_objectdetections" name="i_objectdetections_txt" regex="SEPARATOR" replaceWith=";;"/>
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="k_gpstracks_state" name="gpstracks_state_i" />
             <field column="k_gpstracks_state" name="gpstracks_state_is" />

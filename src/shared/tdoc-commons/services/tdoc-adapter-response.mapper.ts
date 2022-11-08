@@ -253,7 +253,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
                     poisSrc = ObjectUtils.uniqueArray(poisSrc);
 
-                    result['i_objectdetections'] = poisSrc.join(this._objectSeparator);
+                    result['i_objectdetections_txt'] = poisSrc.join(this._objectSeparator);
                 }
                 break;
         }
@@ -428,8 +428,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 'linkedpois_txt'));
         this.mapDetailResponseDocuments(mapper, 'image_objectdetections', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_objectdetections')],
-                'i_objectdetections'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_objectdetections_txt')],
+                'i_objectdetections_txt'));
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);

@@ -126,7 +126,7 @@ export class SqlMytbDbImageConfig {
                     ' ":::name=", objects.o_name,' +
                     ' ":::category=", objects.o_category,' +
                     ' ":::precision=", COALESCE(image_object.io_precision, ""),' +
-                    ' ":::state=", COALESCE(image_object.io_state, "")) SEPARATOR ";;") AS i_objectdetections ' +
+                    ' ":::state=", COALESCE(image_object.io_state, "")) ORDER BY objects.o_name SEPARATOR ";;") AS i_objectdetections ' +
                     'FROM image_object' +
                     ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                     '            AND image_object.io_detector=objects_key.ok_detector ' +
