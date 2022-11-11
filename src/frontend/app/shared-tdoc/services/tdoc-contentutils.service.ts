@@ -159,6 +159,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
+            } else if (type === 'POI') {
+                filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'ROUTE') {
                 filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'TRIP' && record.tripId) {
@@ -176,6 +178,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else if (type === 'IMAGE' || type === 'TOPIMAGE' || type === 'VIDEO' || type === 'TOPVIDEO') {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 12;
+            } else if (type === 'POI') {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'NEWS') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'INFO') {
@@ -196,6 +200,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else if (type === 'IMAGE' || type === 'TOPIMAGE' || type === 'VIDEO' || type === 'TOPVIDEO') {
                 filters['moreFilter'] = 'destination_id_s:' + id;
                 filters['perPage'] = 12;
+            } else if (type === 'POI') {
+                filters['moreFilter'] = 'destination_id_ss:' + id;
             } else if (type === 'TRACK') {
                 filters['moreFilter'] = 'destination_id_ss:' + id;
             } else if (type === 'TRIP') {

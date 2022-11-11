@@ -4,6 +4,12 @@
 DROP VIEW IF EXISTS importmytbdb_kategorie_tour;
 CREATE VIEW importmytbdb_kategorie_tour AS SELECT * FROM testmytbdb.kategorie_tour;
 
+DROP VIEW IF EXISTS importmytbdb_kategorie_poi;
+CREATE VIEW importmytbdb_kategorie_poi AS SELECT * FROM testmytbdb.kategorie_poi;
+
+DROP VIEW IF EXISTS importmytbdb_tour_poi;
+CREATE VIEW importmytbdb_tour_poi AS SELECT * FROM testmytbdb.tour_poi;
+
 -- ##################
 -- copy tables
 -- ##################
@@ -12,6 +18,9 @@ INSERT INTO playlist SELECT * FROM testmytbexportbetadb.playlist;
 
 TRUNCATE TABLE location;
 INSERT INTO location SELECT * FROM testmytbexportbetadb.location;
+
+TRUNCATE TABLE poi;
+INSERT INTO poi SELECT * FROM testmytbexportbetadb.poi;
 
 TRUNCATE TABLE news;
 INSERT INTO news SELECT * FROM testmytbexportbetadb.news;
@@ -43,6 +52,9 @@ INSERT INTO kategorie_tour SELECT * FROM testmytbexportbetadb.kategorie_tour;
 TRUNCATE TABLE kategorie_playlist;
 INSERT INTO kategorie_playlist SELECT * FROM testmytbexportbetadb.kategorie_playlist;
 
+TRUNCATE TABLE kategorie_poi;
+INSERT INTO kategorie_poi SELECT * FROM testmytbexportbetadb.kategorie_poi;
+
 TRUNCATE TABLE destination;
 INSERT INTO destination SELECT * FROM testmytbexportbetadb.destination;
 
@@ -54,6 +66,9 @@ INSERT INTO tour_info SELECT * FROM testmytbexportbetadb.tour_info;
 
 TRUNCATE TABLE tour_playlist;
 INSERT INTO tour_playlist SELECT * FROM testmytbexportbetadb.tour_playlist;
+
+TRUNCATE TABLE tour_poi;
+INSERT INTO tour_poi SELECT * FROM testmytbexportbetadb.tour_poi;
 
 TRUNCATE TABLE image;
 INSERT INTO image SELECT * FROM testmytbexportbetadb.image;

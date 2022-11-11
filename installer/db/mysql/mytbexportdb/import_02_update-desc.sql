@@ -42,6 +42,13 @@ UPDATE kategorie_full toupdate,
 SET toupdate.k_html=CONCAT(COALESCE(k_html, ''), '<label>tour</label><ul><li>', COALESCE(grouped.t_names, ''), '</li></ul>\n')
 WHERE toupdate.k_id=grouped.k_id;
 
+UPDATE kategorie_full toupdate,
+    (SELECT mjoin.k_id AS k_id, GROUP_CONCAT(CAST(poi.poi_name AS char(200)) SEPARATOR  '</li><li>') AS poi_names
+     FROM importmytbdb_kategorie_poi mjoin INNER JOIN poi ON mjoin.poi_id = poi.poi_id
+     GROUP BY mjoin.k_id) grouped
+SET toupdate.k_html=CONCAT(COALESCE(k_html, ''), '<label>poi</label><ul><li>', COALESCE(grouped.poi_names, ''), '</li></ul>\n')
+WHERE toupdate.k_id=grouped.k_id;
+
 -- tour: calc desc
 UPDATE tour toupdate,
  (SELECT tour.t_id, location.l_gps_lat, location.l_gps_lon, location.l_lochirarchietxt
@@ -95,6 +102,13 @@ SET
                             '<label>t_route_m</label><span>', COALESCE(t_route_m, ''), '</span>\n',
                             '<label>t_typ</label><span>t_typ_', COALESCE(t_typ, ''), '</span>\n',
                            '')
+WHERE toupdate.t_id=grouped.t_id;
+
+UPDATE tour toupdate,
+    (SELECT mjoin.t_id AS t_id, GROUP_CONCAT(CAST(poi.poi_name AS char(200)) SEPARATOR  '</li><li>') AS poi_names
+     FROM importmytbdb_tour_poi mjoin INNER JOIN poi ON mjoin.poi_id = poi.poi_id
+     GROUP BY mjoin.t_id) grouped
+SET toupdate.t_html_list=CONCAT(COALESCE(t_html_list, ''), '<label>poi</label><ul><li>', COALESCE(grouped.poi_names, ''), '</li></ul>\n')
 WHERE toupdate.t_id=grouped.t_id;
 
 -- ##################

@@ -12,6 +12,9 @@ INSERT INTO playlist SELECT * FROM importmytbexportbetadb.playlist;
 DELETE FROM location;
 INSERT INTO location SELECT * FROM importmytbexportbetadb.location;
 
+DELETE TABLE poi;
+INSERT INTO poi SELECT * FROM importmytbexportbetadb.poi;
+
 DELETE FROM news;
 INSERT INTO news SELECT * FROM importmytbexportbetadb.news;
 
@@ -42,6 +45,9 @@ INSERT INTO kategorie_tour SELECT * FROM importmytbexportbetadb.kategorie_tour;
 DELETE FROM kategorie_playlist;
 INSERT INTO kategorie_playlist SELECT * FROM importmytbexportbetadb.kategorie_playlist;
 
+DELETE TABLE kategorie_poi;
+INSERT INTO kategorie_poi SELECT * FROM importmytbexportbetadb.kategorie_poi;
+
 DELETE FROM destination;
 INSERT INTO destination SELECT * FROM importmytbexportbetadb.destination;
 
@@ -53,6 +59,9 @@ INSERT INTO tour_info SELECT * FROM importmytbexportbetadb.tour_info;
 
 DELETE FROM tour_playlist;
 INSERT INTO tour_playlist SELECT * FROM importmytbexportbetadb.tour_playlist;
+
+DELETE TABLE tour_poi;
+INSERT INTO tour_poi SELECT * FROM importmytbexportbetadb.tour_poi;
 
 DELETE FROM image;
 INSERT INTO image SELECT * FROM importmytbexportbetadb.image;

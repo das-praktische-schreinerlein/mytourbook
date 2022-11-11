@@ -12,8 +12,10 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
     public static solrConfig: SolrConfig = {
         spatialField: 'geo_loc_p',
         spatialSortKey: 'distance',
-        fieldList: ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'destination_id_s', 'track_id_i', 'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i',
-            'image_similar_id_i', 'dateshow_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
+        fieldList: ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'destination_id_s', 'track_id_i', 'trip_id_i',
+            'news_id_i', 'video_id_i', 'info_id_i', 'poi_id_i',
+            'image_similar_id_i', 'dateshow_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt',
+            'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
             'data_tech_dist_f', 'data_tech_dur_f', 'data_tech_sections_s',
             'data_info_guides_s', 'data_info_region_s', 'data_info_baseloc_s', 'data_info_destloc_s', 'data_info_section_details_s',
@@ -23,7 +25,8 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'rate_pers_motive_i', 'rate_pers_schwierigkeit_i', 'rate_pers_wichtigkeit_i',
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
-            'gpstracks_basefile_s', 'gpstracks_state_i', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
+            'gpstracks_basefile_s', 'gpstracks_state_i', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s',
+            'name_s', 'type_s',
             'objects_txt', 'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt', 'route_attr_ss',
             'navigation_objects_txt', 'extended_object_properties_txt',
             'linkedroutes_txt', 'linkedinfos_txt', 'linkedplaylists_txt', 'linkedpois_txt', 'i_objectdetections_txt'],
@@ -137,7 +140,7 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             }
         },
         commonSortOptions: {
-            'bq': 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:INFO^1.1 type_s:VIDEO^1.1 type_s:IMAGE^1' +
+            'bq': 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:INFO^1.1  type_s:POI^1.1 type_s:VIDEO^1.1 type_s:IMAGE^1' +
             ' _val_:"div(rate_pers_gesamt_i, 10)"',
             'qf': 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0',
             'defType': 'edismax',
@@ -247,6 +250,12 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             },
             'countNewsDesc': {
                 'sort': 'count_news_i desc, name_s ASC'
+            },
+            'countPois': {
+                'sort': 'count_pois_i asc, name_s ASC'
+            },
+            'countPoisDesc': {
+                'sort': 'count_pois_i desc, name_s ASC'
             },
             'countRoutes': {
                 'sort': 'count_routes_i asc, name_s ASC'

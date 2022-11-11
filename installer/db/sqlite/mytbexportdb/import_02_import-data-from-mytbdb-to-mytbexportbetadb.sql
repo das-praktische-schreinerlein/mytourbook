@@ -53,6 +53,28 @@ INSERT into location_playlist (lp_id, l_id, p_id, lp_pos)
     FROM importmytbdb_location_playlist;
 
 -- ##################
+-- import poi
+-- ##################
+INSERT INTO poi (poi_id, poi_meta_desc, poi_name, poi_reference, poi_geo_longdeg, poi_geo_latdeg, poi_geo_ele,
+                 poi_calced_id, poi_calced_gps_loc, poi_calced_gps_lat, poi_calced_gps_lon, poi_calced_altMaxFacet)
+SELECT poi_id, poi_meta_desc, poi_name, poi_reference, poi_geo_longdeg, poi_geo_latdeg, poi_geo_ele,
+       "POI" || "_" || poi_id, poi_calced_gps_loc, poi_calced_gps_lat, poi_calced_gps_lon, poi_calced_altMaxFacet
+FROM importmytbdb_poi WHERE poi_id IN (
+    SELECT distinct poi_id FROM importmytbdb_tour_poi
+    UNION
+    SELECT distinct poi_id FROM importmytbdb_kategorie_poi
+    );
+
+-- calc keywords
+UPDATE poi
+SET poi_keywords = (SELECT GROUP_CONCAT(DISTINCT mk.kw_name) AS poi_keywords
+                  FROM importmytbdb_poi_keyword mjoin LEFT JOIN importmytbdb_keyword mk ON mjoin.kw_id=mk.kw_id
+                  WHERE poi.poi_id=mjoin.poi_id);
+
+-- remove todos
+UPDATE poi SET poi_meta_desc=REPLACE(poi_meta_desc, 'TODODESC', '');
+
+-- ##################
 -- import info
 -- ##################
 INSERT INTO info (if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_name, if_publisher, if_typ, if_url,
@@ -190,6 +212,11 @@ INSERT into kategorie_playlist(kp_id, k_id, p_id, kp_pos)
     SELECT kp_id, k_id, p_id, kp_pos
     FROM importmytbdb_kategorie_playlist;
 
+-- import pois
+INSERT into kategorie_poi(kpoi_id, k_id, poi_id, kpoi_pos, kpoi_type)
+    SELECT kpoi_id, k_id, poi_id, kpoi_pos, kpoi_type
+    FROM importmytbdb_kategorie_poi;
+
 -- ##################
 -- import routes
 -- ##################
@@ -234,6 +261,11 @@ SET
 INSERT into tour_playlist(tp_id, t_id, p_id, tp_pos)
     SELECT tp_id, t_id, p_id, tp_pos
     FROM importmytbdb_tour_playlist;
+
+-- import pois
+INSERT into tour_poi(tpoi_id, t_id, poi_id, tpoi_pos, tpoi_type)
+    SELECT tpoi_id, t_id, poi_id, tpoi_pos, tpoi_type
+    FROM importmytbdb_tour_poi;
 
 -- ##################
 -- import-trackroutes
@@ -390,7 +422,7 @@ SET i_objects = (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name) AS i_
 
 -- HINT: SEPARATOR must be manually replaced because semicolon is used as separator
 UPDATE image
-SET i_objectdetections = (SELECT GROUP_CONCAT(DISTINCT 'ioId=' || COALESCE(importmytbdb_image_object.io_id, '') ||
+SET i_objectdetections = (SELECT GROUP_CONCAT(('ioId=' || COALESCE(importmytbdb_image_object.io_id, '') ||
                 ':::key=' || COALESCE(importmytbdb_image_object.io_obj_type, '') ||
                 ':::detector=' || COALESCE(importmytbdb_image_object.io_detector, '') ||
                 ':::imgWidth=' || COALESCE(importmytbdb_image_object.io_img_width, '') ||
@@ -402,7 +434,7 @@ SET i_objectdetections = (SELECT GROUP_CONCAT(DISTINCT 'ioId=' || COALESCE(impor
                 ':::name=' || importmytbdb_objects.o_name ||
                 ':::category=' || importmytbdb_objects.o_category ||
                 ':::precision=' || COALESCE(importmytbdb_image_object.io_precision, '') ||
-                ':::state=' || COALESCE(importmytbdb_image_object.io_state, '') SEPARATOR 'SEPARATOR') AS i_objectdetections
+                ':::state=' || COALESCE(importmytbdb_image_object.io_state, '')), 'SEPARATOR') AS i_objectdetections
                  FROM importmytbdb_image_object
                           INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
                           INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id

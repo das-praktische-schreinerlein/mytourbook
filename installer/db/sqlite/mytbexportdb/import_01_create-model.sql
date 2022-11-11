@@ -63,6 +63,7 @@ CREATE TABLE info (
   if_id int(11) NOT NULL PRIMARY KEY,
   l_id int(11) DEFAULT null,
   kw_id int(11) DEFAULT NULL,
+  countPois int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
   countLocations int(11) DEFAULT 0,
   if_gesperrt int(2) DEFAULT 1,
@@ -208,6 +209,28 @@ CREATE TABLE location_playlist
 CREATE INDEX IF NOT EXISTS idx_LP__LP_POS ON location_playlist (lp_pos);
 
 -- ---------------
+-- poi-data
+-- ---------------
+DROP TABLE IF EXISTS poi;
+CREATE TABLE IF NOT EXISTS poi (
+   poi_id int(11) PRIMARY KEY,
+   poi_meta_desc text DEFAULT NULL,
+   poi_name varchar(255) DEFAULT NULL,
+   poi_reference varchar(255) DEFAULT NULL,
+   poi_keywords text DEFAULT NULL,
+   poi_geo_longdeg float DEFAULT NULL,
+   poi_geo_latdeg float DEFAULT NULL,
+   poi_geo_ele float DEFAULT NULL,
+   poi_calced_id VARCHAR(50) DEFAULT NULL,
+   poi_calced_gps_loc VARCHAR(50) DEFAULT NULL,
+   poi_calced_gps_lat VARCHAR(50) DEFAULT NULL,
+   poi_calced_gps_lon VARCHAR(50) DEFAULT NULL,
+   poi_calced_altMaxFacet DECIMAL DEFAULT NULL,
+   countRoutes int(11) DEFAULT 0,
+   countTracks int(11) DEFAULT 0
+);
+
+-- ---------------
 -- destination-data
 -- ---------------
 DROP TABLE IF EXISTS destination;
@@ -258,6 +281,7 @@ CREATE TABLE destination (
   countImagesTop int(11) DEFAULT 0,
   countInfos int(11) DEFAULT 0,
   countNews int(11) DEFAULT 0,
+  countPois int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
   countTrips int(11) DEFAULT 0,
   countTracks int(11) DEFAULT 0,
@@ -349,6 +373,7 @@ CREATE TABLE tour (
   countImagesTop int(11) DEFAULT 0,
   countInfos int(11) DEFAULT 0,
   countNews int(11) DEFAULT 0,
+  countPois int(11) DEFAULT 0,
   countTrips int(11) DEFAULT 0,
   countTracks int(11) DEFAULT 0,
   countVideos int(11) DEFAULT 0
@@ -374,6 +399,18 @@ CREATE TABLE tour_playlist
     CONSTRAINT tour_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_TP__TP_POS ON tour_playlist (tp_pos);
+
+CREATE TABLE IF NOT EXISTS tour_poi
+(
+    tpoi_id  int(11) PRIMARY KEY,
+    t_id   int(11) NOT NULL DEFAULT '0',
+    poi_id   int(11) NOT NULL DEFAULT '0',
+    tpoi_pos int(11) NOT NULL,
+    tpoi_type int(11) NOT NULL,
+    CONSTRAINT tour_poi_ibfk_1 FOREIGN KEY (t_id) REFERENCES tour (t_id) ON DELETE CASCADE,
+    CONSTRAINT tour_poi_ibfk_2 FOREIGN KEY (poi_id) REFERENCES poi (poi_id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_TPOI__TPOI_POS ON tour_poi (tpoi_pos);
 
 -- ---------------
 -- track-data
@@ -435,6 +472,7 @@ CREATE TABLE kategorie_full (
   k_calced_year smallint DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
+  countPois int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
   countVideos int(11) DEFAULT 0
 );
@@ -459,6 +497,19 @@ CREATE TABLE kategorie_playlist
     CONSTRAINT kategorie_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
 ) ;
 CREATE INDEX IF NOT EXISTS idx_KP__KP_POS ON kategorie_playlist (kp_pos);
+
+DROP TABLE IF EXISTS kategorie_poi;
+CREATE TABLE IF NOT EXISTS kategorie_poi
+(
+    kpoi_id  int(11) PRIMARY KEY,
+    k_id   int(11) NOT NULL DEFAULT '0',
+    poi_id   int(11) NOT NULL DEFAULT '0',
+    kpoi_pos int(11) NOT NULL,
+    kpoi_type int(11) NOT NULL,
+    CONSTRAINT kategorie_poi_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie_full (k_id) ON DELETE CASCADE,
+    CONSTRAINT kategorie_poi_ibfk_2 FOREIGN KEY (poi_id) REFERENCES poi (poi_id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_KPOI__KPOI_POS ON kategorie_poi (kpoi_pos);
 
 -- ---------------
 -- image-data

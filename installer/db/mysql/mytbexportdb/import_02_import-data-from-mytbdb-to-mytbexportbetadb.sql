@@ -54,6 +54,30 @@ INSERT into location_playlist (lp_id, l_id, p_id, lp_pos)
     FROM importmytbdb_location_playlist;
 
 -- ##################
+-- import poi
+-- ##################
+INSERT INTO poi (poi_id, poi_meta_desc, poi_name, poi_reference, poi_geo_longdeg, poi_geo_latdeg, poi_geo_ele,
+                 poi_calced_id, poi_calced_gps_loc, poi_calced_gps_lat, poi_calced_gps_lon, poi_calced_altMaxFacet)
+SELECT poi_id, poi_meta_desc, poi_name, poi_reference, poi_geo_longdeg, poi_geo_latdeg, poi_geo_ele,
+       CONCAT("POI", "_", poi_id), poi_calced_gps_loc, poi_calced_gps_lat, poi_calced_gps_lon, poi_calced_altMaxFacet
+FROM importmytbdb_poi WHERE poi_id IN (
+    SELECT distinct poi_id FROM importmytbdb_tour_poi
+    UNION
+    SELECT distinct poi_id FROM importmytbdb_kategorie_poi
+    );
+
+-- calc keywords
+UPDATE poi toupdate,
+    (SELECT poi.poi_id AS poi_id, GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS poi_keywords
+     FROM poi LEFT JOIN importmytbdb_poi_keyword mjoin ON poi.poi_id=mjoin.poi_id LEFT JOIN importmytbdb_keyword mk ON mjoin.kw_id=mk.kw_id
+     GROUP BY poi.poi_id) grouped
+SET toupdate.poi_keywords=grouped.poi_keywords
+WHERE toupdate.poi_id=grouped.poi_id;
+
+-- remove todos
+UPDATE poi SET poi_meta_desc=REPLACE(poi_meta_desc, 'TODODESC', '');
+
+-- ##################
 -- import info
 -- ##################
 INSERT INTO info (if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_name, if_publisher, if_typ, if_url,
@@ -203,6 +227,11 @@ INSERT into kategorie_playlist(kp_id, k_id, p_id, kp_pos)
     SELECT kp_id, k_id, p_id, kp_pos
     FROM importmytbdb_kategorie_playlist;
 
+-- import pois
+INSERT into kategorie_poi(kpoi_id, k_id, poi_id, kpoi_pos, kpoi_type)
+    SELECT kpoi_id, k_id, poi_id, kpoi_pos, kpoi_type
+    FROM importmytbdb_kategorie_poi;
+
 -- ##################
 -- import routes
 -- ##################
@@ -253,6 +282,11 @@ WHERE toupdate.t_id=grouped.t_id;
 INSERT into tour_playlist(tp_id, t_id, p_id, tp_pos)
     SELECT tp_id, t_id, p_id, tp_pos
     FROM importmytbdb_tour_playlist;
+
+-- import pois
+INSERT into tour_poi(tpoi_id, t_id, poi_id, tpoi_pos, tpoi_type)
+    SELECT tpoi_id, t_id, poi_id, tpoi_pos, tpoi_type
+    FROM importmytbdb_tour_poi;
 
 -- ##################
 -- import-trackroutes
