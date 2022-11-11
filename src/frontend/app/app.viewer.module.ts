@@ -4,9 +4,9 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import {environment} from '../environments/environment';
-import {AppModule} from './app.module';
 import {TranslateJsonPHttpLoader} from './services/translate-jsonp-http-loader';
 import {FallbackHttpClient} from './services/fallback-http-client';
+import {AppReadOnlyModule} from './app.readonly.module';
 
 registerLocaleData(localeDe);
 
@@ -18,7 +18,7 @@ export function createTranslateLoader(http: FallbackHttpClient): TranslateLoader
 
 @NgModule({
     imports: [
-        AppModule,
+        AppReadOnlyModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

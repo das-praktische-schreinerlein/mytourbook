@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {TourDocRecordResolver} from '../shared-tdoc/resolver/tdoc-details.resolver';
 import {TourDocEditpageComponent} from './components/tdoc-editpage/tdoc-editpage.component';
-import {TourDocRecordCreateResolver} from '../shared-tdoc/resolver/tdoc-create.resolver';
+import {TourDocRecordCreateResolver} from '../shared-admin-tdoc/resolver/tdoc-create.resolver';
 import {TourDocCreatepageComponent} from './components/tdoc-createpage/tdoc-createpage.component';
 import {TourDocModalCreatepageComponent} from './components/tdoc-createpage/tdoc-modal-createpage.component';
 

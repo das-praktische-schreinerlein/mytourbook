@@ -1,14 +1,14 @@
 import {LOCALE_ID, NgModule} from '@angular/core';
 import {ServerModule} from '@angular/platform-server';
-import {AppModule} from './app.module';
 import {AppComponent} from './components/app/app.component';
 import {ModuleMapLoaderModule} from '@nguniversal/module-map-ngfactory-loader';
+import {AppReadOnlyModule} from './app.readonly.module';
 
 @NgModule({
     imports: [
-        // The AppServerModule should import your AppModule followed
+        // The AppServerModule should import your AppReadOnlyModule (we dont need to fasten admin-pages) followed
         // by the ServerModule from @angular/platform-server.
-        AppModule,
+        AppReadOnlyModule,
         ServerModule,
         ModuleMapLoaderModule
     ],

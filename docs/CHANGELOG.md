@@ -30,6 +30,7 @@
 - frontend: moved functionality to new component tdoc-selectsearch
 - frontend: added new component odimage-editor
 - backend: fixed sql/solr for all entities
+- frontend: split components and build for smaller optimized readonly-version
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -56,6 +57,7 @@
 - frontend: moved functionality to new component tdoc-selectsearch
 - backend: fixed sql for ODIMGOBJECT, POI
 - backend: fixed sql/solr for all entities
+- frontend: split components and build for smaller optimized readonly-version
 
 ### bug fixes
 - backend: fixed media-export of dependent records

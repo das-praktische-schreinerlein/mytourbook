@@ -22,13 +22,15 @@ import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-com
 import {TourDocEditpageComponent} from './components/tdoc-editpage/tdoc-editpage.component';
 import {TourDocAdminRoutingModule} from './tdoc-admin-routing.module';
 import {TourDocCreatepageComponent} from './components/tdoc-createpage/tdoc-createpage.component';
-import {TourDocRecordCreateResolver} from '../shared-tdoc/resolver/tdoc-create.resolver';
+import {TourDocRecordCreateResolver} from '../shared-admin-tdoc/resolver/tdoc-create.resolver';
 import {TourDocContentUtils} from '../shared-tdoc/services/tdoc-contentutils.service';
 import {CommonDocSearchFormUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
 import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocRoutingService} from '../../shared/tdoc-commons/services/tdoc-routing.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocModalCreatepageComponent} from './components/tdoc-createpage/tdoc-modal-createpage.component';
+import {SharedAdminTourDocModule} from '../shared-admin-tdoc/shared-admin-tdoc.module';
+import {TourDocDataService} from '../../shared/tdoc-commons/services/tdoc-data.service';
 
 @NgModule({
     declarations: [
@@ -44,6 +46,7 @@ import {TourDocModalCreatepageComponent} from './components/tdoc-createpage/tdoc
         HttpClientModule,
         AngularCommonsModule,
         SharedTourDocModule,
+        SharedAdminTourDocModule,
         TourDocAdminRoutingModule,
         FrontendCommonDocCommonsModule
     ],
@@ -51,6 +54,7 @@ import {TourDocModalCreatepageComponent} from './components/tdoc-createpage/tdoc
         TranslateService,
         CommonRoutingService,
         TourDocSearchFormConverter,
+        TourDocDataService,
         { provide: CommonDocRoutingService, useClass: TourDocRoutingService },
         TourDocRoutingService,
         { provide: CommonDocSearchFormUtils, useClass: TourDocSearchFormUtils },

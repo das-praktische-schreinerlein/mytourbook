@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {TourDocListComponent} from './components/tdoc-list/tdoc-list.component';
 import {TourDocListItemComponent} from './components/tdoc-list-item/tdoc-list-item.component';
-import {TourDocEditformComponent} from './components/tdoc-editform/tdoc-editform.component';
 import {TourDocSearchformComponent} from './components/tdoc-searchform/tdoc-searchform.component';
 import {TourDocInlineSearchpageComponent} from './components/tdoc-inline-searchpage/tdoc-inline-searchpage.component';
 import {TourDocListItemSmallComponent} from './components/tdoc-list-item-small/tdoc-list-item-small.component';
@@ -34,7 +33,6 @@ import {TourDocDataMetaComponent} from './components/tdoc-datameta/tdoc-datameta
 import {TourDocActionsComponent} from './components/tdoc-actions/tdoc-actions.component';
 import {TourDocActionTagsComponent} from './components/tdoc-actiontags/tdoc-actiontags.component';
 import {TourDocPersonTagsComponent} from './components/tdoc-persontags/tdoc-persontags.component';
-import {FileDropModule} from 'ngx-file-drop';
 import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocKeywordsComponent} from './components/tdoc-keywords/tdoc-keywords.component';
 import {TourDocKeywordsstateComponent} from './components/tdoc-keywordsstate/tdoc-keywordsstate.component';
@@ -42,28 +40,18 @@ import {TourDocVideoplayerComponent} from './components/tdoc-videoplayer/tdoc-vi
 import {TourDocPersontagsstateComponent} from './components/tdoc-persontagsstate/tdoc-persontagsstate.component';
 import {TourDocMultiActionHeaderComponent} from './components/tdoc-multiactionheader/tdoc-multiactionheader.component';
 import {TourDocMapCodePipe} from './pipes/tdoc-mapcode.pipe';
-import {TourDocObjectDetectionObjectKeyEditFormComponent} from './components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
 import {TourDocDashboardSearchColumnComponent} from './components/tdoc-dashboard-searchcolumn/tdoc-dashboard-searchcolumn.component';
-import {GpxEditAreaComponent} from './components/gpx-editarea/gpx-editarea.component';
-import {TourDocReplaceFormComponent} from './components/tdoc-replaceform/tdoc-replaceform.component';
-import {TourDocAssignFormComponent} from './components/tdoc-assignform/tdoc-assignform.component';
 import {TourDocKeywordTagFormComponent} from './components/tdoc-keywordtagform/tdoc-keywordtagform.component';
 import {TourDocSimpleSearchNavigationComponent} from './components/tdoc-simple-search-navigation/tdoc-simple-search-navigation.component';
 import {VisJsProfileChartComponent} from './components/visjs-profilechart/visjs-profilechart.component';
 import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-profilechart.component';
 import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
-import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 import {TourDocRouteAttributeComponent} from './components/tdoc-routeattr/tdoc-routeattr.component';
 import {TourDocLinkedRoutesComponent} from './components/tdoc-linked-routes/tdoc-linked-routes.component';
 import {RouterModule} from '@angular/router';
 import {TourDocLinkedInfosComponent} from './components/tdoc-linked-infos/tdoc-linked-infos.component';
 import {TourDocLinkedPlaylistsComponent} from './components/tdoc-linked-playlists/tdoc-linked-playlists.component';
-import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
 import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-linked-pois.component';
-import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.component';
-import {TourDocSelectSearchComponent} from './components/tdoc-selectsearch/tdoc-selectsearch.component';
-import {TextEditorComponent} from './components/text-editor/text-editor.component';
-import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor.component';
 
 @NgModule({
     declarations: [
@@ -73,7 +61,6 @@ import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor
         TourDocListItemFlatComponent,
         TourDocListItemThinComponent,
         TourDocListItemPageComponent,
-        TourDocEditformComponent,
         TourDocSearchformComponent,
         TourDocInlineSearchpageComponent,
         TourDocMapComponent,
@@ -98,26 +85,16 @@ import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor
         TourDocPersontagsstateComponent,
         TourDocMultiActionHeaderComponent,
         TourDocDashboardSearchColumnComponent,
-        TourDocObjectDetectionObjectKeyEditFormComponent,
-        GpxEditAreaComponent,
-        TourDocReplaceFormComponent,
-        TourDocAssignFormComponent,
         TourDocKeywordTagFormComponent,
         TourDocSimpleSearchNavigationComponent,
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
         TourDocInfoComponent,
-        TourDocAssignJoinFormComponent,
         TourDocRouteAttributeComponent,
         TourDocLinkedRoutesComponent,
         TourDocLinkedInfosComponent,
         TourDocLinkedPlaylistsComponent,
-        TourDocAssignPlaylistFormComponent,
-        TourDocLinkedPoisComponent,
-        GpxEditLocComponent,
-        TourDocSelectSearchComponent,
-        TextEditorComponent,
-        OdImageEditorComponent
+        TourDocLinkedPoisComponent
     ],
     imports: [
         ToastrModule,
@@ -133,7 +110,6 @@ import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor
         AngularMapsModule,
         FrontendCommonDocCommonsModule,
         LightboxModule,
-        FileDropModule,
         RouterModule
     ],
     providers: [
@@ -146,7 +122,6 @@ import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor
         TourDocListItemFlatComponent,
         TourDocListItemThinComponent,
         TourDocListItemPageComponent,
-        TourDocEditformComponent,
         TourDocSearchformComponent,
         TourDocInlineSearchpageComponent,
         TourDocMapComponent,
@@ -171,26 +146,16 @@ import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor
         TourDocPersontagsstateComponent,
         TourDocMultiActionHeaderComponent,
         TourDocDashboardSearchColumnComponent,
-        TourDocObjectDetectionObjectKeyEditFormComponent,
-        GpxEditAreaComponent,
-        TourDocReplaceFormComponent,
-        TourDocAssignFormComponent,
         TourDocKeywordTagFormComponent,
         TourDocSimpleSearchNavigationComponent,
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
         TourDocInfoComponent,
-        TourDocAssignJoinFormComponent,
         TourDocRouteAttributeComponent,
         TourDocLinkedRoutesComponent,
         TourDocLinkedInfosComponent,
         TourDocLinkedPlaylistsComponent,
-        TourDocAssignPlaylistFormComponent,
-        TourDocLinkedPoisComponent,
-        GpxEditLocComponent,
-        TourDocSelectSearchComponent,
-        TextEditorComponent,
-        OdImageEditorComponent
+        TourDocLinkedPoisComponent
     ]
 })
 export class SharedTourDocModule {}
