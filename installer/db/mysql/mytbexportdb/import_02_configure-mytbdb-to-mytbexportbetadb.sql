@@ -23,6 +23,8 @@ DROP VIEW IF EXISTS importmytbdb_location_info;
 CREATE VIEW importmytbdb_location_info AS SELECT * FROM testmytbdb.location_info;
 DROP VIEW IF EXISTS importmytbdb_info_playlist;
 CREATE VIEW importmytbdb_info_playlist AS SELECT * FROM testmytbdb.info_playlist;
+DROP VIEW IF EXISTS importmytbdb_poi_info;
+CREATE VIEW importmytbdb_poi_info AS SELECT * FROM testmytbdb.poi_info;
 DROP VIEW IF EXISTS importmytbdb_news;
 CREATE VIEW importmytbdb_news AS SELECT * FROM testmytbdb.news;
 DROP VIEW IF EXISTS importmytbdb_trip;

@@ -10,6 +10,9 @@ CREATE VIEW importmytbdb_kategorie_poi AS SELECT * FROM testmytbdb.kategorie_poi
 DROP VIEW IF EXISTS importmytbdb_tour_poi;
 CREATE VIEW importmytbdb_tour_poi AS SELECT * FROM testmytbdb.tour_poi;
 
+DROP VIEW IF EXISTS importmytbdb_poi_info;
+CREATE VIEW importmytbdb_poi_info AS SELECT * FROM testmytbdb.poi_info;
+
 -- ##################
 -- copy tables
 -- ##################

@@ -579,7 +579,7 @@
                             tour.d_id = '${destination.d_id}'
                         ORDER BY k_datevon asc"
                     deltaImportQuery="
-                        SELECT kategorie_full.k_id,
+                        SELECT k_id,
                                tr_id,
                                n_id,
                                k_dateshow || 'Z' AS k_dateshow,

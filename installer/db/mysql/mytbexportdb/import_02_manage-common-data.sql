@@ -105,7 +105,7 @@ set
 update info
 set
     countLocations=(select COUNT(DISTINCT location_info.l_id) FROM location_info WHERE location_info.if_id = info.if_id),
-    countPois=(select COUNT(DISTINCT poi_info.poi_id) FROM poi_info WHERE poi_info.if_id = info.if_id),
+    countPois=(select COUNT(DISTINCT importmytbdb_poi_info.poi_id) FROM importmytbdb_poi_info WHERE importmytbdb_poi_info.if_id = info.if_id),
     countRoutes=(select COUNT(DISTINCT tour_info.t_id) FROM tour_info WHERE tour_info.if_id = info.if_id);
 
 -- add statistics: playlist
