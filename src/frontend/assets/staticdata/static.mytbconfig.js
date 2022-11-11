@@ -17,7 +17,7 @@ window.importStaticConfigJsonP = `{
             "possiblePrefixes": ["KW_", "", "kw_"],
             "structuredKeywords": [
                 {"name": "Todos",
-                    "keywords": ["TODOKEYWORDS"]},
+                    "keywords": ["TODOKEYWORDS", "TODOPOISTART", "TODOPOIMAIN", "TODOPOIEND"]},
                 {"name": "Tourdauer",
                     "keywords": [
                         "Kurztour",

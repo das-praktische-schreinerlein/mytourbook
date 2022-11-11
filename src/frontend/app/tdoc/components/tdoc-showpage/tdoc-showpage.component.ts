@@ -48,6 +48,7 @@ export interface TourDocShowpageComponentAvailableTabs {
     TRIP?: boolean;
     TRIP_NEARBY?: boolean;
     POI?: boolean;
+    POI_NEARBY?: boolean;
     ALL?: boolean;
 }
 
@@ -149,7 +150,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         VIDEO: true,
         NEWS: true,
         ODIMGOBJECT: true,
-        POI: true
+        POI: true,
+        POI_NEARBY: true,
     };
     showItemObjectsFlag = false;
 
@@ -282,6 +284,11 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             filters['where'] = this.createNearByFilter(record);
         } else if (type === 'IMAGE_NEARBY') {
             filters['type'] = 'IMAGE';
+            filters['sort'] = 'distance';
+            filters['moreFilter'] = 'id_notin_is:' + record.id;
+            filters['where'] = this.createNearByFilter(record);
+        } else if (type === 'POI_NEARBY') {
+            filters['type'] = 'POI';
             filters['sort'] = 'distance';
             filters['moreFilter'] = 'id_notin_is:' + record.id;
             filters['where'] = this.createNearByFilter(record);

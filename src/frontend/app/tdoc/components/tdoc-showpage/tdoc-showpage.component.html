@@ -268,15 +268,6 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.INFO"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
-                <app-tdoc-inline-searchpage *ngIf="availableTabs.POI"
-                                            [label]="'POIs'"
-                                            i18n-label="label inline-searchpage POI|Label inline-searchpage POI@@linline-search.label.tdoc.POI"
-                                            [params]="getFiltersForType(record, 'POI')"
-                                            [htmlId]="'POI'"
-                                            [showForm]="false"
-                                            [showResultList]="false"
-                                            [layout]="Layout.FLAT"
-                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
                                             [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.tdoc.TRIP"
@@ -298,6 +289,15 @@
                                             [layout]="Layout.BIG"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.TRACK"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.POI_NEARBY"
+                                            [label]="'POIs in der Nähe'"
+                                            i18n-label="label inline-searchpage POI_NEARBY|Label inline-searchpage POI_NEARBY@@linline-search.label.tdoc.POI_NEARBY"
+                                            [params]="getFiltersForType(record, 'POI_NEARBY')"
+                                            [htmlId]="'POI_NEARBY'"
+                                            [showForm]="false"
+                                            [showResultList]="false"
+                                            [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
 

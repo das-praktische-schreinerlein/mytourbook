@@ -2566,7 +2566,8 @@
                 "NEWS": true,
                 "PLAYLIST": true,
                 "VIDEO": true,
-                "POI": true
+                "POI": true,
+                "POI_NEARBY": true
             }
         },
         "tdoc-albumpage": {
@@ -2587,6 +2588,7 @@
                 "TRIP": true,
                 "PLAYLIST": true,
                 "POI": true,
+                "VIDEO": true,
                 "ALL": true
             },
             "availableToDoDashboardRows": {
