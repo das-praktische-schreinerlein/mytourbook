@@ -273,7 +273,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             filters['sort'] = 'distance';
             filters['where'] = undefined;
             filters['moreFilter'] = 'id_notin_is:' + record.id;
-            filters['where'] = this.createNearByFilter(record);
+            filters['where'] = this.createNearByFilter(record, 5);
             if (record.type === 'LOCATION' && theme !== undefined) {
                 filters['theme'] = theme;
             }
@@ -281,17 +281,17 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             filters['type'] = 'ROUTE';
             filters['sort'] = 'distance';
             filters['moreFilter'] = 'id_notin_is:' + record.id;
-            filters['where'] = this.createNearByFilter(record);
+            filters['where'] = this.createNearByFilter(record, 1);
         } else if (type === 'IMAGE_NEARBY') {
             filters['type'] = 'IMAGE';
             filters['sort'] = 'distance';
             filters['moreFilter'] = 'id_notin_is:' + record.id;
-            filters['where'] = this.createNearByFilter(record);
+            filters['where'] = this.createNearByFilter(record, 1);
         } else if (type === 'POI_NEARBY') {
             filters['type'] = 'POI';
             filters['sort'] = 'distance';
             filters['moreFilter'] = 'id_notin_is:' + record.id;
-            filters['where'] = this.createNearByFilter(record);
+            filters['where'] = this.createNearByFilter(record, 3);
         }
 
         return filters;
@@ -305,9 +305,9 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         return super.renderDesc();
     }
 
-    protected createNearByFilter(record: TourDocRecord): string {
+    protected createNearByFilter(record: TourDocRecord, distance: number): string {
         return record.geoLat !== undefined
-            ? 'nearby:' + [record.geoLat, record.geoLon, 1].join('_') +
+            ? 'nearby:' + [record.geoLat, record.geoLon, distance].join('_') +
                 '_,_nearbyAddress:' + record.locHirarchie.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
             : 'blimblamblummichgibtesnicht';
     }
