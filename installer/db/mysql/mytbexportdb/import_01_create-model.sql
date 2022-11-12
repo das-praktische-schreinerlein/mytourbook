@@ -712,7 +712,7 @@ CREATE TABLE video (
   v_rate int(11) DEFAULT NULL,
   v_rate_motive int(11) DEFAULT NULL,
   v_rate_wichtigkeit int(11) DEFAULT NULL,
-  v_video_objects text COLLATE utf8_general_ci,
+  v_objectdetections text COLLATE utf8_general_ci,
   v_dateshow date DEFAULT NULL,
   v_calced_id VARCHAR(50) COLLATE utf8_general_ci DEFAULT NULL,
   v_calced_path VARCHAR(255) COLLATE utf8_general_ci DEFAULT NULL,

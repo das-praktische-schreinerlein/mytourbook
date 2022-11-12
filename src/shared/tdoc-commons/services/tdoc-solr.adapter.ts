@@ -29,7 +29,8 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'name_s', 'type_s',
             'objects_txt', 'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt', 'route_attr_ss',
             'navigation_objects_txt', 'extended_object_properties_txt',
-            'linkedroutes_txt', 'linkedinfos_txt', 'linkedplaylists_txt', 'linkedpois_txt', 'i_objectdetections_txt'],
+            'linkedroutes_txt', 'linkedinfos_txt', 'linkedplaylists_txt', 'linkedpois_txt',
+            'i_objectdetections_txt', 'v_objectdetections_txt'],
         facetConfigs: {
             'id_notin_is': {
                 filterField: 'id',

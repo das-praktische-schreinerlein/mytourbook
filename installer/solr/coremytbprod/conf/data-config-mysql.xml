@@ -1762,13 +1762,13 @@
             <!-- child='true' -->
             <entity name="poi_navigation_objects"
                     query='
-                        SELECT navigation_objects FROM (SELECT CONCAT("navid=POI_", poi_id, ":::name=", COALESCE(poi_name, "null"), ":::navtype=PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=POI_", poi_id, ":::name=", COALESCE(poi_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM poi
                             WHERE poi_name &lt; (SELECT poi_name FROM poi WHERE poi_id IN (${poi.poi_id}))
                             ORDER BY poi_name DESC LIMIT 1
                         )
                         UNION
-                        SELECT navigation_objects FROM (SELECT CONCAT("navid=POI_", poi_id, ":::name=", COALESCE(poi_name, "null"), ":::navtype=SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=POI_", poi_id, ":::name=", COALESCE(poi_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                             FROM poi
                             WHERE poi_name &gt; (SELECT poi_name FROM poi WHERE poi_id IN (${poi.poi_id}))
                             ORDER BY poi_name LIMIT 1
