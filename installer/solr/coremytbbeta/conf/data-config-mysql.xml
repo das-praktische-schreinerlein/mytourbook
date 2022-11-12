@@ -1778,11 +1778,11 @@
 
             <entity name="poi_extended_object_properties"
                     query='
-                         SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR) AS extended_object_properties)
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
                               FROM poi
                               WHERE poi.poi_id IN (${poi.poi_id})
                            UNION
-                         SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR) AS extended_object_properties)
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
                               FROM poi
                               WHERE poi.poi_id IN (${poi.poi_id})
                     '>
