@@ -400,6 +400,7 @@ CREATE TABLE tour_playlist
 );
 CREATE INDEX IF NOT EXISTS idx_TP__TP_POS ON tour_playlist (tp_pos);
 
+DROP TABLE IF EXISTS tour_poi;
 CREATE TABLE IF NOT EXISTS tour_poi
 (
     tpoi_id  int(11) PRIMARY KEY,
