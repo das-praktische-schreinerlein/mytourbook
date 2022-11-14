@@ -159,11 +159,11 @@ describe('TourDocAdapterResponseMapper', () => {
                     '\nJetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.\n'
                 ],
                 'dateshow_dt': '2000-01-01T00:00:00Z',
-                'navigation_objects_txt': [
+                'navigation_objects_clob': [
                     'navid=TRACK_8:::name=Dienstreise 01.01.2000:::navtype=PREDECESSOR',
                     'navid=TRACK_10:::name=Ausflug Schlaubetal 01.01.2000:::navtype=SUCCESSOR'
                 ],
-                'linkedroutes_txt': [
+                'linkedroutes_clob': [
                     'type=subroute:::name=Dienstreise 01.01.2000:::refId=1200:::full=1',
                     'type=subroute:::name=Dienstreise:::refId=1201:::full=true',
                     'type=subroute:::name=Ausflug Schlaubetal 01.01.2000:::refId=1202:::full=false',

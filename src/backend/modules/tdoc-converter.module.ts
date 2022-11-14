@@ -183,7 +183,7 @@ export class TourDocImportConverterModule {
                         ? 'SOURCE_OSM/' +  feature.id
                         : 'SOURCE_GEOJSON/' +  feature.id,
                     desc_txt: desc,
-                    linkedinfos_txt: linkedInfos.join(';;'),
+                    linkedinfos_clob: linkedInfos.join(';;'),
                     data_tech_alt_max_i: coordinate['ele'],
                     keywords_txt: keywords.join(', '),
                     name_s: name

@@ -15,6 +15,9 @@ INSERT INTO location SELECT * FROM importmytbexportbetadb.location;
 DELETE FROM poi;
 INSERT INTO poi SELECT * FROM importmytbexportbetadb.poi;
 
+DELETE FROM poi_info;
+INSERT INTO poi_info SELECT * FROM importmytbexportbetadb.poi_info;
+
 DELETE FROM news;
 INSERT INTO news SELECT * FROM importmytbexportbetadb.news;
 

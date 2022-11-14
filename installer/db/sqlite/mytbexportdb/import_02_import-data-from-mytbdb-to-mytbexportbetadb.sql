@@ -20,7 +20,6 @@ INSERT INTO location (l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage
 UPDATE location SET l_lochirarchietxt=REPLACE(l_lochirarchietxt, 'OFFEN -> ', '');
 UPDATE location SET l_lochirarchietxt=REPLACE(l_lochirarchietxt, ' -> ', ',,');
 UPDATE location SET l_lochirarchietxt=TRIM(l_lochirarchietxt);
-
 UPDATE location SET l_lochirarchieids=SUBSTR(l_lochirarchieids, 3, LENGTH(l_lochirarchietxt)) WHERE LENGTH(l_lochirarchietxt) > 2;
 UPDATE location SET l_lochirarchieids=REPLACE(l_lochirarchieids, ',', ',,');
 UPDATE location SET l_lochirarchieids=TRIM(l_lochirarchieids);
@@ -216,6 +215,13 @@ INSERT into kategorie_playlist(kp_id, k_id, p_id, kp_pos)
 INSERT into kategorie_poi(kpoi_id, k_id, poi_id, kpoi_pos, kpoi_type)
     SELECT kpoi_id, k_id, poi_id, kpoi_pos, kpoi_type
     FROM importmytbdb_kategorie_poi;
+
+-- ##################
+-- import-poiinfos
+-- ##################
+INSERT into poi_info (poiif_id, if_id, poi_id, poiif_linked_details)
+SELECT poiif_id, if_id, poi_id, poiif_linked_details
+FROM importmytbdb_poi_info where poi_id IS NOT NULL AND if_ID IS NOT NULL;
 
 -- ##################
 -- import routes
@@ -422,27 +428,29 @@ SET i_objects = (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name) AS i_
 
 -- HINT: SEPARATOR must be manually replaced because semicolon is used as separator
 UPDATE image
-SET i_objectdetections = (SELECT GROUP_CONCAT(('ioId=' || COALESCE(importmytbdb_image_object.io_id, '') ||
-                ':::key=' || COALESCE(importmytbdb_image_object.io_obj_type, '') ||
-                ':::detector=' || COALESCE(importmytbdb_image_object.io_detector, '') ||
-                ':::imgWidth=' || COALESCE(importmytbdb_image_object.io_img_width, '') ||
-                ':::imgHeight=' || COALESCE(importmytbdb_image_object.io_img_height, '') ||
-                ':::objX=' || COALESCE(importmytbdb_image_object.io_obj_x1, '') ||
-                ':::objY=' || COALESCE(importmytbdb_image_object.io_obj_y1, '') ||
-                ':::objWidth=' || COALESCE(importmytbdb_image_object.io_obj_width, '') ||
-                ':::objHeight=' || COALESCE(importmytbdb_image_object.io_obj_height, '') ||
-                ':::name=' || importmytbdb_objects.o_name ||
-                ':::category=' || importmytbdb_objects.o_category ||
-                ':::precision=' || COALESCE(importmytbdb_image_object.io_precision, '') ||
-                ':::state=' || COALESCE(importmytbdb_image_object.io_state, '')), 'SEPARATOR') AS i_objectdetections
-                 FROM importmytbdb_image_object
-                          INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
-                          INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
-                 WHERE image.i_id=importmytbdb_image_object.i_id
-                   AND LOWER(o_category) NOT LIKE 'person'
-                   AND (importmytbdb_image_object.io_precision = 1
-                     OR importmytbdb_image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
-                                                               'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
+SET i_objectdetections = (SELECT GROUP_CONCAT(i_objectdetections, 'SEPARATOR')
+                          FROM (SELECT 'ioId=' || COALESCE(importmytbdb_image_object.io_id, '') ||
+                                       ':::key=' || COALESCE(importmytbdb_image_object.io_obj_type, '') ||
+                                       ':::detector=' || COALESCE(importmytbdb_image_object.io_detector, '') ||
+                                       ':::imgWidth=' || COALESCE(importmytbdb_image_object.io_img_width, '') ||
+                                       ':::imgHeight=' || COALESCE(importmytbdb_image_object.io_img_height, '') ||
+                                       ':::objX=' || COALESCE(importmytbdb_image_object.io_obj_x1, '') ||
+                                       ':::objY=' || COALESCE(importmytbdb_image_object.io_obj_y1, '') ||
+                                       ':::objWidth=' || COALESCE(importmytbdb_image_object.io_obj_width, '') ||
+                                       ':::objHeight=' || COALESCE(importmytbdb_image_object.io_obj_height, '') ||
+                                       ':::name=' || importmytbdb_objects.o_name ||
+                                       ':::category=' || importmytbdb_objects.o_category ||
+                                       ':::precision=' || COALESCE(importmytbdb_image_object.io_precision, '') ||
+                                       ':::state=' || COALESCE(importmytbdb_image_object.io_state, '') AS i_objectdetections
+                                FROM importmytbdb_image_object
+                                         INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
+                                         INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+                                WHERE image.i_id=importmytbdb_image_object.i_id
+                                  AND LOWER(o_category) NOT LIKE 'person'
+                                  AND (importmytbdb_image_object.io_precision = 1
+                                    OR importmytbdb_image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
+                                                                              'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
+                               )  objectdetectionssrc
 );
 
 -- remove todos
@@ -521,6 +529,32 @@ SET v_objects = (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name) AS v_
              OR importmytbdb_video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
      );
+
+UPDATE video
+SET v_objectdetections = (SELECT GROUP_CONCAT(v_objectdetections, 'SEPARATOR')
+                          FROM (SELECT 'voId=' || COALESCE(importmytbdb_video_object.vo_id, '') ||
+                                       ':::key=' || COALESCE(importmytbdb_video_object.vo_obj_type, '') ||
+                                       ':::detector=' || COALESCE(importmytbdb_video_object.vo_detector, '') ||
+                                       ':::imgWidth=' || COALESCE(importmytbdb_video_object.vo_img_width, '') ||
+                                       ':::imgHeight=' || COALESCE(importmytbdb_video_object.vo_img_height, '') ||
+                                       ':::objX=' || COALESCE(importmytbdb_video_object.vo_obj_x1, '') ||
+                                       ':::objY=' || COALESCE(importmytbdb_video_object.vo_obj_y1, '') ||
+                                       ':::objWidth=' || COALESCE(importmytbdb_video_object.vo_obj_width, '') ||
+                                       ':::objHeight=' || COALESCE(importmytbdb_video_object.vo_obj_height, '') ||
+                                       ':::name=' || importmytbdb_objects.o_name ||
+                                       ':::category=' || importmytbdb_objects.o_category ||
+                                       ':::precision=' || COALESCE(importmytbdb_video_object.vo_precision, '') ||
+                                       ':::state=' || COALESCE(importmytbdb_video_object.vo_state, '') AS v_objectdetections
+                                FROM importmytbdb_video_object
+                                         INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
+                                         INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+                                WHERE video.v_id=importmytbdb_video_object.v_id
+                                  AND LOWER(o_category) NOT LIKE 'person'
+                                  AND (importmytbdb_video_object.vo_precision = 1
+                                    OR importmytbdb_video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
+                                                                              'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
+                               )  objectdetectionssrc
+);
 
 -- remove todos
 UPDATE video SET v_keywords=REPLACE(v_keywords, 'KW_TODOKEYWORDS,', '');

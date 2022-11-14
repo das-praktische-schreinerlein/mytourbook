@@ -13,6 +13,8 @@
                     SELECT DISTINCT playlist.p_id,
                                     'PLAYLIST'                                                   AS type,
                                     playlist.p_calced_id                          AS id,
+                                    playlist.p_calced_navigation_objects                         AS navigation_objects,
+                                    playlist.p_calced_extended_object_properties                 AS extended_object_properties,
                                     playlist.countInfos,
                                     playlist.countImages,
                                     playlist.countLocations,
@@ -22,13 +24,15 @@
                                     playlist.countVideos,
                                     p_name,
                                     p_meta_desc,
-                                    p_name  || ' ' || p_meta_desc AS html
+                                    p_name || ' ' || p_meta_desc AS html
                     FROM playlist WHERE p_id IN (SELECT p_id FROM image_playlist UNION SELECT p_id FROM video_playlist)
                     ORDER BY p_name"
                 deltaImportQuery="
                     SELECT DISTINCT playlist.p_id,
                                     'PLAYLIST'                                                   AS type,
                                     playlist.p_calced_id                          AS id,
+                                    playlist.p_calced_navigation_objects                         AS navigation_objects,
+                                    playlist.p_calced_extended_object_properties                 AS extended_object_properties,
                                     playlist.countInfos,
                                     playlist.countImages,
                                     playlist.countLocations,
@@ -62,56 +66,8 @@
             <field column="countTracks" name="count_tracks_i" />
             <field column="countTrips" name="count_trips_i" />
             <field column="countVideos" name="count_videos_i" />
-
-            <!-- child='true' -->
-            <entity name="playlist_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT "navid=PLAYLIST_" || p_id || ":::name=" || COALESCE(p_name, "null") || ":::navtype=" || "PREDECESSOR" AS navigation_objects
-                            FROM playlist
-                            WHERE p_name &lt; (SELECT p_name FROM playlist WHERE p_id IN (${playlist.p_id}))
-                            ORDER BY p_name DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT "navid=PLAYLIST_" || p_id || ":::name=" || COALESCE(p_name, "null") || ":::navtype=" || "SUCCESSOR" AS navigation_objects
-                            FROM playlist
-                            WHERE p_name &gt; (SELECT p_name FROM playlist WHERE p_id IN (${playlist.p_id}))
-                            ORDER BY p_name LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="playlist_extended_object_properties"
-                    query='
-                         SELECT "category=ENTITYCOUNT:::name=INFO_COUNT:::value=" || CAST(countInfos AS CHAR) AS extended_object_properties
-                              FROM playlist
-                              WHERE playlist.p_id IN (${playlist.p_id})
-                            UNION
-                         SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
-                              FROM playlist
-                              WHERE playlist.p_id IN (${playlist.p_id})
-                            UNION
-                         SELECT "category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=" || CAST(countLocations AS CHAR) AS extended_object_properties
-                              FROM playlist
-                              WHERE playlist.p_id IN (${playlist.p_id})
-                            UNION
-                         SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
-                              FROM playlist
-                              WHERE playlist.p_id IN (${playlist.p_id})
-                            UNION
-                         SELECT "category=ENTITYCOUNT:::name=TRACK_COUNT:::value=" || CAST(countTracks AS CHAR) AS extended_object_properties
-                              FROM playlist
-                              WHERE playlist.p_id IN (${playlist.p_id})
-                            UNION
-                         SELECT "category=ENTITYCOUNT:::name=TRIP_COUNT:::value=" || CAST(countTrips AS CHAR) AS extended_object_properties
-                              FROM playlist
-                              WHERE playlist.p_id IN (${playlist.p_id})
-                            UNION
-                         SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
-                              FROM playlist
-                              WHERE playlist.p_id IN (${playlist.p_id})
-                    '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
 
         </entity>
 
@@ -121,7 +77,10 @@
                     SELECT DISTINCT info.if_id,
                                     'INFO'                                                   AS type,
                                     info.if_calced_subtype                          AS subtype,
-                                    info.if_calced_id                          AS id,
+                                    info.if_calced_id                                               AS id,
+                                    info.if_calced_linkedplaylists                               AS linkedplaylists,
+                                    info.if_calced_navigation_objects                         AS navigation_objects,
+                                    info.if_calced_extended_object_properties                 AS extended_object_properties,
                                     info.l_id,
                                     info.countRoutes,
                                     info.countLocations,
@@ -141,7 +100,10 @@
                     SELECT DISTINCT info.if_id,
                                     'INFO'                                                   AS type,
                                     info.if_calced_subtype                          AS subtype,
-                                    info.if_calced_id                          AS id,
+                                    info.if_calced_id                                               AS id,
+                                    info.if_calced_linkedplaylists                               AS linkedplaylists,
+                                    info.if_calced_navigation_objects                         AS navigation_objects,
+                                    info.if_calced_extended_object_properties                 AS extended_object_properties,
                                     info.l_id,
                                     info.countRoutes,
                                     info.countLocations,
@@ -186,49 +148,18 @@
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="countRoutes" name="count_routes_i" />
             <field column="countLocations" name="count_locations_i" />
-
-            <!-- child='true' -->
-            <entity name="info_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=INFO_" || if_id || ":::name=" || COALESCE(if_name, "null") || ":::navtype=PREDECESSOR") AS navigation_objects
-                            FROM info
-                            WHERE if_name &lt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
-                            ORDER BY if_name DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=INFO_" || if_id || ":::name=" || COALESCE(if_name, "null") || ":::navtype=SUCCESSOR") AS navigation_objects
-                            FROM info
-                            WHERE if_name &gt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
-                            ORDER BY if_name LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="info_extended_object_properties"
-                    query='
-                         SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
-                              FROM info
-                              WHERE info.if_id IN (${info.if_id})
-                           UNION
-                         SELECT "category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=" || CAST(countLocations AS CHAR) AS extended_object_properties
-                              FROM info
-                              WHERE info.if_id IN (${info.if_id})
-                    '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedplaylists" name="linkedplaylists_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="info_linkedplaylists"
                     query='
-                        SELECT playlist.p_id, playlist.p_name, info_playlist.ifp_pos,
-                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
-                           ":::position=" || COALESCE(info_playlist.ifp_pos, "null")
-                          AS linkedplaylists
+                        SELECT playlist.p_id, playlist.p_name, info_playlist.ifp_pos
                           FROM playlist INNER JOIN info_playlist ON playlist.p_id = info_playlist.p_id WHERE info_playlist.if_id IN (${info.if_id})
                           ORDER BY p_name'>
                 <field column="p_id" name="playlist_id_is"/>
                 <field column="p_name" name="playlists_txt"/>
                 <field column="ifp_pos" name="position_is"/>
-                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
             <entity name="info_tour"
@@ -295,7 +226,10 @@
                     SELECT 'DESTINATION'                                                                                             AS type,
                            destination.d_calced_actiontype                                                                           AS actiontype,
                            destination.d_calced_actiontype                          AS subtype,
-                           destination.d_calced_id                          AS id,
+                           destination.d_calced_id                                               AS id,
+                           destination.d_calced_linkedplaylists                               AS linkedplaylists,
+                           destination.d_calced_navigation_objects                         AS navigation_objects,
+                           destination.d_calced_extended_object_properties                 AS extended_object_properties,
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
@@ -352,7 +286,12 @@
                     ORDER BY d_datevon, d_id"
                 deltaImportQuery="
                     SELECT 'DESTINATION'                                                                                             AS type,
-                           destination.d_calced_id                          AS id,
+                           destination.d_calced_actiontype                                                                           AS actiontype,
+                           destination.d_calced_actiontype                          AS subtype,
+                           destination.d_calced_id                                               AS id,
+                           destination.d_calced_linkedplaylists                               AS linkedplaylists,
+                           destination.d_calced_navigation_objects                         AS navigation_objects,
+                           destination.d_calced_extended_object_properties                 AS extended_object_properties,
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
@@ -366,7 +305,7 @@
                            d_name,
                             d_name || ' ' || d_keywords || ' ' || l_lochirarchietxt AS html,
                            d_dateshow || 'Z' AS d_dateshow,
-                           d_datevon || 'Z'                                                                                          AS datesort,
+                           d_datevon || 'Z'                                                                                           AS datesort,
                            d_datevon || 'Z' AS d_datevon,
                            DATETIME(d_datevon)                                                     AS dateonly,
                            'DONE' || (d_datevon IS NOT NULL)                                                             AS done,
@@ -397,7 +336,7 @@
                            `D_RATE_MOTIVE`                                                                                     AS motive,
                            `D_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
                            `D_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
-                           D_calced_altAscFacet                                                                AS altAscFacet,
+                           D_calced_altAscFacet                                                       AS altAscFacet,
                            D_calced_altMaxFacet                                                               AS altMaxFacet,
                            D_calced_distFacet                                                        AS distFacet,
                            D_calced_durFacet                                                        AS durFacet,
@@ -482,62 +421,9 @@
             <field column="countTracks" name="count_tracks_i" />
             <field column="countTrips" name="count_trips_i" />
             <field column="countVideos" name="count_videos_i" />
-
-            <!-- child='true' -->
-            <entity name="destination_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=DESTINATION_" || d_id || ":::name=" || COALESCE(d_name, "null") || ":::navtype=PREDECESSOR")  AS navigation_objects
-                            FROM destination LEFT JOIN location ON destination.l_id = location.l_id
-                            WHERE L_lochirarchietxt || d_name &lt;
-                                (SELECT L_lochirarchietxt || d_name FROM destination LEFT JOIN location ON destination.l_id = location.l_id WHERE d_id IN ("${destination.d_id}"))
-                            ORDER BY L_lochirarchietxt || d_name DESC, d_id DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=DESTINATION_" || d_id || ":::name=" || COALESCE(d_name, "null") || ":::navtype=SUCCESSOR")  AS navigation_objects
-                            FROM destination LEFT JOIN location ON destination.l_id = location.l_id
-                            WHERE L_lochirarchietxt || d_name &gt;
-                                (SELECT L_lochirarchietxt || d_name FROM destination LEFT JOIN location ON destination.l_id = location.l_id WHERE d_id IN ("${destination.d_id}"))
-                            ORDER BY L_lochirarchietxt || d_name, d_id LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="destination_extended_object_properties"
-                    query='
-                        SELECT "category=ENTITYCOUNT:::name=NEWS_COUNT:::value=" || CAST(countNews AS CHAR) AS extended_object_properties
-                              FROM destination
-                              WHERE destination.d_id IN ("${destination.d_id}")
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
-                              FROM destination
-                              WHERE destination.d_id IN ("${destination.d_id}")
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=INFO_COUNT:::value=" || CAST(countInfos AS CHAR) AS extended_object_properties
-                              FROM destination
-                              WHERE destination.d_id IN ("${destination.d_id}")
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRIP_COUNT:::value=" || CAST(countTrips AS CHAR) AS extended_object_properties
-                              FROM destination
-                              WHERE destination.d_id IN ("${destination.d_id}")
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRACK_COUNT:::value=" || CAST(countTracks AS CHAR) AS extended_object_properties
-                              FROM destination
-                              WHERE destination.d_id IN ("${destination.d_id}")
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
-                              FROM destination
-                              WHERE destination.d_id IN ("${destination.d_id}")
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=" || CAST(countImagesTop AS CHAR) AS extended_object_properties
-                              FROM destination
-                              WHERE destination.d_id IN ("${destination.d_id}")
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
-                              FROM destination
-                              WHERE destination.d_id IN ("${destination.d_id}")
-                    '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedinfos" name="linkedinfos_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="destination_image"
                     query="
@@ -613,15 +499,12 @@
 
             <entity name="destination_linkedinfos"
                     query='
-                    SELECT "type=" || COALESCE(if_typ, "null") || ":::name=" || COALESCE(if_name, "null") ||
-                        ":::refId=" || CAST(info.if_id AS CHAR) || ":::linkedDetails=" || COALESCE(tour_info.tif_linked_details, "null")
-                        AS linkedinfos, info.if_id
+                    SELECT info.if_id
                     FROM info INNER JOIN tour_info ON tour_info.if_id = info.if_id
                          INNER JOIN tour ON tour_info.t_id = tour.t_id
                     WHERE tour.d_id = "${destination.d_id}"
                         ORDER BY if_name'>
                 <field column="if_id" name="info_id_is"/>
-                <field column="linkedinfos" name="linkedinfos_txt"/>
             </entity>
             <entity name="destination_poi"
                     query="
@@ -643,7 +526,12 @@
                     SELECT 'TRACK'                                                                                        AS type,
                            kategorie_full.k_calced_actiontype                          AS actiontype,
                            kategorie_full.k_calced_actiontype                          AS subtype,
-                           kategorie_full.k_calced_id                          AS id,
+                           kategorie_full.k_calced_id                                               AS id,
+                           kategorie_full.k_calced_linkedplaylists                               AS linkedplaylists,
+                           kategorie_full.k_calced_linkedpois                                  AS linkedpois,
+                           kategorie_full.k_calced_linkedroutes                                  AS linkedroutes,
+                           kategorie_full.k_calced_navigation_objects                         AS navigation_objects,
+                           kategorie_full.k_calced_extended_object_properties                 AS extended_object_properties,
                            kategorie_full.k_id,
                            kategorie_full.t_id,
                            kategorie_full.d_id,
@@ -709,12 +597,18 @@
                     SELECT 'TRACK'                                                                                        AS type,
                            kategorie_full.k_calced_actiontype                          AS actiontype,
                            kategorie_full.k_calced_actiontype                          AS subtype,
-                           kategorie_full.k_calced_id                          AS id,
+                           kategorie_full.k_calced_id                                               AS id,
+                           kategorie_full.k_calced_linkedplaylists                               AS linkedplaylists,
+                           kategorie_full.k_calced_linkedpois                                  AS linkedpois,
+                           kategorie_full.k_calced_linkedroutes                                  AS linkedroutes,
+                           kategorie_full.k_calced_navigation_objects                         AS navigation_objects,
+                           kategorie_full.k_calced_extended_object_properties                 AS extended_object_properties,
                            kategorie_full.k_id,
                            kategorie_full.t_id,
                            kategorie_full.d_id,
                            kategorie_full.k_t_ids,
                            kategorie_full.k_d_ids,
+                           kategorie_full.tr_id,
                            kategorie_full.l_id,
                            kategorie_full.countImages,
                            kategorie_full.countImagesTop,
@@ -730,7 +624,7 @@
                            k_datevon || 'Z' AS k_datevon,
                            k_calced_dateonly                                                AS dateonly,
                            'DONE' || (k_datevon IS NOT NULL)                                                        AS done,
-                           k_calced_week                                                                                AS month,
+                           k_calced_week                                                                                AS week,
                            k_calced_month                                                                               AS month,
                            k_calced_year                                                                                AS year,
                            k_gpstracks_basefile,
@@ -742,6 +636,7 @@
                            k_meta_shortdesc_html,
                            k_meta_shortdesc_html                                                                          AS k_meta_shortdesc_html2,
                            k_rate_gesamt,
+                           k_route_attr,
                            k_gps_lat,
                            k_gps_lon,
                            l_calced_gps_loc                                                              AS k_gps_loc,
@@ -760,11 +655,11 @@
                            `K_RATE_MOTIVE`                                                                                AS motive,
                            `K_RATE_SCHWIERIGKEIT`                                                                         AS schwierigkeit,
                            `K_RATE_WICHTIGKEIT`                                                                           AS wichtigkeit,
-                            K_calced_altAscFacet                                                                AS altAscFacet,
-                            K_calced_altMaxFacet                                                               AS altMaxFacet,
-                            K_calced_distFacet                                                        AS distFacet,
-                            K_calced_dur                                             AS dur,
-                            K_calced_durFacet                                                        AS durFacet
+                           K_calced_altAscFacet                                                                AS altAscFacet,
+                           K_calced_altMaxFacet                                                               AS altMaxFacet,
+                           K_calced_distFacet                                                        AS distFacet,
+                           K_calced_dur                                             AS dur,
+                           K_calced_durFacet                                                        AS durFacet
                     FROM kategorie_full,
                          location
                     WHERE kategorie_full.l_id = location.l_id
@@ -846,73 +741,31 @@
             <field column="countVideos" name="count_videos_i" />
             <field column="k_route_attr" name="route_attr_ss" />
             <field column="k_route_attr" name="route_attr_txt" />
-
-            <!-- child='true' -->
-            <entity name="track_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=TRACK_" || k_id || ":::name=" || COALESCE(k_name, "null") || ":::navtype=PREDECESSOR")  AS navigation_objects
-                            FROM kategorie_full
-                            WHERE k_datevon &lt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id}))
-                            ORDER BY k_datevon DESC, k_id DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=TRACK_" || k_id || ":::name=" || COALESCE(k_name, "null") || ":::navtype=SUCCESSOR")  AS navigation_objects
-                            FROM kategorie_full
-                            WHERE k_datevon &gt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id}))
-                            ORDER BY k_datevon, k_id LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="track_extended_object_properties"
-                    query='
-                        SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
-                              FROM kategorie_full
-                              WHERE kategorie_full.k_id IN (${track.k_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
-                              FROM kategorie_full
-                              WHERE kategorie_full.k_id IN (${track.k_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=" || CAST(countImagesTop AS CHAR) AS extended_object_properties
-                              FROM kategorie_full
-                              WHERE kategorie_full.k_id IN (${track.k_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
-                              FROM kategorie_full
-                              WHERE kategorie_full.k_id IN (${track.k_id})
-                        '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedplaylists" name="linkedplaylists_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedroutes" name="linkedroutes_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedpois" name="linkedpois_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="track_linkedplaylists"
                     query='
-                        SELECT playlist.p_id, playlist.p_name, kategorie_playlist.kp_pos,
-                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
-                           ":::position=" || COALESCE(kategorie_playlist.kp_pos, "null")
-                          AS linkedplaylists
+                        SELECT playlist.p_id, playlist.p_name, kategorie_playlist.kp_pos
                           FROM playlist INNER JOIN kategorie_playlist ON playlist.p_id = kategorie_playlist.p_id WHERE kategorie_playlist.k_id IN (${track.k_id})
                           ORDER BY p_name'>
                 <field column="p_id" name="playlist_id_is"/>
                 <field column="p_name" name="playlists_txt"/>
                 <field column="kp_pos" name="position_is"/>
-                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
             <entity name="track_linkedroutes"
                     query='
                     SELECT * FROM (
-                    SELECT "type=mainroute:::name=" || COALESCE(t_name, "null") || ":::refId=" || CAST(tour.t_id AS CHAR) ||
-                       ":::full=true:::linkedRouteAttr=" || COALESCE(kategorie_full.k_route_attr, "null")
-                      AS linkedroutes, k_route_attr as kt_route_attr
-                      FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE kategorie_full.k_id IN (${track.k_id})
-                    UNION
-                    SELECT "type=subroute:::name=" || COALESCE(t_name, "null") || ":::refId=" || CAST(tour.t_id AS CHAR) ||
-                       ":::full=" || CAST(COALESCE(kt_full, "false") AS CHAR) || ":::linkedRouteAttr=" || COALESCE(kategorie_tour.kt_route_attr, "null")
-                      AS linkedroutes, kt_route_attr
-                      FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (${track.k_id})
-                    )  routessrc GROUP BY linkedroutes, kt_route_attr ORDER BY linkedroutes, kt_route_attr'>
-                <field column="linkedroutes" name="linkedroutes_txt"/>
+                        SELECT k_route_attr as kt_route_attr
+                        FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE kategorie_full.k_id IN (${track.k_id})
+                        UNION
+                        SELECT kt_route_attr
+                        FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (${track.k_id})
+                    )  routessrc GROUP BY kt_route_attr ORDER BY kt_route_attr'>
                 <field column="kt_route_attr" name="route_attr_ss"/>
                 <field column="kt_route_attr" name="route_attr_txt"/>
             </entity>
@@ -976,7 +829,11 @@
                     SELECT 'ROUTE'                                                                                             AS type,
                            tour.t_calced_actiontype                                                                           AS actiontype,
                            tour.t_calced_actiontype                          AS subtype,
-                           tour.t_calced_id                          AS id,
+                           tour.t_calced_id                                               AS id,
+                           tour.t_calced_linkedplaylists                               AS linkedplaylists,
+                           tour.t_calced_linkedpois                                  AS linkedpois,
+                           tour.t_calced_navigation_objects                         AS navigation_objects,
+                           tour.t_calced_extended_object_properties                 AS extended_object_properties,
                            tour.k_id,
                            tour.t_id,
                            tour.d_id,
@@ -1046,7 +903,13 @@
                     ORDER BY t_datevon, t_id"
                 deltaImportQuery="
                     SELECT 'ROUTE'                                                                                             AS type,
-                           tour.t_calced_id                          AS id,
+                           tour.t_calced_actiontype                                                                           AS actiontype,
+                           tour.t_calced_actiontype                          AS subtype,
+                           tour.t_calced_id                                               AS id,
+                           tour.t_calced_linkedplaylists                               AS linkedplaylists,
+                           tour.t_calced_linkedpois                                  AS linkedpois,
+                           tour.t_calced_navigation_objects                         AS navigation_objects,
+                           tour.t_calced_extended_object_properties                 AS extended_object_properties,
                            tour.k_id,
                            tour.t_id,
                            tour.d_id,
@@ -1061,10 +924,10 @@
                            t_name,
                            t_html_list,
                            t_html_list || ' ' || t_name || ' ' || t_keywords || ' ' || t_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
-                           t_dateshow || 'Z' AS t_dateshow,
+                           t_dateshow || 'Z' as t_dateshow,
                            t_datevon || 'Z'                                                                                           AS datesort,
                            t_datevon || 'Z' AS t_datevon,
-                           t_calced_dateonly                                                     AS dateonly,
+                           t_calced_dateonly                                                    AS dateonly,
                            'DONE' || (t_datevon IS NOT NULL)                                                             AS done,
                            t_gpstracks_basefile,
                            t_gpstracks_state,
@@ -1196,81 +1059,30 @@
             <field column="countTracks" name="count_tracks_i" />
             <field column="countTrips" name="count_trips_i" />
             <field column="countVideos" name="count_videos_i" />
-
-            <!-- child='true' -->
-            <entity name="route_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=ROUTE_" || t_id || ":::name=" || COALESCE(t_name, "null") || ":::navtype=PREDECESSOR")  AS navigation_objects
-                            FROM tour LEFT JOIN location ON tour.l_id = location.l_id
-                            WHERE L_lochirarchietxt || t_name &lt;
-                                (SELECT L_lochirarchietxt || t_name FROM tour LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))
-                            ORDER BY L_lochirarchietxt || t_name DESC, t_id DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=ROUTE_" || t_id || ":::name=" || COALESCE(t_name, "null") || ":::navtype=SUCCESSOR")  AS navigation_objects
-                            FROM tour LEFT JOIN location ON tour.l_id = location.l_id
-                            WHERE L_lochirarchietxt || t_name &gt;
-                                (SELECT L_lochirarchietxt || t_name FROM tour LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))
-                            ORDER BY L_lochirarchietxt || t_name, t_id LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="route_extended_object_properties"
-                    query='
-                        SELECT "category=ENTITYCOUNT:::name=NEWS_COUNT:::value=" || CAST(countNews AS CHAR) AS extended_object_properties
-                              FROM tour
-                              WHERE tour.t_id IN (${route.t_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRIP_COUNT:::value=" || CAST(countTrips AS CHAR) AS extended_object_properties
-                              FROM tour
-                              WHERE tour.t_id IN (${route.t_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=INFO_COUNT:::value=" || CAST(countInfos AS CHAR) AS extended_object_properties
-                              FROM tour
-                              WHERE tour.t_id IN (${route.t_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRACK_COUNT:::value=" || CAST(countTracks AS CHAR) AS extended_object_properties
-                              FROM tour
-                              WHERE tour.t_id IN (${route.t_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
-                              FROM tour
-                              WHERE tour.t_id IN (${route.t_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=" || CAST(countImagesTop AS CHAR) AS extended_object_properties
-                              FROM tour
-                              WHERE tour.t_id IN (${route.t_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
-                              FROM tour
-                              WHERE tour.t_id IN (${route.t_id})
-                    '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedplaylists" name="linkedplaylists_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedinfos" name="linkedinfos_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedpois" name="linkedpois_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="route_linkedplaylists"
                     query='
-                        SELECT playlist.p_id, playlist.p_name, tour_playlist.tp_pos,
-                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
-                           ":::position=" || COALESCE(tour_playlist.tp_pos, "null")
-                          AS linkedplaylists
+                        SELECT playlist.p_id, playlist.p_name, tour_playlist.tp_pos
                           FROM playlist INNER JOIN tour_playlist ON playlist.p_id = tour_playlist.p_id WHERE tour_playlist.t_id IN (${route.t_id})
                           ORDER BY p_name'>
                 <field column="p_id" name="playlist_id_is"/>
                 <field column="p_name" name="playlists_txt"/>
                 <field column="tp_pos" name="position_is"/>
-                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
             <entity name="route_linkedroutes"
                     query='
                     SELECT * FROM (
-                    SELECT k_route_attr AS kt_route_attr
-                      FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
-                    UNION
-                    SELECT kt_route_attr
-                      FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
+                        SELECT k_route_attr AS kt_route_attr
+                          FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
+                        UNION
+                        SELECT kt_route_attr
+                          FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
                     )  routessrc GROUP BY kt_route_attr ORDER BY kt_route_attr'>
                 <field column="kt_route_attr" name="linked_route_attr_s"/>
                 <field column="kt_route_attr" name="route_attr_ss"/>
@@ -1363,13 +1175,10 @@
 
             <entity name="route_linkedinfos"
                     query='
-                    SELECT "type=" || COALESCE(if_typ, "null") || ":::name=" || COALESCE(if_name, "null") ||
-                        ":::refId=" || CAST(info.if_id AS CHAR) || ":::linkedDetails=" || COALESCE(tour_info.tif_linked_details, "null")
-                        AS linkedinfos, info.if_id
+                    SELECT info.if_id
                     FROM info INNER JOIN tour_info ON tour_info.if_id = info.if_id WHERE tour_info.t_id IN (${route.t_id})
                         ORDER BY if_name'>
                 <field column="if_id" name="info_id_is"/>
-                <field column="linkedinfos" name="linkedinfos_txt"/>
             </entity>
 
         </entity>
@@ -1379,7 +1188,10 @@
                 query="
                     SELECT 'LOCATION'                                                                                     AS type,
                            location.l_calced_subtype                          AS subtype,
-                           l_calced_id                          AS id,
+                           l_calced_id                                               AS id,
+                           l_calced_linkedplaylists                               AS linkedplaylists,
+                           l_calced_navigation_objects                         AS navigation_objects,
+                           l_calced_extended_object_properties                 AS extended_object_properties,
                            l_id,
                            l_parent_id,
                            location.countImages,
@@ -1412,8 +1224,13 @@
                     ORDER BY l_typ asc, l_name"
                 deltaImportQuery="
                     SELECT 'LOCATION'                                                                                     AS type,
-                           l_calced_id                          AS id,
+                           location.l_calced_subtype                          AS subtype,
+                           l_calced_id                                               AS id,
+                           l_calced_linkedplaylists                               AS linkedplaylists,
+                           l_calced_navigation_objects                         AS navigation_objects,
+                           l_calced_extended_object_properties                 AS extended_object_properties,
                            l_id,
+                           l_parent_id,
                            location.countImages,
                            location.countImagesTop,
                            location.countInfos,
@@ -1479,61 +1296,10 @@
             <field column="countTracks" name="count_tracks_i" />
             <field column="countTrips" name="count_trips_i" />
             <field column="countVideos" name="count_videos_i" />
-
-            <!-- child='true' -->
-            <entity name="location_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=LOCATION_" || l_id || ":::name=" || COALESCE(l_name, "null") || ":::navtype=PREDECESSOR") AS navigation_objects,
-                                l_lochirarchietxt
-                            FROM location
-                            WHERE l_lochirarchietxt &lt; (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id}))
-                            ORDER BY l_lochirarchietxt DESC, l_id DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=LOCATION_" || l_id || ":::name=" || COALESCE(l_name, "null") || ":::navtype=SUCCESSOR") AS navigation_objects, l_lochirarchietxt
-                            FROM location
-                            WHERE l_lochirarchietxt &gt; (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id}))
-                            ORDER BY l_lochirarchietxt, l_id LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="location_extended_object_properties"
-                    query='
-                        SELECT "category=ENTITYCOUNT:::name=NEWS_COUNT:::value=" || CAST(countNews AS CHAR) AS extended_object_properties
-                              FROM location
-                              WHERE location.l_id IN (${location.l_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
-                              FROM location
-                              WHERE location.l_id IN (${location.l_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=INFO_COUNT:::value=" || CAST(countInfos AS CHAR) AS extended_object_properties
-                              FROM location
-                              WHERE location.l_id IN (${location.l_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRIP_COUNT:::value=" || CAST(countTrips AS CHAR) AS extended_object_properties
-                              FROM location
-                              WHERE location.l_id IN (${location.l_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRACK_COUNT:::value=" || CAST(countTracks AS CHAR) AS extended_object_properties
-                              FROM location
-                              WHERE location.l_id IN (${location.l_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
-                              FROM location
-                              WHERE location.l_id IN (${location.l_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=" || CAST(countImagesTop AS CHAR) AS extended_object_properties
-                              FROM location
-                              WHERE location.l_id IN (${location.l_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
-                              FROM location
-                              WHERE location.l_id IN (${location.l_id})
-                    '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedplaylists" name="linkedplaylists_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedinfos" name="linkedinfos_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="location_image"
                     query="
@@ -1603,31 +1369,24 @@
 
             <entity name="location_linkedplaylists"
                     query='
-                        SELECT playlist.p_id, playlist.p_name, location_playlist.lp_pos,
-                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
-                           ":::position=" || COALESCE(location_playlist.lp_pos, "null")
+                        SELECT playlist.p_id, playlist.p_name, location_playlist.lp_pos
                           AS linkedplaylists
                           FROM playlist INNER JOIN location_playlist ON playlist.p_id = location_playlist.p_id WHERE location_playlist.l_id IN (${location.l_id})
                           ORDER BY p_name'>
-                <field column="p_id" name="playlist_id_i"/>
                 <field column="p_id" name="playlist_id_is"/>
                 <field column="p_name" name="playlists_txt"/>
                 <field column="lp_pos" name="position_is"/>
-                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
             <entity name="location_linkedinfos"
                     query='
-                    SELECT "type=" || COALESCE(if_typ, "null") || ":::name=" || COALESCE(if_name, "null") ||
-                        ":::refId=" || CAST(info.if_id AS CHAR) || ":::linkedDetails=" || COALESCE(location_info.lif_linked_details, "null")
-                        AS linkedinfos, info.if_id
+                    SELECT info.if_id
                     FROM location
                           INNER JOIN location_info ON location_info.l_id = location.l_id
                           INNER JOIN info ON location_info.if_id = info.if_id
                           WHERE location.l_id IN (${location.l_id}) GROUP BY info.if_id
                         ORDER BY if_name'>
                 <field column="if_id" name="info_id_is"/>
-                <field column="linkedinfos" name="linkedinfos_txt"/>
             </entity>
 
             <entity name="location_info"
@@ -1662,6 +1421,8 @@
                     SELECT DISTINCT poi.poi_id,
                                     'POI'                                           AS type,
                                     poi.poi_calced_id                          AS id,
+                                    poi.poi_calced_navigation_objects                         AS navigation_objects,
+                                    poi.poi_calced_extended_object_properties                 AS extended_object_properties,
                                     poi.countRoutes,
                                     poi.countTracks,
                                     poi_name,
@@ -1677,8 +1438,10 @@
                     ORDER BY poi_name"
                 deltaImportQuery="
                     SELECT DISTINCT poi.poi_id,
-                                    'poi'                                           AS type,
+                                    'POI'                                           AS type,
                                     poi.poi_calced_id                          AS id,
+                                    poi.poi_calced_navigation_objects                         AS navigation_objects,
+                                    poi.poi_calced_extended_object_properties                 AS extended_object_properties,
                                     poi.countRoutes,
                                     poi.countTracks,
                                     poi_name,
@@ -1714,36 +1477,9 @@
             <field column="type" name="type_txt" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countTracks" name="count_tracks_i" />
-
-            <!-- child='true' -->
-            <entity name="poi_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=POI_" || poi_id || ":::name=" || COALESCE(poi_name, "null") || ":::navtype=PREDECESSOR") AS navigation_objects
-                            FROM poi
-                            WHERE poi_name &lt; (SELECT poi_name FROM poi WHERE poi_id IN (${poi.poi_id}))
-                            ORDER BY poi_name DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=POI_" || poi_id || ":::name=" || COALESCE(poi_name, "null") || ":::navtype=SUCCESSOR") AS navigation_objects
-                            FROM poi
-                            WHERE poi_name &gt; (SELECT poi_name FROM poi WHERE poi_id IN (${poi.poi_id}))
-                            ORDER BY poi_name LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="poi_extended_object_properties"
-                    query='
-                         SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
-                              FROM poi
-                              WHERE poi.poi_id IN (${poi.poi_id})
-                           UNION
-                         SELECT "category=ENTITYCOUNT:::name=TRACK_COUNT:::value=" || CAST(countTracks AS CHAR) AS extended_object_properties
-                              FROM poi
-                              WHERE poi.poi_id IN (${poi.poi_id})
-                    '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedinfos" name="linkedinfos_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="poi_tour"
                     query="
@@ -1829,6 +1565,16 @@
                 <field column="destination.d_id" name="destination_id_ss" />
                 <field column="actiontype" name="actiontype_ss" />
             </entity>
+            <entity name="poi_linkedinfos"
+                    query='
+                    SELECT info.if_id
+                    FROM poi
+                          INNER JOIN poi_info ON poi_info.poi_id = poi.poi_id
+                          INNER JOIN info ON poi_info.if_id = info.if_id
+                          WHERE poi.poi_id IN (${poi.poi_id}) GROUP BY info.if_id
+                        ORDER BY if_name'>
+                <field column="if_id" name="info_id_is"/>
+            </entity>
         </entity>
 
         <entity name="image"
@@ -1837,7 +1583,10 @@
                     SELECT 'IMAGE'                                                                                           AS type,
                            kategorie_full.k_calced_actiontype                          AS actiontype,
                            kategorie_full.k_calced_actiontype                          AS subtype,
-                           image.i_calced_id                          AS id,
+                           image.i_calced_id                                               AS id,
+                           image.i_calced_linkedplaylists                               AS linkedplaylists,
+                           image.i_calced_navigation_objects                         AS navigation_objects,
+                           image.i_calced_extended_object_properties                 AS extended_object_properties,
                            i_calced_path                                                                        AS i_url,
                            image.i_id,
                            image.k_id,
@@ -1885,13 +1634,17 @@
                       AND image.k_id = kategorie_full.k_id
                     ORDER BY i_date, image.i_id"
                 deltaImportQuery="
-                    SELECT 'IMAGE'                                                  AS type,
+                    SELECT 'IMAGE'                                                                                           AS type,
                            kategorie_full.k_calced_actiontype                          AS actiontype,
                            kategorie_full.k_calced_actiontype                          AS subtype,
-                           image.i_calced_id                          AS id,
-                           i_calced_path                               AS i_url,
+                           image.i_calced_id                                               AS id,
+                           image.i_calced_linkedplaylists                               AS linkedplaylists,
+                           image.i_calced_navigation_objects                         AS navigation_objects,
+                           image.i_calced_extended_object_properties                 AS extended_object_properties,
+                           i_calced_path                                                                        AS i_url,
                            image.i_id,
                            image.k_id,
+                           kategorie_full.tr_id,
                            kategorie_full.n_id,
                            kategorie_full.d_id,
                            image.t_id,
@@ -1899,15 +1652,15 @@
                            k_name,
                            i_katname,
                            i_katdesc,
-                           i_katdesc || ' ' || k_name || ' ' || k_meta_shortdesc_md AS html,
-                           i_calced_week                                             AS week,
-                           i_calced_month                                            AS month,
-                           i_calced_year                                             AS year,
+                           i_katdesc || ' ' || k_name || ' ' || i_keywords || ' ' || k_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
+                           i_calced_week                                                                                      AS week,
+                           i_calced_month                                                                                     AS month,
+                           i_calced_year                                                                                      AS year,
                            i_dateshow || 'Z' AS i_dateshow,
-                           i_date || 'Z'                                                   AS datesort,
+                           i_date || 'Z'                                                                                            AS datesort,
                            i_date || 'Z' AS i_date,
-                           i_calced_dateonly             AS dateonly,
-                           'DONE' || (i_date IS NOT NULL)                     AS done,
+                           i_calced_dateonly                                                      AS dateonly,
+                           'DONE' || (i_date IS NOT NULL)                                                              AS done,
                            k_gpstracks_basefile,
                            k_gpstracks_state,
                            i_keywords,
@@ -1916,17 +1669,17 @@
                            i_objectdetections,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
-                           k_meta_shortdesc_html                                    AS k_meta_shortdesc_html2,
+                           k_meta_shortdesc_html                                                                             AS k_meta_shortdesc_html2,
                            i_rate,
                            i_gps_lat,
                            i_gps_lon,
-                           i_calced_gps_loc                        AS i_gps_loc,
+                           i_calced_gps_loc                                                                 AS i_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
-                           `I_GPS_ELE`                                              AS altMax,
-                           `I_RATE`                                                 AS gesamt,
-                           `I_RATE_MOTIVE`                                          AS motive,
-                           `I_RATE_WICHTIGKEIT`                                     AS wichtigkeit,
+                           `I_GPS_ELE`                                                                                       AS altMax,
+                           `I_RATE`                                                                                          AS gesamt,
+                           `I_RATE_MOTIVE`                                                                                   AS motive,
+                           `I_RATE_WICHTIGKEIT`                                                                              AS wichtigkeit,
                            I_calced_altMaxFacet                                                               AS altMaxFacet
                     FROM image,
                          kategorie_full,
@@ -1961,7 +1714,7 @@
             <field column="i_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
-            <field column="i_objectdetections" name="i_objectdetections_txt" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="i_objectdetections" name="i_objectdetections_clob" regex="SEPARATOR" replaceWith=";;"/>
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="k_gpstracks_state" name="gpstracks_state_i" />
             <field column="k_gpstracks_state" name="gpstracks_state_is" />
@@ -1996,36 +1749,18 @@
             <field column="motive" name="rate_pers_motive_i" />
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
             <field column="gesamt" name="rate_pers_gesamt_is" />
-
-            <entity name="image_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=IMAGE_" || i_id || ":::name=" || COALESCE(i_katname, "null") || ":::navtype=PREDECESSOR") AS navigation_objects
-                            FROM image
-                            WHERE i_date &lt; (SELECT i_date FROM image WHERE i_id IN (${image.i_id}))
-                            ORDER BY i_date DESC, i_id DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=IMAGE_" || i_id || ":::name=" || COALESCE(i_katname, "null") || ":::navtype=SUCCESSOR") AS navigation_objects
-                             FROM image
-                             WHERE i_date &gt; (SELECT i_date FROM image WHERE i_id IN (${image.i_id}))
-                             ORDER BY i_date, i_id LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedplaylists" name="linkedplaylists_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="image_linkedplaylists"
                     query='
-                        SELECT playlist.p_id, playlist.p_name, image_playlist.ip_pos,
-                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=" || CAST(playlist.p_id AS CHAR) ||
-                           ":::position=" || COALESCE(image_playlist.ip_pos, "null")
+                        SELECT playlist.p_id, playlist.p_name, image_playlist.ip_pos
                           AS linkedplaylists
                           FROM playlist INNER JOIN image_playlist ON playlist.p_id = image_playlist.p_id WHERE image_playlist.i_id IN (${image.i_id})
                           ORDER BY p_name'>
                 <field column="p_id" name="playlist_id_is"/>
                 <field column="p_name" name="playlists_txt"/>
                 <field column="ip_pos" name="position_is"/>
-                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
         </entity>
 
@@ -2035,7 +1770,10 @@
                     SELECT 'VIDEO'                                                                                           AS type,
                            kategorie_full.k_calced_actiontype                          AS actiontype,
                            kategorie_full.k_calced_actiontype                          AS subtype,
-                           video.v_calced_id                          AS id,
+                           video.v_calced_id                                               AS id,
+                           video.v_calced_linkedplaylists                               AS linkedplaylists,
+                           video.v_calced_navigation_objects                         AS navigation_objects,
+                           video.v_calced_extended_object_properties                 AS extended_object_properties,
                            v_calced_path                                                                        AS v_url,
                            video.v_id,
                            video.k_id,
@@ -2082,13 +1820,17 @@
                       AND video.k_id = kategorie_full.k_id
                     ORDER BY v_date, video.v_id"
                 deltaImportQuery="
-                    SELECT 'VIDEO'                                                  AS type,
+                    SELECT 'VIDEO'                                                                                           AS type,
                            kategorie_full.k_calced_actiontype                          AS actiontype,
                            kategorie_full.k_calced_actiontype                          AS subtype,
-                           video.v_calced_id                          AS id,
-                           v_calced_path                               AS v_url,
+                           video.v_calced_id                                               AS id,
+                           video.v_calced_linkedplaylists                               AS linkedplaylists,
+                           video.v_calced_navigation_objects                         AS navigation_objects,
+                           video.v_calced_extended_object_properties                 AS extended_object_properties,
+                           v_calced_path                                                                        AS v_url,
                            video.v_id,
                            video.k_id,
+                           kategorie_full.tr_id,
                            kategorie_full.d_id,
                            kategorie_full.n_id,
                            video.t_id,
@@ -2096,15 +1838,15 @@
                            k_name,
                            v_katname,
                            v_katdesc,
-                           v_katdesc || ' ' || k_name || ' ' || k_meta_shortdesc_md AS html,
-                           v_calced_week                                             AS week,
-                           v_calced_month                                            AS month,
-                           v_calced_year                                             AS year,
+                           v_katdesc || ' ' || k_name || ' ' || v_keywords || ' ' || k_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
+                           v_calced_week                                                                                      AS week,
+                           v_calced_month                                                                                     AS month,
+                           v_calced_year                                                                                      AS year,
                            v_dateshow || 'Z' AS v_dateshow,
-                           v_date || 'Z'                                                   AS datesort,
+                           v_date || 'Z'                                                                                            AS datesort,
                            v_date || 'Z' AS v_date,
-                           v_calced_dateonly             AS dateonly,
-                           'DONE' || (v_date IS NOT NULL)                     AS done,
+                           v_calced_dateonly                                                      AS dateonly,
+                           'DONE' || (v_date IS NOT NULL)                                                              AS done,
                            k_gpstracks_basefile,
                            k_gpstracks_state,
                            v_keywords,
@@ -2112,17 +1854,17 @@
                            v_objects,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
-                           k_meta_shortdesc_html                                    AS k_meta_shortdesc_html2,
+                           k_meta_shortdesc_html                                                                             AS k_meta_shortdesc_html2,
                            v_rate,
                            v_gps_lat,
                            v_gps_lon,
-                           v_calced_gps_loc                        AS v_gps_loc,
+                           v_calced_gps_loc                                                                 AS v_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
-                           `V_GPS_ELE`                                              AS altMax,
-                           `V_RATE`                                                 AS gesamt,
-                           `V_RATE_MOTIVE`                                          AS motive,
-                           `V_RATE_WICHTIGKEIT`                                     AS wichtigkeit,
+                           `V_GPS_ELE`                                                                                       AS altMax,
+                           `V_RATE`                                                                                          AS gesamt,
+                           `V_RATE_MOTIVE`                                                                                   AS motive,
+                           `V_RATE_WICHTIGKEIT`                                                                              AS wichtigkeit,
                            V_calced_altMaxFacet                                                               AS altMaxFacet
                     FROM video,
                          kategorie_full,
@@ -2191,36 +1933,18 @@
             <field column="motive" name="rate_pers_motive_i" />
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
             <field column="gesamt" name="rate_pers_gesamt_is" />
-
-            <!-- child='true' -->
-            <entity name="video_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=VIDEO_" || v_id || ":::name=" || COALESCE(v_katname, "null") || ":::navtype=PREDECESSOR") AS navigation_objects
-                            FROM video
-                            WHERE v_date &lt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))
-                            ORDER BY v_date DESC, v_id DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=VIDEO_" || v_id || ":::name=" || COALESCE(v_katname, "null") || ":::navtype=SUCCESSOR") AS navigation_objects
-                             FROM video
-                             WHERE v_date &gt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))
-                             ORDER BY v_date, v_id LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedplaylists" name="linkedplaylists_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="video_linkedplaylists"
                     query='
-                        SELECT playlist.p_id, playlist.p_name, video_playlist.vp_pos,
-                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=" || CAST(playlist.p_id AS CHAR) ||
-                           ":::position=" || COALESCE(video_playlist.vp_pos, "null")
+                        SELECT playlist.p_id, playlist.p_name, video_playlist.vp_pos
                           AS linkedplaylists
                           FROM playlist INNER JOIN video_playlist ON playlist.p_id = video_playlist.p_id WHERE video_playlist.v_id IN (${video.v_id})
                           ORDER BY p_name'>
                 <field column="p_id" name="playlist_id_is"/>
                 <field column="p_name" name="playlists_txt"/>
                 <field column="vp_pos" name="position_is"/>
-                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
         </entity>
 
@@ -2229,7 +1953,10 @@
                 query="
                     SELECT DISTINCT trip.tr_id,
                                     'TRIP'                                                       AS type,
-                                    trip.tr_calced_id                          AS id,
+                                    trip.tr_calced_id                                               AS id,
+                                    trip.tr_calced_linkedplaylists                               AS linkedplaylists,
+                                    trip.tr_calced_navigation_objects                         AS navigation_objects,
+                                    trip.tr_calced_extended_object_properties                 AS extended_object_properties,
                                     trip.l_id,
                                     trip.countImages,
                                     trip.countImagesTop,
@@ -2268,7 +1995,10 @@
                 deltaImportQuery="
                     SELECT DISTINCT trip.tr_id,
                                     'TRIP'                                                       AS type,
-                                    trip.tr_calced_id                          AS id,
+                                    trip.tr_calced_id                                               AS id,
+                                    trip.tr_calced_linkedplaylists                               AS linkedplaylists,
+                                    trip.tr_calced_navigation_objects                         AS navigation_objects,
+                                    trip.tr_calced_extended_object_properties                 AS extended_object_properties,
                                     trip.l_id,
                                     trip.countImages,
                                     trip.countImagesTop,
@@ -2346,61 +2076,19 @@
             <field column="countRoutes" name="count_routes_i" />
             <field column="countTracks" name="count_tracks_i" />
             <field column="countVideos" name="count_videos_i" />
-
-            <!-- child='true' -->
-            <entity name="trip_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=TRIP_" || tr_id || ":::name=" || COALESCE(tr_name, "null") || ":::navtype=PREDECESSOR") AS navigation_objects
-                            FROM trip
-                            WHERE tr_datevon &lt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id}))
-                            ORDER BY tr_datevon DESC, tr_id DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=TRIP_" || tr_id || ":::name=" || COALESCE(tr_name, "null") || ":::navtype=SUCCESSOR") AS navigation_objects
-                            FROM trip
-                            WHERE tr_datevon &gt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id}))
-                            ORDER BY tr_datevon, tr_id LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="trip_extended_object_properties"
-                    query='
-                        SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
-                              FROM trip
-                              WHERE trip.tr_id IN (${trip.tr_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRACK_COUNT:::value=" || CAST(countTracks AS CHAR) AS extended_object_properties
-                              FROM trip
-                              WHERE trip.tr_id IN (${trip.tr_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
-                              FROM trip
-                              WHERE trip.tr_id IN (${trip.tr_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=" || CAST(countImagesTop AS CHAR) AS extended_object_properties
-                              FROM trip
-                              WHERE trip.tr_id IN (${trip.tr_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
-                              FROM trip
-                              WHERE trip.tr_id IN (${trip.tr_id})
-                    '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="linkedplaylists" name="linkedplaylists_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="trip_linkedplaylists"
                     query='
-                        SELECT playlist.p_id, playlist.p_name, trip_playlist.trp_pos,
-                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
-                           ":::position=" || COALESCE(trip_playlist.trp_pos, "null")
+                        SELECT playlist.p_id, playlist.p_name, trip_playlist.trp_pos
                           AS linkedplaylists
                           FROM playlist INNER JOIN trip_playlist ON playlist.p_id = trip_playlist.p_id WHERE trip_playlist.tr_id IN (${trip.tr_id})
                           ORDER BY p_name'>
                 <field column="p_id" name="playlist_id_is"/>
                 <field column="p_name" name="playlists_txt"/>
                 <field column="trp_pos" name="position_is"/>
-                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
             <entity name="trip_image"
@@ -2514,7 +2202,10 @@
                 query="
                     SELECT DISTINCT news.n_id,
                                     'NEWS'                                                   AS type,
-                                    news.n_calced_id                          AS id,
+                                    news.n_calced_id                                               AS id,
+                                    news.n_calced_linkedplaylists                               AS linkedplaylists,
+                                    news.n_calced_navigation_objects                         AS navigation_objects,
+                                    news.n_calced_extended_object_properties                 AS extended_object_properties,
                                     news.countImages,
                                     news.countImagesTop,
                                     news.countRoutes,
@@ -2548,7 +2239,10 @@
                 deltaImportQuery="
                     SELECT DISTINCT news.n_id,
                                     'NEWS'                                                   AS type,
-                                    news.n_calced_id                          AS id,
+                                    news.n_calced_id                                               AS id,
+                                    news.n_calced_linkedplaylists                               AS linkedplaylists,
+                                    news.n_calced_navigation_objects                         AS navigation_objects,
+                                    news.n_calced_extended_object_properties                 AS extended_object_properties,
                                     news.countImages,
                                     news.countImagesTop,
                                     news.countRoutes,
@@ -2579,7 +2273,7 @@
                     WHERE news.n_id = '${dih.delta.id}'
                     GROUP BY news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2,
                              html, n_keywords"
-                deltaQuery="SELECT n_id FROM info ORDER BY n_id'"
+                deltaQuery="SELECT n_id FROM news ORDER BY n_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -2614,52 +2308,8 @@
             <field column="countTracks" name="count_tracks_i" />
             <field column="countTrips" name="count_trips_i" />
             <field column="countVideos" name="count_videos_i" />
-
-            <!-- child='true' -->
-            <entity name="news_navigation_objects"
-                    query='
-                        SELECT navigation_objects FROM (SELECT ("navid=NEWS_" || n_id || ":::name=" || COALESCE(n_headline, "null") || ":::navtype=PREDECESSOR") AS navigation_objects
-                            FROM news
-                            WHERE n_datevon &lt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id}))
-                            ORDER BY n_datevon DESC, n_id DESC LIMIT 1
-                        )
-                        UNION
-                        SELECT navigation_objects FROM (SELECT ("navid=NEWS_" || n_id || ":::name=" || COALESCE(n_headline, "null") || ":::navtype=SUCCESSOR") AS navigation_objects
-                            FROM news
-                            WHERE n_datevon &gt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id}))
-                            ORDER BY n_datevon, n_id LIMIT 1
-                        )'>
-                <field column="navigation_objects" name="navigation_objects_txt"/>
-            </entity>
-
-            <entity name="news_extended_object_properties"
-                    query='
-                        SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
-                              FROM news
-                              WHERE news.n_id IN (${news.n_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRIP_COUNT:::value=" || CAST(countTrips AS CHAR) AS extended_object_properties
-                              FROM news
-                              WHERE news.n_id IN (${news.n_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=TRACK_COUNT:::value=" || CAST(countTracks AS CHAR) AS extended_object_properties
-                              FROM news
-                              WHERE news.n_id IN (${news.n_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
-                              FROM news
-                              WHERE news.n_id IN (${news.n_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=" || CAST(countImagesTop AS CHAR) AS extended_object_properties
-                              FROM news
-                              WHERE news.n_id IN (${news.n_id})
-                           UNION
-                        SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
-                              FROM news
-                              WHERE news.n_id IN (${news.n_id})
-                    '>
-                <field column="extended_object_properties" name="extended_object_properties_txt"/>
-            </entity>
+            <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
+            <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
 
             <entity name="news_image"
                     query="
@@ -2694,7 +2344,7 @@
             </entity>
             <entity name="news_destination"
                     query="
-                        SELECT destination.d_id, d_keywords,  destination.d_calced_actiontype AS actiontype
+                        SELECT destination.d_id, d_keywords, destination.d_calced_actiontype AS actiontype
                           FROM news
                           INNER JOIN kategorie_full ON (kategorie_full.n_id = news.n_id)
                           INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
@@ -2770,4 +2420,3 @@
     </document>
 
 </dataConfig>
-

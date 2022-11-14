@@ -179,7 +179,11 @@
 
     <dynamicField name="random_*" type="random" />
 
-    <!-- uncomment the following to ignore any fields that don't already match an existing 
+    <!-- container fields-->
+    <dynamicField name="*_clob" type="text_general" indexed="false" stored="true"/>
+    <dynamicField name="*_blob" type="binary" indexed="false" stored="true"/>
+
+    <!-- uncomment the following to ignore any fields that don't already match an existing
         field name or dynamic field, rather than reporting them as an error. 
         alternately, change the type="ignored" to some other type e.g. "text" if you want 
         unknown fields indexed and/or stored by default 

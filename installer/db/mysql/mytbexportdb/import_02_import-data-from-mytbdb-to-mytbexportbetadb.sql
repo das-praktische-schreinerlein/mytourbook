@@ -233,6 +233,13 @@ INSERT into kategorie_poi(kpoi_id, k_id, poi_id, kpoi_pos, kpoi_type)
     FROM importmytbdb_kategorie_poi;
 
 -- ##################
+-- import-poiinfos
+-- ##################
+INSERT into poi_info (poiif_id, if_id, poi_id, poiif_linked_details)
+SELECT poiif_id, if_id, poi_id, poiif_linked_details
+FROM importmytbdb_poi_info where poi_id IS NOT NULL AND if_ID IS NOT NULL;
+
+-- ##################
 -- import routes
 -- ##################
 INSERT into tour (t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
@@ -447,29 +454,35 @@ WHERE toupdate.i_id=grouped.i_id;
 
 -- HINT: SEPARATOR must be manually replaced because semicolon is used as separator
 UPDATE image toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT CONCAT('ioId=', COALESCE(importmytbdb_image_object.io_id, ''),
-                ':::key=', COALESCE(importmytbdb_image_object.io_obj_type, ''),
-                ':::detector=', COALESCE(importmytbdb_image_object.io_detector, ''),
-                ':::imgWidth=', COALESCE(importmytbdb_image_object.io_img_width, ''),
-                ':::imgHeight=', COALESCE(importmytbdb_image_object.io_img_height, ''),
-                ':::objX=', COALESCE(importmytbdb_image_object.io_obj_x1, ''),
-                ':::objY=', COALESCE(importmytbdb_image_object.io_obj_y1, ''),
-                ':::objWidth=', COALESCE(importmytbdb_image_object.io_obj_width, ''),
-                ':::objHeight=', COALESCE(importmytbdb_image_object.io_obj_height, ''),
-                ':::name=', importmytbdb_objects.o_name,
-                ':::category=', importmytbdb_objects.o_category,
-                ':::precision=', COALESCE(importmytbdb_image_object.io_precision, ''),
-                ':::state=', COALESCE(importmytbdb_image_object.io_state, '')) ORDER BY importmytbdb_objects.o_name SEPARATOR 'SEPARATOR') AS i_objectdetections, image.i_id AS i_id
-     FROM image INNER JOIN importmytbdb_image_object ON image.i_id=importmytbdb_image_object.i_id
-                INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
-                INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
-     WHERE LOWER(o_category) NOT LIKE 'person'
-       AND (importmytbdb_image_object.io_precision = 1
-         OR importmytbdb_image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
-                                                   'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
-     GROUP BY image.i_id) grouped
-SET toupdate.i_objectdetections=grouped.i_objectdetections
-WHERE toupdate.i_id=grouped.i_id;
+    (SELECT GROUP_CONCAT(i_objectdetections, 'SEPARATOR') as i_objectdetections, grouped.i_id
+     FROM (SELECT CONCAT('ioId=', COALESCE(importmytbdb_image_object.io_id, ''),
+                         ':::key=', COALESCE(importmytbdb_image_object.io_obj_type, ''),
+                         ':::detector=', COALESCE(importmytbdb_image_object.io_detector, ''),
+                         ':::imgWidth=', COALESCE(importmytbdb_image_object.io_img_width, ''),
+                         ':::imgHeight=', COALESCE(importmytbdb_image_object.io_img_height, ''),
+                         ':::objX=', COALESCE(importmytbdb_image_object.io_obj_x1, ''),
+                         ':::objY=', COALESCE(importmytbdb_image_object.io_obj_y1, ''),
+                         ':::objWidth=', COALESCE(importmytbdb_image_object.io_obj_width, ''),
+                         ':::objHeight=', COALESCE(importmytbdb_image_object.io_obj_height, ''),
+                         ':::name=', importmytbdb_objects.o_name,
+                         ':::category=', importmytbdb_objects.o_category,
+                         ':::precision=', COALESCE(importmytbdb_image_object.io_precision, ''),
+                         ':::state=', COALESCE(importmytbdb_image_object.io_state, '')) AS i_objectdetections,
+                  image.i_id
+           FROM image
+                    INNER JOIN importmytbdb_image_object ON image.i_id = importmytbdb_image_object.i_id
+                    INNER JOIN importmytbdb_objects_key
+                               ON importmytbdb_image_object.io_obj_type = importmytbdb_objects_key.ok_key AND
+                                  importmytbdb_image_object.io_detector = importmytbdb_objects_key.ok_detector
+                    INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id = importmytbdb_objects.o_id
+           WHERE LOWER(o_category) NOT LIKE 'person'
+             AND (importmytbdb_image_object.io_precision = 1
+               OR importmytbdb_image_object.io_state in
+                  ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
+                   'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
+           GROUP BY image.i_id) grouped) objectdetections
+SET toupdate.i_objectdetections=objectdetections.i_objectdetections
+WHERE toupdate.i_id=objectdetections.i_id;
 
 -- remove todos
 UPDATE image SET i_keywords=REPLACE(i_keywords, 'KW_TODOKEYWORDS,', '');
@@ -542,6 +555,7 @@ UPDATE video toupdate,
      GROUP BY video.v_id) grouped
 SET toupdate.v_objects=grouped.v_objects
 WHERE toupdate.v_id=grouped.v_id;
+
 
 -- remove todos
 UPDATE video SET v_keywords=REPLACE(v_keywords, 'KW_TODOKEYWORDS,', '');

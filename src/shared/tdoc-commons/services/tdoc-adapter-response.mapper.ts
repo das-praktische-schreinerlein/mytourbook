@@ -173,7 +173,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
                     routesSrc = ObjectUtils.uniqueArray(routesSrc);
 
-                    result['linkedroutes_txt'] = routesSrc.join(this._objectSeparator);
+                    result['linkedroutes_clob'] = routesSrc.join(this._objectSeparator);
                 }
                 break;
             case 'linkedinfos':
@@ -189,7 +189,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
                     infosSrc = ObjectUtils.uniqueArray(infosSrc);
 
-                    result['linkedinfos_txt'] = infosSrc.join(this._objectSeparator);
+                    result['linkedinfos_clob'] = infosSrc.join(this._objectSeparator);
                 }
                 break;
             case 'linkedplaylists':
@@ -206,7 +206,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
                     playlistsSrc = ObjectUtils.uniqueArray(playlistsSrc);
 
-                    result['linkedplaylists_txt'] = playlistsSrc.join(this._objectSeparator);
+                    result['linkedplaylists_clob'] = playlistsSrc.join(this._objectSeparator);
                 }
                 break;
             case 'linkedpois':
@@ -225,7 +225,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
                     poisSrc = ObjectUtils.uniqueArray(poisSrc);
 
-                    result['linkedpois_txt'] = poisSrc.join(this._objectSeparator);
+                    result['linkedpois_clob'] = poisSrc.join(this._objectSeparator);
                 }
                 break;
             case 'odimageobjects':
@@ -253,7 +253,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
                     poisSrc = ObjectUtils.uniqueArray(poisSrc);
 
-                    result['i_objectdetections_txt'] = poisSrc.join(this._objectSeparator);
+                    result['i_objectdetections_clob'] = poisSrc.join(this._objectSeparator);
                 }
                 break;
         }
@@ -404,32 +404,32 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 'v_fav_url_txt'));
         this.mapDetailResponseDocuments(mapper, 'navigation_objects', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'navigation_objects_txt')],
-                'navigation_objects_txt'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'navigation_objects_clob')],
+                'navigation_objects_clob'));
         this.mapDetailResponseDocuments(mapper, 'extended_object_properties', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'extended_object_properties_txt')],
-                'extended_object_properties_txt'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'extended_object_properties_clob')],
+                'extended_object_properties_clob'));
         this.mapDetailResponseDocuments(mapper, 'linkedroutes', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedroutes_txt')],
-                'linkedroutes_txt'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedroutes_clob')],
+                'linkedroutes_clob'));
         this.mapDetailResponseDocuments(mapper, 'linkedinfos', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedinfos_txt')],
-                'linkedinfos_txt'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedinfos_clob')],
+                'linkedinfos_clob'));
         this.mapDetailResponseDocuments(mapper, 'linkedplaylists', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedplaylists_txt')],
-                'linkedplaylists_txt'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedplaylists_clob')],
+                'linkedplaylists_clob'));
         this.mapDetailResponseDocuments(mapper, 'linkedpois', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedpois_txt')],
-                'linkedpois_txt'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedpois_clob')],
+                'linkedpois_clob'));
         this.mapDetailResponseDocuments(mapper, 'image_objectdetections', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_objectdetections_txt')],
-                'i_objectdetections_txt'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_objectdetections_clob')],
+                'i_objectdetections_clob'));
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
@@ -591,31 +591,31 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 break;
             case 'image_objectdetections':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocodimageobject'],
-                    ['i_objectdetections', 'i_objectdetections_txt'], record, docs, true);
+                    ['i_objectdetections', 'i_objectdetections_clob'], record, docs, true);
                 break;
             case 'navigation_objects':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocnavigationobject'],
-                    ['navigation_objects', 'navigation_objects_txt'], record, docs, true);
+                    ['navigation_objects', 'navigation_objects_clob'], record, docs, true);
                 break;
             case 'extended_object_properties':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocextendedobjectproperty'],
-                    ['extended_object_properties', 'extended_object_properties_txt'], record, docs, true);
+                    ['extended_object_properties', 'extended_object_properties_clob'], record, docs, true);
                 break;
             case 'linkedroutes':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedroute'],
-                    ['linkedroutes', 'linkedroutes_txt'], record, docs, true);
+                    ['linkedroutes', 'linkedroutes_clob'], record, docs, true);
                 break;
             case 'linkedinfos':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedinfo'],
-                    ['linkedinfos', 'linkedinfos_txt'], record, docs, true);
+                    ['linkedinfos', 'linkedinfos_clob'], record, docs, true);
                 break;
             case 'linkedplaylists':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedplaylist'],
-                    ['linkedplaylists', 'linkedplaylists_txt'], record, docs, true);
+                    ['linkedplaylists', 'linkedplaylists_clob'], record, docs, true);
                 break;
             case 'linkedpois':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedpoi'],
-                    ['linkedpois', 'linkedpois_txt'], record, docs, true);
+                    ['linkedpois', 'linkedpois_clob'], record, docs, true);
                 break;
             case 'video':
                 const videoDocs = [];

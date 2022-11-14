@@ -19,6 +19,8 @@ CREATE TABLE playlist (
   p_meta_desc text DEFAULT NULL,
   p_name varchar(255) DEFAULT NULL,
   p_calced_id VARCHAR(50) DEFAULT NULL,
+  p_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  p_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   countInfos int(11) DEFAULT 0,
   countImages int(11) DEFAULT 0,
   countLocations int(11) DEFAULT 0,
@@ -47,6 +49,9 @@ CREATE TABLE news (
   n_objects text,
   n_gesperrt int(2) DEFAULT 1,
   n_calced_id VARCHAR(50) DEFAULT NULL,
+  n_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  n_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  n_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   countImages int(11) DEFAULT 0,
   countImagesTop int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
@@ -75,6 +80,9 @@ CREATE TABLE info (
   if_typ int(11) DEFAULT NULL,
   if_url varchar(255) NULL,
   if_calced_id VARCHAR(50) DEFAULT NULL,
+  if_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  if_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  if_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   if_calced_subtype VARCHAR(50) DEFAULT NULL
 );
 
@@ -117,6 +125,9 @@ CREATE TABLE trip (
   tr_dateshow date DEFAULT NULL,
   tr_gesperrt int(2) DEFAULT 1,
   tr_calced_id VARCHAR(50) DEFAULT NULL,
+  tr_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  tr_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  tr_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   tr_calced_dur DECIMAL(11, 2) DEFAULT NULL,
   tr_calced_durFacet DECIMAL(11, 1) DEFAULT NULL,
   tr_calced_dateonly VARCHAR(20) DEFAULT NULL,
@@ -172,6 +183,10 @@ CREATE TABLE location (
   l_objects text,
   l_gesperrt int(2) DEFAULT 1,
   l_calced_id VARCHAR(50) DEFAULT NULL,
+  l_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  l_calced_linkedinfos VARCHAR(2000) DEFAULT NULL,
+  l_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  l_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   l_calced_subtype VARCHAR(50) DEFAULT NULL,
   l_calced_gps_loc VARCHAR(50) DEFAULT NULL,
   l_calced_gps_lat VARCHAR(50) DEFAULT NULL,
@@ -222,6 +237,10 @@ CREATE TABLE IF NOT EXISTS poi (
    poi_geo_latdeg float DEFAULT NULL,
    poi_geo_ele float DEFAULT NULL,
    poi_calced_id VARCHAR(50) DEFAULT NULL,
+   poi_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+   poi_calced_linkedinfos VARCHAR(2000) DEFAULT NULL,
+   poi_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+   poi_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
    poi_calced_gps_loc VARCHAR(50) DEFAULT NULL,
    poi_calced_gps_lat VARCHAR(50) DEFAULT NULL,
    poi_calced_gps_lon VARCHAR(50) DEFAULT NULL,
@@ -229,6 +248,15 @@ CREATE TABLE IF NOT EXISTS poi (
    countRoutes int(11) DEFAULT 0,
    countTracks int(11) DEFAULT 0
 );
+
+DROP TABLE IF EXISTS poi_info;
+CREATE TABLE poi_info (
+   poiif_id int(11) PRIMARY KEY,
+   if_id int(11) NOT NULL,
+   poi_id int(11) NOT NULL,
+   poiif_linked_details varchar(255) DEFAULT NULL
+);
+
 
 -- ---------------
 -- destination-data
@@ -272,6 +300,10 @@ CREATE TABLE destination (
   d_dateshow date DEFAULT NULL,
   d_gesperrt int(2) DEFAULT 1,
   d_calced_id VARCHAR(50) DEFAULT NULL,
+  d_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  d_calced_linkedinfos VARCHAR(2000) DEFAULT NULL,
+  d_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  d_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   d_calced_actiontype VARCHAR(50) DEFAULT NULL,
   d_calced_altAscFacet DECIMAL DEFAULT NULL,
   d_calced_altMaxFacet DECIMAL DEFAULT NULL,
@@ -358,6 +390,11 @@ CREATE TABLE tour (
   t_dateshow date DEFAULT NULL,
   t_gesperrt int(2) DEFAULT 1,
   t_calced_id VARCHAR(50) DEFAULT NULL,
+  t_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  t_calced_linkedinfos VARCHAR(2000) DEFAULT NULL,
+  t_calced_linkedpois VARCHAR(2000) DEFAULT NULL,
+  t_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  t_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   t_calced_d_id VARCHAR(255) DEFAULT NULL,
   t_calced_sections VARCHAR(255) DEFAULT NULL,
   t_calced_actiontype VARCHAR(50) DEFAULT NULL,
@@ -461,6 +498,11 @@ CREATE TABLE kategorie_full (
   n_id int(11) DEFAULT NULL,
   k_dateshow date DEFAULT NULL,
   k_calced_id VARCHAR(50) DEFAULT NULL,
+  k_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  k_calced_linkedroutes VARCHAR(2000) DEFAULT NULL,
+  k_calced_linkedpois VARCHAR(2000) DEFAULT NULL,
+  k_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  k_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   k_calced_actiontype VARCHAR(50) DEFAULT NULL,
   k_calced_altAscFacet DECIMAL DEFAULT NULL,
   k_calced_altMaxFacet DECIMAL DEFAULT NULL,
@@ -540,6 +582,9 @@ CREATE TABLE image (
   i_rate_wichtigkeit int(11) DEFAULT NULL,
   i_dateshow date DEFAULT NULL,
   i_calced_id VARCHAR(50) DEFAULT NULL,
+  i_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  i_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  i_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   i_calced_path VARCHAR(255) DEFAULT NULL,
   i_calced_gps_loc VARCHAR(50) DEFAULT NULL,
   i_calced_gps_lat VARCHAR(50) DEFAULT NULL,
@@ -589,6 +634,9 @@ CREATE TABLE video (
   v_objectdetections text,
   v_dateshow date DEFAULT NULL,
   v_calced_id VARCHAR(50) DEFAULT NULL,
+  v_calced_linkedplaylists VARCHAR(2000) DEFAULT NULL,
+  v_calced_navigation_objects VARCHAR(2000) DEFAULT NULL,
+  v_calced_extended_object_properties VARCHAR(2000) DEFAULT NULL,
   v_calced_path VARCHAR(255) DEFAULT NULL,
   v_calced_gps_loc VARCHAR(50) DEFAULT NULL,
   v_calced_gps_lat VARCHAR(50) DEFAULT NULL,

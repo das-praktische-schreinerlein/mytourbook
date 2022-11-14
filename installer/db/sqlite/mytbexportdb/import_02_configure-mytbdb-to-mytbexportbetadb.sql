@@ -20,6 +20,8 @@ DROP VIEW IF EXISTS importmytbdb_poi;
 CREATE TEMP VIEW importmytbdb_poi AS SELECT * FROM importmytbdb.poi;
 DROP VIEW IF EXISTS importmytbdb_poi_keyword;
 CREATE TEMP VIEW importmytbdb_poi_keyword AS SELECT * FROM importmytbdb.poi_keyword;
+DROP VIEW IF EXISTS importmytbdb_poi_info;
+CREATE TEMP VIEW importmytbdb_poi_info AS SELECT * FROM importmytbdb.poi_info;
 DROP VIEW IF EXISTS importmytbdb_info;
 CREATE TEMP VIEW importmytbdb_info AS SELECT * FROM importmytbdb.info;
 DROP VIEW IF EXISTS importmytbdb_info_keyword;
