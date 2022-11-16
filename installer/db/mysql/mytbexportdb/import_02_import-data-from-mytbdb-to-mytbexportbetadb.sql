@@ -59,7 +59,7 @@ SET
     l_calced_dateonly=DATE_FORMAT(l_datefirst, GET_FORMAT(DATE, "ISO")),
     l_calced_week=WEEK(l_datefirst),
     l_calced_month=MONTH(l_datefirst),
-    l_calced_yea=YEAR(l_datefirst)
+    l_calced_year=YEAR(l_datefirst)
 ;
 
 -- ##################
@@ -82,7 +82,7 @@ SET
     poi_calced_dateonly=DATE_FORMAT(poi_datefirst, GET_FORMAT(DATE, "ISO")),
     poi_calced_week=WEEK(poi_datefirst),
     poi_calced_month=MONTH(poi_datefirst),
-    poi_calced_yea=YEAR(poi_datefirst)
+    poi_calced_year=YEAR(poi_datefirst)
 ;
 
 
