@@ -1237,7 +1237,7 @@
                            l_datefirst                                                                                           AS datesort,
                            l_datefirst,
                            l_calced_dateonly                                                     AS dateonly,
-                           CONCAT('DONE', (t_datefirst IS NOT NULL))                                                             AS done,
+                           CONCAT('DONE', (l_datefirst IS NOT NULL))                                                             AS done,
                            l_html,
                            l_meta_shortdesc_md,
                            l_meta_shortdesc_html,
