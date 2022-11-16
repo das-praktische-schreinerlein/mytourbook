@@ -36,6 +36,8 @@ export class TourDocAssignFormComponent
                 return ['route_id_is', 'loc_lochirarchie_txt', 'trip_id_is'];
             case 'LOCATION':
                 return ['loc_lochirarchie_txt'];
+            case 'POI':
+                return ['loc_lochirarchie_txt'];
             case 'NEWS':
                 return [];
             default:

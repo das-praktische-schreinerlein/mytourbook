@@ -142,7 +142,7 @@ export class SqlMytbDbInfoConfig {
         selectFieldList: [
             '"INFO" AS type',
             'CONCAT("INFO", "_", info.if_id) AS id',
-            'CONCAT("if_", info.if_typ) AS subtype',
+            'info.if_calced_subtype AS subtype',
             'info.if_id',
             'info.l_id',
             'info.l_id as if_l_id',

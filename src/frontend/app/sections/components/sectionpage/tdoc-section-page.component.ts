@@ -142,6 +142,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         filters['nearBy'] = this.tdocSearchForm.nearby;
         filters['nearbyAddress'] = this.tdocSearchForm.nearbyAddress;
         filters['fulltext'] = this.tdocSearchForm.fulltext;
+
         return filters;
     }
 
@@ -218,17 +219,17 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                     && recordType !== 'NEWS';
             case 'noLocation':
                 return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'TRIP' || recordType === 'LOCATION'
-                    || recordType === 'INFO';
+                    || recordType === 'INFO' || recordType === 'POI';
             case 'noRoute':
                 return recordType === 'TRACK';
             case 'unrated':
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
-                    && recordType !== 'INFO';
+                    && recordType !== 'INFO' && recordType !== 'POI';
             case 'todoKeywords':
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO' && recordType !== 'LOCATION'
-                    && recordType !== 'TRIP' && recordType !== 'NEWS';
+                    && recordType !== 'TRIP' && recordType !== 'NEWS' && recordType !== 'POI';
             case 'todoDesc':
-                return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO';
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO' && recordType !== 'POI';
             case 'doublettes':
                 return recordType !== 'ODIMGOBJECT';
             case 'conflictingRates':
@@ -253,10 +254,10 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
             case 'rated':
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
-                    && recordType !== 'INFO';
+                    && recordType !== 'INFO' && recordType !== 'POI';
             case 'rejected':
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
-                    && recordType !== 'INFO';
+                    && recordType !== 'INFO' && recordType !== 'POI';
             case 'objectDetectionDone':
                 return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
         }

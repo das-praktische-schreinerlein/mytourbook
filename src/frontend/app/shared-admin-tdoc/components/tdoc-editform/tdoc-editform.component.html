@@ -446,6 +446,10 @@
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputPoitype"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
             </div>
         </fieldset>
         <fieldset>
@@ -639,6 +643,20 @@
         <div class="col-sm-4 input-group input-group-sm">
             <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['subTypeActiontype']"
+                                     [settings]="settingsSelectActionType"
+                                     [texts]="textsSelectActionType"
+                                     (ngModelChange)="onInputChanged($event, 'subtype')"
+                                     required="required"
+                                     formControlName="subtype"
+                                     ngDefaultControl
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputPoitype>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="poitype label|Label for filter: poitype@@label.searchform.tdoc.poitype">Poitype:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['subTypePoiType']"
                                      [settings]="settingsSelectActionType"
                                      [texts]="textsSelectActionType"
                                      (ngModelChange)="onInputChanged($event, 'subtype')"

@@ -243,10 +243,10 @@
                            d_name,
                            CONCAT( d_name, ' ', d_keywords, ' ', l_lochirarchietxt) AS html,
                            d_dateshow,
-                           d_datevon                                                                                           AS datesort,
-                           d_datevon,
-                           DATE_FORMAT(d_datevon, GET_FORMAT(DATE, 'ISO'))                                                     AS dateonly,
-                           CONCAT('DONE', (d_datevon IS NOT NULL))                                                             AS done,
+                           d_datefirst                                                                                           AS datesort,
+                           d_datefirst,
+                           DATE_FORMAT(d_datefirst, GET_FORMAT(DATE, 'ISO'))                                                     AS dateonly,
+                           CONCAT('DONE', (d_datefirst IS NOT NULL))                                                             AS done,
                            d_keywords,
                            d_rate_gesamt,
                            d_gps_lat,
@@ -283,7 +283,7 @@
                     FROM destination,
                          location
                     WHERE destination.l_id = location.l_id
-                    ORDER BY d_datevon, d_id"
+                    ORDER BY d_datefirst, d_id"
                 deltaImportQuery="
                     SELECT 'DESTINATION'                                                                                             AS type,
                            destination.d_calced_actiontype                                                                           AS actiontype,
@@ -305,10 +305,10 @@
                            d_name,
                            CONCAT( d_name, ' ', d_keywords, ' ', l_lochirarchietxt) AS html,
                            d_dateshow,
-                           d_datevon                                                                                           AS datesort,
-                           d_datevon,
-                           DATE_FORMAT(d_datevon, GET_FORMAT(DATE, 'ISO'))                                                     AS dateonly,
-                           CONCAT('DONE', (d_datevon IS NOT NULL))                                                             AS done,
+                           d_datefirst                                                                                           AS datesort,
+                           d_datefirst,
+                           DATE_FORMAT(d_datefirst, GET_FORMAT(DATE, 'ISO'))                                                     AS dateonly,
+                           CONCAT('DONE', (d_datefirst IS NOT NULL))                                                             AS done,
                            d_keywords,
                            d_rate_gesamt,
                            d_gps_lat,
@@ -346,7 +346,7 @@
                          location
                     WHERE destination.l_id = location.l_id
                       AND destination.d_id = '${dih.delta.id}'"
-                deltaQuery="SELECT D_id FROM destination ORDER BY d_datevon, d_id'"
+                deltaQuery="SELECT D_id FROM destination ORDER BY d_datefirst, d_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -367,7 +367,7 @@
             <field column="d_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="d_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="dateonly" name="dateonly_s" />
-            <field column="d_datevon" name="date_dt" />
+            <field column="d_datefirst" name="date_dt" />
             <field column="d_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
             <field column="done" name="done_ss" />
@@ -869,10 +869,10 @@
                            t_html_list,
                            CONCAT(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
                            t_dateshow,
-                           t_datevon                                                                                           AS datesort,
-                           t_datevon,
+                           t_datefirst                                                                                           AS datesort,
+                           t_datefirst,
                            t_calced_dateonly                                                     AS dateonly,
-                           CONCAT('DONE', (t_datevon IS NOT NULL))                                                             AS done,
+                           CONCAT('DONE', (t_datefirst IS NOT NULL))                                                             AS done,
                            t_gpstracks_basefile,
                            t_gpstracks_state,
                            t_keywords,
@@ -920,7 +920,7 @@
                     FROM tour,
                          location
                     WHERE tour.l_id = location.l_id
-                    ORDER BY t_datevon, t_id"
+                    ORDER BY t_datefirst, t_id"
                 deltaImportQuery="
                     SELECT 'ROUTE'                                                                                             AS type,
                            tour.t_calced_actiontype                                                                           AS actiontype,
@@ -945,10 +945,10 @@
                            t_html_list,
                            CONCAT(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
                            t_dateshow,
-                           t_datevon                                                                                           AS datesort,
-                           t_datevon,
+                           t_datefirst                                                                                           AS datesort,
+                           t_datefirst,
                            t_calced_dateonly                                                     AS dateonly,
-                           CONCAT('DONE', (t_datevon IS NOT NULL))                                                             AS done,
+                           CONCAT('DONE', (t_datefirst IS NOT NULL))                                                             AS done,
                            t_gpstracks_basefile,
                            t_gpstracks_state,
                            t_keywords,
@@ -997,7 +997,7 @@
                          location
                     WHERE tour.l_id = location.l_id
                       AND tour.t_id = '${dih.delta.id}'"
-                deltaQuery="SELECT T_id FROM tour ORDER BY t_datevon, t_id'"
+                deltaQuery="SELECT T_id FROM tour ORDER BY t_datefirst, t_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -1022,7 +1022,7 @@
             <field column="t_gpstracks_state" name="gpstracks_state_i" />
             <field column="t_gpstracks_state" name="gpstracks_state_is" />
             <field column="dateonly" name="dateonly_s" />
-            <field column="t_datevon" name="date_dt" />
+            <field column="t_datefirst" name="date_dt" />
             <field column="t_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
             <field column="done" name="done_ss" />
@@ -1233,6 +1233,11 @@
                            location.countTrips,
                            location.countVideos,
                            l_name,
+                           l_dateshow,
+                           l_datefirst                                                                                           AS datesort,
+                           l_datefirst,
+                           l_calced_dateonly                                                     AS dateonly,
+                           CONCAT('DONE', (t_datefirst IS NOT NULL))                                                             AS done,
                            l_html,
                            l_meta_shortdesc_md,
                            l_meta_shortdesc_html,
@@ -1270,6 +1275,10 @@
                            location.countTrips,
                            location.countVideos,
                            l_name,
+                           l_dateshow,
+                           l_datefirst                                                                                           AS datesort,
+                           l_datefirst,
+                           l_calced_dateonly                                                     AS dateonly,
                            l_html,
                            l_meta_shortdesc_md,
                            l_meta_shortdesc_html,
@@ -1314,6 +1323,10 @@
             <field column="type" name="type_txt" />
             <field column="subtype" name="subtype_s" />
             <field column="subtype" name="subtype_ss" />
+            <field column="dateonly" name="dateonly_s" />
+            <field column="l_datefirst" name="date_dt" />
+            <field column="l_dateshow" name="dateshow_dt" />
+            <field column="datesort" name="datesort_dt" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
@@ -1462,39 +1475,53 @@
                     SELECT DISTINCT poi.poi_id,
                                     'POI'                                           AS type,
                                     poi.poi_calced_id                          AS id,
+                                    poi.poi_calced_subtype                          AS subtype,
                                     poi.poi_calced_navigation_objects                         AS navigation_objects,
                                     poi.poi_calced_extended_object_properties                 AS extended_object_properties,
                                     poi.countRoutes,
                                     poi.countTracks,
                                     poi_name,
+                                    poi_dateshow,
+                                    poi_datefirst                                                                                           AS datesort,
+                                    poi_datefirst,
+                                    poi_calced_dateonly                                                     AS dateonly,
                                     poi_meta_desc,
                                     poi_reference,
                                     poi_calced_gps_lat,
                                     poi_calced_gps_lon,
                                     poi_calced_gps_loc,
                                     poi_calced_altMaxFacet,
-                                    CONCAT(poi_name, ' ', poi_keywords, ' ', poi_reference, ' ', poi_meta_desc) AS html,
+                                    l_lochirarchietxt,
+                                    l_lochirarchieids,
+                                    CONCAT(poi_name, ' ', poi_keywords, ' ', poi_reference, ' ', poi_meta_desc, ' ', l_lochirarchietxt) AS html,
                                     poi_keywords
-                    FROM POI
+                    FROM POI LEFT JOIN location ON poi.l_id = location.l_id
                     ORDER BY poi_name"
                 deltaImportQuery="
                     SELECT DISTINCT poi.poi_id,
                                     'POI'                                           AS type,
                                     poi.poi_calced_id                          AS id,
+                                    poi.poi_calced_subtype                          AS subtype,
                                     poi.poi_calced_navigation_objects                         AS navigation_objects,
                                     poi.poi_calced_extended_object_properties                 AS extended_object_properties,
                                     poi.countRoutes,
                                     poi.countTracks,
                                     poi_name,
+                                    poi_dateshow,
+                                    poi_datefirst                                                                                           AS datesort,
+                                    poi_datefirst,
+                                    poi_calced_dateonly                                                     AS dateonly,
                                     poi_meta_desc,
                                     poi_reference,
                                     poi_calced_gps_lat,
                                     poi_calced_gps_lon,
                                     poi_calced_gps_loc,
                                     poi_calced_altMaxFacet,
-                                    CONCAT(poi_name, ' ', poi_keywords, ' ', poi_reference, ' ', poi_meta_desc) AS html,
+                                    l_lochirarchietxt,
+                                    l_lochirarchieids,
+                                    CONCAT(poi_name, ' ', poi_keywords, ' ', poi_reference, ' ', poi_meta_desc, ' ', l_lochirarchietxt) AS html,
                                     poi_keywords
-                    FROM POI
+                    FROM POI LEFT JOIN location ON poi.l_id = location.l_id
                     WHERE poi.poi_id = '${dih.delta.id}'"
                 deltaQuery="SELECT poi_id FROM poi ORDER BY poi_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
@@ -1518,6 +1545,16 @@
             <field column="type" name="type_txt" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countTracks" name="count_tracks_i" />
+            <field column="subtype" name="subtype_s" />
+            <field column="subtype" name="subtype_ss" />
+            <field column="dateonly" name="dateonly_s" />
+            <field column="poi_datefirst" name="date_dt" />
+            <field column="poi_dateshow" name="dateshow_dt" />
+            <field column="datesort" name="datesort_dt" />
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="navigation_objects" name="navigation_objects_clob" regex="SEPARATOR" replaceWith=";;"/>
             <field column="extended_object_properties" name="extended_object_properties_clob" regex="SEPARATOR" replaceWith=";;"/>
             <field column="linkedinfos" name="linkedinfos_clob" regex="SEPARATOR" replaceWith=";;"/>
@@ -1625,6 +1662,9 @@
                            kategorie_full.k_calced_actiontype                          AS actiontype,
                            kategorie_full.k_calced_actiontype                          AS subtype,
                            image.i_calced_id                                         AS id,
+                           image.i_calced_linkedplaylists                               AS linkedplaylists,
+                           image.i_calced_navigation_objects                         AS navigation_objects,
+                           image.i_calced_extended_object_properties                 AS extended_object_properties,
                            i_calced_path                                                                        AS i_url,
                            image.i_id,
                            image.k_id,
@@ -1676,6 +1716,9 @@
                            kategorie_full.k_calced_actiontype                          AS actiontype,
                            kategorie_full.k_calced_actiontype                          AS subtype,
                            image.i_calced_id                                         AS id,
+                           image.i_calced_linkedplaylists                               AS linkedplaylists,
+                           image.i_calced_navigation_objects                         AS navigation_objects,
+                           image.i_calced_extended_object_properties                 AS extended_object_properties,
                            i_calced_path                               AS i_url,
                            image.i_id,
                            image.k_id,

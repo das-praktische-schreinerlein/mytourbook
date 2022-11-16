@@ -29,12 +29,12 @@ export class SqlMytbExportDbDestinationConfig {
             'destination.d_id',
             'destination.l_id',
             'd_name',
-            'd_datevon AS d_dateshow',
-            'd_datevon',
-            'DATE_FORMAT(d_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
-            'WEEK(d_datevon) AS week',
-            'MONTH(d_datevon) AS month',
-            'YEAR(d_datevon) AS year',
+            'd_datefirst AS d_dateshow',
+            'd_datefirst',
+            'DATE_FORMAT(d_datefirst, GET_FORMAT(DATE, "ISO")) AS dateonly',
+            'WEEK(d_datefirst) AS week',
+            'MONTH(d_datefirst) AS month',
+            'YEAR(d_datefirst) AS year',
             'CAST(l_gps_lat AS CHAR(50)) AS d_gps_lat',
             'CAST(l_gps_lon AS CHAR(50)) AS d_gps_lon',
             'CONCAT(l_gps_lat, ",", l_gps_lon) AS d_gps_loc',
@@ -101,7 +101,7 @@ export class SqlMytbExportDbDestinationConfig {
                 noFacet: true
             },
             'done_ss': {
-                selectField: 'CONCAT("DONE", (d_datevon IS NOT NULL))',
+                selectField: 'CONCAT("DONE", (d_datefirst IS NOT NULL))',
                 orderBy: 'value asc'
             },
             'keywords_txt': {
@@ -132,7 +132,7 @@ export class SqlMytbExportDbDestinationConfig {
                 action: AdapterFilterActions.IN
             },
             'month_is': {
-                selectField: 'MONTH(d_datevon)',
+                selectField: 'MONTH(d_datefirst)',
                 orderBy: 'value asc'
             },
             'news_id_i': {
@@ -223,17 +223,17 @@ export class SqlMytbExportDbDestinationConfig {
                 selectLimit: 1
             },
             'week_is': {
-                selectField: 'WEEK(d_datevon)',
+                selectField: 'WEEK(d_datefirst)',
                 orderBy: 'value asc'
             },
             'year_is': {
-                selectField: 'YEAR(d_datevon)',
+                selectField: 'YEAR(d_datefirst)',
                 orderBy: 'value asc'
             }
         },
         sortMapping: {
-            'date': 'd_datevon DESC',
-            'dateAsc': 'd_datevon ASC',
+            'date': 'd_datefirst DESC',
+            'dateAsc': 'd_datefirst ASC',
             'distance': 'geodist ASC',
             'dataTechDurDesc': 'd_route_dauer DESC',
             'dataTechAltDesc': 'd_route_hm DESC',
@@ -244,10 +244,10 @@ export class SqlMytbExportDbDestinationConfig {
             'dataTechMaxAsc': 'd_ele_max ASC',
             'dataTechDistAsc': 'd_route_m ASC',
             'forExport': 'destination.d_id ASC',
-            'ratePers': 'd_rate_gesamt DESC, d_datevon DESC',
+            'ratePers': 'd_rate_gesamt DESC, d_datefirst DESC',
             'location': 'l_lochirarchietxt ASC, d_name ASC',
             'locationDetails': 'l_lochirarchietxt ASC, d_name ASC',
-            'relevance': 'd_datevon DESC'
+            'relevance': 'd_datefirst DESC'
         },
         spartialConfig: {
             lat: 'l_gps_lat',
@@ -287,8 +287,8 @@ export class SqlMytbExportDbDestinationConfig {
             news_id_i: 'n_id',
             news_id_is: 'n_id',
             dateshow_dt: 'd_dateshow',
-            datestart_dt: 'd_datevon',
-            dateend_dt: 'd_datebis',
+            datestart_dt: 'd_datefirst',
+            dateend_dt: 'd_datelast',
             distance: 'geodist',
             geo_lon_s: 'd_gps_lon',
             geo_lat_s: 'd_gps_lat',

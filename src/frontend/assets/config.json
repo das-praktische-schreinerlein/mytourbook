@@ -1228,7 +1228,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "INFO", "info"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "INFO", "info", "POI", "poi"]
                         }
                     ],
                     "configAvailability": [
@@ -1785,7 +1785,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "INFO", "info"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "INFO", "info", "POI", "poi"]
                         }
                     ],
                     "configAvailability": [

@@ -48,12 +48,12 @@ export class SqlMytbExportDbRouteConfig {
             'tour.d_id',
             't_name',
             't_html_list',
-            't_datevon AS t_dateshow',
-            't_datevon',
-            'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
-            'WEEK(t_datevon) AS week',
-            'MONTH(t_datevon) AS month',
-            'YEAR(t_datevon) AS year',
+            't_datefirst AS t_dateshow',
+            't_datefirst',
+            'DATE_FORMAT(t_datefirst, GET_FORMAT(DATE, "ISO")) AS dateonly',
+            'WEEK(t_datefirst) AS week',
+            'MONTH(t_datefirst) AS month',
+            'YEAR(t_datefirst) AS year',
             't_gpstracks_basefile',
             't_keywords',
             't_meta_shortdesc',
@@ -133,7 +133,7 @@ export class SqlMytbExportDbRouteConfig {
                 orderBy: 'value asc'
             },
             'done_ss': {
-                selectField: 'CONCAT("DONE", (t_datevon IS NOT NULL))',
+                selectField: 'CONCAT("DONE", (t_datefirst IS NOT NULL))',
                 orderBy: 'value asc'
             },
             'keywords_txt': {
@@ -164,7 +164,7 @@ export class SqlMytbExportDbRouteConfig {
                 action: AdapterFilterActions.IN
             },
             'month_is': {
-                selectField: 'MONTH(t_datevon)',
+                selectField: 'MONTH(t_datefirst)',
                 orderBy: 'value asc'
             },
             'objects_txt': {
@@ -251,17 +251,17 @@ export class SqlMytbExportDbRouteConfig {
                 selectLimit: 1
             },
             'week_is': {
-                selectField: 'WEEK(t_datevon)',
+                selectField: 'WEEK(t_datefirst)',
                 orderBy: 'value asc'
             },
             'year_is': {
-                selectField: 'YEAR(t_datevon)',
+                selectField: 'YEAR(t_datefirst)',
                 orderBy: 'value asc'
             }
         },
         sortMapping: {
-            'date': 't_datevon DESC',
-            'dateAsc': 't_datevon ASC',
+            'date': 't_datefirst DESC',
+            'dateAsc': 't_datefirst ASC',
             'distance': 'geodist ASC',
             'dataTechDurDesc': 't_route_dauer DESC',
             'dataTechAltDesc': 't_route_hm DESC',
@@ -272,10 +272,10 @@ export class SqlMytbExportDbRouteConfig {
             'dataTechMaxAsc': 't_ele_max ASC',
             'dataTechDistAsc': 't_route_m ASC',
             'forExport': 'tour.t_id ASC',
-            'ratePers': 't_rate_gesamt DESC, t_datevon DESC',
+            'ratePers': 't_rate_gesamt DESC, t_datefirst DESC',
             'location': 'l_lochirarchietxt ASC, t_name ASC',
             'locationDetails': 'l_lochirarchietxt ASC, t_name ASC',
-            'relevance': 't_datevon DESC'
+            'relevance': 't_datefirst DESC'
         },
         spartialConfig: {
             lat: 't_gps_lat',
@@ -329,8 +329,8 @@ export class SqlMytbExportDbRouteConfig {
             news_id_i: 'n_id',
             news_id_is: 'n_id',
             dateshow_dt: 't_dateshow',
-            datestart_dt: 't_datevon',
-            dateend_dt: 't_datebis',
+            datestart_dt: 't_datefirst',
+            dateend_dt: 't_datelast',
             desc_txt: 't_meta_shortdesc',
             desc_md_txt: 't_meta_shortdesc_md',
             desc_html_txt: 't_meta_shortdesc_html',

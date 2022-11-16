@@ -226,12 +226,12 @@ FROM importmytbdb_poi_info where poi_id IS NOT NULL AND if_ID IS NOT NULL;
 -- ##################
 -- import routes
 -- ##################
-INSERT into tour (t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
+INSERT into tour (t_id, l_id, k_id, t_gesperrt, t_datefirst, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
                   t_gpstracks_state, t_calced_id, t_calced_d_id, t_calced_sections, t_calced_actiontype, t_calced_altAscFacet, t_calced_altMaxFacet, t_calced_distFacet, t_calced_durFacet,
                   t_calced_dateonly, t_calced_week, t_calced_month, t_calced_year)
-    SELECT t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
+    SELECT t_id, l_id, k_id, t_gesperrt, t_datefirst, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_desc_sectionDetails, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ,
            t_gpstracks_state, "ROUTE" || "_" || t_id, t_calced_d_id, t_calced_sections, t_calced_actiontype, t_calced_altAscFacet, t_calced_altMaxFacet, t_calced_distFacet, t_calced_durFacet,
-           DATETIME(t_datevon), CAST(STRFTIME('%W', t_datevon) AS INT), CAST(STRFTIME('%m', t_datevon) AS INT), CAST(STRFTIME('%Y', t_datevon) AS INT)
+           DATETIME(t_datefirst), CAST(STRFTIME('%W', t_datefirst) AS INT), CAST(STRFTIME('%m', t_datefirst) AS INT), CAST(STRFTIME('%Y', t_datefirst) AS INT)
     FROM importmytbdb_tour;
 
 -- calc tour: d-ids
@@ -252,7 +252,7 @@ UPDATE tour SET t_keywords=REPLACE(t_keywords, 'KW_TODOKEYWORDS', '');
 -- calc desc+dates+coords
 UPDATE tour
 SET
-    t_dateshow=t_datevon,
+    t_dateshow=t_datefirst,
     t_desc_fuehrer_full=t_desc_fuehrer,
     t_meta_shortdesc_md=t_meta_shortdesc,
     t_meta_shortdesc_html=t_meta_shortdesc,
@@ -300,7 +300,7 @@ INSERT INTO destination (d_id,
        d_desc_ziel,
        d_name,
        d_typ,
-       d_datevon,
+       d_datefirst,
        d_route_hm,
        d_ele_max,
        d_route_m,
@@ -334,7 +334,7 @@ SELECT tour.t_calced_d_id AS d_id,
        t_desc_ziel AS d_desc_ziel,
        t_desc_ziel AS d_name,
        t_typ AS d_typ,
-       min(t_datevon)                                                  AS d_datevon,
+       min(t_datefirst)                                                AS d_datefirst,
        min(t_route_hm)                                                 AS d_route_hm,
        min(t_ele_max)                                                  AS d_ele_max,
        min(t_route_m)                                                  AS d_route_m,
@@ -367,7 +367,7 @@ GROUP BY d_id;
 -- calc desc+dates+coords
 UPDATE destination
 SET
-    d_dateshow=d_datevon;
+    d_dateshow=d_datefirst;
 
 UPDATE destination
 SET

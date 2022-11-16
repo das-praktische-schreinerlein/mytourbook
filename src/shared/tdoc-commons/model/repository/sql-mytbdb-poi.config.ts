@@ -3,12 +3,13 @@ import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-co
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
+import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 
 export class SqlMytbDbPoiConfig {
     public static readonly tableConfig: TableConfig = {
         key: 'poi',
         tableName: 'poi',
-        selectFrom: 'poi',
+        selectFrom: 'poi LEFT JOIN location_hirarchical as location ON poi.l_id = location.l_id',
         optionalGroupBy: [
             {
                 from: 'LEFT JOIN poi_keyword ON poi.poi_id=poi_keyword.poi_id ' +
@@ -83,14 +84,24 @@ export class SqlMytbDbPoiConfig {
         selectFieldList: [
             '"POI" AS type',
             'CONCAT("POI", "_", poi.poi_id) AS id',
+            'poi.poi_type',
+            'poi.poi_calced_subtype as subtype',
             'poi.poi_id',
+            'poi.l_id',
             'poi.poi_name',
+            'poi.poi_datefirst AS t_dateshow',
+            'poi.poi_datefirst',
+            'DATE_FORMAT(poi.poi_datefirst, GET_FORMAT(DATE, "ISO")) AS dateonly',
+            'MONTH(poi.poi_datefirst) AS month',
+            'YEAR(poi.poi_datefirst) AS year',
             'poi.poi_calced_gps_lat',
             'poi.poi_calced_gps_lon',
             'poi.poi_calced_gps_loc',
             'poi.poi_geo_ele',
             'poi.poi_calced_altMaxFacet AS altMaxFacet',
             'poi_reference',
+            'l_lochirarchietxt AS l_lochirarchietxt',
+            'l_lochirarchieids AS l_lochirarchieids',
             'poi_meta_desc',
             'poi_meta_desc AS poi_meta_desc_md',
             'poi_meta_desc AS poi_meta_desc_html'],
@@ -113,8 +124,16 @@ export class SqlMytbDbPoiConfig {
                 filterField: '"666dummy999"'
             },
             'noLocation': {
-                constValues: ['noLocation'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(poi.poi_id) AS count, "noLocation" AS value,' +
+                    ' "noLocation" AS label, "true" AS id' +
+                    ' FROM poi WHERE (poi.l_id IS NULL OR poi.l_id IN (0,1 ))' +
+                    ' AND poi_id NOT IN (' +
+                    '    SELECT DISTINCT poi_id FROM tour_poi' +
+                    '    UNION' +
+                    '    SELECT DISTINCT poi_id FROM kategorie_poi' +
+                    ')',
+                filterField: 'poi.l_id',
+                action: AdapterFilterActions.IN
             },
             'noMainFavoriteChildren': {
                 constValues: ['noMainFavoriteChildren'],
@@ -125,16 +144,29 @@ export class SqlMytbDbPoiConfig {
                 filterField: '"666dummy999"'
             },
             'noSubType': {
-                constValues: ['noSubType'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(poi.poi_id) AS count, "noSubType" AS value,' +
+                    ' "noSubType" AS label, "true" AS id' +
+                    ' FROM poi WHERE (poi_type IS NULL OR poi_type IN (0))' +
+                    ' AND poi_id NOT IN (' +
+                    '    SELECT DISTINCT poi_id FROM tour_poi' +
+                    '    UNION' +
+                    '    SELECT DISTINCT poi_id FROM kategorie_poi' +
+                    ')',
+                filterField: 'poi.poi_calced_subtype',
+                action: AdapterFilterActions.IN
             },
             'todoDesc': {
                 constValues: ['todoDesc'],
                 filterField: '"666dummy999"'
             },
             'todoKeywords': {
-                constValues: ['todoKeywords'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(poi.poi_id) AS count, "todoKeywords" AS value,' +
+                    ' "todoKeywords" AS label, "true" AS id' +
+                    ' FROM poi INNER JOIN poi_keyword ON poi.poi_id=poi_keyword.poi_id' +
+                    ' INNER JOIN keyword ON poi_keyword.kw_id=keyword.kw_id ' +
+                    'WHERE poi_datefirst IS NOT NULL AND keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                filterField: 'keyword.kw_name',
+                action: AdapterFilterActions.IN
             },
             'unrated': {
                 constValues: ['unrated'],
@@ -187,7 +219,12 @@ export class SqlMytbDbPoiConfig {
                 action: AdapterFilterActions.IN_NUMBER
             },
             'initial_s': {
-                noFacet: true
+                selectSql: 'SELECT COUNT(*) as count, ' +
+                    ' SUBSTR(UPPER(poi_name), 1, 1) as value ' +
+                    'FROM poi ' +
+                    'WHERE LENGTH(poi_name) > 0 ' +
+                    'GROUP BY SUBSTR(UPPER(poi_name), 1, 1)' +
+                    'ORDER BY value',
             },
             'keywords_txt': {
                 selectSql: 'SELECT count(keyword.kw_id) AS count, ' +
@@ -203,10 +240,18 @@ export class SqlMytbDbPoiConfig {
                 noFacet: true
             },
             'loc_lochirarchie_txt': {
-                noFacet: true
+                selectSql: 'SELECT COUNT(poi.l_id) AS count, GetTechName(l_name) AS value,' +
+                    ' l_lochirarchietxt AS label, location.l_id AS id' +
+                    ' FROM location_hirarchical as location LEFT JOIN poi ON poi.l_id = location.l_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label ASC',
+                triggerTables: ['location', 'poi'],
+                filterField: 'GetTechName(l_lochirarchietxt)',
+                action: AdapterFilterActions.LIKE
             },
             'month_is': {
-                noFacet: true
+                selectField: 'MONTH(poi_datefirst)',
+                orderBy: 'value asc'
             },
             'news_id_i': {
                 constValues: ['news_id_i'],
@@ -256,8 +301,7 @@ export class SqlMytbDbPoiConfig {
                 noFacet: true
             },
             'subtype_ss': {
-                constValues: ['subtype_ss'],
-                filterField: '"666dummy999"'
+                selectField: 'poi.poi_calced_subtype'
             },
             'trip_id_i': {
                 constValues: ['trip_id_i'],
@@ -276,7 +320,8 @@ export class SqlMytbDbPoiConfig {
                 noFacet: true
             },
             'year_is': {
-                noFacet: true
+                selectField: 'YEAR(poi_datefirst)',
+                orderBy: 'value asc'
             }
         },
         sortMapping: {
@@ -284,8 +329,12 @@ export class SqlMytbDbPoiConfig {
             'countRoutesDesc': '(SELECT COUNT(DISTINCT poi_sort.t_id) FROM tour_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) DESC, poi_name ASC',
             'countTracks': '(SELECT COUNT(DISTINCT poi_sort.k_id) FROM kategorie_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) ASC, poi_name ASC',
             'countTracksDesc': '(SELECT COUNT(DISTINCT poi_sort.k_id) FROM kategorie_poi poi_sort WHERE poi_sort.poi_id = poi.poi_id) DESC, poi_name ASC',
+            'date': 'poi_datefirst DESC, poi_name ASC',
+            'dateAsc': 'poi_datefirst ASC, poi_name ASC',
             'distance': 'geodist ASC, poi_name ASC',
             'name': 'poi_name ASC',
+            'location': 'l_lochirarchietxt ASC, poi_name ASC',
+            'locationDetails': 'l_lochirarchietxt ASC, poi_name ASC',
             'forExport': 'poi.poi_id ASC, poi_name ASC',
             'relevance': 'poi.poi_id DESC, poi_name ASC'
         },
@@ -302,11 +351,11 @@ export class SqlMytbDbPoiConfig {
             noFavoriteChildren: '"666dummy999"',
             noMainFavoriteChildren: '"666dummy999"',
             noCoordinates: '"666dummy999"',
-            noLocation: '"666dummy999"',
+            noLocation: 'poi.l_id',
             noRoute: '"666dummy999"',
-            noSubType: '"666dummy999"',
+            noSubType: 'poi.poi_calced_subtype',
             todoDesc: '"todoDesc"',
-            todoKeywords: '"666dummy999"',
+            todoKeywords: 'keyword.kw_name',
             unrated: '"666dummy999"',
             unRatedChildren: '"666dummy999"',
             data_tech_alt_min_i: 'poi.poi_geo_ele',
@@ -338,25 +387,32 @@ export class SqlMytbDbPoiConfig {
             trip_id_i: '"666dummy999"',
             loc_id_i: '"666dummy999"',
             loc_id_is: '"666dummy999"',
-            loc_lochirarchie_ids_txt: '"666dummy999"',
-            l_lochirarchietxt: '"666dummy999"',
+            loc_lochirarchie_ids_txt: 'location.l_id',
+            l_lochirarchietxt: 'location.l_name',
+            initial_s: 'SUBSTR(UPPER(poi_name), 1, 1)',
             gpstracks_state_is: '"666dummy999"',
             name_s: 'poi_name',
-            initial_s: 'SUBSTR(UPPER(poi_name), 1, 1)',
             html: 'CONCAT(poi_name, " ", COALESCE(poi_meta_desc,""))'
         },
         writeMapping: {
+            'poi.l_id': ':loc_id_i:',
             'poi.poi_geo_ele': ':data_tech_alt_max_i:',
             'poi.poi_geo_longdeg': ':geo_lon_s:',
             'poi.poi_geo_latdeg': ':geo_lat_s:',
             'poi.poi_reference': ':data_info_guides_s:',
             'poi.poi_meta_desc': ':desc_txt:',
-            'poi.poi_name': ':name_s:'
+            'poi.poi_name': ':name_s:',
+            'poi.poi_type': ':subtype_s:'
         },
         fieldMapping: {
             id: 'id',
             poi_id_i: 'poi_id',
             poi_id_is: 'poi_id',
+            loc_id_i: 'l_id',
+            loc_id_is: 'l_id',
+            dateshow_dt: 'poi_dateshow',
+            datestart_dt: 'poi_datefirst',
+            dateend_dt: 'poi_datelast',
             desc_txt: 'poi_meta_desc',
             desc_md_txt: 'poi_meta_desc_md',
             desc_html_txt: 'poi_meta_desc_html',
@@ -369,7 +425,10 @@ export class SqlMytbDbPoiConfig {
             geo_loc_p: 'poi_calced_gps_loc',
             poi_name_s: 'poi_name',
             poi_desc_txt: 'poi_meta_desc',
+            loc_lochirarchie_s: 'l_lochirarchietxt',
+            loc_lochirarchie_ids_s: 'l_lochirarchieids',
             name_s: 'poi_name',
+            subtype_s: 'subtype',
             type_s: 'type'
         }
     };
@@ -384,6 +443,16 @@ export class SqlMytbDbPoiConfig {
         joinFieldMappings: {
             'if_id': 'refId',
             'poiif_linked_details': 'linkedDetails'
+        }
+    };
+
+    public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
+        table: 'poi',
+        idField: 'poi_id',
+        references: {
+            'loc_lochirarchie_txt': {
+                table: 'location', idField: 'l_id', referenceField: 'l_id'
+            }
         }
     };
 

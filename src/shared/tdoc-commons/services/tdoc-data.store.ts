@@ -267,7 +267,7 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                     values = 'null,0,1';
                 }
                 if (values === undefined && (filterName === 'noSubType')) {
-                    values = 'null,ac_,ac_null,ac_0';
+                    values = 'null,ac_,ac_null,ac_0,if_,if_null,if_0,loc_,loc_null,loc_0,poi_,poi_null,poi_0';
                 }
                 if (values === undefined && (filterName === 'todoDesc')) {
                     values = 'TODODESC';

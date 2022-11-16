@@ -214,12 +214,12 @@ export class SqlMytbDbRouteConfig {
             'tour.l_id',
             'tour.t_calced_d_id',
             't_name',
-            't_datevon AS t_dateshow',
-            't_datevon',
-            'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
-            'WEEK(t_datevon) AS week',
-            'MONTH(t_datevon) AS month',
-            'YEAR(t_datevon) AS year',
+            't_datefirst AS t_dateshow',
+            't_datefirst',
+            'DATE_FORMAT(t_datefirst, GET_FORMAT(DATE, "ISO")) AS dateonly',
+            'WEEK(t_datefirst) AS week',
+            'MONTH(t_datefirst) AS month',
+            'YEAR(t_datefirst) AS year',
             't_gpstracks_basefile',
             't_gpstracks_state',
             't_meta_shortdesc',
@@ -310,8 +310,8 @@ export class SqlMytbDbRouteConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(tour.t_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM tour WHERE t_datevon IS NOT NULL AND t_meta_shortdesc LIKE "TODODESC%"',
-                filterField: 't_datevon IS NOT NULL AND tour.t_meta_shortdesc',
+                    ' FROM tour WHERE t_datefirst IS NOT NULL AND t_meta_shortdesc LIKE "TODODESC%"',
+                filterField: 't_datefirst IS NOT NULL AND tour.t_meta_shortdesc',
                 action: AdapterFilterActions.LIKE
             },
             'todoKeywords': {
@@ -319,15 +319,15 @@ export class SqlMytbDbRouteConfig {
                     ' "todoKeywords" AS label, "true" AS id' +
                     ' FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
                     ' INNER JOIN keyword ON tour_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE t_datevon IS NOT NULL AND keyword.kw_name IN ("KW_TODOKEYWORDS")',
-                filterField: 't_datevon IS NOT NULL AND keyword.kw_name',
+                    'WHERE t_datefirst IS NOT NULL AND keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                filterField: 't_datefirst IS NOT NULL AND keyword.kw_name',
                 action: AdapterFilterActions.IN
             },
             'unrated': {
                 selectSql: 'SELECT COUNT(tour.t_id) AS count, "unrated" AS value,' +
                     ' "unrated" AS label, "true" AS id' +
-                    ' FROM tour WHERE t_datevon IS NOT NULL AND (t_rate_gesamt IS NULL OR t_rate_gesamt in (0))',
-                filterField: 't_datevon IS NOT NULL AND tour.t_rate_gesamt',
+                    ' FROM tour WHERE t_datefirst IS NOT NULL AND (t_rate_gesamt IS NULL OR t_rate_gesamt in (0))',
+                filterField: 't_datefirst IS NOT NULL AND tour.t_rate_gesamt',
                 action: AdapterFilterActions.IN
             },
             'unRatedChildren': {
@@ -378,7 +378,7 @@ export class SqlMytbDbRouteConfig {
                 orderBy: 'value asc'
             },
             'done_ss': {
-                selectField: 'CONCAT("DONE", (t_datevon IS NOT NULL))',
+                selectField: 'CONCAT("DONE", (t_datefirst IS NOT NULL))',
                 orderBy: 'value asc'
             },
             'gpstracks_state_is': {
@@ -426,7 +426,7 @@ export class SqlMytbDbRouteConfig {
                 action: AdapterFilterActions.LIKE
             },
             'month_is': {
-                selectField: 'MONTH(t_datevon)',
+                selectField: 'MONTH(t_datefirst)',
                 orderBy: 'value asc'
             },
             'news_id_i': {
@@ -556,11 +556,11 @@ export class SqlMytbDbRouteConfig {
                 selectLimit: 1
             },
             'week_is': {
-                selectField: 'WEEK(t_datevon)',
+                selectField: 'WEEK(t_datefirst)',
                 orderBy: 'value asc'
             },
             'year_is': {
-                selectField: 'YEAR(t_datevon)',
+                selectField: 'YEAR(t_datefirst)',
                 orderBy: 'value asc'
             },
             // statistics
@@ -578,7 +578,7 @@ export class SqlMytbDbRouteConfig {
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +
                     '                           where kt.t_id > 1' +
                     '                             and kt.t_id not in (1, 1681)' +
-                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
                     '' +
                     '                           union all' +
                     '' +
@@ -590,7 +590,7 @@ export class SqlMytbDbRouteConfig {
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
-                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
                     '' +
                     '                           union all' +
                     '' +
@@ -603,7 +603,7 @@ export class SqlMytbDbRouteConfig {
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +
                     '                           where kt.t_id > 1' +
                     '                             and kt.t_id not in (1, 1681)' +
-                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
                     '                             and t_ele_max is not null' +
                     '' +
                     '                           union all' +
@@ -616,7 +616,7 @@ export class SqlMytbDbRouteConfig {
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
-                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
                     '                             and t_ele_max is not null' +
                     '                       ) x' +
                     '                  where year is not null' +
@@ -632,7 +632,7 @@ export class SqlMytbDbRouteConfig {
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +
                     '                           where kt.t_id > 1' +
                     '                             and kt.t_id not in (1, 1681)' +
-                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
                     '' +
                     '                           union all' +
                     '' +
@@ -641,7 +641,7 @@ export class SqlMytbDbRouteConfig {
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
-                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
                     '' +
                     '                           union all' +
                     '' +
@@ -651,7 +651,7 @@ export class SqlMytbDbRouteConfig {
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +
                     '                           where kt.t_id > 1' +
                     '                             and kt.t_id not in (1, 1681)' +
-                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
                     '                             and t_ele_max is not null' +
                     '' +
                     '                           union all' +
@@ -661,7 +661,7 @@ export class SqlMytbDbRouteConfig {
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
-                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
                     '                             and t_ele_max is not null' +
                     '                       ) x' +
                     '                  group by type' +
@@ -672,11 +672,11 @@ export class SqlMytbDbRouteConfig {
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
                     '                                           t_calced_actiontype as type,' +
-                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_datefirst)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
-                    '                             and T_DATEVON is not null' +
+                    '                             and t_datefirst is not null' +
                     '                           group by name, type' +
                     '                       ) x' +
                     '                  where year is not null' +
@@ -688,11 +688,11 @@ export class SqlMytbDbRouteConfig {
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
                     '                                           CONCAT("ele_", t_calced_altMaxFacet)  as         type,' +
-                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_datefirst)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
-                    '                             and T_DATEVON is not null' +
+                    '                             and t_datefirst is not null' +
                     '                             and t_ele_max is not null' +
                     '                           group by name, type' +
                     '                       ) x' +
@@ -705,11 +705,11 @@ export class SqlMytbDbRouteConfig {
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
                     '                                           t_calced_actiontype as type,' +
-                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_datefirst)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
-                    '                             and T_DATEVON is not null' +
+                    '                             and t_datefirst is not null' +
                     '                           group by name, type' +
                     '                       ) x' +
                     '                  where year is not null' +
@@ -721,11 +721,11 @@ export class SqlMytbDbRouteConfig {
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
                     '                                           CONCAT("ele_", t_calced_altMaxFacet) as type,' +
-                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_datefirst)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
-                    '                             and T_DATEVON is not null' +
+                    '                             and t_datefirst is not null' +
                     '                             and t_ele_max is not null' +
                     '                           group by name, type' +
                     '                       ) x' +
@@ -770,8 +770,8 @@ export class SqlMytbDbRouteConfig {
                 '      INNER JOIN kategorie k_sort ON v_sort.k_id = k_sort.k_id' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
                 '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC, t_name ASC',
-            'date': 't_datevon DESC, t_name ASC',
-            'dateAsc': 't_datevon ASC, t_name ASC',
+            'date': 't_datefirst DESC, t_name ASC',
+            'dateAsc': 't_datefirst ASC, t_name ASC',
             'distance': 'geodist ASC, t_name ASC',
             'dataTechDurDesc': 't_route_dauer DESC, t_name ASC',
             'dataTechAltDesc': 't_route_hm DESC, t_name ASC',
@@ -785,12 +785,12 @@ export class SqlMytbDbRouteConfig {
             'dataTechSectionsAsc': 't_calced_sections ASC, t_name ASC',
             'forExport': 'tour.t_id ASC',
             'name': 't_name ASC',
-            'ratePers': 't_rate_gesamt DESC, t_datevon DESC, t_name ASC',
+            'ratePers': 't_rate_gesamt DESC, t_datefirst DESC, t_name ASC',
             'playlistPos': 'tour_playlist.tp_pos ASC',
             'location': 'l_lochirarchietxt ASC, t_name ASC',
             'locationDetails': 'l_lochirarchietxt ASC, t_name ASC',
             'region': 't_desc_gebiet ASC, t_name ASC',
-            'relevance': 't_datevon DESC, t_name ASC'
+            'relevance': 't_datefirst DESC, t_name ASC'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',
@@ -837,9 +837,9 @@ export class SqlMytbDbRouteConfig {
         writeMapping: {
             'tour.l_id': ':loc_id_i:',
             'tour.k_id': ':track_id_i:',
-            'tour.t_datevon': ':datestart_dt:',
+            'tour.t_datefirst': ':datestart_dt:',
             'tour.t_gesperrt': ':blocked_i:',
-            'tour.t_datebis': ':dateend_dt:',
+            'tour.t_datelast': ':dateend_dt:',
             'tour.t_meta_shortdesc': ':desc_txt:',
 //                'tour.t_meta_shortdesc_md': ':desc_md_txt:',
 //                'tour.t_meta_shortdesc_html': ':desc_html_txt:',
@@ -891,8 +891,8 @@ export class SqlMytbDbRouteConfig {
             news_id_i: 'n_id',
             news_id_is: 'n_id',
             dateshow_dt: 't_dateshow',
-            datestart_dt: 't_datevon',
-            dateend_dt: 't_datebis',
+            datestart_dt: 't_datefirst',
+            dateend_dt: 't_datelast',
             desc_txt: 't_meta_shortdesc',
             desc_md_txt: 't_meta_shortdesc_md',
             desc_html_txt: 't_meta_shortdesc_html',

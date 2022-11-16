@@ -196,6 +196,7 @@ export class TourDocSqlMytbDbConfig {
             'track': SqlMytbDbTrackConfig.actionTagAssignConfig,
             'route': SqlMytbDbRouteConfig.actionTagAssignConfig,
             'news': SqlMytbDbNewsConfig.actionTagAssignConfig,
+            'poi': SqlMytbDbPoiConfig.actionTagAssignConfig,
             'trip': SqlMytbDbTripConfig.actionTagAssignConfig,
             'info': SqlMytbDbInfoConfig.actionTagAssignConfig
         }

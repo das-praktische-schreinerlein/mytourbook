@@ -80,6 +80,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         'poiJoinType': IMultiSelectOption[];
         'subType': IMultiSelectOption[];
         'subTypeActiontype': IMultiSelectOption[];
+        'subTypePoiType': IMultiSelectOption[];
         'subTypeLocType': IMultiSelectOption[];
         'subTypeInfoType': IMultiSelectOption[];
         'trackId': IMultiSelectOption[];
@@ -537,6 +538,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                         120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136]
                 },
                 'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
+                'subTypePoiType': {labelPrefix: 'poi_', values: [1, 2, 3, 4, 5, 6]},
                 'subTypeInfoType': {labelPrefix: 'if_', values: [1, 2]},
                 'tdocdatainfo.baseloc': {},
                 'tdocdatainfo.destloc': {},
@@ -653,6 +655,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'poiJoinType': [],
                 'subType': [],
                 'subTypeActiontype': [],
+                'subTypePoitype': [],
                 'subTypeLocType': [],
                 'subTypeInfoType': [],
                 'trackId': [],
@@ -729,6 +732,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 (formValueConfig['subtype'][0]  + '')
                     .replace(/ac_/g, '')
                     .replace(/loc_/g, '')
+                    .replace(/poi_/g, '')
                     .replace(/if_/g, '');
         }
 

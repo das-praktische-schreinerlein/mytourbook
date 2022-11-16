@@ -1,4 +1,4 @@
-SELECT toupdate.t_id, t_name, t_datevon, datevon
+SELECT toupdate.t_id, t_name, t_datefirst, datevon
 FROM tour toupdate,
 (SELECT t_id, MIN(datevon) AS datevon
    FROM
@@ -19,7 +19,7 @@ FROM tour toupdate,
     ) getTours
   GROUP BY t_id ORDER BY t_id DESC
   ) grouped
-WHERE toupdate.t_id=grouped.t_id AND (toupdate.T_DATEVON IS NULL OR toupdate.T_DATEVON > datevon);
+WHERE toupdate.t_id=grouped.t_id AND (toupdate.t_datefirst IS NULL OR toupdate.t_datefirst > datevon);
 
 
 UPDATE tour toupdate,
@@ -43,5 +43,8 @@ UPDATE tour toupdate,
   GROUP BY t_id ORDER BY t_id DESC
   ) grouped
 SET
-  toupdate.t_datevon=grouped.datevon
-WHERE toupdate.t_id=grouped.t_id AND (toupdate.T_DATEVON IS NULL OR toupdate.T_DATEVON > datevon);
+  toupdate.t_datefirst=grouped.datevon
+WHERE toupdate.t_id=grouped.t_id AND (toupdate.t_datefirst IS NULL OR toupdate.t_datefirst > datevon);
+
+-- TODO updatelocation (min-date from kategorie and tour)
+-- TODO update poi (mindate from kategorie_poi and tour_poi)
