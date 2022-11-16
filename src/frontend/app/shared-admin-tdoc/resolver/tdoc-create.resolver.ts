@@ -71,6 +71,17 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
             case 'trip':
                 fields.push('datestart', 'dateend', 'locId');
                 break;
+            case 'poi':
+                fields.push('locId');
+
+                // remove desc... it will not be used here...
+                for (const field of ['keywords', 'desc', 'descTxt', 'descMd']) {
+                    const index = fields.indexOf(field);
+                    if (index > -1) {
+                        fields.splice(index, 1);
+                    }
+                }
+                break;
             case 'news':
                 fields.push('datestart', 'dateend');
                 break;
