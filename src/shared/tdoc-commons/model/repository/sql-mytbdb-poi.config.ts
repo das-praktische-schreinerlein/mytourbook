@@ -127,12 +127,16 @@ export class SqlMytbDbPoiConfig {
                 selectSql: 'SELECT COUNT(poi.poi_id) AS count, "noLocation" AS value,' +
                     ' "noLocation" AS label, "true" AS id' +
                     ' FROM poi WHERE (poi.l_id IS NULL OR poi.l_id IN (0,1 ))' +
-                    ' AND poi_id NOT IN (' +
+                    ' AND poi_id IN (' +
                     '    SELECT DISTINCT poi_id FROM tour_poi' +
                     '    UNION' +
                     '    SELECT DISTINCT poi_id FROM kategorie_poi' +
                     ')',
-                filterField: 'poi.l_id',
+                filterField: 'poi_id IN (' +
+                    '    SELECT DISTINCT poi_id FROM tour_poi' +
+                    '    UNION' +
+                    '    SELECT DISTINCT poi_id FROM kategorie_poi' +
+                    ') AND poi.l_id',
                 action: AdapterFilterActions.IN
             },
             'noMainFavoriteChildren': {
@@ -147,12 +151,16 @@ export class SqlMytbDbPoiConfig {
                 selectSql: 'SELECT COUNT(poi.poi_id) AS count, "noSubType" AS value,' +
                     ' "noSubType" AS label, "true" AS id' +
                     ' FROM poi WHERE (poi_type IS NULL OR poi_type IN (0))' +
-                    ' AND poi_id NOT IN (' +
+                    ' AND poi_id IN (' +
                     '    SELECT DISTINCT poi_id FROM tour_poi' +
                     '    UNION' +
                     '    SELECT DISTINCT poi_id FROM kategorie_poi' +
                     ')',
-                filterField: 'poi.poi_calced_subtype',
+                filterField: 'poi_id IN (' +
+                    '    SELECT DISTINCT poi_id FROM tour_poi' +
+                    '    UNION' +
+                    '    SELECT DISTINCT poi_id FROM kategorie_poi' +
+                    ') AND poi.poi_calced_subtype',
                 action: AdapterFilterActions.IN
             },
             'todoDesc': {
