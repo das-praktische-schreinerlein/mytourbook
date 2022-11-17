@@ -10,6 +10,7 @@
                             "command": "mediaImportManager",
                             "action": "copyFilesToDateFolder",
                             "backend": "config/backend.import.json",
+                            "defaultLocationName": "todo-rename-location",
                             "sourceDir": "F:/playground/mytb-test/mytbbase/import/import/SOURCE",
                             "groupedDir": "F:/playground/mytb-test/mytbbase/import/import/images/GROUPED",
                             "archiveImageDir": "F:/playground/mytb-test/mytbbase/import/archive"

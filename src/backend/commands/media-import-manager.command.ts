@@ -10,12 +10,14 @@ import {KeywordValidationRule, ValidationRule} from '@dps/mycms-commons/dist/sea
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import * as Promise_serial from 'promise-serial';
+import {NameUtils} from '@dps/mycms-commons/dist/commons/utils/name.utils';
 
 export class MediaImportManagerCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
         return {
             action: new KeywordValidationRule(true),
             backend: new SimpleConfigFilePathValidationRule(true),
+            defaultLocationName: new SimpleFilePathValidationRule(false),
             sourceDir: new SimpleFilePathValidationRule(false),
             groupedDir: new SimpleFilePathValidationRule(false),
             readyImageDir: new SimpleFilePathValidationRule(false),
@@ -60,19 +62,21 @@ export class MediaImportManagerCommand extends CommonAdminCommand {
         const targetVideoDir = argv['targetVideoDir'];
         const archiveImageDir = argv['archiveImageDir'];
         const archiveVideoDir = argv['archiveVideoDir'];
+        const defaultLocationName = NameUtils.normalizeKwNames(
+            NameUtils.normalizeFileNames(argv['defaultLocationName'] || 'name-the-location-here'));
 
         let promise: Promise<any>;
         switch (action) {
             case 'copyFilesToDateFolder':
-                console.log('START processing: copyFilesToDateFolder', sourceDir, groupedDir);
+                console.log('START processing: copyFilesToDateFolder', sourceDir, groupedDir, defaultLocationName);
 
-                console.log('do: copyFilesToDateFolder', sourceDir, groupedDir);
+                console.log('do: copyFilesToDateFolder', sourceDir, groupedDir, defaultLocationName);
                 promise = this.checkRequiredDirs([sourceDir, groupedDir, archiveImageDir]).catch(error => {
                     console.error('ERROR while checking prerequisites copyFilesToDateFolder', error);
                     return utils.reject(error);
                 }).then(() => {
-                    return this.copyFilesToDateFolder(sourceDir, groupedDir).catch(error => {
-                        console.error('ERROR while copyFilesToDateFolder', sourceDir, groupedDir, error);
+                    return this.copyFilesToDateFolder(sourceDir, groupedDir, defaultLocationName).catch(error => {
+                        console.error('ERROR while copyFilesToDateFolder', sourceDir, groupedDir, defaultLocationName, error);
                         return utils.reject(error);
                     });
                 }).then(() => {
@@ -191,7 +195,7 @@ export class MediaImportManagerCommand extends CommonAdminCommand {
         return prefix;
     }
 
-    protected copyFilesToDateFolder(srcDir: string, destDir: string): Promise<any> {
+    protected copyFilesToDateFolder(srcDir: string, destDir: string, defaultLocationName: string): Promise<any> {
         const files = fs.readdirSync(srcDir);
         const promises = [];
         for (const file of files) {
@@ -204,7 +208,7 @@ export class MediaImportManagerCommand extends CommonAdminCommand {
             const datePrefix = StringUtils.formatToShortFileNameDate(srcStat.mtime, '');
 
             promises.push(function () {
-                const prefixedDestDir = destDir + '/' + datePrefix;
+                const prefixedDestDir = destDir + '/' + datePrefix + (defaultLocationName ? '-' + defaultLocationName : '');
                 const err = FileUtils.checkDirPath(prefixedDestDir, true,  false, false, true);
                 if (err) {
                     return Promise.reject('destDir is invalid: ' + err);
