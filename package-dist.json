@@ -56,7 +56,8 @@
   },
   "private": true,
   "optionalDeps // do copy these to deps if needed": {
-    "minimist": "1.2.5"
+    "minimist": "1.2.5",
+    "inline-source": "7.0.0"
   },
   "dependencies": {
     "axios": "0.19.2",
