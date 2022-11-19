@@ -5,6 +5,7 @@ import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/src/commons/model/objectdetection-model';
 import {SafeUrl} from '@angular/platform-browser';
 
+// TODO move to commons
 @Component({
     selector: 'app-odimage-editor',
     templateUrl: './odimage-editor.component.html',

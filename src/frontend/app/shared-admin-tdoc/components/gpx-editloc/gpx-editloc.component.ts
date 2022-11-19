@@ -12,6 +12,7 @@ import {LatLng, LeafletMouseEvent} from 'leaflet';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import {FormUtils} from '../../../shared-tdoc/services/form.utils';
 
+// TODO move to commons
 @Component({
     selector: 'app-gpx-editloc',
     templateUrl: './gpx-editloc.component.html',

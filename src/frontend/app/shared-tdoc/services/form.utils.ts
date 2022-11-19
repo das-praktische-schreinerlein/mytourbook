@@ -1,3 +1,4 @@
+// TODO move to commons
 export class FormUtils {
     public static getNumberFormValue(values: {}, formKey: string): number {
         if (!values[formKey]) {

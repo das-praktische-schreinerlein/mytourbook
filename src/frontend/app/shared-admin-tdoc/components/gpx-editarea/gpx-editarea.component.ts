@@ -17,6 +17,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
 
+// TODO move to commons
 @Component({
     selector: 'app-gpx-editarea',
     templateUrl: './gpx-editarea.component.html',
