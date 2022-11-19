@@ -52,7 +52,7 @@ export class TourDocModalCreatepageComponent extends TourDocCreatepageComponent 
     }
 
     // TODO add cancel to commons
-    submitCancel() {
+    submitCancelModal() {
         this.closeModal();
 
         return false;

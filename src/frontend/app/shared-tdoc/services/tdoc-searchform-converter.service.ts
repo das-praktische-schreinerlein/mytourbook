@@ -52,6 +52,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         return undefined;
     }
 
+    // TODO move to commons
     public static layoutFromString(layout: string): Layout {
         if (!layout) {
             return undefined;

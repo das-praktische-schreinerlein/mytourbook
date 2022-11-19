@@ -21,7 +21,6 @@ export class TourDocSelectSearchComponent extends AbstractInlineComponent {
     public selectMultiActionManager = new CommonDocMultiActionManager(this.appService, this.actionService);
 
     selectFilter: {} = undefined;
-    joinIndexes: any[] = [];
 
     @Input()
     public modal ? = false;

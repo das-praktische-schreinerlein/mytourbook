@@ -185,7 +185,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
     // TODO add cancel to commons
     @Output()
-    public cancel: EventEmitter<boolean> = new EventEmitter();
+    public cancelModal: EventEmitter<boolean> = new EventEmitter();
 
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocSearchFormUtils: TourDocSearchFormUtils,
@@ -376,8 +376,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     // TODO add cancel to commons
-    submitCancel(event: Event): boolean {
-        this.cancel.emit(false);
+    submitCancelModal(event: Event): boolean {
+        this.cancelModal.emit(false);
 
         return false;
     }

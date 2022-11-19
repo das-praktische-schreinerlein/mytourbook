@@ -37,7 +37,7 @@ export class TourDocModalShowpageComponent extends TourDocShowpageComponent {
     }
 
     // TODO add cancel to commons
-    submitModalClose() {
+    submitCloseModal() {
         this.closeModal();
 
         return false;
