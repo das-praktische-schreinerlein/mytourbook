@@ -106,7 +106,11 @@ export class TourDocSelectSearchComponent extends AbstractInlineComponent {
         const filters = {};
         filters['type'] = this.type;
         filters['sort'] = 'distance';
-        filters['where'] = this.createNearByFilter();
+
+        const where = this.createNearByFilter();
+        if (where) {
+            filters['where'] = where;
+        }
 
         const fullText: string = [].concat(this.nameFilterValues)
             .map(value => {
@@ -135,8 +139,8 @@ export class TourDocSelectSearchComponent extends AbstractInlineComponent {
     protected createNearByFilter(): string {
         return this.basePosition !== undefined
             ? 'nearby:' + [this.basePosition.lat, this.basePosition.lng, 10].join('_') +
-            '_,_nearbyAddress:' + this.baseLocHierarchy.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
-            : 'blimblamblummichgibtesnicht';
+                '_,_nearbyAddress:' + this.baseLocHierarchy.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
+            : undefined;
     }
 
     protected configureComponent(): void {
