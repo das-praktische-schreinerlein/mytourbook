@@ -760,9 +760,13 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected preparePoiFiltersForType(record: TourDocRecord): void {
-        this.poiSearchNames = ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(name => {
-            return FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), name);
-        });
+        const name = FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), 'name');
+        this.poiSearchNames = ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(fieldName => {
+            return FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), fieldName);
+        }).concat(name
+            ? name.split(/[ ,;:\/]+/)
+            : []);
+
         this.poiSearchBasePosition = record.geoLat !== undefined
             ? new LatLng(Number(record.geoLat), Number(record.geoLon))
             : undefined;
