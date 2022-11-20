@@ -216,6 +216,7 @@ export class SqlMytbDbRouteConfig {
             't_name',
             't_datefirst AS t_dateshow',
             't_datefirst',
+            't_datelast',
             'DATE_FORMAT(t_datefirst, GET_FORMAT(DATE, "ISO")) AS dateonly',
             'WEEK(t_datefirst) AS week',
             'MONTH(t_datefirst) AS month',
