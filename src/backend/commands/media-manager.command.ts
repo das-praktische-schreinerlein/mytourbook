@@ -21,6 +21,7 @@ import {
     SimpleFilePathValidationRule
 } from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
+    IdCsvValidationRule,
     KeywordValidationRule,
     NumberValidationRule,
     SolrValidationRule,
@@ -44,8 +45,10 @@ export class MediaManagerCommand extends CommonAdminCommand {
             ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),
             parallel: new NumberValidationRule(false, 1, 999, 10),
             pageNum: new NumberValidationRule(false, 1, 999999999, 1),
-            playlists: new KeywordValidationRule(false),
+            actiontype: new IdCsvValidationRule(false),
             fulltext: new SolrValidationRule(false),
+            persons: new KeywordValidationRule(false),
+            playlists: new KeywordValidationRule(false),
             personalRateOverall: new KeywordValidationRule(false),
             directoryProfile: new KeywordValidationRule(false),
             fileNameProfile: new KeywordValidationRule(false),
@@ -100,9 +103,11 @@ export class MediaManagerCommand extends CommonAdminCommand {
             parallel: Number.parseInt(argv['parallel'], 10)
         };
         const pageNum = Number.parseInt(argv['pageNum'], 10);
-        const playlists = argv['playlists'];
+        const actiontype = argv['actiontype'];
         const fulltext = argv['fulltext'];
+        const persons = argv['persons'];
         const personalRateOverall = argv['personalRateOverall'];
+        const playlists = argv['playlists'];
         const skipCheckForExistingFilesInDataBase = argv['skipCheckForExistingFilesInDataBase'] === true
             || argv['skipCheckForExistingFilesInDataBase'] === 'true';
         const renameFileIfExists = !!argv['renameFileIfExists'];
@@ -216,9 +221,11 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 searchForm = new TourDocSearchForm({
                     type: type,
+                    actiontype: actiontype,
                     fulltext: fulltext,
-                    playlists: playlists,
+                    persons: persons,
                     personalRateOverall: personalRateOverall,
+                    playlists: playlists,
                     sort: 'm3uExport',
                     pageNum: Number.isInteger(pageNum) ? pageNum : 1});
 

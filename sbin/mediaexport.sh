@@ -11,7 +11,7 @@ function dofail {
 
 # check parameters
 if [ "$#" -lt 2 ]; then
-    dofail "USAGE: mediaexport.sh CONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES] \nFATAL: requires 2 parameters " 1
+    dofail "USAGE: mediaexport.sh CONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES ACTIONTYPES PERSONS] \nFATAL: requires 2 parameters " 1
     exit 1
 fi
 
@@ -27,6 +27,8 @@ SHOWNONBLOCKEDONLY=${9:-showall}
 FULLTEXRFILTER=${10}
 CREATEHTML=${11:-none}
 TYPES=${12:-image,video}
+ACTIONTYPES=${13}
+PERSONS=${14}
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
@@ -34,19 +36,19 @@ source ${SCRIPTPATH}/configure-environment.bash
 # check parameters
 cd ${MYTB}
 if [ ! -d "${EXPORTDIR}" ]; then
-    dofail "USAGE: mediaexport.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES]\nFATAL: EXPORTDIR: ${EXPORTDIR} not exists " 1
+    dofail "USAGE: mediaexport.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES ACTIONTYPES PERSONS]\nFATAL: EXPORTDIR: ${EXPORTDIR} not exists " 1
 fi
 if [ -d "${EXPORTDIR}/${PLAYLISTFILE}" ]; then
-    dofail "USAGE: mediaexport.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES]\nFATAL: PLAYLISTFILE: ${EXPORTDIR}/${PLAYLISTFILE} is directory " 1
+    dofail "USAGE: mediaexport.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES ACTIONTYPES PERSONS]\nFATAL: PLAYLISTFILE: ${EXPORTDIR}/${PLAYLISTFILE} is directory " 1
 fi
 
 CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
 if [ ! -f "${CONFGFILE}" ]; then
-    dofail "USAGE: dataexport-playlist.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES]\nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
+    dofail "USAGE: dataexport-playlist.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES ACTIONTYPES PERSONS]\nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
 fi
 CLICONFGFILE="${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json"
 if [ ! -f "${CLICONFGFILE}" ]; then
-    dofail "USAGE: dataexport-playlist.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES]\nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
+    dofail "USAGE: dataexport-playlist.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES ACTIONTYPES PERSONS]\nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
 fi
 
 echo "start - prepare file expor for types $TYPES: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
@@ -69,19 +71,19 @@ for TYPE in "${TYPESARR[@]}"
 do
   echo "start export of $TYPE"
   if [ "${TYPE}" == "image" ]; then
-    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
+    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}" --actiontype "${ACTIONTYPES}" --persons "${PERSONS}"
     ${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-images.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_images_export_chunk
   elif [ "${TYPE}" == "route" ]; then
-    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportRouteFiles  --exportName "${PLAYLISTFILE}-routes" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
+    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportRouteFiles  --exportName "${PLAYLISTFILE}-routes" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}" --actiontype "${ACTIONTYPES}" --persons "${PERSONS}"
     ${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-routes.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_routes_export_chunk
   elif [ "${TYPE}" == "track" ]; then
-    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportTrackFiles  --exportName "${PLAYLISTFILE}-tracks" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
+    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportTrackFiles  --exportName "${PLAYLISTFILE}-tracks" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}" --actiontype "${ACTIONTYPES}" --persons "${PERSONS}"
     ${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-tracks.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_tracks_export_chunk
   elif [ "${TYPE}" == "video" ]; then
-    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}"
+    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}" --actiontype "${ACTIONTYPES}" --persons "${PERSONS}"
     ${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-videos.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_videos_export_chunk
   else
-    dofail "USAGE: mediaexport.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES]\nFATAL: TYPE: $TYPE not exists " 1
+    dofail "USAGE: mediaexport.shcONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES ACTIONTYPES PERSONS]\nFATAL: TYPE: $TYPE not exists " 1
   fi
 done
 
