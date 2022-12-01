@@ -32,6 +32,7 @@
 - backend: fixed sql/solr for all entities
 - frontend: split components and build for smaller optimized readonly-version
 - backend: improved sql/solr for all entities
+- commons: improved and generalized itemsjs-adapter
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -60,6 +61,7 @@
 - backend: fixed sql/solr for all entities
 - frontend: split components and build for smaller optimized readonly-version
 - backend: improved sql/solr for all entities
+- commons: improved and generalized itemsjs-adapter
 
 ### bug fixes
 - backend: fixed media-export of dependent records

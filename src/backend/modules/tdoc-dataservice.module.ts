@@ -12,8 +12,11 @@ import {TourDocItemsJsAdapter} from '../shared/tdoc-commons/services/tdoc-itemsj
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {FacetCacheUsageConfigurations, SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {CommonObjectDetectionProcessingDatastore} from '@dps/mycms-commons/dist/commons/model/common-object-detection-processing-datastore';
-import {TourDocSqlMytbDbObjectDetectionProcessingAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection-processing.adapter';
+import {
+    TourDocSqlMytbDbObjectDetectionProcessingAdapter
+} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection-processing.adapter';
 import {BackendConfigType} from './backend.commons';
+import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '../shared/tdoc-commons/services/itemsjs.dataimporter';
 
 export interface SqlConnectionConfig {
     client: 'sqlite3' | 'mysql';
@@ -172,13 +175,23 @@ export class TourDocDataServiceModule {
         const dataService: TourDocDataService = new TourDocDataService(dataStore);
 
         // configure adapter
-        const itemsJsConfig = backendConfig.TourDocItemsJsAdapter;
-        if (itemsJsConfig === undefined) {
+        const config = backendConfig.TourDocItemsJsAdapter;
+        if (config === undefined) {
             throw new Error('config for TourDocItemsJsAdapter not exists');
         }
-        const records = TourDocFileUtils.parseRecordSourceFromJson(fs.readFileSync(itemsJsConfig.dataFile, { encoding: 'utf8' }));
 
-        const adapter = new TourDocItemsJsAdapter({mapperConfig: backendConfig.mapperConfig}, records);
+        const tdocs = [];
+        const data = TourDocFileUtils.parseRecordSourceFromJson(fs.readFileSync(config.dataFile, { encoding: 'utf8' }));
+        const exportRecords = data.map(doc => {
+            return importer.extendAdapterDocument(doc);
+        });
+
+        tdocs.push(...exportRecords);
+
+        const itemsJsConfig: ExtendedItemsJsConfig = TourDocItemsJsAdapter.itemsJsConfig;
+        const importer: ItemsJsDataImporter = new ItemsJsDataImporter(itemsJsConfig);
+        const records = importer.mapToItemJsDocuments(tdocs);
+        const adapter = new TourDocItemsJsAdapter({mapperConfig: backendConfig.mapperConfig}, records, itemsJsConfig);
         dataStore.setAdapter('http', adapter, '', {});
 
         return dataService;

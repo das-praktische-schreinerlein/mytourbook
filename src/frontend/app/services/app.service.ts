@@ -16,6 +16,8 @@ import {FallbackHttpClient} from './fallback-http-client';
 import * as Promise_serial from 'promise-serial';
 import {DataMode} from '../../shared/tdoc-commons/model/datamode.enum';
 import {ToastrService} from 'ngx-toastr';
+import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '../../shared/tdoc-commons/services/itemsjs.dataimporter';
+import {TourDocRecordRelation} from '../../shared/tdoc-commons/model/records/tdoc-record';
 
 @Injectable()
 export class AppService extends GenericAppService {
@@ -239,6 +241,11 @@ export class AppService extends GenericAppService {
         me.appConfig.permissions.tdocActionTagWritable = false;
         me.appConfig.permissions.adminWritable = false;
 
+        const options = { skipMediaCheck: me.appConfig.skipMediaCheck};
+        const itemsJsConfig: ExtendedItemsJsConfig = TourDocItemsJsAdapter.itemsJsConfig;
+        itemsJsConfig.skipMediaCheck = me.appConfig.skipMediaCheck || false;
+        const importer: ItemsJsDataImporter = new ItemsJsDataImporter(itemsJsConfig);
+
         return  me.fallBackHttpClient.loadJsonPData(me.appConfig.staticPDocsFile, 'importStaticDataPDocsJsonP', 'pdocs')
             .then(function onPDocLoaded(data: any) {
                 if (data['pdocs']) {
@@ -266,7 +273,7 @@ export class AppService extends GenericAppService {
                         const data = arrayOfResults[i];
                         if (data['mdocs']) {
                             const exportRecords = data['mdocs'].map(doc => {
-                                return TourDocItemsJsAdapter.extendAdapterDocument(doc);
+                                return importer.extendAdapterDocument(doc);
                             });
 
                             tdocs.push(...exportRecords);
@@ -274,14 +281,13 @@ export class AppService extends GenericAppService {
                         }
 
                         if (data['currentRecords']) {
-                            const options = {};
                             const responseMapper = new TourDocAdapterResponseMapper(options);
                             const searchRecords = data['currentRecords'].map(doc => {
-                                const record = TourDocItemsJsAdapter.createRecordFromJson(responseMapper,
-                                    me.tdocDataStore.getMapper('tdoc'), doc);
+                                const record = importer.createRecordFromJson(responseMapper,
+                                    me.tdocDataStore.getMapper('tdoc'), doc, TourDocRecordRelation);
                                 const adapterValues = responseMapper.mapToAdapterDocument({}, record);
 
-                                return TourDocItemsJsAdapter.extendAdapterDocument(adapterValues);
+                                return importer.extendAdapterDocument(adapterValues);
                             });
 
                             tdocs.push(...searchRecords);
@@ -297,8 +303,9 @@ export class AppService extends GenericAppService {
                 });
             }).then(function onDocParsed(tdocs: any[]) {
                 console.log('initially loaded tdocs from assets', tdocs);
-                const options = { skipMediaCheck: me.appConfig.skipMediaCheck};
-                const tdocAdapter = new TourDocItemsJsAdapter(options, tdocs);
+                const records = importer.mapToItemJsDocuments(tdocs);
+                const tdocAdapter = new TourDocItemsJsAdapter(options, records, itemsJsConfig);
+
                 me.tdocDataStore.setAdapter('http', tdocAdapter, '', {});
                 me.tdocDataService.setWritable(false);
 
