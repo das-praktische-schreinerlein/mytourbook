@@ -32,6 +32,15 @@ export class SqlMytbDbPoiConfig {
                 from: 'LEFT JOIN kategorie_poi ON poi.poi_id=kategorie_poi.poi_id',
                 triggerParams: ['track_id_i', 'track_id_is'],
                 groupByFields: ['kategorie_poi.k_id']
+            },
+            {
+                from: 'INNER JOIN (SELECT poi_id AS id FROM poi WHERE poi_calced_identifier' +
+                    '              IN (SELECT DISTINCT poi_calced_identifier' + ' AS name' +
+                    '                  FROM poi GROUP BY name HAVING COUNT(*) > 1)' +
+                    '             ) doublettes' +
+                    '             ON poi.poi_id=doublettes.id',
+                triggerParams: ['doublettes'],
+                groupByFields: []
             }
         ],
         groupbBySelectFieldList: true,
@@ -109,8 +118,16 @@ export class SqlMytbDbPoiConfig {
         facetConfigs: {
             // dashboard
             'doublettes': {
-                constValues: ['doublettes'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(poi.poi_id) AS count, "doublettes" AS value,' +
+                    ' "doublettes" AS label, "true" AS id' +
+                    ' FROM poi INNER JOIN (SELECT poi_id AS id FROM poi WHERE poi_calced_identifier' +
+                    '              IN (SELECT DISTINCT poi_calced_identifier' + ' AS name' +
+                    '                  FROM poi GROUP BY name HAVING COUNT(*) > 1)' +
+                    '             ) doublettes' +
+                    '             ON poi.poi_id=doublettes.id',
+                cache: {
+                    useCache: false
+                }
             },
             'conflictingRates': {
                 constValues: ['conflictingRates'],
