@@ -33,6 +33,8 @@ WHERE KW_ID NOT IN (
     UNION
     select distinct kw_id from location_keyword
     UNION
+    select distinct kw_id from poi_keyword
+    UNION
     select distinct kw_id from tour_keyword
     UNION
     select distinct kw_id from video_keyword
