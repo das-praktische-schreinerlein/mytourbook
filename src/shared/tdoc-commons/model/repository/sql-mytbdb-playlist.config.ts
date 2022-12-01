@@ -21,8 +21,8 @@ export class SqlMytbDbPlaylistConfig {
                 groupByFields: []
             },
             {
-                from: 'INNER JOIN (SELECT p_id AS id FROM playlist WHERE n_key' +
-                    '              IN (SELECT DISTINCT n_key AS name' +
+                from: 'INNER JOIN (SELECT p_id AS id FROM playlist WHERE p_key' +
+                    '              IN (SELECT DISTINCT p_key AS name' +
                     '                  FROM playlist GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON playlist.p_id=doublettes.id',
