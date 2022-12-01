@@ -3,7 +3,6 @@ import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-comm
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
-import {TourDocSqlUtils} from '../../services/tdoc-sql.utils';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 
 export class SqlMytbDbTripConfig {
@@ -39,8 +38,8 @@ export class SqlMytbDbTripConfig {
                 groupByFields: ['news.n_id']
             },
             {
-                from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') +
-                    '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
+                from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE tr_key' +
+                    '              IN (SELECT DISTINCT tr_key AS name' +
                     '                  FROM trip GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON trip.tr_id=doublettes.id',
@@ -184,8 +183,8 @@ export class SqlMytbDbTripConfig {
             'doublettes': {
                 selectSql: 'SELECT COUNT(trip.tr_id) AS count, "doublettes" AS value,' +
                     ' "doublettes" AS label, "true" AS id' +
-                    ' FROM trip INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') +
-                    '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
+                    ' FROM trip INNER JOIN (SELECT tr_id AS id FROM trip WHERE tr_key' +
+                    '              IN (SELECT DISTINCT tr_key AS name' +
                     '                  FROM trip GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON trip.tr_id=doublettes.id',
@@ -495,6 +494,7 @@ export class SqlMytbDbTripConfig {
             'trip.tr_gesperrt': ':blocked_i:',
 //                'trip.tr_meta_shortdesc_md': ':desc_md_txt:',
 //                'trip.tr_meta_shortdesc_html': ':desc_html_txt:',
+            'trip.tr_key': ':key_s:',
             'trip.tr_name': ':name_s:'
         },
         fieldMapping: {

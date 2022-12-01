@@ -1,7 +1,6 @@
 import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
-import {TourDocSqlUtils} from '../../services/tdoc-sql.utils';
 
 export class SqlMytbDbPlaylistConfig {
     public static readonly tableConfig: TableConfig = {
@@ -22,8 +21,8 @@ export class SqlMytbDbPlaylistConfig {
                 groupByFields: []
             },
             {
-                from: 'INNER JOIN (SELECT p_id AS id FROM playlist WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('p_name') +
-                    '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('p_name') + ' AS name' +
+                from: 'INNER JOIN (SELECT p_id AS id FROM playlist WHERE n_key' +
+                    '              IN (SELECT DISTINCT n_key AS name' +
                     '                  FROM playlist GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON playlist.p_id=doublettes.id',
@@ -97,8 +96,8 @@ export class SqlMytbDbPlaylistConfig {
             'doublettes': {
                 selectSql: 'SELECT COUNT(playlist.p_id) AS count, "doublettes" AS value,' +
                     ' "doublettes" AS label, "true" AS id' +
-                    ' FROM playlist INNER JOIN (SELECT p_id AS id FROM playlist WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('p_name') +
-                    '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('p_name') + ' AS name' +
+                    ' FROM playlist INNER JOIN (SELECT p_id AS id FROM playlist WHERE p_key' +
+                    '              IN (SELECT DISTINCT p_key AS name' +
                     '                  FROM playlist GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON playlist.p_id=doublettes.id',
@@ -351,6 +350,7 @@ export class SqlMytbDbPlaylistConfig {
         },
         writeMapping: {
             'playlist.p_meta_desc': ':desc_txt:',
+            'playlist.p_key': ':key_s:',
             'playlist.p_name': ':name_s:'
         },
         fieldMapping: {

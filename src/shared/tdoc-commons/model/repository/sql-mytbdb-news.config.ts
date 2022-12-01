@@ -3,7 +3,6 @@ import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-comm
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
-import {TourDocSqlUtils} from '../../services/tdoc-sql.utils';
 
 export class SqlMytbDbNewsConfig {
     public static readonly tableConfig: TableConfig = {
@@ -12,8 +11,8 @@ export class SqlMytbDbNewsConfig {
         selectFrom: 'news',
         optionalGroupBy: [
             {
-                from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
-                    '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
+                from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE n_key' +
+                    '              IN (SELECT DISTINCT n_key AS name' +
                     '                  FROM news GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON news.n_id=doublettes.id',
@@ -147,8 +146,8 @@ export class SqlMytbDbNewsConfig {
                 selectSql: 'SELECT COUNT(DISTINCT news.n_id) AS count, "doublettes" AS value,' +
                     ' "doublettes" AS label, "true" AS id' +
                     ' FROM news INNER JOIN (SELECT n_id AS id' +
-                    '              FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
-                    '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
+                    '              FROM news WHERE n_key' +
+                    '              IN (SELECT DISTINCT n_key AS name' +
                     '                  FROM news GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON news.n_id=doublettes.id',
@@ -411,6 +410,7 @@ export class SqlMytbDbNewsConfig {
             'news.n_message_md': ':desc_md_txt:',
             'news.n_message_html': ':desc_html_txt:',
             'news.n_keywords': ':keywords_txt:',
+            'news.n_key': ':key_s:',
             'news.n_headline': ':name_s:'
         },
         fieldMapping: {

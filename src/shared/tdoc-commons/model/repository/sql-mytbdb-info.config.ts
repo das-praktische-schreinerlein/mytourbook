@@ -3,7 +3,6 @@ import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-comm
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
-import {TourDocSqlUtils} from '../../services/tdoc-sql.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 
@@ -72,8 +71,8 @@ export class SqlMytbDbInfoConfig {
                 groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS if_keywords']
             },
             {
-                from: 'INNER JOIN (SELECT if_id AS id FROM info WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('if_name') +
-                    '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('if_name') + ' AS name' +
+                from: 'INNER JOIN (SELECT if_id AS id FROM info WHERE if_key' +
+                    '              IN (SELECT DISTINCT if_key AS name' +
                     '                  FROM info GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON info.if_id=doublettes.id',
@@ -165,8 +164,8 @@ export class SqlMytbDbInfoConfig {
             'doublettes': {
                 selectSql: 'SELECT COUNT(info.if_id) AS count, "doublettes" AS value,' +
                     ' "doublettes" AS label, "true" AS id' +
-                    ' FROM info INNER JOIN (SELECT if_id AS id FROM info WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('if_name') +
-                    '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('if_name') + ' AS name' +
+                    ' FROM info INNER JOIN (SELECT if_id AS id FROM info WHERE if_key' +
+                    '              IN (SELECT DISTINCT if_key AS name' +
                     '                  FROM info GROUP BY name HAVING COUNT(*) > 1)' +
                     '             ) doublettes' +
                     '             ON info.if_id=doublettes.id',
@@ -461,6 +460,7 @@ export class SqlMytbDbInfoConfig {
             'info.if_publisher': ':info_publisher_s:',
             'info.if_typ': ':subtype_s:',
             'info.if_url': ':info_reference_s:',
+            'info.if_key': ':key_s:',
             'info.if_name': ':name_s:'
         },
         fieldMapping: {
