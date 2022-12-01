@@ -389,11 +389,11 @@ window.importStaticConfigJsonP = `{
             }
         },
         "tdoc-albumpage": {
-            "allowAutoplay": false,
+            "allowAutoPlay": true,
             "m3uAvailable": true
         },
         "cdoc-listheader": {
-            "allowAutoplay": false
+            "allowAutoPlay": true
         },
         "pdoc-sectionpage": {
             "availableTabs": {

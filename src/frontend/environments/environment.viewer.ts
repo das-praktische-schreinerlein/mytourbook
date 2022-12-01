@@ -19,7 +19,7 @@ export const environment: AppEnvironment = {
     skipMediaCheck: false,
     tdocWritable: false,
     tdocActionTagWritable: false,
-    allowAutoPlay: false,
+    allowAutoPlay: true,
     tdocMaxItemsPerAlbum: -1,
     m3uAvailable: false,
     cookieLawSeenName: 'cookieLawSeenV20180525',
