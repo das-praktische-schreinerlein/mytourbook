@@ -255,6 +255,64 @@ window.importStaticConfigJsonP = `{
         "tdoc-actions": {
             "actionTags": [
                 {
+                    "key": "link_download_image_static",
+                    "type": "link",
+                    "name": "Download Image Static",
+                    "shortName": "\uD83D\uDCE5",
+                    "payload": {
+                        "url": "./pics_full/{{id}}",
+                        "target": "download",
+                        "replacements": {
+                            "id": "record.tdocimages[0].fileName"
+                        }
+                    },
+                    "showFilter": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["show_only_on_popup"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                    ]
+                },
+                {
+                    "key": "link_download_video_static",
+                    "type": "link",
+                    "name": "Download Video Static",
+                    "shortName": "\uD83D\uDCE5",
+                    "payload": {
+                        "url": "./video_full/{{id}}",
+                        "target": "download",
+                        "replacements": {
+                            "id": "record.tdocvideos[0].fileName"
+                        }
+                    },
+                    "showFilter": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["show_only_on_popup"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                    ]
+                },
+                {
                     "key": "local_album_current",
                     "type": "albumtag",
                     "name": "\u2764 local Album",
@@ -389,11 +447,11 @@ window.importStaticConfigJsonP = `{
             }
         },
         "tdoc-albumpage": {
-            "allowAutoPlay": true,
+            "allowAutoplay": true,
             "m3uAvailable": true
         },
         "cdoc-listheader": {
-            "allowAutoPlay": true
+            "allowAutoplay": true
         },
         "pdoc-sectionpage": {
             "availableTabs": {
