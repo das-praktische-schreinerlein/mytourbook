@@ -14,7 +14,10 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         aggregationFields: ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'destination_id_s', 'track_id_i',
             'trip_id_i', 'news_id_i', 'video_id_i', 'info_id_i', 'poi_id_i', 'image_similar_id_i', 'loc_parent_id_i'],
         refConfigs: [
-            { containerField: 'linkedinfos_clob', refField: 'refId', filterFields: ['info_id_i', 'info_id_is']}
+            { containerField: 'linkedinfos_clob', refField: 'refId', idPrefix: 'INFO_', filterFields: ['info_id_i', 'info_id_is']},
+            { containerField: 'linkedplaylists_clob', refField: 'refId', idPrefix: 'PLAYLIST_', filterFields: ['playlist_id_i', 'playlist_id_is']},
+            { containerField: 'linkedpois_clob', refField: 'refId', idPrefix: 'POI_', filterFields: ['poi_id_i', 'poi_id_is']},
+            { containerField: 'linkedroutes_clob', refField: 'refId', idPrefix: 'ROUTE_', filterFields: ['route_id_i', 'route_id_is']}
         ],
         spatialField: 'geo_loc_p',
         spatialSortKey: 'distance',

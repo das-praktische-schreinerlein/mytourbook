@@ -5,15 +5,23 @@ import {isNumeric} from 'rxjs/internal-compatibility';
 import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 import {BaseEntityRecordRelationsType} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 
+export interface RefMappingType {
+    [id: string]:  {
+        [filterField: string]: any[]
+    };
+}
+
+
 export interface RefConfigType {
     containerField: string,
     refField: string,
+    idPrefix: string,
     filterFields: string[]
 }
 
 export interface ExtendedItemsJsConfig extends ItemsJsConfig {
     aggregationFields: string[],
-    refConfigs: [RefConfigType],
+    refConfigs: RefConfigType[],
     skipMediaCheck: boolean
 }
 
@@ -24,22 +32,18 @@ export class ItemsJsDataImporter {
     protected _valueSeparator = '=';
     protected itemsJsConfig: ExtendedItemsJsConfig;
 
-    constructor(itemsJsConfig: ExtendedItemsJsConfig) {
-        this.itemsJsConfig = itemsJsConfig;
-    }
-
-    public mapToItemJsDocuments(data: any) {
-        for (const aggreationName in this.itemsJsConfig.aggregations) {
-            const aggregation = this.itemsJsConfig.aggregations[aggreationName];
+    public static prepareConfiguration(itemsJsConfig: ExtendedItemsJsConfig) {
+        for (const aggreationName in itemsJsConfig.aggregations) {
+            const aggregation = itemsJsConfig.aggregations[aggreationName];
             if (!aggregation['field']) {
                 aggregation['field'] = aggreationName;
             }
         }
 
-        for (const fieldName of this.itemsJsConfig.aggregationFields) {
+        for (const fieldName of itemsJsConfig.aggregationFields) {
             if (fieldName.endsWith('_i') || fieldName.endsWith('_s')) {
-                if (!this.itemsJsConfig.aggregations[fieldName]) {
-                    this.itemsJsConfig.aggregations[fieldName] = {
+                if (!itemsJsConfig.aggregations[fieldName]) {
+                    itemsJsConfig.aggregations[fieldName] = {
                         conjunction: false,
                         sort: 'term',
                         order: 'asc',
@@ -48,8 +52,8 @@ export class ItemsJsDataImporter {
                     };
                 }
 
-                if (!this.itemsJsConfig.aggregations[fieldName + 's']) {
-                    this.itemsJsConfig.aggregations[fieldName + 's'] = {
+                if (!itemsJsConfig.aggregations[fieldName + 's']) {
+                    itemsJsConfig.aggregations[fieldName + 's'] = {
                         conjunction: false,
                         sort: 'term',
                         order: 'asc',
@@ -59,7 +63,13 @@ export class ItemsJsDataImporter {
                 }
             }
         }
+    }
 
+    constructor(itemsJsConfig: ExtendedItemsJsConfig) {
+        this.itemsJsConfig = itemsJsConfig;
+    }
+
+    public mapToItemJsDocuments(data: any) {
         const recordIds = {};
         const records = [];
         const recordMap = {};
@@ -94,6 +104,9 @@ export class ItemsJsDataImporter {
 
             recordMap[record.id] = record;
         }
+
+        const refMappings = this.generateRelationMappings(recordMap);
+        this.remapRelationMappings(recordMap, refMappings);
 
         if (!this.itemsJsConfig.skipMediaCheck) {
             this.clearNotExistingMediaPathes(records, imagePathes, videoPathes);
@@ -163,9 +176,9 @@ export class ItemsJsDataImporter {
             values['loc_lochirarchie_txt'] = values['loc_lochirarchie_s'].split(',,');
         }
 
-        // add aggregations for searchableFields
+        // add aggregations for searchableFields if not exists
         for (const fieldName of this.itemsJsConfig.searchableFields) {
-            if (fieldName.endsWith('_i') || fieldName.endsWith('_s')) {
+            if ((fieldName.endsWith('_i') || fieldName.endsWith('_s')) && !values[fieldName + 's']) {
                 values[fieldName + 's'] = values[fieldName];
             }
         }
@@ -182,8 +195,6 @@ export class ItemsJsDataImporter {
                 values[key] = values[key] + '';
             }
         }
-
-        // TODO if array set all array values as strings
 
         return values;
     }
@@ -269,7 +280,9 @@ export class ItemsJsDataImporter {
         }
     }
 
-    protected maRelations(recordMap: {}) {
+    protected generateRelationMappings(recordMap: {}): RefMappingType {
+        const result: RefMappingType = {};
+
         for (const recordId of Object.keys(recordMap)) {
             const record = recordMap[recordId];
             for (const refConfig of this.itemsJsConfig.refConfigs) {
@@ -285,14 +298,47 @@ export class ItemsJsDataImporter {
                         }
                     }
 
-                    // TODO set current Id -> to refIds of refererenced
                     for (const filterField of refConfig.filterFields) {
-                        // record[filterField] = refIds;
+                        if (!record[filterField]) {
+                            record[filterField] = [];
+                        }
+
+                        if (!Array.isArray(record[filterField])) {
+                            record[filterField] = [record[filterField]];
+                        }
+
+                        record[filterField] = record[filterField].concat(refIds);
+
+                        for (const refId of refIds) {
+                            const fullRefId = refConfig.idPrefix + refId;
+                            if (!result[fullRefId]) {
+                                result[fullRefId] = {};
+                            }
+
+                            if (!result[fullRefId][filterField]) {
+                                result[fullRefId][filterField] = [];
+                            }
+
+                            result[fullRefId][filterField].push(recordId);
+                        }
                     }
                 }
             }
         }
 
+        return result;
+    }
+
+    protected remapRelationMappings(recordMap: {}, refMappings: RefMappingType) {
+        // TODO map to original-record instead opf reference
+        for (const recordId of Object.keys(recordMap)) {
+            const record = recordMap[recordId];
+            const recordRefMappings = refMappings[record['id']];
+            if (!recordRefMappings) {
+                continue;
+            }
+
+        }
     }
 
     protected getItemsJsConfig(): ItemsJsConfig {

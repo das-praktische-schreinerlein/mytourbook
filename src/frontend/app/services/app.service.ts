@@ -244,6 +244,7 @@ export class AppService extends GenericAppService {
         const options = { skipMediaCheck: me.appConfig.skipMediaCheck};
         const itemsJsConfig: ExtendedItemsJsConfig = TourDocItemsJsAdapter.itemsJsConfig;
         itemsJsConfig.skipMediaCheck = me.appConfig.skipMediaCheck || false;
+        ItemsJsDataImporter.prepareConfiguration(itemsJsConfig);
         const importer: ItemsJsDataImporter = new ItemsJsDataImporter(itemsJsConfig);
 
         return  me.fallBackHttpClient.loadJsonPData(me.appConfig.staticPDocsFile, 'importStaticDataPDocsJsonP', 'pdocs')

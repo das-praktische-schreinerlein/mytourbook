@@ -32,7 +32,7 @@ export class TourDocExporterCommand extends CommonAdminCommand {
 
     protected processCommandArgs(argv: {}): Promise<any> {
         const perRun = 999;
-        const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video'];
+        const typeOrder = ['location', 'playlist', 'info', 'poi', 'news', 'trip', 'route', 'track', 'image', 'video'];
 
         const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {

@@ -189,6 +189,7 @@ export class TourDocDataServiceModule {
         tdocs.push(...exportRecords);
 
         const itemsJsConfig: ExtendedItemsJsConfig = TourDocItemsJsAdapter.itemsJsConfig;
+        ItemsJsDataImporter.prepareConfiguration(itemsJsConfig);
         const importer: ItemsJsDataImporter = new ItemsJsDataImporter(itemsJsConfig);
         const records = importer.mapToItemJsDocuments(tdocs);
         const adapter = new TourDocItemsJsAdapter({mapperConfig: backendConfig.mapperConfig}, records, itemsJsConfig);
