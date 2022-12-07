@@ -2,11 +2,9 @@ import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
-import {ItemsJsConfig, ItemsJsSelectQueryData} from '@dps/mycms-commons/dist/search-commons/services/itemsjs-query.builder';
-import {GenericItemsJsAdapter, ItemJsResult} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
-import {Mapper} from 'js-data';
-import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
-import {ExtendedItemsJsConfig} from './itemsjs.dataimporter';
+import {ItemsJsConfig} from '@dps/mycms-commons/dist/search-commons/services/itemsjs-query.builder';
+import {GenericItemsJsAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
+import {ExtendedItemsJsConfig} from '@dps/mycms-commons/dist/search-commons/services/itemsjs.dataimporter';
 
 export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public static itemsJsConfig: ExtendedItemsJsConfig = {
@@ -343,76 +341,6 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         return TourDocItemsJsAdapter.itemsJsConfig;
     }
 
-    // TODO move to commons
-    protected queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): ItemsJsSelectQueryData {
-        // map html to fulltext
-        const adapterQuery = <AdapterQuery> params;
-        let fulltextQuery = '';
-        const specialAggregations = {};
-        if (adapterQuery.where) {
-            if (adapterQuery.where['html']) {
-                const action = Object.getOwnPropertyNames(adapterQuery.where['html'])[0];
-                fulltextQuery = adapterQuery.where['html'][action];
-                delete adapterQuery.where['html'];
-            }
-
-            for (const filterBase of []) {
-                if (adapterQuery.where[filterBase + '_txt']) {
-                    const action = Object.getOwnPropertyNames(adapterQuery.where[filterBase + '_txt'])[0];
-                    specialAggregations[filterBase + '_ss'] = adapterQuery.where[filterBase + '_txt'][action];
-                    delete adapterQuery.where[filterBase + '_txt'];
-                }
-            }
-        }
-
-        const queryData = super.queryTransformToAdapterQueryWithMethod(method, mapper, adapterQuery, opts);
-        queryData.query = fulltextQuery;
-
-        if (!queryData.filters) {
-            queryData.filters = {};
-        }
-        queryData.filters = {...queryData.filters, ...specialAggregations};
-
-        console.log('itemsjs query:', queryData);
-
-        return queryData;
-    }
-
-    // TODO move to commons
-    extractRecordsFromRequestResult(mapper: Mapper, result: ItemJsResult): TourDocRecord[] {
-        // got documents
-        const docs = result.data.items;
-        const recordIds = {};
-        const afterRecordIds = {};
-        const records = [];
-        for (const doc of docs) {
-            if (recordIds[doc['id']]) {
-                console.error('DUPLICATION id not unique on itemsjs-result', doc['id'], doc);
-                continue;
-            }
-
-            recordIds[doc['id']] = true;
-
-            // remap fields
-            const docCopy = {...doc};
-            for (const filterBase of ['keywords', 'objects', 'persons', 'playlists']) {
-                docCopy[filterBase + '_txt'] = docCopy[filterBase + '_ss'];
-            }
-
-            const record = this.mapResponseDocument(mapper, docCopy, this.getItemsJsConfig());
-            if (afterRecordIds[record['id']]) {
-                console.error('DUPLICATION id not unique after itemsjs-mapping', record['id'], record);
-                continue;
-            }
-
-            afterRecordIds[record['id']] = true;
-
-            records.push(record);
-        }
-        // console.log('extractRecordsFromRequestResult:', records);
-
-        return records;
-    }
 
 }
 

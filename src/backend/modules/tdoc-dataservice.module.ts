@@ -16,7 +16,7 @@ import {
     TourDocSqlMytbDbObjectDetectionProcessingAdapter
 } from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection-processing.adapter';
 import {BackendConfigType} from './backend.commons';
-import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '../shared/tdoc-commons/services/itemsjs.dataimporter';
+import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '@dps/mycms-commons/dist/search-commons/services/itemsjs.dataimporter';
 
 export interface SqlConnectionConfig {
     client: 'sqlite3' | 'mysql';

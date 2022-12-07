@@ -16,7 +16,7 @@ import {FallbackHttpClient} from './fallback-http-client';
 import * as Promise_serial from 'promise-serial';
 import {DataMode} from '../../shared/tdoc-commons/model/datamode.enum';
 import {ToastrService} from 'ngx-toastr';
-import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '../../shared/tdoc-commons/services/itemsjs.dataimporter';
+import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '@dps/mycms-commons/dist/search-commons/services/itemsjs.dataimporter';
 import {TourDocRecordRelation} from '../../shared/tdoc-commons/model/records/tdoc-record';
 
 @Injectable()
@@ -253,7 +253,7 @@ export class AppService extends GenericAppService {
                     return Promise.resolve(data['pdocs']);
                 }
 
-                return Promise.reject('No static tdocs found');
+                return Promise.reject('No static pdocs found');
             }).then(function onPDocParsed(docs: any[]) {
                 me.pdocDataService.setWritable(true);
                 return me.pdocDataService.addMany(docs);
