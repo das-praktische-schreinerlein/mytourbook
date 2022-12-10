@@ -11,7 +11,7 @@ function dofail {
 
 # check parameters
 if [ "$#" -ne 1 ]; then
-    dofail "USAGE: dataimport-03-import-tracks-to production-database.sh importKey\nFATAL: requires 'importKey' as parameters 'import-XXXX'" 1
+    dofail "USAGE: dataimport-03-import-tracks-to-production-database.sh importKey\nFATAL: requires 'importKey' as parameters 'import-XXXX'" 1
     exit 1
 fi
 IMPORTKEY=$1
@@ -32,7 +32,10 @@ source ${SCRIPTPATH}/configure-environment.bash
 
 echo "now: initialize production-database (mysql)"
 cd ${MYTB}
-node_modules/.bin/db-migrate up --migrations-dir migrations/mytbdb --config ${CONFIG_BASEDIR}db-migrate-database.json --env mytbdb_mysql
+node_modules/.bin/db-migrate up\
+           --migrations-dir migrations/mytbdb\
+           --config ${CONFIG_BASEDIR}db-migrate-database.json\
+           --env mytbdb_mysql
 cd $CWD
 
 echo "YOUR TODO: start facetcache for production-database in separate shell' cd ${MYTB} && npm run backend-start-server-managed-facetcache-dev && cd $CWD'"
@@ -47,7 +50,13 @@ echo "now: export import-database"
 if [[ ! -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" && ! -f "${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json" ]]; then
   echo "now: create image-export-file"
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --command exportTourDoc --action exportDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+  node dist/backend/serverAdmin.js\
+           --debug\
+           --command exportTourDoc\
+           --action exportDocs\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json\
+           --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
   cd $CWD
 else
   if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" ]; then
@@ -77,7 +86,14 @@ done
 
 echo "now: import into production-database"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --renameFileAfterSuccess true --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json --backend ${CONFIG_BASEDIR}backend.dev.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+node dist/backend/serverAdmin.js\
+           --debug\
+           --renameFileAfterSuccess true\
+           --command loadTourDoc\
+           --action loadDocs\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json\
+           --backend ${CONFIG_BASEDIR}backend.dev.json\
+           --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
 
 # fallback if importdir is a symlink and file cant be renamed
 if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" ]; then

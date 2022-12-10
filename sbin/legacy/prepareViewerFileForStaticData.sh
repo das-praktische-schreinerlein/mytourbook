@@ -32,6 +32,8 @@ fi
 
 echo "start - preparing ${DESTDIR}/index.viewer.full for ${RESULTBASE}"
 
+# TODO remove when script is functional
+
 echo "running - coping ${DESTDIR}/index.viewer.full"
 cp ${SCRIPTPATH}/../dist/static/mytbviewer/de/index.viewer.full.html  ${DESTDIR}/index.viewer.full.tmp
 
@@ -47,6 +49,8 @@ for CHUNKFILE in $(/usr/bin/find ./ -name "${RESULTBASE}*.js" -printf "%f\n"); d
   sed -z -E -i "s/<\/head>/\n  <script inlineexport type=\"text\/javascript\" src=\"$CHUNKFILE\"><\/script>\n<\/head>/"  ${DESTDIR}/index.viewer.full.tmp
   sed -z -E -i "s/staticTDocsFiles\": \[/staticTDocsFiles\": \[\"$CHUNKFILE\", /"  ${DESTDIR}/index.viewer.full.tmp
 done
+
+# TODO use only this
 
 echo "inline all ${DESTDIR}/index.viewer.full.html"
 cd ${SCRIPTPATH}

@@ -9,6 +9,8 @@ function dofail {
     exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
 }
 
+
+# TODO remove when script is functional
 # check parameters
 if [ "$#" -lt 2 ]; then
     dofail "USAGE: prepareExportFileForStaticData.sh BASEFILE DESTDIR RESULTBASE\nFATAL: requires 'BASEFILE' as parameters 'import-XXXX'" 1

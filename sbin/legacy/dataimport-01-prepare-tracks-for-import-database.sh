@@ -39,7 +39,7 @@ done
 
 if [ ! -d "${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}" ]; then
   echo "now: copy images to import-folder and group in subfolder by date"
-  ${MYTBTOOLS}copyFilesToDateFolder.sh ${DIGIFOTOS_BASEDIR}OFFEN/${IMPORTKEY} ${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}
+  ${MYTBTOOLS}legacy/copyFilesToDateFolder.sh ${DIGIFOTOS_BASEDIR}OFFEN/${IMPORTKEY} ${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}
 else
   echo "WARNING: presorted subfolder already exists '${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}'?"
   echo "SKIP: copy images to import-folder and group in subfolder by date"
@@ -84,7 +84,7 @@ done
 
 if [ ! -d "${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}" ]; then
   echo "now: move videos to videofolder"
-  ${MYTBTOOLS}moveVideosToVideoFolder.sh ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}
+  ${MYTBTOOLS}legacy/moveVideosToVideoFolder.sh ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}
 else
   echo "WARNING: presorted video-subfolder already exists '${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}'?"
   echo "SKIP: now: move videos to videofolder"
@@ -107,7 +107,7 @@ done
 
 if [ ! -d "${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full" ]; then
   echo "now: copy images and prefix path"
-  ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full ${IMPORTKEY}_
+  ${MYTBTOOLS}legacy/copyDirsAndPrefixPath.sh  ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full ${IMPORTKEY}_
 else
   echo "WARNING: prefixed image-subfolder already exists '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full'?"
   echo "SKIP: copy images and prefix path"
@@ -122,7 +122,7 @@ fi
 
 if [ ! -d "${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full" ]; then
   echo "now: copy videos and prefix path"
-  ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full ${IMPORTKEY}_
+  ${MYTBTOOLS}legacy/copyDirsAndPrefixPath.sh  ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full ${IMPORTKEY}_
 else
   echo "WARNING: prefixed video-subfolder already exists '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full'?"
   echo "SKIP: copy videos and prefix path"
@@ -137,11 +137,19 @@ fi
 
 echo "now: convert videos: avi/mov... to mp4"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --debug true
+node dist/backend/serverAdmin.js\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json\
+           --command mediaManager\
+           --action convertVideosFromMediaDirToMP4\
+           --importDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/\
+           --outputDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/\
+           --debug true
 cd $CWD
 
 echo "now: rotate mp4-videos"
-echo "OPTIONAL YOUR TODO: rotate mp4-videos run this command in a shell 'cd ${MYTB} && node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/${IMPORTKEY}_Blablum/CIMG6228.MOV.MP4 && cd $CWD'"
+echo "OPTIONAL YOUR TODO: rotate mp4-videos run this command in a shell 'cd ${MYTB} && node dist/backend/serverAdmin.js\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/${IMPORTKEY}_Blablum/CIMG6228.MOV.MP4 && cd $CWD'"
 echo "OPEN: Can we proceed the next steps ?"
 select yn in "Yes"; do
     case $yn in
@@ -167,8 +175,24 @@ rm -f "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log"
 rm -f "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json"
 rm -f "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.log"
 rm -f "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json"
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --skipCheckForExistingFilesInDataBase true --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/pics_full/ --debug true --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json > "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log"
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --skipCheckForExistingFilesInDataBase true --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/video_full/ --debug true --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json > "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.log"
+node dist/backend/serverAdmin.js\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json\
+           --command mediaManager\
+           --action generateTourDocsFromMediaDir\
+           --skipCheckForExistingFilesInDataBase true\
+           --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/pics_full/\
+           --debug true\
+           --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json > "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log"
+node dist/backend/serverAdmin.js\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json\
+           --command mediaManager\
+           --action generateTourDocsFromMediaDir\
+           --skipCheckForExistingFilesInDataBase true\
+           --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/video_full/\
+           --debug true\
+           --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json > "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.log"
 
 echo "OPTIONAL YOUR TODO: fix import-files (location-names...)"
 echo "OPEN: Did fix this files in editor '${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json'?"

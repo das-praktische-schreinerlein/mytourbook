@@ -31,7 +31,10 @@ source ${SCRIPTPATH}/configure-environment.bash
 
 echo "now: prepare app-environment (database-migrations...)"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --preparedCommand prepareAppEnv --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
+node dist/backend/serverAdmin.js\
+           --preparedCommand prepareAppEnv\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
 echo "YOUR TODO: start facetcache for import-database in separate shell: 'cd ${MYTB} && npm run backend-start-server-managed-facetcache-import && cd $CWD'"
@@ -47,7 +50,14 @@ if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json" ]; then
   echo "now: load image-import-file"
 
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --renameFileAfterSuccess true --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
+  node dist/backend/serverAdmin.js\
+           --debug\
+           --renameFileAfterSuccess true\
+           --command loadTourDoc\
+           --action loadDocs\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json\
+           --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
 
   # fallback if importdir is a symlink and file cant be renamed
   if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json" ]; then
@@ -72,7 +82,14 @@ fi
 if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json" ]; then
   echo "now: load video-import-file"
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --renameFileAfterSuccess true --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
+  node dist/backend/serverAdmin.js\
+           --debug\
+           --renameFileAfterSuccess true\
+           --command loadTourDoc\
+           --action loadDocs\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json\
+           --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
 
   # fallback if importdir is a symlink and file cant be renamed
   if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json" ]; then
@@ -98,7 +115,12 @@ echo "OPTIONAL: read image-dates"
 echo "OPEN: Do you want to read the image-dates?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command mediaManager --action readImageDates --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json  --backend ${CONFIG_BASEDIR}backend.import.json; break;;
+        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js\
+           --command mediaManager\
+           --action readImageDates\
+           --debug true\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json; break;;
         No) break;;
     esac
 done
@@ -107,19 +129,34 @@ echo "OPTIONAL: read video-dates"
 echo "OPEN: Do you want to read the video-dates?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command mediaManager --action readVideoDates --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json  --backend ${CONFIG_BASEDIR}backend.import.json; break;;
+        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js\
+           --command mediaManager\
+           --action readVideoDates\
+           --debug true\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json; break;;
         No) break;;
     esac
 done
 
 echo "now: create scaled image-copies"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --command mediaManager --action scaleImages --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
+node dist/backend/serverAdmin.js\
+           --command mediaManager\
+           --action scaleImages\
+           --debug true\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
 echo "now: create scaled video-copies"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --command mediaManager --action scaleVideos --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
+node dist/backend/serverAdmin.js\
+           --command mediaManager\
+           --action scaleVideos\
+           --debug true\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
 echo "OPTIONAL YOUR TODO: fix image/track-date if needed (via gui or cli and run script manually)"

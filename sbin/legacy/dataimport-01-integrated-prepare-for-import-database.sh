@@ -11,7 +11,7 @@ function dofail {
 
 # check parameters
 if [ "$#" -ne 1 ]; then
-    dofail "USAGE: dataimport-01-prepare-tracks-for-import-database.sh IMPORTKEY\nFATAL: requires 'IMPORTKEY' as parameters 'import-XXXX'" 1
+    dofail "USAGE: dataimport-01-integrated-prepare-for-import-database.sh IMPORTKEY\nFATAL: requires 'IMPORTKEY' as parameters 'import-XXXX'" 1
     exit 1
 fi
 IMPORTKEY=$1
