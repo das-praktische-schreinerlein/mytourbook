@@ -52,7 +52,10 @@ ${SCRIPTPATH}/setImportDirectory.sh $IMPORTKEY
 
 echo "now: prepare app-environment (database-migrations...)"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --preparedCommand prepareAppEnv --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
+node dist/backend/serverAdmin.js\
+     --preparedCommand prepareAppEnv\
+     --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+     --backend ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
 echo "done - prepare environment: '${IMPORTKEY_BASEDIR}'"

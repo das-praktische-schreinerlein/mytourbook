@@ -48,14 +48,22 @@ done
 
 echo "now: convert videos: avi/mov... to mp4"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir ${IMPORT_BASEDIR_SRC}/ --outputDir ${IMPORT_BASEDIR_SRC}/ --debug true
+node dist/backend/serverAdmin.js\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json\
+           --backend ${CONFIG_BASEDIR}backend.import.json\
+           --command mediaManager\
+           --action convertVideosFromMediaDirToMP4\
+           --importDir ${IMPORT_BASEDIR_SRC}/\
+           --outputDir ${IMPORT_BASEDIR_SRC}/\
+           --debug true
 cd $CWD
 
 echo ""
 echo ""
 echo "##########################"
 echo "now: rotate mp4-videos"
-echo "OPTIONAL YOUR TODO: rotate mp4-videos run this command in a shell 'cd ${MYTB} && node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile ${IMPORT_BASEDIR_SRC}/CIMG6228.MOV.MP4 && cd $CWD'"
+echo "OPTIONAL YOUR TODO: rotate mp4-videos run this command in a shell 'cd ${MYTB} && node dist/backend/serverAdmin.js\
+           --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile ${IMPORT_BASEDIR_SRC}/CIMG6228.MOV.MP4 && cd $CWD'"
 echo "##########################"
 echo "OPEN: Can we proceed the next steps ?"
 select yn in "Yes"; do

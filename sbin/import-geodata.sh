@@ -28,9 +28,25 @@ fi
 
 for DATAFILE in ${POIIMPORTDIR}/*.geojson; do
  echo "CONVERTING ${DATAFILE} -> ${DATAFILE}.json"
- node dist/backend/serverAdmin.js --debug --command convertTourDoc --action convertGeoJsonToTourDoc --adminclibackend config/adminCli.dev.json --backend config/backend.dev.json --renameFileIfExists true --mode RESPONSE --file ${DATAFILE}.json --srcFile ${DATAFILE}
+ node dist/backend/serverAdmin.js\
+      --debug\
+      --command convertTourDoc\
+      --action convertGeoJsonToTourDoc\
+      --adminclibackend config/adminCli.dev.json\
+      --backend config/backend.dev.json\
+      --renameFileIfExists true\
+      --mode RESPONSE\
+      --file ${DATAFILE}.json\
+      --srcFile ${DATAFILE}
  echo "IMPORTING ${DATAFILE}.json"
- node dist/backend/serverAdmin.js --debug --command loadTourDoc --action loadDocs --adminclibackend config/adminCli.dev.json --backend config/backend.dev.json  --renameFileAfterSuccess true --file ${DATAFILE}.json
+ node dist/backend/serverAdmin.js\
+      --debug\
+      --command loadTourDoc\
+      --action loadDocs\
+      --adminclibackend config/adminCli.dev.json\
+      --backend config/backend.dev.json\
+      --renameFileAfterSuccess true\
+      --file ${DATAFILE}.json
 done
 
 cd $CWD

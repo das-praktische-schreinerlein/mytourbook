@@ -77,8 +77,22 @@ done
 
 echo "now: send to queue (2 runs -> to get picasa-files blocked till picasa finished)"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json --backend ${CONFIG_BASEDIR}backend.dev.json --command objectDetectionManager --action sendQueueRequests --detector picasafile --maxPerRun 2000 --debug 1
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json --backend ${CONFIG_BASEDIR}backend.dev.json --command objectDetectionManager --action sendQueueRequests --detector tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,faceapi --maxPerRun 2000 --debug 1
+node dist/backend/serverAdmin.js\
+     --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json\
+     --backend ${CONFIG_BASEDIR}backend.dev.json\
+     --command objectDetectionManager\
+     --action sendQueueRequests\
+     --detector picasafile\
+     --maxPerRun 2000\
+     --debug 1
+node dist/backend/serverAdmin.js\
+     --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json\
+     --backend ${CONFIG_BASEDIR}backend.dev.json\
+     --command objectDetectionManager\
+     --action sendQueueRequests\
+     --detector tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,faceapi\
+     --maxPerRun 2000\
+     --debug 1
 cd $CWD
 
 echo "done - fix data in production-database"
