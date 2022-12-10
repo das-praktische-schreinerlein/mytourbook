@@ -33,6 +33,8 @@
 - frontend: split components and build for smaller optimized readonly-version
 - backend: improved sql/solr for all entities
 - commons: improved and generalized itemsjs-adapter
+- backend: improved export/import-scripts
+- common: added generation of viewer to admin-server
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -44,6 +46,7 @@
 - backend: added converter to import POIs from geojson-files
 - backend+frontend: added support to edit ODIMGOBJECT
 - frontend: added new component odimage-editor
+- common: added generation of viewer to admin-server
 
 ### improvements
 - backend: extend image-export with more filter
@@ -62,6 +65,7 @@
 - frontend: split components and build for smaller optimized readonly-version
 - backend: improved sql/solr for all entities
 - commons: improved and generalized itemsjs-adapter
+- backend: improved export/import-scripts
 
 ### bug fixes
 - backend: fixed media-export of dependent records
