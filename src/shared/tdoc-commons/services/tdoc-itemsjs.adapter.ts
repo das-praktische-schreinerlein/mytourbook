@@ -300,8 +300,8 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 order: ['asc', 'asc', 'desc']
             },
             'relevance': {
-                field: ['id', 'dateshow_dt'],
-                order: ['asc', 'desc']
+                field: ['dateshow_dt', 'id'],
+                order: ['desc', 'desc']
             },
             'trackDate': {
                 field: ['dateshow_dt', 'rate_pers_gesamt_i'],
