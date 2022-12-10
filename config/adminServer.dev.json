@@ -241,7 +241,7 @@
                             "command": "mediaManager",
                             "action": "exportImageFiles",
                             "backend": "config/backend.dev.json",
-                            "exportName": "favorites-top",
+                            "exportName": "favorites-top-images",
                             "exportDir": "F:/playground/mytb-test/export/favorites/",
                             "directoryProfile": "default",
                             "fileNameProfile": "default",
@@ -256,7 +256,7 @@
                             "command": "mediaManager",
                             "action": "exportVideoFiles",
                             "backend": "config/backend.dev.json",
-                            "exportName": "favorites-top",
+                            "exportName": "favorites-top-videos",
                             "exportDir": "F:/playground/mytb-test/export/favorites/",
                             "directoryProfile": "default",
                             "fileNameProfile": "default",
@@ -264,6 +264,18 @@
                             "rateMinFilter": "",
                             "resolutionProfile": "default",
                             "showNonBlockedOnly": "showall"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "generateHtmlViewerFileForExport",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "favorites-top",
+                            "exportDir": "F:/playground/mytb-test/export/favorites/",
+                            "createViewer": "html",
+                            "srcFile": "F:/Projekte/mytourbook_dev/dist/static/mytbviewer/de/index.viewer.full.html",
+                            "srcFiles": "F:/playground/mytb-test/export/favorites/favorites-top-images.mdocexport.json,F:/playground/mytb-test/export/favorites/favorites-top-videos.mdocexport.json"
                         }
                     }
                 ]

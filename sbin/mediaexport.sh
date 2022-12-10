@@ -67,28 +67,102 @@ echo "now: generate export"
 cd ${MYTB}
 
 IFS=', ' read -r -a TYPESARR <<< "$TYPES"
+DATAFILES=()
 for TYPE in "${TYPESARR[@]}"
 do
   echo "start export of $TYPE"
   if [ "${TYPE}" == "image" ]; then
-    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}" --actiontype "${ACTIONTYPES}" --persons "${PERSONS}"
-    ${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-images.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_images_export_chunk
+    DATAFILEBASE="images"
+    node dist/backend/serverAdmin.js\
+           --debug\
+           --command mediaManager\
+           --action exportImageFiles\
+           --exportName "${PLAYLISTFILE}-${DATAFILEBASE}"\
+           --adminclibackend "${CLICONFGFILE}"\
+           --backend "${CONFGFILE}"\
+           --exportDir "$EXPORTDIR"\
+           --directoryProfile "${DIPROFILE}"\
+           --fileNameProfile "${FILEPROFILE}"\
+           --resolutionProfile "${RESOLUTIONPROFILE}"\
+           --parallel 20\
+           --playlists "${PLAYLISTNAMEFILTER}"\
+           --rateMinFilter "${RATEMINFILTER}"\
+           --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
+           --fulltext "${FULLTEXRFILTER}"\
+           --actiontype "${ACTIONTYPES}"\
+           --persons "${PERSONS}"
   elif [ "${TYPE}" == "route" ]; then
-    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportRouteFiles  --exportName "${PLAYLISTFILE}-routes" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}" --actiontype "${ACTIONTYPES}" --persons "${PERSONS}"
-    ${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-routes.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_routes_export_chunk
+    DATAFILEBASE="routes"
+    node dist/backend/serverAdmin.js\
+           --debug\
+           --command mediaManager\
+           --action exportRouteFiles\
+           --exportName "${PLAYLISTFILE}-${DATAFILEBASE}"\
+           --adminclibackend "${CLICONFGFILE}"\
+           --backend "${CONFGFILE}"\
+           --exportDir "$EXPORTDIR"\
+           --directoryProfile "${DIPROFILE}"\
+           --fileNameProfile "${FILEPROFILE}"\
+           --resolutionProfile "${RESOLUTIONPROFILE}"\
+           --parallel 20\
+           --playlists "${PLAYLISTNAMEFILTER}"\
+           --rateMinFilter "${RATEMINFILTER}"\
+           --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
+           --fulltext "${FULLTEXRFILTER}"\
+           --actiontype "${ACTIONTYPES}"\
+           --persons "${PERSONS}"
   elif [ "${TYPE}" == "track" ]; then
-    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportTrackFiles  --exportName "${PLAYLISTFILE}-tracks" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}" --actiontype "${ACTIONTYPES}" --persons "${PERSONS}"
-    ${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-tracks.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_tracks_export_chunk
+    DATAFILEBASE="tracks"
+    node dist/backend/serverAdmin.js\
+           --debug\
+           --command mediaManager\
+           --action exportTrackFiles\
+           --exportName "${PLAYLISTFILE}-${DATAFILEBASE}"\
+           --adminclibackend "${CLICONFGFILE}"\
+           --backend "${CONFGFILE}"\
+           --exportDir "$EXPORTDIR"\
+           --directoryProfile "${DIPROFILE}"\
+           --fileNameProfile "${FILEPROFILE}"\
+           --resolutionProfile "${RESOLUTIONPROFILE}"\
+           --parallel 20\
+           --playlists "${PLAYLISTNAMEFILTER}"\
+           --rateMinFilter "${RATEMINFILTER}"\
+           --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
+           --fulltext "${FULLTEXRFILTER}"\
+           --actiontype "${ACTIONTYPES}"\
+           --persons "${PERSONS}"
   elif [ "${TYPE}" == "video" ]; then
-    node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY} --fulltext "${FULLTEXRFILTER}" --actiontype "${ACTIONTYPES}" --persons "${PERSONS}"
-    ${SCRIPTPATH}/prepareExportFileForStaticData.sh $EXPORTDIR/${PLAYLISTFILE}-videos.mdocexport.json $EXPORTDIR ${PLAYLISTFILE}-static.mytbtdocs_videos_export_chunk
+    DATAFILEBASE="videos"
+    node dist/backend/serverAdmin.js\
+           --debug\
+           --command mediaManager\
+           --action exportVideoFiles\
+           --exportName "${PLAYLISTFILE}-${DATAFILEBASE}"\
+           --adminclibackend "${CLICONFGFILE}"\
+           --backend "${CONFGFILE}"\
+           --exportDir "$EXPORTDIR"\
+           --directoryProfile "${DIPROFILE}"\
+           --fileNameProfile "${FILEPROFILE}"\
+           --resolutionProfile "${RESOLUTIONPROFILE}"\
+           --parallel 20\
+           --playlists "${PLAYLISTNAMEFILTER}"\
+           --rateMinFilter "${RATEMINFILTER}"\
+           --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
+           --fulltext "${FULLTEXRFILTER}"\
+           --actiontype "${ACTIONTYPES}"\
+           --persons "${PERSONS}"
   else
     dofail "USAGE:mediaexport.sh CONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES ACTIONTYPES PERSONS]\nFATAL: TYPE: $TYPE not exists " 1
   fi
+
+  DATAFILES+=("${EXPORTDIR}/${PLAYLISTFILE}-${DATAFILEBASE}.mdocexport.json")
 done
 
 if [ "${CREATEHTML}" == "createhtml" ]; then
-   ${SCRIPTPATH}/prepareViewerFileForStaticData.sh $EXPORTDIR "${PLAYLISTFILE}-static.mytbtdocs_*_export_chunk" "${PLAYLISTFILE}.html"
+
+   function join_by { local IFS="$1"; shift; echo "$*"; };
+   JOINED_DATAFILES=`join_by , "${DATAFILES[@]}"`
+   ${SCRIPTPATH}/generateViewerFileForStaticData.sh  $EXPORTDIR "${JOINED_DATAFILES}" ${PLAYLISTFILE}
 fi
 
 echo "done - file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"

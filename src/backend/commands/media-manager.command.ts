@@ -24,12 +24,23 @@ import {
     IdCsvValidationRule,
     KeywordValidationRule,
     NumberValidationRule,
+    RegExValidationReplaceRule,
     SolrValidationRule,
     ValidationRule,
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
+import {TourDocViewerManagerModule} from '../modules/tdoc-viewer-manager.module';
+import * as XRegExp from 'xregexp';
+
+export class SimpleFilePathListValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required,
+            new XRegExp('^[-,_.a-zA-Z0-9\:\/\\\\ \\p{LC}]*$', 'gi'),
+            new XRegExp('[-,_.a-zA-Z0-9\:\/\\\\ \\p{LC}]*', 'gi'), '', 4096);
+    }
+}
 
 export class MediaManagerCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
@@ -38,6 +49,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             backend: new SimpleConfigFilePathValidationRule(true),
             importDir: new SimpleFilePathValidationRule(false),
             srcFile: new SimpleFilePathValidationRule(false),
+            srcFiles: new SimpleFilePathListValidationRule(false),
             exportDir: new SimpleFilePathValidationRule(false),
             exportName: new SimpleFilePathValidationRule(false),
             outputDir: new SimpleFilePathValidationRule(false),
@@ -58,6 +70,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             additionalMappingsFile: new SimpleConfigFilePathValidationRule(false),
             rotate: new NumberValidationRule(false, 1, 360, 0),
             force: new KeywordValidationRule(false),
+            createViewer: new WhiteListValidationRule(false, [true, false, 'html', 'htmlWithoutImage'], false),
             skipCheckForExistingFilesInDataBase : new KeywordValidationRule(false),
             renameFileIfExists:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)
         };
@@ -66,6 +79,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
     protected definePossibleActions(): string[] {
         return ['readImageDates', 'readVideoDates', 'scaleImages', 'scaleVideos',
             'exportImageFiles', 'exportRouteFiles', 'exportTrackFiles', 'exportVideoFiles',
+            'generateHtmlViewerFileForExport',
             'generateTourDocsFromMediaDir',
             'findCorrespondingTourDocRecordsForMedia', 'insertSimilarMatchings',
             'convertVideosFromMediaDirToMP4',
@@ -78,6 +92,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
     protected processCommandArgs(argv: {}): Promise<any> {
         // importDir and outputDir are used in CommonMediaManagerCommand too
         argv['importDir'] = TourDocFileUtils.normalizeCygwinPath(argv['importDir']);
+        argv['srcFile'] = TourDocFileUtils.normalizeCygwinPath(argv['srcFile']);
         argv['outputDir'] = TourDocFileUtils.normalizeCygwinPath(argv['outputDir']);
         argv['outputFile'] = TourDocFileUtils.normalizeCygwinPath(argv['outputFile']);
 
@@ -112,6 +127,16 @@ export class MediaManagerCommand extends CommonAdminCommand {
             || argv['skipCheckForExistingFilesInDataBase'] === 'true';
         const renameFileIfExists = !!argv['renameFileIfExists'];
 
+        const srcFile = argv['srcFile'];
+        const srcFiles: string[] = argv['srcFiles']
+            ? argv['srcFiles'].split(',')
+            : [];
+        const createHtml = argv['createHtml'];
+        const exportDir = argv['exportDir'];
+        const exportName = argv['exportName'];
+
+        // TODO skipMediaCheck... as option
+
         const mediaManagerModule = new MediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
         const playlistConfig: TourDocServerPlaylistServiceConfig = {
             audioBaseUrl: backendConfig.playlistExportAudioBaseUrl,
@@ -130,6 +155,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const tdocManagerModule = new TourDocMediaManagerModule(backendConfig, dataService, mediaManagerModule, tourDocExportManager,
             tourDocMediaFileImportManager, {});
         const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
+        const tdocViewerManagerModule = new TourDocViewerManagerModule();
 
         switch (action) {
             case 'readImageDates':
@@ -171,12 +197,18 @@ export class MediaManagerCommand extends CommonAdminCommand {
             case 'exportRouteFiles':
             case 'exportTrackFiles':
             case 'exportVideoFiles':
-                const exportDir = argv['exportDir'];
                 if (exportDir === undefined) {
                     console.error(action + ' missing parameter - usage: --exportDir EXPORTDIR', argv);
                     promise = Promise.reject(action + ' missing parameter - usage: --exportDir EXPORTDIR [-force true/false]');
                     return promise;
                 }
+
+                if (exportName === undefined) {
+                    console.error(action + ' missing parameter - usage: --exportName EXPORTNAME', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --exportName EXPORTNAME');
+                    return promise;
+                }
+
                 const directoryProfile = argv['directoryProfile'];
                 if (directoryProfile === undefined) {
                     console.error(action + ' missing parameter - usage: --directoryProfile directoryProfile', argv);
@@ -200,7 +232,11 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     return promise;
                 }
 
-                const exportName = argv['exportName'];
+                if (createHtml && !srcFile) {
+                    console.error(action + ' missing parameter - usage: --srcFile srcFileForHtmlViewer', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --srcFile srcFileForHtmlViewer');
+                    return promise;
+                }
 
                 let type = 'UNKNOWN';
                 switch (action) {
@@ -229,7 +265,6 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     sort: 'm3uExport',
                     pageNum: Number.isInteger(pageNum) ? pageNum : 1});
 
-
                 const rateMinFilter = argv['rateMinFilter'];
                 if (rateMinFilter !== undefined && Number.isInteger(rateMinFilter)) {
                     const rateFilters = [];
@@ -240,6 +275,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                         searchForm.personalRateOverall = rateFilters.join(',');
                     }
                 }
+
                 const blockedFilter = argv['showNonBlockedOnly'] + '';
                 if (blockedFilter !== undefined && blockedFilter.toLowerCase() !== 'showall') {
                     searchForm.moreFilter = 'blocked_i:null,0';
@@ -253,8 +289,43 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     directoryProfile: directoryProfile,
                     fileNameProfile: fileNameProfile,
                     resolutionProfile: resolutionProfile
+                }).then((result) => {
+                    if (!createHtml || !srcFile) {
+                        return Promise.resolve(result);
+                    }
+
+                    const exportJsonFile = exportDir + '/' + exportName + '.mdocexport.json';
+                    return tdocViewerManagerModule.generateViewerHtmlFile(srcFile,  [exportJsonFile],
+                        exportDir + '/' + exportName + '.html', 100, 'mdocs');
                 });
                 break;
+            case 'generateHtmlViewerFileForExport':
+                if (createHtml && !srcFile) {
+                    console.error(action + ' missing parameter - usage: --srcFile srcFileForHtmlViewer', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --srcFile srcFileForHtmlViewer');
+                    return promise;
+                }
+
+                if (exportDir === undefined) {
+                    console.error(action + ' missing parameter - usage: --exportDir EXPORTDIR', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --exportDir EXPORTDIR [-force true/false]');
+                    return promise;
+                }
+
+                if (exportName === undefined) {
+                    console.error(action + ' missing parameter - usage: --exportName EXPORTNAME', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --exportName EXPORTNAME');
+                    return promise;
+                }
+
+                if (srcFiles.length < 1) {
+                    console.error(action + ' missing parameter - usage: --srcFiles JSONFILE,JSONFILE2...', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --srcFiles JSONFILE,JSONFILE2...');
+                    return promise;
+                }
+
+                return tdocViewerManagerModule.generateViewerHtmlFile(srcFile,  srcFiles,
+                    exportDir + '/' + exportName + '.html', 100, 'mdocs');
             case 'generateTourDocsFromMediaDir':
                 if (importDir === undefined) {
                     console.error(action + ' missing parameter - usage: --importDir INPUTDIR', argv);
