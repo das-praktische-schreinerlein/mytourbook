@@ -3,6 +3,7 @@ import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import fs from 'fs';
 import path from 'path';
 
+// TODO generalize and move to commons
 export class TourDocViewerManagerModule {
     public generateViewerHtmlFile(srcHtmlFile: string, jsonExportFiles: string[], targetHtmlFile: string, chunkSize: number,
                                   parent?: string): Promise<string> {

@@ -278,7 +278,27 @@ export class MediaManagerCommand extends CommonAdminCommand {
 
                 const blockedFilter = argv['showNonBlockedOnly'] + '';
                 if (blockedFilter !== undefined && blockedFilter.toLowerCase() !== 'showall') {
-                    searchForm.moreFilter = 'blocked_i:null,0';
+                    switch (blockedFilter) {
+                        case 'nonblocked5':
+                            searchForm.moreFilter = 'blocked_i:null,0,1,2,3,4,5';
+                            break;
+                        case 'nonblocked4':
+                            searchForm.moreFilter = 'blocked_i:null,0,1,2,3,4';
+                            break;
+                        case 'nonblocked3':
+                            searchForm.moreFilter = 'blocked_i:null,0,1,2,3';
+                            break;
+                        case 'nonblocked2':
+                            searchForm.moreFilter = 'blocked_i:null,0,1,2';
+                            break;
+                        case 'nonblocked1':
+                            searchForm.moreFilter = 'blocked_i:null,0,1';
+                            break;
+                        case 'nonblocked0':
+                        case 'nonblocked':
+                        default:
+                            searchForm.moreFilter = 'blocked_i:null,0';
+                    }
                 }
                 console.log('START processing: ' + action, searchForm, exportDir, processingOptions);
 
