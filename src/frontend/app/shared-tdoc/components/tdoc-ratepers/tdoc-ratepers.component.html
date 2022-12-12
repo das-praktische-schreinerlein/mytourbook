@@ -1,8 +1,10 @@
-<ng-container *ngIf="record !== undefined && (record.blocked > 0 || tdocratepers !== undefined) && (!small || tdocratepers.gesamt > 0)">
+<ng-container *ngIf="record !== undefined && (record.blocked > 0 || tdocratepers !== undefined) && (!small || record.blocked > 0 || tdocratepers && tdocratepers.gesamt > 0)">
     <div class="techvaluetable">
         <div *ngIf="record.blocked > 0" class="entry"><div class="label">Sichtbarkeit:</div><div class="value">{{ 'label.blocked.' + record.blocked | translate }}</div></div>
-        <div *ngIf="tdocratepers.gesamt > 0" class="entry"><div class="label">Gesamt:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.gesamt)" [readonly]="true"></ngb-rating></div></div>
-        <div *ngIf="!small && tdocratepers.bildung > 0" class="entry"><div class="label">Bildung:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.bildung)" [readonly]="true"></ngb-rating></div></div>
-        <div *ngIf="!small && tdocratepers.motive > 0" class="entry"><div class="label">Motive:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.motive)" [readonly]="true"></ngb-rating></div></div>
+        <ng-container *ngIf="tdocratepers">
+            <div *ngIf="tdocratepers.gesamt > 0" class="entry"><div class="label">Gesamt:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.gesamt)" [readonly]="true"></ngb-rating></div></div>
+            <div *ngIf="!small && tdocratepers.bildung > 0" class="entry"><div class="label">Bildung:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.bildung)" [readonly]="true"></ngb-rating></div></div>
+            <div *ngIf="!small && tdocratepers.motive > 0" class="entry"><div class="label">Motive:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.motive)" [readonly]="true"></ngb-rating></div></div>
+        </ng-container>
     </div>
 </ng-container>
