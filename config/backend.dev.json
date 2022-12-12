@@ -25,6 +25,8 @@
     "playlistExportUseVideoAssetStoreUrls": false,
     "playlistExportMaxM3uRecordAllowed": 10000,
     "imageMagicAppPath": "contrib/imagemagic/",
+    "nodejsBinaryPath": "node",
+    "inlineJsPath": "devtools/create-allinone-html.js",
     "tdocDataStoreAdapter": "TourDocSqlMytbDbAdapter",
     "tdocWritable": true,
     "mapperConfig": {

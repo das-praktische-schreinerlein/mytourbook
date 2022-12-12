@@ -46,9 +46,14 @@ node dist/backend/serverAdmin.js\
      --srcFiles ${DATAFILES}\
      --debug 1
 
-echo "inline all ${EXPORTDIR}/index.viewer.full.html"
-cd ${SCRIPTPATH}
-node --max-old-space-size=8192 ../devtools/create-allinone-html.js ${EXPORTDIR}/${EXPORTNAME}.html ${EXPORTDIR}/${EXPORTNAME}.html inlineexport
+echo "inline all ${EXPORTDIR}/${EXPORTNAME}.html"
+node dist/backend/serverAdmin.js\
+     --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json\
+     --backend ${CONFIG_BASEDIR}backend.dev.json\
+     --command mediaManager\
+     --action inlineDataOnViewerFile\
+     --srcFile ${EXPORTDIR}/${EXPORTNAME}.html\
+     --debug 1
 cd ${CWD}
 
 echo "done - generate ${EXPORTDIR}/${EXPORTNAME}.html for ${DATAFILES}"

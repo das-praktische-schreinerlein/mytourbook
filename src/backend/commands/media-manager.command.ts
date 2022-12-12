@@ -31,8 +31,9 @@ import {
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
-import {TourDocViewerManagerModule} from '../modules/tdoc-viewer-manager.module';
+import {ViewerManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/viewer-manager.module';
 import * as XRegExp from 'xregexp';
+import {BackendConfigType} from '../modules/backend.commons';
 
 export class SimpleFilePathListValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
@@ -79,7 +80,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
     protected definePossibleActions(): string[] {
         return ['readImageDates', 'readVideoDates', 'scaleImages', 'scaleVideos',
             'exportImageFiles', 'exportRouteFiles', 'exportTrackFiles', 'exportVideoFiles',
-            'generateHtmlViewerFileForExport',
+            'generateHtmlViewerFileForExport', 'inlineDataOnViewerFile',
             'generateTourDocsFromMediaDir',
             'findCorrespondingTourDocRecordsForMedia', 'insertSimilarMatchings',
             'convertVideosFromMediaDirToMP4',
@@ -104,7 +105,9 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const action = argv['action'];
         const importDir = argv['importDir'];
         const outputFile = argv['outputFile'];
-        const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
+        const backendConfig: BackendConfigType = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
+
+        // @ts-ignore
         const writable = backendConfig.tdocWritable === true || backendConfig.tdocWritable === 'true';
         const dataService = TourDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);
         if (writable) {
@@ -155,7 +158,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const tdocManagerModule = new TourDocMediaManagerModule(backendConfig, dataService, mediaManagerModule, tourDocExportManager,
             tourDocMediaFileImportManager, {});
         const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
-        const tdocViewerManagerModule = new TourDocViewerManagerModule();
+        const viewerManagerModule = new ViewerManagerModule();
 
         switch (action) {
             case 'readImageDates':
@@ -276,28 +279,53 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     }
                 }
 
-                const blockedFilter = argv['showNonBlockedOnly'] + '';
-                if (blockedFilter !== undefined && blockedFilter.toLowerCase() !== 'showall') {
-                    switch (blockedFilter) {
-                        case 'nonblocked5':
-                            searchForm.moreFilter = 'blocked_i:null,0,1,2,3,4,5';
-                            break;
-                        case 'nonblocked4':
-                            searchForm.moreFilter = 'blocked_i:null,0,1,2,3,4';
-                            break;
-                        case 'nonblocked3':
-                            searchForm.moreFilter = 'blocked_i:null,0,1,2,3';
-                            break;
-                        case 'nonblocked2':
-                            searchForm.moreFilter = 'blocked_i:null,0,1,2';
-                            break;
-                        case 'nonblocked1':
-                            searchForm.moreFilter = 'blocked_i:null,0,1';
-                            break;
-                        case 'nonblocked0':
-                        case 'nonblocked':
-                        default:
-                            searchForm.moreFilter = 'blocked_i:null,0';
+                const blockedFilters = argv['showNonBlockedOnly'] + '';
+                if (blockedFilters !== undefined && blockedFilters.toLowerCase() !== 'showall') {
+                    let blockedValues: string[] = undefined;
+                    for (const blockedFilter of blockedFilters.split(',')) {
+                        switch (blockedFilter) {
+                            case 'nonblocked5':
+                                blockedValues = ['null', '0', '1', '2', '3', '4', '5'];
+                                break;
+                            case 'nonblocked4':
+                                blockedValues = ['null', '0', '1', '2', '3', '4'];
+                                break;
+                            case 'nonblocked3':
+                                blockedValues = ['null', '0', '1', '2', '3'];
+                                break;
+                            case 'nonblocked2':
+                                blockedValues = ['null', '0', '1', '2'];
+                                break;
+                            case 'nonblocked1':
+                                blockedValues = ['null', '0', '1'];
+                                break;
+                            case 'blocked5':
+                                blockedValues.push('5');
+                                break;
+                            case 'blocked4':
+                                blockedValues.push('4');
+                                break;
+                            case 'blocked3':
+                                blockedValues.push('3');
+                                break;
+                            case 'blocked2':
+                                blockedValues.push('2');
+                                break;
+                            case 'blocked1':
+                                blockedValues.push('1');
+                                break;
+                            case 'nonblocked0':
+                            case 'nonblocked':
+                            default:
+                                blockedValues = ['null', '0'];
+                        }
+                    }
+
+                    if (blockedValues && blockedValues.length  > 0) {
+                        searchForm.moreFilter = searchForm.moreFilter
+                            ? searchForm.moreFilter + '_,_'
+                            : '';
+                        searchForm.moreFilter = searchForm.moreFilter + 'blocked_i:' + blockedValues.join(',');
                     }
                 }
                 console.log('START processing: ' + action, searchForm, exportDir, processingOptions);
@@ -315,9 +343,19 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     }
 
                     const exportJsonFile = exportDir + '/' + exportName + '.mdocexport.json';
-                    return tdocViewerManagerModule.generateViewerHtmlFile(srcFile,  [exportJsonFile],
-                        exportDir + '/' + exportName + '.html', 100, 'mdocs');
+                    return viewerManagerModule.generateViewerHtmlFile(srcFile,  [exportJsonFile],
+                        exportDir + '/' + exportName + '.html', 100, 'mdocs',
+                        function (html: string) {
+                            return viewerManagerModule.htmlConfigConverter(html, 'staticTDocsFiles'); },
+                        function (html: string, jsonPFileName: string) {
+                            return viewerManagerModule.jsonToJsTargetContentConverter(html, jsonPFileName,
+                                'importStaticDataTDocsJsonP'); },
+                        function (html: string, dataFileConfigName: string) {
+                            return viewerManagerModule.htmlInlineFileConverter(html, dataFileConfigName,
+                                'staticTDocsFiles'); }
+                    );
                 });
+
                 break;
             case 'generateHtmlViewerFileForExport':
                 if (createHtml && !srcFile) {
@@ -344,8 +382,39 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     return promise;
                 }
 
-                return tdocViewerManagerModule.generateViewerHtmlFile(srcFile,  srcFiles,
-                    exportDir + '/' + exportName + '.html', 100, 'mdocs');
+                promise = viewerManagerModule.generateViewerHtmlFile(srcFile,  srcFiles,
+                    exportDir + '/' + exportName + '.html', 100, 'mdocs',
+                    function (html: string) {
+                        return viewerManagerModule.htmlConfigConverter(html, 'staticTDocsFiles'); },
+                    function (html: string, jsonPFileName: string) {
+                        return viewerManagerModule.jsonToJsTargetContentConverter(html, jsonPFileName,
+                            'importStaticDataTDocsJsonP'); },
+                    function (html: string, dataFileConfigName: string) {
+                        return viewerManagerModule.htmlInlineFileConverter(html, dataFileConfigName,
+                            'staticTDocsFiles'); }
+                );
+
+                break;
+            case 'inlineDataOnViewerFile':
+                if (!backendConfig.nodejsBinaryPath || !backendConfig.inlineJsPath) {
+                    console.error(action + ' missing config - nodejsBinaryPath, inlineJsPath');
+                    promise = Promise.reject(action + ' missing config - nodejsBinaryPath, inlineJsPath');
+                    return promise;
+                }
+
+                if (srcFile === undefined) {
+                    console.error(action + ' missing parameter - usage: --srcFile SRCFILE', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --srcFile SRCFILE');
+                    return promise;
+                }
+
+                promise = viewerManagerModule.inlineDataOnViewerFile(
+                    backendConfig.nodejsBinaryPath,
+                    backendConfig.inlineJsPath,
+                    srcFile,
+                    srcFile);
+
+                break;
             case 'generateTourDocsFromMediaDir':
                 if (importDir === undefined) {
                     console.error(action + ' missing parameter - usage: --importDir INPUTDIR', argv);

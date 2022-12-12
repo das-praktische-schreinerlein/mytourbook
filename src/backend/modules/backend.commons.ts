@@ -32,6 +32,8 @@ export interface BackendConfigType extends CommonBackendConfigType<KeywordMapper
     CommonImageBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonVideoBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     ObjectDetectionManagerBackendConfig {
+    nodejsBinaryPath: string,
+    inlineJsPath: string,
     tdocDataStoreAdapter: string,
     tdocWritable: boolean,
     tdocImportConverterAdditionalKeywords?: string[],

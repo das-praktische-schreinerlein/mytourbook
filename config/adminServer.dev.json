@@ -277,6 +277,14 @@
                             "srcFile": "F:/Projekte/mytourbook_dev/dist/static/mytbviewer/de/index.viewer.full.html",
                             "srcFiles": "F:/playground/mytb-test/export/favorites/favorites-top-images.mdocexport.json,F:/playground/mytb-test/export/favorites/favorites-top-videos.mdocexport.json"
                         }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "inlineDataOnViewerFile",
+                            "backend": "config/backend.dev.json",
+                            "srcFile": "F:/playground/mytb-test/export/favorites/favorites-top.html"
+                        }
                     }
                 ]
             },
