@@ -2359,15 +2359,136 @@
                 {
                     "key": "blocked",
                     "type": "tag",
-                    "name": "\uD83D\uDEAB Block from public",
+                    "name": "\uD83D\uDEAB non public",
                     "shortName": "&#x1F6AB",
                     "payload": {
+                        "value": 1
                     },
                     "showFilter": [
                         {
                             "property": "blocked",
                             "command": "CSVIN",
-                            "expectedValues": ["1", "2", "3", "4", "5", "true", "TRUE"]
+                            "expectedValues": ["1"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "blocked",
+                    "type": "tag",
+                    "name": "\uD83D\uDEAB for family and friends only",
+                    "shortName": "&#x1F6AB",
+                    "payload": {
+                        "value": 2
+                    },
+                    "showFilter": [
+                        {
+                            "property": "blocked",
+                            "command": "CSVIN",
+                            "expectedValues": ["2"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "blocked",
+                    "type": "tag",
+                    "name": "\uD83D\uDEAB for family only",
+                    "shortName": "&#x1F6AB",
+                    "payload": {
+                        "value": 3
+                    },
+                    "showFilter": [
+                        {
+                            "property": "blocked",
+                            "command": "CSVIN",
+                            "expectedValues": ["3"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "blocked",
+                    "type": "tag",
+                    "name": "\uD83D\uDEAB for inner family only",
+                    "shortName": "&#x1F6AB",
+                    "payload": {
+                        "value": 4
+                    },
+                    "showFilter": [
+                        {
+                            "property": "blocked",
+                            "command": "CSVIN",
+                            "expectedValues": ["4"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "blocked",
+                    "type": "tag",
+                    "name": "\uD83D\uDEAB for me only",
+                    "shortName": "&#x1F6AB",
+                    "payload": {
+                        "value": 5
+                    },
+                    "showFilter": [
+                        {
+                            "property": "blocked",
+                            "command": "CSVIN",
+                            "expectedValues": ["5"]
                         }
                     ],
                     "recordAvailability": [
