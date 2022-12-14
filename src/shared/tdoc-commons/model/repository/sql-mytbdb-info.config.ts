@@ -448,7 +448,8 @@ export class SqlMytbDbInfoConfig {
             l_lochirarchietxt: 'lifl.l_name',
             gpstracks_state_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(if_name), 1, 1)',
-            html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), " ", COALESCE(if_url,""))'
+            html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), " ", COALESCE(if_url,""))',
+            htmlNameOnly: 'if_name'
         },
         writeMapping: {
             'info.l_id': ':loc_id_i:',

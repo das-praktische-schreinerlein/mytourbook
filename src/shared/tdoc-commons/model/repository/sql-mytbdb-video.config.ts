@@ -503,7 +503,8 @@ export class SqlMytbDbVideoConfig {
             track_id_is: 'video.k_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
-            html: 'CONCAT(COALESCE(v_meta_name, ""), " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", " ", location.l_lochirarchietxt)'
+            html: 'CONCAT(COALESCE(v_meta_name, ""), " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", " ", location.l_lochirarchietxt)',
+            htmlNameOnly: 'CONCAT(COALESCE(v_meta_name, ""), " ", k_name)'
         },
         writeMapping: {
             'video.l_id': ':loc_id_i:',

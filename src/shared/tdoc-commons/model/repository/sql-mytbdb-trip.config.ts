@@ -484,7 +484,8 @@ export class SqlMytbDbTripConfig {
             l_lochirarchietxt: 'location.l_name',
             gpstracks_state_is: '"666dummy999"',
             initial_s: 'SUBSTR(UPPER(tr_name), 1, 1)',
-            html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc, ""), l_lochirarchietxt)'
+            html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc, ""), l_lochirarchietxt)',
+            htmlNameOnly: 'tr_name'
         },
         writeMapping: {
             'trip.l_id': ':loc_id_i:',

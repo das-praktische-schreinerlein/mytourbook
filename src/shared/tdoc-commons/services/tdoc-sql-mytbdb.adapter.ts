@@ -6,10 +6,11 @@ import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 import {
     FacetCacheUsageConfigurations,
     LoadDetailDataConfig,
+    SelectQueryData,
     TableConfig,
     WriteQueryData
 } from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
+import {AdapterOpts, AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {Mapper, utils} from 'js-data';
 import {TourDocImageRecord} from '../model/records/tdocimage-record';
@@ -437,5 +438,46 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         return super._doActionTag(mapper, record, actionTagForm, opts);
     }
 
+    protected queryTransformToAdapterSelectQuery(method: string, mapper: Mapper, params: any, opts: any): SelectQueryData {
+        const tableConfig = this.getTableConfig(<AdapterQuery>params);
+        if (tableConfig === undefined) {
+            return undefined;
+        }
+
+        const adapterQuery: AdapterQuery = <AdapterQuery>params;
+        const fulltextFilterName = 'html';
+        const fulltextNameOnlyFilterName = 'htmlNameOnly';
+        const fulltextNameOnlyTrigger = 'SF_searchNameOnly';
+
+        if (adapterQuery.where && adapterQuery.where[fulltextFilterName] &&
+            tableConfig.filterMapping.hasOwnProperty(fulltextNameOnlyFilterName)) {
+            const filter = adapterQuery.where[fulltextFilterName];
+            const action = Object.getOwnPropertyNames(filter)[0];
+            const value: string[] = adapterQuery.where[fulltextFilterName][action];
+
+            if (value.join(' ')
+                .includes(fulltextNameOnlyTrigger)) {
+
+                const fulltextValues = [];
+                adapterQuery.where[fulltextNameOnlyFilterName] = [];
+                for (let fulltextValue of value) {
+                    fulltextValue = fulltextValue.split(fulltextNameOnlyTrigger)
+                        .join('')
+                        .trim();
+                    if (fulltextValue && fulltextValue.length > 0) {
+                        fulltextValues.push(fulltextValue);
+                    }
+                }
+
+                adapterQuery.where[fulltextNameOnlyFilterName] = {};
+                adapterQuery.where[fulltextNameOnlyFilterName][action] = fulltextValues;
+
+                adapterQuery.where[fulltextFilterName] = undefined;
+                delete adapterQuery.where[fulltextFilterName];
+            }
+        }
+
+        return this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, adapterQuery, <AdapterOpts>opts);
+    }
 }
 

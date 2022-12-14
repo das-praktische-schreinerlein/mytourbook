@@ -602,7 +602,8 @@ export class SqlMytbDbImageConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: '"666dummy999"',
-            html: 'CONCAT(COALESCE(i_meta_name, ""), " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", location.l_lochirarchietxt)'
+            html: 'CONCAT(COALESCE(i_meta_name, ""), " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", location.l_lochirarchietxt)',
+            htmlNameOnly: 'CONCAT(COALESCE(i_meta_name, ""), " ", k_name)'
         },
         writeMapping: {
             'image.l_id': ':loc_id_i:',

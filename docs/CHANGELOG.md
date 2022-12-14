@@ -36,6 +36,7 @@
 - backend: improved export/import-scripts
 - common: added generation of viewer to admin-server
 - common: improved visibility-filter
+- backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only 
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -68,6 +69,7 @@
 - commons: improved and generalized itemsjs-adapter
 - backend: improved export/import-scripts
 - common: improved visibility-filter
+- backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only
 
 ### bug fixes
 - backend: fixed media-export of dependent records

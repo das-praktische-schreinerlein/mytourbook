@@ -399,7 +399,8 @@ export class SqlMytbDbNewsConfig {
             l_lochirarchietxt: '"666dummy999"',
             gpstracks_state_is: '"666dummy999"',
             initial_s: '"666dummy999"',
-            html: 'CONCAT(n_headline, " ", COALESCE(n_message,""))'
+            html: 'CONCAT(n_headline, " ", COALESCE(n_message,""))',
+            htmlNameOnly: 'n_headline'
         },
         writeMapping: {
             'news.n_date': ':dateshow_dt:',

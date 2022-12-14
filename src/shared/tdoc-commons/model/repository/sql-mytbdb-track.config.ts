@@ -686,7 +686,8 @@ export class SqlMytbDbTrackConfig {
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
             initial_s: 'SUBSTR(UPPER(k_name), 1, 1)',
-            html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_lochirarchietxt)'
+            html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_lochirarchietxt)',
+            htmlNameOnly: 'k_name'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',
