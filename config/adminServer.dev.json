@@ -247,6 +247,7 @@
                             "fileNameProfile": "default",
                             "playlists": "",
                             "rateMinFilter": 1,
+                            "parallel": 20,
                             "resolutionProfile": "default",
                             "showNonBlockedOnly": "showall"
                         }
@@ -262,6 +263,7 @@
                             "fileNameProfile": "default",
                             "playlists": "",
                             "rateMinFilter": "",
+                            "parallel": 20,
                             "resolutionProfile": "default",
                             "showNonBlockedOnly": "showall"
                         }
