@@ -67,7 +67,20 @@ export class MediaManagerCommand extends CommonAdminCommand {
             fileNameProfile: new KeywordValidationRule(false),
             resolutionProfile: new KeywordValidationRule(false),
             rateMinFilter: new NumberValidationRule(false, 0, 15, undefined),
-            showNonBlockedOnly: new KeywordValidationRule(false),
+            showNonBlockedOnly: new WhiteListValidationRule(false, [
+                'showAll',
+                'nonblocked_meonly',
+                'nonblocked_innerfamily',
+                'nonblocked_family',
+                'nonblocked_friends',
+                'nonblocked_nonpublic',
+                'blocked_meonly',
+                'blocked_innerfamily',
+                'blocked_family',
+                'blocked_friends',
+                'blocked_nonpublic',
+                'nonblocked_public',
+                'nonblocked'], undefined),
             additionalMappingsFile: new SimpleConfigFilePathValidationRule(false),
             rotate: new NumberValidationRule(false, 1, 360, 0),
             force: new KeywordValidationRule(false),
@@ -284,40 +297,59 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     let blockedValues: string[] = undefined;
                     for (const blockedFilter of blockedFilters.split(',')) {
                         switch (blockedFilter) {
-                            case 'nonblocked5':
-                                blockedValues = ['null', '0', '1', '2', '3', '4', '5'];
+                            case 'nonblocked_meonly':
+                                blockedValues = ['null', '0',
+                                    '1', '2', '3', '4', '5',
+                                    '6', '7', '8', '9', '10',
+                                    '11', '12', '13', '14', '15',
+                                    '16', '17', '18', '19', '20',
+                                    '21', '22', '23', '24', '25'];
                                 break;
-                            case 'nonblocked4':
-                                blockedValues = ['null', '0', '1', '2', '3', '4'];
+                            case 'nonblocked_innerfamily':
+                                blockedValues = ['null', '0',
+                                    '1', '2', '3', '4', '5',
+                                    '6', '7', '8', '9', '10',
+                                    '11', '12', '13', '14', '15',
+                                    '16', '17', '18', '19', '20'];
                                 break;
-                            case 'nonblocked3':
-                                blockedValues = ['null', '0', '1', '2', '3'];
+                            case 'nonblocked_family':
+                                blockedValues = ['null', '0',
+                                    '1', '2', '3', '4', '5',
+                                    '6', '7', '8', '9', '10',
+                                    '11', '12', '13', '14', '15'];
                                 break;
-                            case 'nonblocked2':
-                                blockedValues = ['null', '0', '1', '2'];
+                            case 'nonblocked_friends':
+                                blockedValues = ['null', '0',
+                                    '1', '2', '3', '4', '5',
+                                    '6', '7', '8', '9', '10'];
                                 break;
-                            case 'nonblocked1':
-                                blockedValues = ['null', '0', '1'];
+                            case 'nonblocked_nonpublic':
+                                blockedValues = ['null', '0',
+                                    '1', '2', '3', '4', '5'];
                                 break;
-                            case 'blocked5':
-                                blockedValues.push('5');
+                            case 'blocked_meonly':
+                                blockedValues.push('21', '22', '23', '24', '25');
                                 break;
-                            case 'blocked4':
-                                blockedValues.push('4');
+                            case 'blocked_innerfamily':
+                                blockedValues.push('16', '17', '18', '19', '20');
                                 break;
-                            case 'blocked3':
-                                blockedValues.push('3');
+                            case 'blocked_family':
+                                blockedValues.push('11', '12', '13', '14', '15');
                                 break;
-                            case 'blocked2':
-                                blockedValues.push('2');
+                            case 'blocked_friends':
+                                blockedValues.push('6', '7', '8', '9', '10');
                                 break;
-                            case 'blocked1':
-                                blockedValues.push('1');
+                            case 'blocked_nonpublic':
+                                blockedValues.push('1', '2', '3', '4', '5');
                                 break;
-                            case 'nonblocked0':
+                            case 'nonblocked_public':
                             case 'nonblocked':
-                            default:
                                 blockedValues = ['null', '0'];
+                                break
+                            default:
+                                console.error(action + ' invalid parameter - usage: --showNonBlockedOnly FILTER', argv);
+                                promise = Promise.reject(action + ' missing parameter - usage: --showNonBlockedOnly srcFileForHtmlViewer');
+                                return promise;
                         }
                     }
 

@@ -1407,8 +1407,8 @@
                     "showFilter": [
                         {
                             "property": "blocked",
-                            "command": "CSVIN",
-                            "expectedValues": ["1", "2", "3", "4", "5", "true", "TRUE"]
+                            "command": "GT",
+                            "expectedValues": [0]
                         }
                     ],
                     "recordAvailability": [
@@ -2362,13 +2362,13 @@
                     "name": "\uD83D\uDEAB non public",
                     "shortName": "&#x1F6AB",
                     "payload": {
-                        "value": 1
+                        "value": 3
                     },
                     "showFilter": [
                         {
                             "property": "blocked",
                             "command": "CSVIN",
-                            "expectedValues": ["1"]
+                            "expectedValues": ["1", "2", "3", "4", "5"]
                         }
                     ],
                     "recordAvailability": [
@@ -2392,13 +2392,13 @@
                     "name": "\uD83D\uDEAB for family and friends only",
                     "shortName": "&#x1F6AB",
                     "payload": {
-                        "value": 2
+                        "value": 8
                     },
                     "showFilter": [
                         {
                             "property": "blocked",
                             "command": "CSVIN",
-                            "expectedValues": ["2"]
+                            "expectedValues": ["6", "7", "8", "9", "10"]
                         }
                     ],
                     "recordAvailability": [
@@ -2422,13 +2422,13 @@
                     "name": "\uD83D\uDEAB for family only",
                     "shortName": "&#x1F6AB",
                     "payload": {
-                        "value": 3
+                        "value": 13
                     },
                     "showFilter": [
                         {
                             "property": "blocked",
                             "command": "CSVIN",
-                            "expectedValues": ["3"]
+                            "expectedValues": ["11", "12", "13", "14", "15"]
                         }
                     ],
                     "recordAvailability": [
@@ -2452,13 +2452,13 @@
                     "name": "\uD83D\uDEAB for inner family only",
                     "shortName": "&#x1F6AB",
                     "payload": {
-                        "value": 4
+                        "value": 18
                     },
                     "showFilter": [
                         {
                             "property": "blocked",
                             "command": "CSVIN",
-                            "expectedValues": ["4"]
+                            "expectedValues": ["16", "17", "18", "19", "20"]
                         }
                     ],
                     "recordAvailability": [
@@ -2482,13 +2482,13 @@
                     "name": "\uD83D\uDEAB for me only",
                     "shortName": "&#x1F6AB",
                     "payload": {
-                        "value": 5
+                        "value": 23
                     },
                     "showFilter": [
                         {
                             "property": "blocked",
                             "command": "CSVIN",
-                            "expectedValues": ["5"]
+                            "expectedValues": ["21", "22", "23", "24", "25"]
                         }
                     ],
                     "recordAvailability": [
