@@ -1403,6 +1403,7 @@
                     "name": "\uD83D\uDEAB Block from public",
                     "shortName": "&#x1F6AB",
                     "payload": {
+                        "value": 3
                     },
                     "showFilter": [
                         {

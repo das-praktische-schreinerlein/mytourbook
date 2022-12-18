@@ -21,7 +21,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  var filePath = path.join(__dirname, 'sqls', driver, '20190804164718-add-blocked-up.sql');
+  var filePath = path.join(__dirname, 'sqls', driver, '20221218104718-update-blocked-up.sql');
   return new Promise( function( resolve, reject ) {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
       if (err) return reject(err);
@@ -36,7 +36,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  var filePath = path.join(__dirname, 'sqls', driver, '20190804164718-add-blocked-down.sql');
+  var filePath = path.join(__dirname, 'sqls', driver, '20221218104718-update-blocked-down.sql');
   return new Promise( function( resolve, reject ) {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
       if (err) return reject(err);
