@@ -68,7 +68,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             resolutionProfile: new KeywordValidationRule(false),
             rateMinFilter: new NumberValidationRule(false, 0, 15, undefined),
             showNonBlockedOnly: new WhiteListValidationRule(false, [
-                'showAll',
+                'showall',
                 'nonblocked_meonly',
                 'nonblocked_innerfamily',
                 'nonblocked_family',
