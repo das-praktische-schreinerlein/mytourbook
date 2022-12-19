@@ -445,23 +445,29 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         }
 
         const adapterQuery: AdapterQuery = <AdapterQuery>params;
-        const fulltextFilterName = 'html';
-        const fulltextNameOnlyFilterName = 'htmlNameOnly';
-        const fulltextNameOnlyTrigger = 'SF_searchNameOnly';
+        this.remapFulltextFilter(adapterQuery, tableConfig, 'html', 'SF_searchNameOnly', 'htmlNameOnly', 'likein');
+        this.remapFulltextFilter(adapterQuery, tableConfig, 'html', 'SF_searchTrackKeywordsOnly', 'track_keywords_txt', 'in');
 
+        return this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, adapterQuery, <AdapterOpts>opts);
+    }
+
+
+    // TODO move to commons
+    protected remapFulltextFilter(adapterQuery: AdapterQuery, tableConfig: TableConfig, fulltextFilterName: string,
+                                  fulltextNewTrigger: string, fulltextNewFilterName: string, fullTextNewAction: string) {
         if (adapterQuery.where && adapterQuery.where[fulltextFilterName] &&
-            tableConfig.filterMapping.hasOwnProperty(fulltextNameOnlyFilterName)) {
+            tableConfig.filterMapping.hasOwnProperty(fulltextNewFilterName)) {
             const filter = adapterQuery.where[fulltextFilterName];
             const action = Object.getOwnPropertyNames(filter)[0];
             const value: string[] = adapterQuery.where[fulltextFilterName][action];
 
             if (value.join(' ')
-                .includes(fulltextNameOnlyTrigger)) {
+                .includes(fulltextNewTrigger)) {
 
                 const fulltextValues = [];
-                adapterQuery.where[fulltextNameOnlyFilterName] = [];
+                adapterQuery.where[fulltextNewFilterName] = [];
                 for (let fulltextValue of value) {
-                    fulltextValue = fulltextValue.split(fulltextNameOnlyTrigger)
+                    fulltextValue = fulltextValue.split(fulltextNewTrigger)
                         .join('')
                         .trim();
                     if (fulltextValue && fulltextValue.length > 0) {
@@ -469,15 +475,13 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                     }
                 }
 
-                adapterQuery.where[fulltextNameOnlyFilterName] = {};
-                adapterQuery.where[fulltextNameOnlyFilterName][action] = fulltextValues;
+                adapterQuery.where[fulltextNewFilterName] = {};
+                adapterQuery.where[fulltextNewFilterName][fullTextNewAction] = fulltextValues;
 
                 adapterQuery.where[fulltextFilterName] = undefined;
                 delete adapterQuery.where[fulltextFilterName];
             }
         }
-
-        return this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, adapterQuery, <AdapterOpts>opts);
     }
 }
 

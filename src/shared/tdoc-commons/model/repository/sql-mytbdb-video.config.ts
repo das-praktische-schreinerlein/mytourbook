@@ -22,6 +22,12 @@ export class SqlMytbDbVideoConfig {
                 groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS i_keywords']
             },
             {
+                from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
+                    'LEFT JOIN keyword tkw ON kategorie_keyword.kw_id=tkw.kw_id',
+                triggerParams: ['track_keywords_txt'],
+                groupByFields: ['GROUP_CONCAT(DISTINCT tkw.kw_name ORDER BY tkw.kw_name SEPARATOR ", ") AS track_keywords']
+            },
+            {
                 from: 'LEFT JOIN tour kt2 ON kategorie.t_id=kt2.t_id ' +
                     'LEFT JOIN destination dt ON dt.d_id in (kt2.t_calced_d_id)',
                 triggerParams: ['destination_id_s', 'destination_id_ss'],
@@ -503,6 +509,7 @@ export class SqlMytbDbVideoConfig {
             track_id_is: 'video.k_id',
             loc_lochirarchie_ids_txt: 'location.l_id',
             l_lochirarchietxt: 'location.l_name',
+            track_keywords_txt: 'tkw.kw_name',
             html: 'CONCAT(COALESCE(v_meta_name, ""), " ", k_name, " ", COALESCE(k_meta_shortdesc,""), " ", " ", location.l_lochirarchietxt)',
             htmlNameOnly: 'CONCAT(COALESCE(v_meta_name, ""), " ", k_name)'
         },
