@@ -36,7 +36,8 @@
 - backend: improved export/import-scripts
 - common: added generation of viewer to admin-server
 - common: improved visibility-filter
-- backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only 
+- backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only
+- frontend: made section-page-elements configurable
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -49,6 +50,7 @@
 - backend+frontend: added support to edit ODIMGOBJECT
 - frontend: added new component odimage-editor
 - common: added generation of viewer to admin-server
+- frontend: made section-page-elements configurable
 
 ### improvements
 - backend: extend image-export with more filter
