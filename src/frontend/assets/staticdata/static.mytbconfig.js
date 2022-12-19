@@ -454,6 +454,32 @@ window.importStaticConfigJsonP = `{
             "allowAutoplay": true
         },
         "pdoc-sectionpage": {
+            "pageContainerOrder": [
+                "contentContainer",
+                "topTenContainer",
+                "tagcloudContainer"
+            ],
+            "bestMatchingTabsOrder": [
+                "TRIP",
+                "TRACK",
+                "IMAGE",
+                "VIDEO",
+                "ROUTE",
+                "DESTINATION",
+                "LOCATION",
+                "POI",
+                "INFO",
+                "PLAYLIST",
+                "ALL"
+            ],
+            "favoritesTabsOrder": [
+                "IMAGE",
+                "VIDEO",
+                "TRACK",
+                "ROUTE",
+                "DESTINATION",
+                "ALL"
+            ],
             "availableTabs": {
                 "DESTINATION": true,
                 "IMAGE": true,

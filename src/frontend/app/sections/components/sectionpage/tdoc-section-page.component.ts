@@ -62,6 +62,9 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     tdocSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
     routeSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
     statistics: {} = [];
+    pageContainerOrder = [];
+    bestMatchingTabsOrder = [];
+    favoritesTabsOrder = [];
     availableTabs: TourDocSectionPageComponentAvailableTabs = {
         DESTINATION: true,
         IMAGE: true,
@@ -92,7 +95,37 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     };
     availableDoneDashboardRows: TourDocSectionPageComponentDashboardRows = {
     };
+
     private layoutSize: LayoutSizeData;
+    private DEFAULT_PAGECONTAINERORDER = [
+        'contentContainer',
+        'searchHintContainer',
+        'newsContainer',
+        'sectionsContainer',
+        'topTenContainer',
+        'dashBoardContainer',
+        'adminAreaContainer',
+        'tagcloudContainer',
+        'statisticBoardContainer'];
+    private DEFAULT_BESTMATCHINGTABORDER = [
+        'ROUTE',
+        'DESTINATION',
+        'LOCATION',
+        'IMAGE',
+        'TRACK',
+        'TRIP',
+        'VIDEO',
+        'INFO',
+        'PLAYLIST',
+        'POI',
+        'ALL'];
+    private DEFAULT_FAVORITESTABORDER = [
+        'IMAGE',
+        'ROUTE',
+        'DESTINATION',
+        'TRACK',
+        'VIDEO',
+        'ALL'];
 
     constructor(route: ActivatedRoute, pdocDataService: PDocDataService, private cdocDataService: TourDocDataService,
                 commonRoutingService: CommonRoutingService, private searchFormConverter: TourDocSearchFormConverter,
@@ -510,6 +543,36 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             this.doStatisticSearch('DESTINATION');
             this.doStatisticSearch('TRACK');
         }
+
+        if (this.pdoc['pageContainerOrder']) {
+            this.pageContainerOrder = this.pdoc['pageContainerOrder'];
+        } else if (BeanUtils.getValue(config, 'components.pdoc-sectionpage.pageContainerOrder') !== undefined) {
+            this.pageContainerOrder = BeanUtils.getValue(config, 'components.pdoc-sectionpage.pageContainerOrder');
+        } else {
+            this.pageContainerOrder = this.DEFAULT_PAGECONTAINERORDER;
+        }
+
+        let list = [];
+        if (this.pdoc['bestMatchingTabsOrder']) {
+            list = this.pdoc['bestMatchingTabsOrder'];
+        } else if (BeanUtils.getValue(config, 'components.pdoc-sectionpage.bestMatchingTabsOrder') !== undefined) {
+            list = BeanUtils.getValue(config, 'components.pdoc-sectionpage.bestMatchingTabsOrder');
+        } else {
+            list = this.DEFAULT_BESTMATCHINGTABORDER;
+        }
+
+        this.bestMatchingTabsOrder =  list.filter(tab => this.availableTabs[tab]);
+
+        list = [];
+        if (this.pdoc['favoritesTabsOrder']) {
+            list = this.pdoc['favoritesTabsOrder'];
+        } else if (BeanUtils.getValue(config, 'components.pdoc-sectionpage.favoritesTabsOrder') !== undefined) {
+            list = BeanUtils.getValue(config, 'components.pdoc-sectionpage.favoritesTabsOrder');
+        } else {
+            list = this.DEFAULT_FAVORITESTABORDER;
+        }
+
+        this.favoritesTabsOrder =  list.filter(tab => this.availableTabs[tab]);
     }
 
 }

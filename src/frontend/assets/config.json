@@ -2711,6 +2711,38 @@
             "allowAutoplay": false
         },
         "pdoc-sectionpage": {
+            "pageContainerOrder": [
+                "contentContainer",
+                "searchHintContainer",
+                "newsContainer",
+                "sectionsContainer",
+                "topTenContainer",
+                "dashBoardContainer",
+                "adminAreaContainer",
+                "tagcloudContainer",
+                "statisticBoardContainer"
+            ],
+            "bestMatchingTabsOrder": [
+                "ROUTE",
+                "DESTINATION",
+                "LOCATION",
+                "IMAGE",
+                "TRACK",
+                "TRIP",
+                "VIDEO",
+                "INFO",
+                "PLAYLIST",
+                "POI",
+                "ALL"
+            ],
+            "favoritesTabsOrder": [
+                "IMAGE",
+                "ROUTE",
+                "DESTINATION",
+                "TRACK",
+                "VIDEO",
+                "ALL"
+            ],
             "availableTabs": {
                 "DESTINATION": true,
                 "IMAGE": true,

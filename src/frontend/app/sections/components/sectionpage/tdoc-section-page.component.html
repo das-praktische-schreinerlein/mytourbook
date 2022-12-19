@@ -6,31 +6,73 @@
             </div>
 
             <div class="sectionpage-stacked-left-content-container" style="width: 73%; display: inline-block;">
-                <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="dashBoardContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="adminAreaContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="statisticBoardContainer"></ng-container>
+                <ng-container *ngFor="let pageContainer of pageContainerOrder">
+                    <ng-container [ngSwitch]="pageContainer">
+                        <ng-container *ngSwitchCase="'contentContainer'">
+                            <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'searchHintContainer'">
+                            <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'newsContainer'">
+                            <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'sectionsContainer'">
+                            <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'topTenContainer'">
+                            <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'dashBoardContainer'">
+                            <ng-container *ngTemplateOutlet="dashBoardContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'adminAreaContainer'">
+                            <ng-container *ngTemplateOutlet="adminAreaContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'statisticBoardContainer'">
+                            <ng-container *ngTemplateOutlet="statisticBoardContainer"></ng-container>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
             </div>
         </ng-container>
         <ng-container *ngSwitchDefault="">
-            <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="dashBoardContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="adminAreaContainer"></ng-container>
-            <ng-container *ngIf="pdoc.flgShowTopTen">
-                <div class="container content-container hidden-print">
-                    <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
-                    <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
-                </div>
-            </ng-container>
-            <ng-container *ngTemplateOutlet="statisticBoardContainer"></ng-container>
+                <ng-container *ngFor="let pageContainer of pageContainerOrder">
+                    <ng-container [ngSwitch]="pageContainer">
+                        <ng-container *ngSwitchCase="'contentContainer'">
+                            <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'searchHintContainer'">
+                            <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'newsContainer'">
+                            <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'sectionsContainer'">
+                            <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'topTenContainer'">
+                            <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'dashBoardContainer'">
+                            <ng-container *ngTemplateOutlet="dashBoardContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'adminAreaContainer'">
+                            <ng-container *ngTemplateOutlet="adminAreaContainer"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'tagcloudContainer'">
+                            <ng-container *ngIf="pdoc.flgShowTopTen">
+                                <div class="container content-container hidden-print">
+                                    <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
+                                    <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'statisticBoardContainer'">
+                            <ng-container *ngTemplateOutlet="statisticBoardContainer"></ng-container>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
         </ng-container>
     </ng-container>
 </ng-container>
@@ -282,9 +324,12 @@
 <ng-template #bestMatching>
     <h5><span class="fx-bg-type" i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</span></h5>
     <ngb-tabset>
+        <ngb-tab *ngFor="let bestMatchingTab of bestMatchingTabsOrder">
 
-        <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'ROUTE'">
+                Routen
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'ROUTE'">
                 <app-tdoc-inline-searchpage [label]="'Routen'"
                                             i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.tdoc.ROUTE"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -298,10 +343,11 @@
                                             (searchResultFound)="onTopTenRouteResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Ziele" *ngIf="availableTabs.DESTINATION">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'DESTINATION'">
+                Ziele
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'DESTINATION'">
                 <app-tdoc-inline-searchpage [label]="'Ziele'"
                                             i18n-label="label section-page DESTINATION|Label section-page DESTINATION@@linline-search.label.tdoc.DESTINATION"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -315,10 +361,11 @@
                                             (searchResultFound)="onTopTenDestinationResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Regionen" *ngIf="availableTabs.LOCATION">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'LOCATION'">
+                Regionen
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'LOCATION'">
                 <app-tdoc-inline-searchpage [label]="'Regionen'"
                                             i18n-label="label section-page LOCATION|Label section-page LOCATION@@linline-search.label.tdoc.LOCATION"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -332,10 +379,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'IMAGE'">
+                Bilder
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'IMAGE'">
                 <app-tdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.tdoc.IMAGE"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -350,10 +398,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'TRACK'">
+                Tracks
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'TRACK'">
                 <app-tdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.tdoc.TRACK"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -367,10 +416,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Trips" *ngIf="availableTabs.TRIP">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'TRIP'">
+                Trips
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'TRIP'">
                 <app-tdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label section-page TRIP|Label section-page TRIP@@linline-search.label.tdoc.TRIP"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -384,10 +434,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'VIDEO'">
+                Videos
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'VIDEO'">
                 <app-tdoc-inline-searchpage [label]="'Videos'"
                                             i18n-label="label section-page VIDEO|Label section-page VIDEO@@linline-search.label.tdoc.VIDEO"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -401,10 +452,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Infos" *ngIf="availableTabs.INFO">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'INFO'">
+                Infos
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'INFO'">
                 <app-tdoc-inline-searchpage [label]="'Infos'"
                                             i18n-label="label section-page INFO|Label section-page INFO@@linline-search.label.tdoc.INFO"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -418,10 +470,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Playlists" *ngIf="availableTabs.PLAYLIST">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'PLAYLIST'">
+                Playlists
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'PLAYLIST'">
                 <app-tdoc-inline-searchpage [label]="'Playlists'"
                                             i18n-label="label section-page PLAYLIST|Label section-page PLAYLIST@@linline-search.label.tdoc.PLAYLIST"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -435,10 +488,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="POIs" *ngIf="availableTabs.POI">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'POI'">
+                POIs
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'POI'">
                 <app-tdoc-inline-searchpage [label]="'POIs'"
                                             i18n-label="label section-page POI|Label section-page POI@@linline-search.label.tdoc.POI"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -452,10 +506,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
 
-        <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
-            <ng-template ngbTabContent>
+            <ng-template ngbTabTitle *ngIf="bestMatchingTab == 'ALL'">
+                Alles
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="bestMatchingTab == 'ALL'">
                 <app-tdoc-inline-searchpage [label]="'Alles'"
                                             i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.tdoc.ALL"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -476,8 +531,12 @@
 <ng-template #favorites>
     <h5><span class="fx-bg-type" i18n="heading favorite-results sectionPage|Heading to favorite-results sectionPage@@heading.sectionPage.favoriteResults">Favorites</span></h5>
     <ngb-tabset>
-        <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
-            <ng-template ngbTabContent>
+        <ngb-tab *ngFor="let favoritesTab of favoritesTabsOrder">
+
+            <ng-template ngbTabTitle *ngIf="favoritesTab == 'IMAGE'">
+                Bilder
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="favoritesTab == 'IMAGE'">
                 <app-tdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.tdoc.IMAGE"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -492,9 +551,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
-            <ng-template ngbTabContent>
+
+            <ng-template ngbTabTitle *ngIf="favoritesTab == 'ROUTE'">
+                Routen
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="favoritesTab == 'ROUTE'">
                 <app-tdoc-inline-searchpage [label]="'Routen'"
                                             i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.tdoc.ROUTE"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -508,9 +569,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Ziele" *ngIf="availableTabs.DESTINATION">
-            <ng-template ngbTabContent>
+
+            <ng-template ngbTabTitle *ngIf="favoritesTab == 'DESTINATION'">
+                Ziele
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="favoritesTab == 'DESTINATION'">
                 <app-tdoc-inline-searchpage [label]="'Ziele'"
                                             i18n-label="label section-page DESTINATION|Label section-page DESTINATION@@linline-search.label.tdoc.DESTINATION"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -524,9 +587,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
-            <ng-template ngbTabContent>
+
+            <ng-template ngbTabTitle *ngIf="favoritesTab == 'TRACK'">
+                Tracks
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="favoritesTab == 'TRACK'">
                 <app-tdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.tdoc.TRACK"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -540,9 +605,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
-            <ng-template ngbTabContent>
+
+            <ng-template ngbTabTitle *ngIf="favoritesTab == 'VIDEO'">
+                Videos
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="favoritesTab == 'VIDEO'">
                 <app-tdoc-inline-searchpage [label]="'Videos'"
                                             i18n-label="label section-page VIDEO|Label section-page VIDEO@@linline-search.label.tdoc.VIDEO"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -556,9 +623,11 @@
                                             (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
-            <ng-template ngbTabContent>
+
+            <ng-template ngbTabTitle *ngIf="favoritesTab == 'ALL'">
+                Alles
+            </ng-template>
+            <ng-template ngbTabContent *ngIf="favoritesTab == 'ALL'">
                 <app-tdoc-inline-searchpage [label]="'Alles'"
                                             i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.tdoc.ALL"
                                             [searchLinkLabel]="'Durchsuchen'"
