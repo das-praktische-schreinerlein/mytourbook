@@ -19,8 +19,8 @@ import {
 import {TourDocLinkedRouteRecord} from '../shared/tdoc-commons/model/records/tdoclinkedroute-record';
 import {TourDocLinkedInfoRecord} from '../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
 import {TourDocLinkedPlaylistRecord} from '../shared/tdoc-commons/model/records/tdoclinkedplaylist-record';
-import {ProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-search.service';
-import {ExportProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-export.service';
+import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
+import {ExportProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-export.service';
 import {TourDocLinkedPoiRecord} from '../shared/tdoc-commons/model/records/tdoclinkedpoi-record';
 
 export enum MediaExportResolutionProfiles {

@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Event
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
-import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/src/commons/model/objectdetection-model';
+import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 import {SafeUrl} from '@angular/platform-browser';
 
 // TODO move to commons
