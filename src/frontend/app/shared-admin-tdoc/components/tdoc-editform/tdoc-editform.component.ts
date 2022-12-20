@@ -41,7 +41,7 @@ import {LatLng} from 'leaflet';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {CommonDocEditorCommandComponentConfig} from '../text-editor/text-editor.component';
 import {SafeUrl} from '@angular/platform-browser';
-import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/src/commons/model/objectdetection-model';
+import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 import {OdImageEditorComponent} from '../odimage-editor/odimage-editor.component';
 
 export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
