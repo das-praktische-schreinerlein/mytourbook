@@ -10,7 +10,7 @@ import {Layout, LayoutService} from '@dps/mycms-frontend-commons/dist/angular-co
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
-import * as L from 'leaflet';
+import {LatLng} from 'leaflet';
 import {GenericTrackingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
@@ -72,7 +72,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         console.log("tdocClicked", tdoc);
     }
 
-    onMapCenterChanged(newCenter: L.LatLng) {
+    onMapCenterChanged(newCenter: LatLng) {
         console.log("newCenter", newCenter);
     }
 
@@ -125,7 +125,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         super.doProcessAfterResolvedData(config);
         if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {
             const [lat, lon] = this.searchForm.nearby.split('_');
-            this.mapState.mapCenterPos = new L.LatLng(+lat, +lon);
+            this.mapState.mapCenterPos = new LatLng(+lat, +lon);
         } else {
             this.mapState.mapCenterPos = undefined;
         }

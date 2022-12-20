@@ -18,7 +18,7 @@ import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.servi
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
-import * as L from 'leaflet';
+import {LatLng} from 'leaflet';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {MapState, TourDocMapStateService} from '../../services/tdoc-mapstate.service';
 
@@ -59,7 +59,7 @@ export class TourDocInlineSearchpageComponent extends
     public mapCreated ?: EventEmitter<L.Map> = new EventEmitter();
 
     @Output()
-    public centerChanged ?: EventEmitter<L.LatLng> = new EventEmitter();
+    public centerChanged ?: EventEmitter<LatLng> = new EventEmitter();
 
     @Output()
     public tdocClicked ?: EventEmitter<TourDocRecord> = new EventEmitter();
@@ -103,7 +103,7 @@ export class TourDocInlineSearchpageComponent extends
         }
     }
 
-    onMapCenterChanged(newCenter: L.LatLng) {
+    onMapCenterChanged(newCenter: LatLng) {
         if (this.centerChanged) {
             this.centerChanged.emit(newCenter);
         }

@@ -38,6 +38,7 @@
 - common: improved visibility-filter
 - backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only
 - frontend: made section-page-elements configurable
+- frontend: improved leaflet-imports
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend

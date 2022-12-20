@@ -4,7 +4,7 @@ import {TourDocRecord} from '../../../shared/tdoc-commons/model/records/tdoc-rec
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
-import * as L from 'leaflet';
+import {LatLng} from 'leaflet';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {
     CommonDocContentUtils,
@@ -17,7 +17,6 @@ import {
 import {ChartElement} from '../components/visjs-profilechart/visjs-profilechart.component';
 import {BaseImageRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 import {environment} from '../../../environments/environment';
-import LatLng = L.LatLng;
 
 export interface TourDocItemData extends CommonItemData {
     tracks?: TourDocRecord[];

@@ -14,7 +14,6 @@ import {DOCUMENT} from '@angular/common';
 import {GeoElementType, LatLngTime} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
-import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
 
 // TODO move to commons
@@ -274,7 +273,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                     points = layer.getLatLngs();
                 } else if (layer['getPoints']) {
                     // @ts-ignore
-                    const markers: L.Marker[] = layer.getPoints();
+                    const markers: Marker[] = layer.getPoints();
                     if (markers) {
                         markers.forEach(marker => {
                             points.push(marker.getLatLng());
@@ -383,7 +382,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     // TODO move to geogpx.parser
-    public static createGpxTrackSegment(points: L.LatLng[], defaultPosition: LatLngTime): string {
+    public static createGpxTrackSegment(points: LatLng[], defaultPosition: LatLngTime): string {
         if (!points || points.length <= 0) {
             return '';
         }
@@ -424,7 +423,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     // TODO move to geogpx.parser
-    public static createGpxRoute(name: string, type: string, points: L.LatLng[], defaultPosition: LatLngTime): string {
+    public static createGpxRoute(name: string, type: string, points: LatLng[], defaultPosition: LatLngTime): string {
         if (!points || points.length <= 0) {
             return '';
         }

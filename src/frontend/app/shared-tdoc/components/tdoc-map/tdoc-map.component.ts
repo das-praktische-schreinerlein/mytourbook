@@ -1,13 +1,11 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
-
-import 'leaflet';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {TourDocContentUtils, TrackColors} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
-import * as L from 'leaflet';
+import {LatLng} from 'leaflet';
 
 @Component({
     selector: 'app-tdoc-map',
@@ -33,25 +31,25 @@ export class TourDocMapComponent extends AbstractInlineComponent {
     public currentTDocId?: string;
 
     @Input()
-    public mapCenterPos: L.LatLng;
+    public mapCenterPos: LatLng;
 
     @Input()
     public mapZoom: number;
 
     @Input()
-    public showImageTrackAndGeoPos? = false;
+    public showImageTrackAndGeoPos ? = false;
 
     @Input()
     public trackColors?: TrackColors;
 
     @Input()
-    public editable? = false;
+    public editable ? = false;
 
     @Output()
     public mapCreated: EventEmitter<L.Map> = new EventEmitter();
 
     @Output()
-    public centerChanged: EventEmitter<L.LatLng> = new EventEmitter();
+    public centerChanged: EventEmitter<LatLng> = new EventEmitter();
 
     @Output()
     public tdocClicked: EventEmitter<TourDocRecord> = new EventEmitter();

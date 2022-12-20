@@ -2805,13 +2805,13 @@
             ],
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ]
         },
         "tdoc-location-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -2821,7 +2821,7 @@
         "tdoc-news-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -2833,7 +2833,7 @@
         "tdoc-route-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -2843,7 +2843,7 @@
         "tdoc-track-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/route/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -2853,7 +2853,7 @@
         "tdoc-trip-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",

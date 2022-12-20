@@ -7,7 +7,6 @@ import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/servic
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {DOCUMENT} from '@angular/common';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
-import * as L from 'leaflet';
 import {LatLng, LeafletMouseEvent} from 'leaflet';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import {FormUtils} from '../../../shared-tdoc/services/form.utils';
@@ -101,7 +100,7 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
         });
     }
 
-    onGeoLocMapClicked(position: L.LatLng) {
+    onGeoLocMapClicked(position: LatLng) {
         if (position && FormUtils.getStringFormValue(this.editGpxLocFormGroup.getRawValue(), 'geoLocUseMapClickPos') === 'true') {
             this.editGpxLocFormGroup.patchValue({'geoLoc': position.lat + ',' + position.lng + ',' + 0});
             this.cd.markForCheck();
@@ -163,7 +162,7 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
                 if (layer['getPoints']) {
                     const points: LatLng[] = [];
                     // @ts-ignore
-                    const markers: L.Marker[] = layer.getPoints();
+                    const markers: Marker[] = layer.getPoints();
                     if (markers) {
                         markers.forEach(marker => {
                             points.push(marker.getLatLng());

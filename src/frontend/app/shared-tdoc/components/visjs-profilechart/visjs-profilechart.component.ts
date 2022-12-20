@@ -19,7 +19,7 @@ export interface ChartElement extends MapElement {
 }
 
 export class VisJsProfileDistanceChart extends VisJsGeoProfileMap {
-    _convertGeoElementsToDataSet(geoElements: GeoElement[], element, options): DataSet<any> {
+    convertGeoElementsToDataSet(geoElements: GeoElement[], element, options): DataSet<any> {
         const data = new DataSet<any>();
         if (!geoElements) {
             return data;
@@ -73,7 +73,7 @@ export class VisJsProfileDistanceChart extends VisJsGeoProfileMap {
 }
 
 export class VisJsProfileTimeChart extends VisJsGeoProfileMap {
-    _convertGeoElementsToDataSet(geoElements: GeoElement[], element, options): DataSet<any> {
+    convertGeoElementsToDataSet(geoElements: GeoElement[], element, options): DataSet<any> {
         const data = new DataSet<any>();
         if (!geoElements) {
             return data;
@@ -150,7 +150,7 @@ export class VisJsProfileChartComponent implements AfterViewChecked, OnChanges {
     public flgGenerateNameFromGpx?: boolean;
 
     @Input()
-    public flagTimeChart? = false;
+    public flagTimeChart ? = false;
 
     constructor(private http: MinimalHttpBackendClient) {
         this.gpxLoader = new GeoLoader(http, new GeoGpxParser());
@@ -202,11 +202,13 @@ export class VisJsProfileChartComponent implements AfterViewChecked, OnChanges {
                         + ', ' + (point.alt ? point.alt : 0) + ', ' + (point['time'] ? '"' + point['time'] + '"' : undefined) + ']]}}';
                 loader = this.jsonLoader;
             } else if ((trackUrl !== undefined && trackUrl.endsWith('.gpx'))
-                || (trackSrc !== undefined && trackSrc !== null && (trackSrc.indexOf('<trkpt') || trackSrc.indexOf('<rpt')))) {
+                || (trackSrc !== undefined && trackSrc !== null
+                    && (trackSrc.indexOf('<trkpt') >= 0 || trackSrc.indexOf('<rtept') >= 0))) {
                 loader = this.gpxLoader;
             } else {
                 loader = this.jsonLoader;
             }
+
             dataSources.push({ geoLoader: loader, url: trackUrl, src: trackSrc});
         }
 
@@ -236,7 +238,7 @@ export class VisJsProfileChartComponent implements AfterViewChecked, OnChanges {
                 }
             };
             const container = document.getElementById(this.chartId);
-            this.flagTimeChart
+            this.flagTimeChart   // NOSONAR do not remove !!!
                 ? new VisJsProfileTimeChart(dataSources, container, options)
                 : new VisJsProfileDistanceChart(dataSources, container, options);
         }

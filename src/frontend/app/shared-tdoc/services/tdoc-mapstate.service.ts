@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import * as L from 'leaflet';
+import {LatLng} from 'leaflet';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 
 export interface MapState {
-    mapCenterPos: L.LatLng;
+    mapCenterPos: LatLng;
     mapZoom: number;
     mapElements: MapElement[];
     currentMapTDocId: string;
