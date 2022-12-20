@@ -5,7 +5,7 @@ import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/re
 import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
 import {TourDocObjectDetectionImageObjectRecord} from '../../../shared/tdoc-commons/model/records/tdocobjectdetectectionimageobject-record';
 import {TourDocImageRecord} from '../../../shared/tdoc-commons/model/records/tdocimage-record';
-import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/src/commons/model/objectdetection-model';
+import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 
 export class TourDocJoinUtils {
 
