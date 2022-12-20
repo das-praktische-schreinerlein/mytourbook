@@ -32,7 +32,7 @@ import {
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import {ViewerManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/viewer-manager.module';
-import * as XRegExp from 'xregexp';
+import * as XRegExp from 'xregexp/lib';
 import {BackendConfigType} from '../modules/backend.commons';
 
 export class SimpleFilePathListValidationRule extends RegExValidationReplaceRule {
