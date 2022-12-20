@@ -211,7 +211,6 @@
                             "vendorChunk": false,
                             "buildOptimizer": true,
                             "serviceWorker": true,
-                            "statsJson": true,
                             "ngswConfigPath": "src/frontend/ngsw-config.json"
                         },
                         "viewer-en": {
