@@ -11,7 +11,7 @@ import {
     VisJsGeoProfileMapPoint
 } from '@dps/mycms-frontend-commons/dist/angular-maps/services/visjs-geoprofilemap.plugin';
 import {GeoElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
-import {DataSet} from 'vis';
+import {DataSet} from 'vis/dist/vis-graph3d.min';
 import {LatLng} from 'leaflet';
 
 
