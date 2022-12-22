@@ -39,6 +39,8 @@
 - backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only
 - frontend: made section-page-elements configurable
 - frontend: improved leaflet-imports
+- frontend: improved imports for bootstrap-modules
+- build: added goals for modules-statistics
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -52,6 +54,7 @@
 - frontend: added new component odimage-editor
 - common: added generation of viewer to admin-server
 - frontend: made section-page-elements configurable
+- build: added goals for modules-statistics
 
 ### improvements
 - backend: extend image-export with more filter
@@ -73,6 +76,7 @@
 - backend: improved export/import-scripts
 - common: improved visibility-filter
 - backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only
+- frontend: improved imports for bootstrap-modules
 
 ### bug fixes
 - backend: fixed media-export of dependent records

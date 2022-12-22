@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
 import {TourDocRouteAttributeComponent} from './tdoc-routeattr.component';
@@ -14,7 +13,7 @@ describe('TourDocRouteAttributeComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocRouteAttributeComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule.forRoot(),
+            imports: [
                 TranslateModule.forRoot()]
         })
             .compileComponents();

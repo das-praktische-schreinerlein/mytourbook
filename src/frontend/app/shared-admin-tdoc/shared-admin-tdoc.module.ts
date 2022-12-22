@@ -8,7 +8,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule} from '@ngx-translate/core';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from 'ngx-toastr';
 import {LightboxModule} from 'ngx-lightbox';
 import {FileDropModule} from 'ngx-file-drop';
@@ -43,7 +42,6 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
     imports: [
         SharedTourDocModule,
         ToastrModule,
-        NgbModule,
         MultiselectDropdownModule,
         TranslateModule,
         BrowserModule,

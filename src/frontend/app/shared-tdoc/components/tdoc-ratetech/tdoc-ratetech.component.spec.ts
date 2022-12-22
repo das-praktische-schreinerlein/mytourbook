@@ -2,7 +2,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TourDocRateTechComponent} from './tdoc-ratetech.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
 
@@ -14,7 +13,7 @@ describe('TourDocRateTechComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocRateTechComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule,
+            imports: [
                 TranslateModule.forRoot()]
         })
             .compileComponents();

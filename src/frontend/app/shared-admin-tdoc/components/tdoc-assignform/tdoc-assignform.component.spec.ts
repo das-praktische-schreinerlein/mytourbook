@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {NgbActiveModal, NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
@@ -29,7 +29,7 @@ describe('TourDocAssignFormComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocAssignFormComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule,
+            imports: [
                 TranslateModule.forRoot()],
             providers: [
                 { provide: Router, useValue: new RouterStub() },

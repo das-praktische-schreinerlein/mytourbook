@@ -10,7 +10,6 @@ import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/servi
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
 import {BrowserModule} from '@angular/platform-browser';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
@@ -41,7 +40,6 @@ import {TourDocDataService} from '../../shared/tdoc-commons/services/tdoc-data.s
     imports: [
         TranslateModule,
         BrowserModule,
-        NgbModule,
         ToastrModule,
         HttpClientModule,
         AngularCommonsModule,

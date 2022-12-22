@@ -13,7 +13,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule} from '@ngx-translate/core';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbAccordionModule, NgbRatingModule, NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from 'ngx-toastr';
 import {LightboxModule} from 'ngx-lightbox';
 import {TourDocProfileMapComponent} from './components/tdoc-profilemap/tdoc-profilemap.component';
@@ -97,8 +97,8 @@ import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-lin
         TourDocLinkedPoisComponent
     ],
     imports: [
+        NgbAccordionModule, NgbRatingModule, NgbTabsetModule,
         ToastrModule,
-        NgbModule,
         MultiselectDropdownModule,
         TranslateModule,
         BrowserModule,

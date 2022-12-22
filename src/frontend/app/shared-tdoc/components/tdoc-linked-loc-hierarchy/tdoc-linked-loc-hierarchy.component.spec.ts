@@ -2,7 +2,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TourDocLinkedLocHierarchyComponent} from './tdoc-linked-loc-hierarchy.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
@@ -35,7 +34,7 @@ describe('TourDocLinkedLocComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule,
+            imports: [
                 TranslateModule.forRoot()]
         })
             .compileComponents();

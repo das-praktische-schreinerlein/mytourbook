@@ -22,7 +22,6 @@ import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.serv
 import {FormBuilder} from '@angular/forms';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
@@ -42,7 +41,6 @@ describe('TourDocAlbumpageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocAlbumpageComponent],
             imports: [
-                NgbModule,
                 TranslateModule.forRoot(),
                 NoopAnimationsModule
             ],

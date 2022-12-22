@@ -2,7 +2,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TourDocListItemThinComponent} from './tdoc-list-item-thin.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
@@ -33,7 +32,7 @@ describe('TourDocListItemThinComponent', () => {
                 LayoutService
             ],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule,
+            imports: [
                 TranslateModule.forRoot()]
         })
             .compileComponents();

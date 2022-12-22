@@ -24,7 +24,7 @@ import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 import {TourDocAlbumService} from '../../services/tdoc-album.service';
 import {TourDocPlaylistService} from '../../services/tdoc-playlist.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
-import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 
 describe('TourDocDashboardSearchColumnComponent', () => {
@@ -35,7 +35,6 @@ describe('TourDocDashboardSearchColumnComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocDashboardSearchColumnComponent],
             imports: [
-                NgbModule,
                 TranslateModule.forRoot()
             ],
             providers: [

@@ -7,7 +7,7 @@ import {SectionsPDocRecordResolver} from '@dps/mycms-frontend-commons/dist/front
 import {TourDocSectionPageComponent} from './components/sectionpage/tdoc-section-page.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCollapseModule, NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SectionsPDocsResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/sections-pdocs.resolver';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
@@ -26,7 +26,7 @@ import {FrontendPDocCommonsModule} from '@dps/mycms-frontend-commons/dist/fronte
     ],
     imports: [
         TranslateModule,
-        NgbModule,
+        NgbCollapseModule, NgbTabsetModule,
         NgxMdModule.forRoot(),
         BrowserModule,
         FormsModule,

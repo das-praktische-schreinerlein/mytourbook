@@ -8,7 +8,6 @@ import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
@@ -40,7 +39,6 @@ describe('TourDocCreatepageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocCreatepageComponent, TourDocDateFormatPipe],
             imports: [
-                NgbModule,
                 TranslateModule.forRoot(),
                 NgxMdModule.forRoot(),
                 NoopAnimationsModule

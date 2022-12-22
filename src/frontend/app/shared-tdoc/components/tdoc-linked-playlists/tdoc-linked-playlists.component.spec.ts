@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
 import {Router} from '@angular/router';
@@ -42,7 +42,7 @@ describe('TourDocLinkedPlaylistsComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule,
+            imports: [
                 TranslateModule.forRoot()]
         })
             .compileComponents();
