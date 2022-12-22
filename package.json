@@ -20,6 +20,7 @@
     "adminserver-serve-beta": "node dist/backend/adminServer.js --adminbackend config/adminServer.beta.json --firewall config/adminfirewall.beta.json",
     "adminserver-serve-prod": "node dist/backend/adminServer.js --adminbackend config/adminServer.prod.json --firewall config/adminfirewall.prod.json",
     "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js && webpack --config adminServer-webpack.config.js && npm run build-after-copy-contrib && npm run build-after-copy-contrib-solrlang && npm run build-after-copy-overrides-config",
+    "backend-build-stats": "tsc -p src/backend && webpack --config backend-webpack.config.js --profile --json > dist/server-stats.json && webpack --config serverAdmin-webpack.config.js  --profile --json > dist/serveradmin-stats.json && webpack --config adminServer-webpack.config.js  --profile --json > dist/adminserver-stats.json && npm run build-after-copy-contrib && npm run build-after-copy-contrib-solrlang && npm run build-after-copy-overrides-config",
     "backend-build-and-serve-dev": "npm run backend-build && npm run backend-serve-dev",
     "backend-prepare-appenv-dev": "node dist/backend/serverAdmin.js --preparedCommand prepareAppEnv --adminclibackend config/adminCli.dev.json --backend config/backend.dev.json",
     "backend-prepare-appenv-import": "node dist/backend/serverAdmin.js --preparedCommand prepareAppEnv --adminclibackend config/adminCli.import.json --backend config/backend.import.json",
@@ -172,6 +173,9 @@
     "version": "ng -v",
     "webpack-analyzer:dev-de": "webpack-bundle-analyzer dist/static/mytbdev/de/stats.json",
     "webpack-analyzer:viewer-de": "webpack-bundle-analyzer dist/static/mytbviewer/de/stats.json",
+    "webpack-analyzer:server": "webpack-bundle-analyzer dist/server-stats.json",
+    "webpack-analyzer:serveradmin": "webpack-bundle-analyzer dist/serveradmin-stats.json",
+    "webpack-analyzer:adminserver": "webpack-bundle-analyzer dist/adminserver-stats.json",
     "xi18n": "ng xi18n frontend --locale de --out-file messages.de.xlf --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
     "xi18n-en": "ng xi18n frontend --locale en --out-file messages.en.xlf --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
     "noop": "npm version"
