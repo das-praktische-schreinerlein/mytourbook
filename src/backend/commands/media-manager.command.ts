@@ -414,17 +414,23 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     return promise;
                 }
 
-                promise = viewerManagerModule.generateViewerHtmlFile(srcFile,  srcFiles,
-                    exportDir + '/' + exportName + '.html', 100, 'mdocs',
-                    function (html: string) {
-                        return viewerManagerModule.htmlConfigConverter(html, 'staticTDocsFiles'); },
-                    function (html: string, jsonPFileName: string) {
-                        return viewerManagerModule.jsonToJsTargetContentConverter(html, jsonPFileName,
-                            'importStaticDataTDocsJsonP'); },
-                    function (html: string, dataFileConfigName: string) {
-                        return viewerManagerModule.htmlInlineFileConverter(html, dataFileConfigName,
-                            'staticTDocsFiles'); }
-                );
+                promise = FileUtils.mergeJsonFiles(srcFiles, exportDir + '/' + exportName + '-merged.mdocexport.json', 'id', 'mdocs')
+                    .then((resultFile) => {
+                        return viewerManagerModule.generateViewerHtmlFile(srcFile, [resultFile],
+                            exportDir + '/' + exportName + '.html', 100, 'mdocs',
+                            function (html: string) {
+                                return viewerManagerModule.htmlConfigConverter(html, 'staticTDocsFiles');
+                            },
+                            function (html: string, jsonPFileName: string) {
+                                return viewerManagerModule.jsonToJsTargetContentConverter(html, jsonPFileName,
+                                    'importStaticDataTDocsJsonP');
+                            },
+                            function (html: string, dataFileConfigName: string) {
+                                return viewerManagerModule.htmlInlineFileConverter(html, dataFileConfigName,
+                                    'staticTDocsFiles');
+                            }
+                        );
+        });
 
                 break;
             case 'inlineDataOnViewerFile':
