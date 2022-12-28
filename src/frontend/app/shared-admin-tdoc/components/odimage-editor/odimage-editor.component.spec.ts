@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {NgxMdModule} from 'ngx-md';
 
-describe('TextEditorComponent', () => {
+describe('OdImageEditorComponent', () => {
     let component: OdImageEditorComponent;
     let fixture: ComponentFixture<OdImageEditorComponent>;
 
