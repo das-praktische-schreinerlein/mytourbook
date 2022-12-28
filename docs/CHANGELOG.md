@@ -41,6 +41,7 @@
 - frontend: improved leaflet-imports
 - frontend: improved imports for bootstrap-modules
 - build: added goals for modules-statistics
+- frontend: hide copyright-footer if configured
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -77,6 +78,7 @@
 - common: improved visibility-filter
 - backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only
 - frontend: improved imports for bootstrap-modules
+- frontend: hide copyright-footer if configured
 
 ### bug fixes
 - backend: fixed media-export of dependent records

@@ -2,6 +2,7 @@ import {CommonEnvironment} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-
 import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export interface AppEnvironment extends CommonEnvironment {
+    hideCopyrightFooter?: boolean,
     assetsPathVersionSnippet: string;
     assetsPathVersionSuffix: string;
     tracksBaseUrl: string;

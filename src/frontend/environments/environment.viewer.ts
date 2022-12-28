@@ -2,6 +2,7 @@ import {AppEnvironment} from './app-environment';
 import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export const environment: AppEnvironment = {
+    hideCopyrightFooter: true,
     production: false, // TODO set this to false for development
     assetsPathVersionSnippet: '',
     assetsPathVersionSuffix: '',
