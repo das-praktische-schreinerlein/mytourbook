@@ -14,7 +14,6 @@
     <script inline type="text/javascript" src="lz-string.min.js"></script>
 
     <script>document.write('<base href="' + document.location + '" />');</script>
-
     <style>
         div.flg-browser-not-compatible {
             display: none;
@@ -63,7 +62,31 @@
         Am besten du probierst es mal mit dem neusten Chrome, Firefox, Edge oder Safari. Die sind getestet :-)
     </div>
 </div>
+
 <app-root>Loading...</app-root>
+
+<img id="dummyBannerLoader" src="assets/images/banner-big.gif" style="display: none" alt="">
+<script>
+    function inlineBannerUtil() {
+        var dummyBannerImage = document.getElementById('dummyBannerLoader');
+        if (!dummyBannerImage) {
+            console.error('banner not found', dummyBannerImage);
+            return;
+        }
+
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML =
+            '.img-navbar-banner { content: url(\'' + dummyBannerImage.currentSrc + '\'); }' +
+            '.img-sidebar-banner { content: url(\'' + dummyBannerImage.currentSrc + '\'); }';
+
+        document.getElementsByTagName('head')[0].appendChild(style);
+
+        console.log('add banner-style', style);
+    }
+
+    inlineBannerUtil();
+</script>
 
 </body>
 </html>
