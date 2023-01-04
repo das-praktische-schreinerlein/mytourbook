@@ -205,7 +205,6 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
             geoRecords.push(TourDocRecordFactory.createSanitized({
                 id: 'TMPLOC' + (new Date()).getTime(),
                 gpsTrackSrc: trackSrc,
-                gpsTrackBaseFile: 'tmp.gpx',
                 name: values['name'],
                 type: this.type,
                 datestart: new Date().toISOString(),
@@ -262,7 +261,9 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
     protected prepareSubmitValues(values: {}): void {
         if (values['gpxSrc'] !== undefined && values['gpxSrc'] !== null) {
             if (AbstractGeoGpxParser.isResponsibleForSrc(values['gpxSrc'])) {
-                values['gpxSrc'] = values['gpxSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
+                values['gpxSrc'] = values['gpxSrc']
+                    .replace(/\n/g, ' ')
+                    .replace(/[ ]+/g, ' ');
             }
         }
     }

@@ -174,8 +174,7 @@ export class VisJsProfileChartComponent extends AbstractMapComponent {
             if (loader) {
                 dataSources.push({ geoLoader: loader, url: trackUrl, src: trackSrc});
             } else {
-                console.error('no loader for mapElement:', chartElement.id, chartElement, trackUrl, trackSrc,
-                    this.gpxLoader.isResponsibleForSrc(trackSrc));
+                console.error('no loader for id/mapElement/url/src:', chartElement.id, chartElement, trackUrl, trackSrc);
             }
         }
 

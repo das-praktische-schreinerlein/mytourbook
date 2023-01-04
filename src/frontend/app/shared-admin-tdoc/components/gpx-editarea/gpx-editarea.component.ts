@@ -16,6 +16,7 @@ import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {LatLng} from 'leaflet';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
+import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
 
 // TODO move to commons
 @Component({
@@ -29,7 +30,6 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     public static readonly _DEFAULT_LON = 13.8;
 
     private trackStatisticService = new TrackStatisticService();
-    private gpxParser = new GeoGpxParser();
     private lastGpx = '';
     private lastName = '';
     private geoMap: L.Map;
@@ -65,7 +65,8 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
 
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocDataService: TourDocDataService,
-                protected contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document) {
+                protected contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document,
+                protected geoParserService: GeoParserDeterminer, protected gpxParser: GeoGpxParser) {
         super(cd);
     }
 
@@ -120,9 +121,10 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 track = track
                     .replace(/[\r\n]/g, ' ')
                     .replace(/[ ]+/g, ' ');
+                track = GeoGpxParser.reformatXml(track);
             }
 
-            this.setCurrentGpx(GeoGpxParser.reformatXml(track));
+            this.setCurrentGpx(track);
         }
 
         this.generateTrackSegments(track);
@@ -136,9 +138,17 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
         if (track === undefined || track === null || track.length <= 0) {
             this.trackSegmentStatistics = [];
             this.editTrackRecords = [];
+            return;
         }
 
-        const geoElements = this.gpxParser.parse(track, {});
+        const geoParser = this.geoParserService.determineParser(undefined, track);
+        if (!geoParser) {
+            this.trackSegmentStatistics = [];
+            this.editTrackRecords = [];
+            return;
+        }
+
+        const geoElements = geoParser.parse(track, {});
         if (geoElements !== undefined && geoElements.length > 0) {
             const trackStatistics = [];
             const editTrackRecords = [];
@@ -354,7 +364,9 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     protected prepareSubmitValues(values: {}): void {
         if (values['gpxSrc'] !== undefined && values['gpxSrc'] !== null) {
             if (AbstractGeoGpxParser.isResponsibleForSrc(values['gpxSrc'])) {
-                values['gpxSrc'] = values['gpxSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
+                values['gpxSrc'] = values['gpxSrc']
+                    .replace(/\n/g, ' ')
+                    .replace(/[ ]+/g, ' ');
             }
         }
     }

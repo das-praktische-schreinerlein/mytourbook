@@ -30,6 +30,11 @@ import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/se
 import {TourDocModalCreatepageComponent} from './components/tdoc-createpage/tdoc-modal-createpage.component';
 import {SharedAdminTourDocModule} from '../shared-admin-tdoc/shared-admin-tdoc.module';
 import {TourDocDataService} from '../../shared/tdoc-commons/services/tdoc-data.service';
+import {GeoParserDeterminer} from '../shared-tdoc/services/geo-parser.determiner';
+import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
+import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
+import {GeoTxtParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geotxt.parser';
+import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geojson.parser';
 
 @NgModule({
     declarations: [
@@ -68,7 +73,12 @@ import {TourDocDataService} from '../../shared/tdoc-commons/services/tdoc-data.s
         TourDocLightBoxService,
         AngularHtmlService,
         AngularMarkdownService,
-        LayoutService
+        LayoutService,
+        GeoParserDeterminer,
+        GeoGpxParser,
+        GeoJsonParser,
+        GeoTxtParser,
+        GeoGpxUtils
     ],
     exports: [
         TourDocEditpageComponent,

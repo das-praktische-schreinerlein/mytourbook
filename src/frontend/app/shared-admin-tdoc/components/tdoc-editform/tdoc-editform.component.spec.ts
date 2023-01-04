@@ -33,6 +33,11 @@ import {TourDocTrackDescSuggesterService} from '../../services/tdoc-track-desc-s
 import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
 import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.service';
+import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
+import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
+import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geojson.parser';
+import {GeoTxtParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geotxt.parser';
+import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
 
 describe('TourDocEditformComponent', () => {
     let component: TourDocEditformComponent;
@@ -52,6 +57,11 @@ describe('TourDocEditformComponent', () => {
                 { provide: TourDocDataService, useValue: new TourDocDataServiceStub() },
                 TourDocSearchFormUtils,
                 { provide: Router, useValue: new RouterStub() },
+                GeoParserDeterminer,
+                { provide: GeoGpxParser, useValue: new GeoGpxParser() },
+                GeoJsonParser,
+                GeoTxtParser,
+                GeoGpxUtils,
                 CommonRoutingService,
                 CommonDocRoutingService,
                 SearchFormUtils,

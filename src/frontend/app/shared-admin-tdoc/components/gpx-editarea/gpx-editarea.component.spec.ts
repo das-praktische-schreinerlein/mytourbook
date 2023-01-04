@@ -18,6 +18,11 @@ import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-com
 import {Router} from '@angular/router';
 import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
+import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
+import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geojson.parser';
+import {GeoTxtParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geotxt.parser';
+import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
 
 describe('GpxEditAreaComponent', () => {
     let component: GpxEditAreaComponent;
@@ -35,6 +40,11 @@ describe('GpxEditAreaComponent', () => {
                 TranslateService,
                 { provide: TourDocDataService, useValue: new TourDocDataServiceStub() },
                 { provide: Router, useValue: new RouterStub() },
+                GeoParserDeterminer,
+                { provide: GeoGpxParser, useValue: new GeoGpxParser() },
+                GeoJsonParser,
+                GeoTxtParser,
+                GeoGpxUtils,
                 CommonRoutingService,
                 CommonDocRoutingService,
                 SearchFormUtils,

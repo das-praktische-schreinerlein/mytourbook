@@ -31,7 +31,7 @@ import {GpxEditAreaComponent} from '../gpx-editarea/gpx-editarea.component';
 import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocJoinUtils} from '../../../shared-tdoc/services/tdoc-join.utils';
 import {FormUtils} from '../../../shared-tdoc/services/form.utils';
-import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
+import {ObjectDetectionDetectedObjectType, ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 import {
     TourDocObjectDetectionImageObjectRecord,
     TourDocObjectDetectionImageObjectRecordValidator
@@ -41,8 +41,9 @@ import {LatLng} from 'leaflet';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {CommonDocEditorCommandComponentConfig} from '../text-editor/text-editor.component';
 import {SafeUrl} from '@angular/platform-browser';
-import {ObjectDetectionDetectedObjectType} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 import {OdImageEditorComponent} from '../odimage-editor/odimage-editor.component';
+import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
+import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
 
 export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
     editorCommands: CommonDocEditorCommandComponentConfig;
@@ -57,7 +58,6 @@ export interface TurDocEditformComponentConfig extends CommonDocEditformComponen
 export class TourDocEditformComponent extends CommonDocEditformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
     TourDocDataService> {
     private trackStatisticService = new TrackStatisticService();
-    private gpxParser = new GeoGpxParser();
     private personsFound: StructuredKeywordState[] = [];
 
     public Layout = Layout;
@@ -193,8 +193,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 public contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document,
                 protected tourDocNameSuggesterService: TourDocNameSuggesterService,
                 protected tourDocDescSuggesterService: TourDocDescSuggesterService,
-                protected router: Router) {
-        super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
+                protected router: Router, protected geoParserService: GeoParserDeterminer) {
+    super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
     }
 
     onInputChanged(value: any, field: string): boolean {
@@ -313,29 +313,39 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     updateMap(): boolean {
         let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
         if (track !== undefined && track !== null && track.length > 0) {
-            track = track.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
+            if (AbstractGeoGpxParser.isResponsibleForSrc(track)) {
+                track = track
+                    .replace(/[\r\n]/g, ' ')
+                    .replace(/[ ]+/g, ' ');
+                this.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
+            }
+
             this.trackRecords = [TourDocRecordFactory.createSanitized({
                 id: 'TMP' + (new Date()).getTime(),
                 gpsTrackSrc: track,
-                gpsTrackBaseFile: 'tmp.gpx',
                 name: this.editFormGroup.getRawValue()['name'],
                 type: this.record.type,
                 datestart: new Date().toISOString(),
                 dateend: new Date().toISOString(),
                 dateshow: this.editFormGroup.getRawValue()['dateshow']
             })];
-            this.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
+
             const statTrack = track;
-            const geoElements = this.gpxParser.parse(statTrack, {});
-            if (geoElements !== undefined && geoElements.length > 0) {
-                let trackStatistic = undefined;
-                for (const geoElement of geoElements) {
-                    trackStatistic = this.trackStatisticService.mergeStatistics(
-                        trackStatistic, this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
-                }
-                this.trackStatistic = trackStatistic;
-            } else {
+            const geoParser = this.geoParserService.determineParser(undefined, statTrack);
+            if (!geoParser) {
                 this.trackStatistic = this.trackStatisticService.emptyStatistic();
+            } else {
+                const geoElements = geoParser.parse(statTrack, {});
+                if (geoElements !== undefined && geoElements.length > 0) {
+                    let trackStatistic = undefined;
+                    for (const geoElement of geoElements) {
+                        trackStatistic = this.trackStatisticService.mergeStatistics(
+                            trackStatistic, this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                    }
+                    this.trackStatistic = trackStatistic;
+                } else {
+                    this.trackStatistic = this.trackStatisticService.emptyStatistic();
+                }
             }
         } else {
             this.trackRecords = [];
