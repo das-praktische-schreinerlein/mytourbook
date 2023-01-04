@@ -42,6 +42,7 @@
 - frontend: improved imports for bootstrap-modules
 - build: added goals for modules-statistics
 - frontend: hide copyright-footer if configured
+- frontend: improved map-handling on maps and map-editor
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -79,6 +80,7 @@
 - backend: added fulltext-search-query-modifier to limit fulltext-search for name-fields only
 - frontend: improved imports for bootstrap-modules
 - frontend: hide copyright-footer if configured
+- frontend: improved map-handling on maps and map-editor 
 
 ### bug fixes
 - backend: fixed media-export of dependent records

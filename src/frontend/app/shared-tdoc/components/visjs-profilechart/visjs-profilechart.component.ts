@@ -1,9 +1,7 @@
-import {AfterViewChecked, ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {MinimalHttpBackendClient} from '@dps/mycms-commons/dist/commons/services/minimal-http-backend-client';
 import {GeoLoader} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.loader';
-import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
-import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geojson.parser';
-import {ComponentUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/component.utils';
+import {AbstractMapComponent} from '@dps/mycms-frontend-commons/dist/angular-maps/components/abstract-map.component';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {
     VisJsGeoProfileMap,
@@ -15,6 +13,7 @@ import {DataSet} from 'vis/dist/vis-graph3d.min';
 import {LatLng} from 'leaflet';
 
 
+// tslint:disable-next-line:no-empty-interface
 export interface ChartElement extends MapElement {
 }
 
@@ -94,7 +93,6 @@ export class VisJsProfileTimeChart extends VisJsGeoProfileMap {
             for (let p = 0; p < geoElement.points.length; p++) {
                 const point = geoElement.points[p];
                 if (point.lat && point.lng && point.alt !== undefined) {
-                    const geoElement = geoElements[i];
                     dist += lastPoint !== undefined
                         ? point.distanceTo(lastPoint)
                         : 0;
@@ -129,94 +127,63 @@ export class VisJsProfileTimeChart extends VisJsGeoProfileMap {
     styleUrls: ['./visjs-profilechart.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VisJsProfileChartComponent implements AfterViewChecked, OnChanges {
-    private readonly gpxLoader: GeoLoader;
-    private readonly jsonLoader: GeoLoader;
-
-    initialized: boolean;
-    flgfullScreen = false;
-    chartHeight = '';
-
-    @Input()
-    public chartId: string;
-
-    @Input()
-    public height: string;
-
-    @Input()
-    public chartElements: MapElement[];
-
+export class VisJsProfileChartComponent extends AbstractMapComponent {
     @Input()
     public flgGenerateNameFromGpx?: boolean;
 
     @Input()
     public flagTimeChart ? = false;
 
-    constructor(private http: MinimalHttpBackendClient) {
-        this.gpxLoader = new GeoLoader(http, new GeoGpxParser());
-        this.jsonLoader = new GeoLoader(http, new GeoJsonParser());
+    constructor(http: MinimalHttpBackendClient) {
+        super(http);
     }
 
-    ngAfterViewChecked() {
-        if (this.initialized) {
+    protected renderMap() {
+        if (!this.initialized || !this.mapId) {
             return;
         }
 
-        this.initialized = true;
-        this.renderChart();
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (this.initialized && ComponentUtils.hasNgChanged(changes)) {
-            this.renderChart();
-        }
-    }
-
-    toggleFullScreen() {
-        this.flgfullScreen = !this.flgfullScreen;
-        this.renderChart();
-    }
-
-    private renderChart() {
-        if (!this.initialized || !this.chartId) {
-            return;
-        }
-
-        this.chartHeight = this.flgfullScreen ? window.innerHeight + 'px' : this.height;
+        this.mapHeight = this.flgfullScreen ? window.innerHeight + 'px' : this.height;
         const dataSources: VisJsGeoProfileMapDataSource[] = [];
-        for (let i = 0; i < this.chartElements.length; i++) {
-            let trackSrc = this.chartElements[i].trackSrc;
-            const trackUrl = this.chartElements[i].trackUrl;
-            const point = this.chartElements[i].point;
+        for (let i = 0; i < this.mapElements.length; i++) {
+            const chartElement = this.mapElements[i];
+            let trackSrc = chartElement.trackSrc;
+            const trackUrl = chartElement.trackUrl;
+            const point = chartElement.point;
+
             // specify options
             let loader: GeoLoader;
-            if ((trackSrc === undefined || trackSrc === null) && (trackUrl === undefined || trackUrl === null) && point !== undefined) {
+            if ((trackSrc === undefined || trackSrc === null) &&
+                (trackUrl === undefined || trackUrl === null) &&
+                point !== undefined) {
                 trackSrc = '{ "track": {' +
                     '"tId":"dummy",' +
-                    '"tName":"' + this.chartElements[i].name.replace(/[^-a-zA-Z0-9+ .;,:]+/g, '') + '",' +
+                    '"tName":"' + chartElement.name.replace(/[^-a-zA-Z0-9+ .;,:]+/g, '') + '",' +
                     '"color":"Red",' +
                     '"colorIdx":"0",' +
-                    '"type":"' + this.chartElements[i].type + '",' +
+                    '"type":"' + chartElement.type + '",' +
                     '"header":["lat","lon","ele"],' +
                     '"records":[[' + point.lat + ', ' + point.lng
-                        + ', ' + (point.alt ? point.alt : 0) + ', ' + (point['time'] ? '"' + point['time'] + '"' : undefined) + ']]}}';
+                        + ', ' + (point.alt ? point.alt : 0)
+                        + ', ' + (point['time'] ? '"' + point['time'] + '"' : undefined) + ']]}}';
                 loader = this.jsonLoader;
-            } else if ((trackUrl !== undefined && trackUrl.endsWith('.gpx'))
-                || (trackSrc !== undefined && trackSrc !== null
-                    && (trackSrc.indexOf('<trkpt') >= 0 || trackSrc.indexOf('<rtept') >= 0))) {
-                loader = this.gpxLoader;
             } else {
-                loader = this.jsonLoader;
+                loader = this.determineLoader(chartElement);
             }
 
-            dataSources.push({ geoLoader: loader, url: trackUrl, src: trackSrc});
+            if (loader) {
+                dataSources.push({ geoLoader: loader, url: trackUrl, src: trackSrc});
+            } else {
+                console.error('no loader for mapElement:', chartElement.id, chartElement, trackUrl, trackSrc,
+                    this.gpxLoader.isResponsibleForSrc(trackSrc));
+            }
         }
 
         if (dataSources.length > 0) {
             const options = {
                 generateName: this.flgGenerateNameFromGpx,
                 width:  '100%',
-                height: this.chartHeight,
+                height: this.mapHeight,
                 style: 'bar-size',
                 showPerspective: true,
                 showGrid: true,
@@ -237,7 +204,8 @@ export class VisJsProfileChartComponent implements AfterViewChecked, OnChanges {
                     return 'Hoehe:' +  data.data.z;
                 }
             };
-            const container = document.getElementById(this.chartId);
+            const container = document.getElementById(this.mapId);
+            // tslint:disable-next-line:no-unused-expression
             this.flagTimeChart   // NOSONAR do not remove !!!
                 ? new VisJsProfileTimeChart(dataSources, container, options)
                 : new VisJsProfileDistanceChart(dataSources, container, options);

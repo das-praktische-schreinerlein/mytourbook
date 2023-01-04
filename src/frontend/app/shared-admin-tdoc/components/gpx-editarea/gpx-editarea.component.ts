@@ -15,6 +15,7 @@ import {GeoElementType, LatLngTime} from '@dps/mycms-frontend-commons/dist/angul
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {LatLng} from 'leaflet';
+import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
 
 // TODO move to commons
 @Component({
@@ -88,10 +89,15 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                     reader.onload = (function(theFile) {
                         return function(e) {
                             let track = e.target.result;
-                            if (me.editGpxFormGroup.getRawValue()['mergeNewTracks'] === true) {
-                                track = GeoGpxParser.mergeGpx(me.getCurrentGpx(), track);
+                            if (AbstractGeoGpxParser.isResponsibleForSrc(track)) {
+                                if (me.editGpxFormGroup.getRawValue()['mergeNewTracks'] === true) {
+                                    track = GeoGpxParser.mergeGpx(me.getCurrentGpx(), track);
+                                }
+
+                                track = GeoGpxParser.reformatXml(track);
                             }
-                            me.setCurrentGpx(GeoGpxParser.reformatXml(track));
+
+                            me.setCurrentGpx(track);
 
                             return me.updateGpsTrack();
                         };
@@ -110,7 +116,12 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
         let track = this.getCurrentGpx();
         this.trackColors.setCurrent(0);
         if (track !== undefined && track !== null && track.length > 0) {
-            track = track.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
+            if (AbstractGeoGpxParser.isResponsibleForSrc(track)) {
+                track = track
+                    .replace(/[\r\n]/g, ' ')
+                    .replace(/[ ]+/g, ' ');
+            }
+
             this.setCurrentGpx(GeoGpxParser.reformatXml(track));
         }
 
@@ -234,9 +245,12 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     fixMap(): boolean {
         let track = this.getCurrentGpx();
         if (track !== undefined && track !== null && track.length > 0) {
-            track = GeoGpxParser.fixXml(track);
-            track = GeoGpxParser.fixXmlExtended(track);
-            track = GeoGpxParser.reformatXml(track);
+            if (AbstractGeoGpxParser.isResponsibleForSrc(track)) {
+                track = GeoGpxParser.fixXml(track);
+                track = GeoGpxParser.fixXmlExtended(track);
+                track = GeoGpxParser.reformatXml(track);
+            }
+
             this.setCurrentGpx(track);
         }
 
@@ -339,7 +353,9 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
 
     protected prepareSubmitValues(values: {}): void {
         if (values['gpxSrc'] !== undefined && values['gpxSrc'] !== null) {
-            values['gpxSrc'] = values['gpxSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
+            if (AbstractGeoGpxParser.isResponsibleForSrc(values['gpxSrc'])) {
+                values['gpxSrc'] = values['gpxSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
+            }
         }
     }
 

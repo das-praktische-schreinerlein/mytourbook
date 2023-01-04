@@ -10,6 +10,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 import {LatLng, LeafletMouseEvent} from 'leaflet';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import {FormUtils} from '../../../shared-tdoc/services/form.utils';
+import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
 
 // TODO move to commons
 @Component({
@@ -194,10 +195,13 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
 
         let trackSrc = values['gpxSrc'];
         if (trackSrc !== undefined && trackSrc !== null && trackSrc.length > 0) {
-            trackSrc = GeoGpxParser.fixXml(trackSrc);
-            trackSrc = GeoGpxParser.fixXmlExtended(trackSrc);
-            trackSrc = GeoGpxParser.reformatXml(trackSrc);
-            trackSrc = trackSrc.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
+            if (AbstractGeoGpxParser.isResponsibleForSrc(trackSrc)) {
+                trackSrc = GeoGpxParser.fixXml(trackSrc);
+                trackSrc = GeoGpxParser.fixXmlExtended(trackSrc);
+                trackSrc = GeoGpxParser.reformatXml(trackSrc);
+                trackSrc = trackSrc.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
+            }
+
             geoRecords.push(TourDocRecordFactory.createSanitized({
                 id: 'TMPLOC' + (new Date()).getTime(),
                 gpsTrackSrc: trackSrc,
@@ -257,7 +261,9 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
 
     protected prepareSubmitValues(values: {}): void {
         if (values['gpxSrc'] !== undefined && values['gpxSrc'] !== null) {
-            values['gpxSrc'] = values['gpxSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
+            if (AbstractGeoGpxParser.isResponsibleForSrc(values['gpxSrc'])) {
+                values['gpxSrc'] = values['gpxSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
+            }
         }
     }
 

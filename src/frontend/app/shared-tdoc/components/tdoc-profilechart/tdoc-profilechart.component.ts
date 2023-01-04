@@ -25,7 +25,7 @@ export class TourDocProfileChartComponent extends AbstractInlineComponent {
     public tdocs: TourDocRecord[];
 
     @Input()
-    public showImageTrackAndGeoPos? = false;
+    public showImageTrackAndGeoPos ? = false;
 
     @Output()
     public chartElementsFound: EventEmitter<ChartElement[]> = new EventEmitter();
