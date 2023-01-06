@@ -9,7 +9,7 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
 import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 import {GpsTrackValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
-import {DefaultTrackColors, TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
+import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {DOCUMENT} from '@angular/common';
 import {GeoElementType, LatLngTime} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
@@ -17,6 +17,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 import {LatLng} from 'leaflet';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
 import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
+import {DefaultTrackColors} from '../../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 // TODO move to commons
 @Component({
@@ -364,9 +365,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     protected prepareSubmitValues(values: {}): void {
         if (values['gpxSrc'] !== undefined && values['gpxSrc'] !== null) {
             if (AbstractGeoGpxParser.isResponsibleForSrc(values['gpxSrc'])) {
-                values['gpxSrc'] = values['gpxSrc']
-                    .replace(/\n/g, ' ')
-                    .replace(/[ ]+/g, ' ');
+                values['gpxSrc'] = GeoGpxParser.trimXml(values['gpxSrc']);
             }
         }
     }

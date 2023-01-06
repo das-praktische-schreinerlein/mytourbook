@@ -1,8 +1,7 @@
 import {
     BaseEntityRecord,
     BaseEntityRecordFieldConfig,
-    BaseEntityRecordRelationsType,
-    BaseEntityRecordType
+    BaseEntityRecordRelationsType
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {
     DateValidationRule,
@@ -23,6 +22,7 @@ import {isArray} from 'util';
 import {
     CommonDocRecord,
     CommonDocRecordFactory,
+    CommonDocRecordType,
     CommonDocRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {TourDocDataTechRecord, TourDocDataTechRecordFactory, TourDocDataTechRecordValidator} from './tdocdatatech-record';
@@ -56,7 +56,7 @@ import {
 } from './tdoclinkedplaylist-record';
 import {TourDocLinkedPoiRecord, TourDocLinkedPoiRecordFactory, TourDocLinkedPoiRecordValidator} from './tdoclinkedpoi-record';
 
-export interface TourDocRecordType extends BaseEntityRecordType {
+export interface TourDocRecordType extends CommonDocRecordType {
     locId: number;
     locIdParent: number;
     routeId: number;

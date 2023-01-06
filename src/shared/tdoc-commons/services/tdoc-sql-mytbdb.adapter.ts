@@ -61,6 +61,9 @@ import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
 import {TourDocObjectDetectionImageObjectRecord} from '../model/records/tdocobjectdetectectionimageobject-record';
 import {TourDocSqlMytbDbObjectDetectionProcessingAdapter} from './tdoc-sql-mytbdb-objectdetection-processing.adapter';
+import {CommonActiontagGpxExportAdapter, GpxExportActionTagForm} from './common-actiontag-gpx-export.adapter';
+import {CommonActiontagGpxSavePointsAdapter, GpxSavePointsActionTagForm} from './common-actiontag-gpx-points.adapter';
+import {AbstractBackendGeoService} from './abstract-backend-geo.service';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
@@ -71,6 +74,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     private readonly actionTagKeywordAdapter: CommonSqlActionTagKeywordAdapter;
     private readonly actionTagPlaylistAdapter: CommonSqlActionTagPlaylistAdapter;
     private readonly actionTagRateAdapter: CommonSqlActionTagRateAdapter;
+    private readonly actionTagGpxExportAdapter: CommonActiontagGpxExportAdapter;
+    private readonly actionTagGpxSavePointsAdapter: CommonActiontagGpxSavePointsAdapter;
     private readonly keywordsAdapter: TourDocSqlMytbDbKeywordAdapter;
     private readonly commonKeywordAdapter: CommonSqlKeywordAdapter;
     private readonly commonPlaylistAdapter: CommonSqlPlaylistAdapter;
@@ -80,7 +85,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     private readonly commonSqlObjectDetectionProcessingAdapter: TourDocSqlMytbDbObjectDetectionProcessingAdapter;
     private readonly dbModelConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
 
-    constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
+    constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations,
+                public backendGeoService: AbstractBackendGeoService) {
         super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfigurations);
         this.extendTableConfigs();
         this.commonObjectDetectionAdapter = new TourDocSqlMytbDbObjectDetectionAdapter(config, this.knex, this.sqlQueryBuilder);
@@ -107,6 +113,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.actionTagODAdapter = new CommonSqlActionTagObjectDetectionAdapter(this.commonObjectDetectionAdapter);
         this.commonSqlObjectDetectionProcessingAdapter =
             new TourDocSqlMytbDbObjectDetectionProcessingAdapter(config, this.knex, this.sqlQueryBuilder);
+        this.actionTagGpxExportAdapter = new CommonActiontagGpxExportAdapter(backendGeoService);
+        this.actionTagGpxSavePointsAdapter = new CommonActiontagGpxSavePointsAdapter(backendGeoService);
     }
 
     protected isActiveLoadDetailsMode(tableConfig: TableConfig, loadDetailDataConfig: LoadDetailDataConfig,
@@ -433,6 +441,13 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         } else if (actionTagForm.type === 'replace' && actionTagForm.key.startsWith('replace')) {
             actionTagForm.deletes = true;
             return this.actionTagReplaceAdapter.executeActionTagReplace(table, id, <ReplaceActionTagForm> actionTagForm, opts);
+        } else if ((table === 'track' || table === 'route') && actionTagForm.type === 'tag') {
+            if (actionTagForm.key.startsWith('gpxExport')) {
+                return this.actionTagGpxExportAdapter.executeActionTagExportGpx(table, id, <GpxExportActionTagForm>actionTagForm);
+            } else if (actionTagForm.key.startsWith('gpxSavePoints')) {
+                return this.actionTagGpxSavePointsAdapter.executeActionTagGpxPointToDatabase(table, id,
+                    <GpxSavePointsActionTagForm>actionTagForm);
+            }
         }
 
         return super._doActionTag(mapper, record, actionTagForm, opts);

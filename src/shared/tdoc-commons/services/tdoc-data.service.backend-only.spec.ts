@@ -27,7 +27,7 @@ describe('TourDocDataService', () => {
             }
         };
         knex = TestHelper.createKnex(options.knexOpts.client, []);
-        const adapter = new TourDocSqlMytbDbAdapter(options, { active : false, entities: {}});
+        const adapter = new TourDocSqlMytbDbAdapter(options, { active : false, entities: {}}, undefined);
         adapter['knex'] = knex;
         datastore.setAdapter('http', adapter, '', {});
 

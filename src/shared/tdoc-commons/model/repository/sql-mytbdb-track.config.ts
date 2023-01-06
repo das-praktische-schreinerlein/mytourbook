@@ -6,6 +6,7 @@ import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-com
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
+import {GeoEntityDbMapping} from '../backend-geo.types';
 
 export class SqlMytbDbTrackConfig {
     public static readonly tableConfig: TableConfig = {
@@ -842,6 +843,20 @@ export class SqlMytbDbTrackConfig {
             { table: 'kategorie_person', fieldReference: 'k_id' },
             { table: 'kategorie_tour', fieldReference: 'k_id' }
         ]
+    };
+
+    public static readonly geoEntityDbMapping: GeoEntityDbMapping = {
+        table: 'kategorie',
+        selectFrom: 'kategorie LEFT JOIN location_hirarchical as location ON location.l_id = kategorie.l_id',
+        fields: {
+            type: '"TRACK"',
+            id: 'kategorie.k_id',
+            name: 'kategorie.k_name',
+            locHirarchie: 'location.l_lochirarchietxt',
+            gpsTrackTxt: 'kategorie.k_gpstracks_txt',
+            gpsTrackSrc: 'kategorie.k_gpstracks_gpx_source',
+            gpsTrackBasefile: 'kategorie.k_gpstracks_basefile'
+        }
     };
 }
 

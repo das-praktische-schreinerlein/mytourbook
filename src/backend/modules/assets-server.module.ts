@@ -63,7 +63,8 @@ export class AssetsServerModule {
                 .get(function(req, res, next) {
                     const tdoc: TourDocRecord = req['tdoc'];
                     const trackFormat = req['trackFormat'];
-                    if (trackFormat === undefined || tdoc === undefined || tdoc.gpsTrackBasefile === undefined) {
+                    if (trackFormat === undefined || tdoc === undefined
+                        || tdoc.gpsTrackBasefile === undefined || tdoc.gpsTrackBasefile === null) {
                         res.status(200);
                         res.sendFile(errorFile, {root: filePathErrorDocs});
                         return;

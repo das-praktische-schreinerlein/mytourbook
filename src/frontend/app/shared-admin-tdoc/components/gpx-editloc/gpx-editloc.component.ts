@@ -261,9 +261,7 @@ export class GpxEditLocComponent extends AbstractInlineComponent {
     protected prepareSubmitValues(values: {}): void {
         if (values['gpxSrc'] !== undefined && values['gpxSrc'] !== null) {
             if (AbstractGeoGpxParser.isResponsibleForSrc(values['gpxSrc'])) {
-                values['gpxSrc'] = values['gpxSrc']
-                    .replace(/\n/g, ' ')
-                    .replace(/[ ]+/g, ' ');
+                values['gpxSrc'] = GeoGpxParser.trimXml(values['gpxSrc']);
             }
         }
     }

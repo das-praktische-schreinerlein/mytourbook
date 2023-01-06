@@ -2,10 +2,11 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inp
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
-import {TourDocContentUtils, TrackColors} from '../../services/tdoc-contentutils.service';
+import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {LatLng} from 'leaflet';
+import {TrackColors} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 @Component({
     selector: 'app-tdoc-map',

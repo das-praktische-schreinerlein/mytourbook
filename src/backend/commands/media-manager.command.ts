@@ -56,7 +56,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             outputDir: new SimpleFilePathValidationRule(false),
             outputFile: new SimpleFilePathValidationRule(false),
             ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),
-            parallel: new NumberValidationRule(false, 1, 999, 10),
+            parallel: new NumberValidationRule(false, 1, 99, 10),
             pageNum: new NumberValidationRule(false, 1, 999999999, 1),
             actiontype: new IdCsvValidationRule(false),
             fulltext: new SolrValidationRule(false),

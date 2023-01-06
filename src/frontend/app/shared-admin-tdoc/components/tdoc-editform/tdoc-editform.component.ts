@@ -685,7 +685,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
     protected prepareSubmitValues(values: {}): void {
         if (values['gpsTrackSrc'] !== undefined && values['gpsTrackSrc'] !== null) {
-            values['gpsTrackSrc'] = values['gpsTrackSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
+            values['gpsTrackSrc'] = GeoGpxParser.trimXml(values['gpsTrackSrc']);
         }
 
         if (values['geoLoc']) {

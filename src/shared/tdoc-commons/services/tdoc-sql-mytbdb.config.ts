@@ -21,6 +21,7 @@ import {SqlMytbDbInfoConfig} from '../model/repository/sql-mytbdb-info.config';
 import {SqlMytbDbPlaylistConfig} from '../model/repository/sql-mytbdb-playlist.config';
 import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 import {SqlMytbDbPoiConfig} from '../model/repository/sql-mytbdb-poi.config';
+import {GeoEntityTableDbMapping} from '../model/backend-geo.types';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly tableConfigs: TableConfigs = {
@@ -237,6 +238,13 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
+    public static readonly geoEntityDbMapping: GeoEntityTableDbMapping = {
+        tables: {
+            'track': SqlMytbDbTrackConfig.geoEntityDbMapping,
+            'route': SqlMytbDbRouteConfig.geoEntityDbMapping
+        }
+    };
+
     public getTableConfigForTableKey(table: string): TableConfig {
         return TourDocSqlMytbDbConfig.tableConfigs[table];
     }
@@ -277,5 +285,8 @@ export class TourDocSqlMytbDbConfig {
         return TourDocSqlMytbDbConfig.actionTagReplaceConfig;
     }
 
+    public getGeoEntityTableDbMapping(): GeoEntityTableDbMapping {
+        return TourDocSqlMytbDbConfig.geoEntityDbMapping;
+    }
 }
 

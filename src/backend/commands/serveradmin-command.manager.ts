@@ -13,6 +13,7 @@ import {TourDocExporterCommand} from './tdoc-exporter.command';
 import {DbAdminCommand} from './dbadmin.command';
 import {MediaImportManagerCommand} from './media-import-manager.command';
 import {TourDocConverterCommand} from './tdoc-converter.command';
+import {GeoManagerCommand} from './geo-manager.command';
 
 export interface ServerAdminCommandConfigType extends CommonServerAdminCommandConfigType, AdminCommandConfigType {
     importDir: string,
@@ -35,6 +36,7 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
                 'mediaManager': new MediaManagerCommand(),
                 'mediaImportManager': new MediaImportManagerCommand(),
                 'objectDetectionManager': new ObjectDetectionManagerCommand(),
+                'geoManagerCommand': new GeoManagerCommand(),
                 'dbAdmin': new DbAdminCommand(),
                 'dbPublish': new DbPublishCommand(),
                 'solrPublish': new SolrPublishCommand()

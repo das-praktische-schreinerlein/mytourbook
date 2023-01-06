@@ -1,6 +1,9 @@
 import {IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {isArray} from 'util';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
+import {GeoEntity} from '../model/backend-geo.types';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
+import {TourDocDataUtils} from './tdoc-data.utils';
 
 export class TourDocFileUtils {
     public static normalizeCygwinPath(path: string): string {
@@ -70,4 +73,17 @@ export class TourDocFileUtils {
 
         return records;
     }
+
+    public static generateGeoFileName(entity: GeoEntity): string {
+        if (!entity) {
+            return undefined;
+        }
+
+        const locHirarchy = TourDocDataUtils.generateTxtLocationHierarchy(entity, false,  true, 3);
+
+        return [StringUtils.generateTechnicalName(locHirarchy.join('-')),
+            StringUtils.generateTechnicalName(entity.name),
+            entity.type + entity.id].join('_');
+    }
+
 }

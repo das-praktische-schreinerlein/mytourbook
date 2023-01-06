@@ -233,6 +233,29 @@
                     }
                 ]
             },
+            "EXPORT: exportGpxTracks": {
+                "description": "export gpx-files to export-track-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
+                            "action": "exportGpxToFile",
+                            "backend": "config/backend.dev.json",
+                            "parallel": 20,
+                            "profile": "track"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
+                            "action": "exportGpxToFile",
+                            "backend": "config/backend.dev.json",
+                            "parallel": 20,
+                            "profile": "route"
+                        }
+                    }
+                ]
+            },
             "EXPORT: exportMediaFavorites": {
                 "description": "export media-favorites to export-media-directory",
                 "commands": [

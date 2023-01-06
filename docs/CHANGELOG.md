@@ -43,6 +43,7 @@
 - build: added goals for modules-statistics
 - frontend: hide copyright-footer if configured
 - frontend: improved map-handling on maps and map-editor
+- frontend+backend: added gpx-export, gpx-track-handling 
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -57,6 +58,7 @@
 - common: added generation of viewer to admin-server
 - frontend: made section-page-elements configurable
 - build: added goals for modules-statistics
+- frontend+backend: added gpx-export, gpx-track-handling
 
 ### improvements
 - backend: extend image-export with more filter

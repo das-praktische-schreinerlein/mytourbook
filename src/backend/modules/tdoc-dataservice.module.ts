@@ -17,6 +17,10 @@ import {
 } from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection-processing.adapter';
 import {BackendConfigType} from './backend.commons';
 import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '@dps/mycms-commons/dist/search-commons/services/itemsjs.dataimporter';
+import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
+import {BackendGeoGpxParser, BackendGeoTxtParser} from '../shared/tdoc-commons/services/backend-geo.parser';
+import {BackendGeoService} from './backend-geo.service';
+import {TourDocSqlMytbDbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb.config';
 
 export interface SqlConnectionConfig {
     client: 'sqlite3' | 'mysql';
@@ -33,6 +37,7 @@ export interface SqlConnectionConfig {
 export class TourDocDataServiceModule {
     private static dataServices = new Map<string, TourDocDataService>();
     private static odDataStores = new Map<string, CommonObjectDetectionProcessingDatastore>();
+    private static geoServices = new Map<string, BackendGeoService>();
 
     public static getDataService(profile: string, backendConfig: BackendConfigType): TourDocDataService {
         if (!this.dataServices.has(profile)) {
@@ -68,6 +73,19 @@ export class TourDocDataServiceModule {
         }
 
         return this.odDataStores.get(profile);
+    }
+
+    public static getGeoService(profile: string, backendConfig: BackendConfigType): BackendGeoService {
+        if (!this.geoServices.has(profile)) {
+            if (backendConfig.tdocDataStoreAdapter === 'TourDocSqlMytbDbAdapter') {
+                this.geoServices.set(profile, TourDocDataServiceModule.createBackendGeoServiceMytbDbSql(backendConfig));
+            } else {
+                throw new Error('configured tdocDataStoreAdapter not exist as GeoService:'
+                    + backendConfig.tdocDataStoreAdapter);
+            }
+        }
+
+        return this.geoServices.get(profile);
     }
 
     private static createDataServiceSolr(backendConfig: BackendConfigType): TourDocDataService {
@@ -128,8 +146,10 @@ export class TourDocDataServiceModule {
             },
             mapperConfig: backendConfig.mapperConfig
         };
+
+        const backendGeoService = this.getGeoService('tdocSolr', backendConfig);
         const adapter = new TourDocSqlMytbDbAdapter(options,
-            <FacetCacheUsageConfigurations>backendConfig.TourDocSqlMytbDbAdapter['facetCacheUsage']);
+            <FacetCacheUsageConfigurations>backendConfig.TourDocSqlMytbDbAdapter['facetCacheUsage'], backendGeoService);
         dataStore.setAdapter('http', adapter, '', {});
 
         return dataService;
@@ -216,4 +236,24 @@ export class TourDocDataServiceModule {
         return odDataStore;
     }
 
+    private static createBackendGeoServiceMytbDbSql(backendConfig: BackendConfigType): BackendGeoService {
+        const sqlConfig: SqlConnectionConfig = backendConfig.TourDocSqlMytbDbAdapter;
+        if (sqlConfig === undefined) {
+            throw new Error('config for TourDocSqlMytbDbAdapter not exists');
+        }
+        const options = {
+            knexOpts: {
+                client: sqlConfig.client,
+                connection: sqlConfig.connection
+            }
+        };
+
+        const geoGpxUtils = new GeoGpxUtils();
+        const gpxParser = new BackendGeoGpxParser(geoGpxUtils);
+        const txtParser = new BackendGeoTxtParser();
+        const geoService = new BackendGeoService(backendConfig, knex(options.knexOpts), gpxParser, txtParser, geoGpxUtils,
+            TourDocSqlMytbDbConfig.geoEntityDbMapping);
+
+        return geoService;
+    }
 }

@@ -9,6 +9,7 @@ import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/servi
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
+import {GeoEntityDbMapping} from '../backend-geo.types';
 
 export class SqlMytbDbRouteConfig {
     public static readonly tableConfig: TableConfig = {
@@ -1016,6 +1017,19 @@ export class SqlMytbDbRouteConfig {
             { table: 'tour_keyword', fieldReference: 't_id' },
             { table: 'tour_info', fieldReference: 't_id' }
         ]
+    };
+
+    public static readonly geoEntityDbMapping: GeoEntityDbMapping = {
+        table: 'tour',
+        selectFrom: 'tour LEFT JOIN location_hirarchical as location ON location.l_id = tour.l_id',
+        fields: {
+            type: '"ROUTE"',
+            id: 'tour.t_id',
+            name: 'tour.t_name',
+            locHirarchie: 'location.l_lochirarchietxt',
+            gpsTrackSrc: 'tour.t_gpstracks_gpx',
+            gpsTrackBasefile: 'tour.t_gpstracks_basefile'
+        }
     };
 }
 

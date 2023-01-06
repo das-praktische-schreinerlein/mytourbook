@@ -1428,6 +1428,36 @@
                     ]
                 },
                 {
+                    "key": "gpxExport",
+                    "type": "tag",
+                    "name": "\u26F3 exportGpxFile",
+                    "shortName": "&#x26F3",
+                    "payload": {
+                        "value": 3
+                    },
+                    "showFilter": [
+                        {
+                            "property": "gpsTrackSrc",
+                            "command": "NOTNULL",
+                            "expectedValues": []
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track", "LOCATION", "location", "ROUTE", "route"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "createBy",
                     "type": "createBy",
                     "name": "New Trip by Track",
