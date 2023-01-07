@@ -1428,6 +1428,36 @@
                     ]
                 },
                 {
+                    "key": "gpxSavePoints",
+                    "type": "tag",
+                    "name": "\u1F4CC saveGpxPointsToDatabase",
+                    "shortName": "&#128204",
+                    "payload": {
+                        "value": 3
+                    },
+                    "showFilter": [
+                        {
+                            "property": "gpsTrackSrc",
+                            "command": "NOTNULL",
+                            "expectedValues": []
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track", "ROUTE", "route"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "gpxExport",
                     "type": "tag",
                     "name": "\u26F3 exportGpxFile",

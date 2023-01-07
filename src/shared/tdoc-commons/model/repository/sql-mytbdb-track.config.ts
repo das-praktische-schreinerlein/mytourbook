@@ -856,6 +856,14 @@ export class SqlMytbDbTrackConfig {
             gpsTrackTxt: 'kategorie.k_gpstracks_txt',
             gpsTrackSrc: 'kategorie.k_gpstracks_gpx_source',
             gpsTrackBasefile: 'kategorie.k_gpstracks_basefile'
+        },
+        pointTable: 'kategorie_tourpoint',
+        pointFields: {
+            refId: 'k_id',
+            lat: 'ktp_lat',
+            lng: 'ktp_lon',
+            alt: 'ktp_ele',
+            time: 'ktp_date',
         }
     };
 }

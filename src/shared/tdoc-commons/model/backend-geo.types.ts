@@ -24,7 +24,7 @@ export class BackendGeoElement implements GeoElementBase<BackendLatLng> {
 
 export interface GeoEntity {
     type: string,
-    id: any,
+    id: string,
     name: string
     locHirarchie?: string;
     gpsTrackTxt?: string,
@@ -32,10 +32,30 @@ export interface GeoEntity {
     gpsTrackBasefile: string
 }
 
+export interface GeoEntityFieldMapping {
+    type: string,
+    id: string,
+    name: string
+    locHirarchie?: string;
+    gpsTrackTxt?: string,
+    gpsTrackSrc: string,
+    gpsTrackBasefile: string
+}
+
+export interface GeoPointEntityFieldMapping {
+    refId: string,
+    alt: string,
+    lat: string,
+    lng: string,
+    time: string
+}
+
 export interface GeoEntityDbMapping {
     table: string,
     selectFrom: string,
-    fields: GeoEntity
+    fields: GeoEntityFieldMapping,
+    pointTable?: string,
+    pointFields?: GeoPointEntityFieldMapping
 }
 
 export interface GeoEntityTablesDbMapping {

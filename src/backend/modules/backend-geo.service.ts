@@ -10,6 +10,7 @@ import {BackendConfigType} from './backend.commons';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import * as Promise_serial from 'promise-serial';
 
 export class BackendGeoService implements AbstractBackendGeoService {
     private readonly sqlQueryBuilder: SqlQueryBuilder;
@@ -76,8 +77,31 @@ export class BackendGeoService implements AbstractBackendGeoService {
             return Promise.reject('no valid entityType:' + entity.type);
         }
 
-        // TODO -> do updateGeoEntity
-        return Promise.resolve(entity);
+        const dbFields = [];
+        const dbValues = [];
+        for (const field of fieldsToUpdate) {
+            if (!geoEntityDbMapping.fields[field]) {
+                return Promise.reject('no valid entityType:' + entity.type + ' missing field:' + field);
+            }
+
+            dbFields.push(geoEntityDbMapping.fields[field]);
+            dbValues.push(entity[field] && entity[field] !== ''
+                ? entity[field]
+                : null);
+        }
+
+        const updateSqlQuery: RawSqlQueryData = {
+            sql: 'UPDATE ' + geoEntityDbMapping.table +
+                ' SET ' + dbFields.map( field => field + '=?').join(', ') +
+                ' WHERE ' + geoEntityDbMapping.fields.id + ' = ?',
+            parameters: dbValues.concat([entity.id])
+        };
+
+        console.trace('call updateGeoEntity sql', updateSqlQuery, entity);
+        return SqlUtils.executeRawSqlQueryData(this.knex, updateSqlQuery).then( () => {
+            console.log('DONE - updateGeoEntity for: ', entity.type, entity.id, entity.name, fieldsToUpdate);
+            return Promise.resolve(entity);
+        });
     }
 
     public readGeoEntitiesWithTxtButNoGpx(entityType: string, force: boolean): Promise<GeoEntity[]> {
@@ -156,6 +180,10 @@ export class BackendGeoService implements AbstractBackendGeoService {
         }
 
         const geoElements = this.txtParser.parse(entity.gpsTrackTxt, {});
+        if (!geoElements) {
+            return Promise.reject('error while parsing txt: got no result:' + entity.id);
+        }
+
         const segments = [];
         let newGpx = '';
         for (const geoElement of geoElements) {
@@ -165,6 +193,10 @@ export class BackendGeoService implements AbstractBackendGeoService {
             } else {
                 newGpx += this.gpxParser.createGpxRoute(geoElement.name, 'ROUTE', geoElement.points, undefined);
             }
+        }
+
+        if (segments && segments.length > 0) {
+            newGpx += this.gpxParser.createGpxTrack(entity.name, 'TRACK', segments);
         }
 
         newGpx = this.gpxUtils.fixXml(newGpx);
@@ -188,19 +220,68 @@ export class BackendGeoService implements AbstractBackendGeoService {
             return Promise.reject('no valid gpx:' + entity.id);
         }
 
-        const geoElements = this.gpxParser.parse(entity.gpsTrackSrc, {});
-        for (const geoElement of geoElements) {
-            for (const point of geoElement.points) {
-                // TODO save point to database
-                if (true) {
-                    return Promise.reject('no implemented yet - save entity:' + entity)
-                }
-            }
+        const geoEntityDbMapping = this.geoEntityDbMapping.tables[entity.type] || this.geoEntityDbMapping.tables[entity.type.toLowerCase()];
+        if (!geoEntityDbMapping || !geoEntityDbMapping.pointTable || !geoEntityDbMapping.pointFields) {
+            return Promise.reject('no valid entityType:' + entity.type);
         }
 
-        console.log('DONE - saveGpxPointsToDatabase for: ', entity.type, entity.id, entity.name);
+        const geoElements = this.gpxParser.parse(entity.gpsTrackSrc, {});
+        if (!geoElements) {
+            return Promise.reject('error while parsing gpx -got no result' + entity.id);
+        }
 
-        return Promise.resolve(entity);
+        const deleteSqlQuery: RawSqlQueryData = {
+            sql: 'DELETE FROM ' + geoEntityDbMapping.pointTable +
+                ' WHERE ' + geoEntityDbMapping.pointFields.refId + ' = ?',
+            parameters: [entity.id]
+        };
+
+        const sql = 'INSERT INTO ' + geoEntityDbMapping.pointTable + '(' +
+                ' ' + geoEntityDbMapping.pointFields.refId +
+                ', ' + geoEntityDbMapping.pointFields.lat +
+                ', ' + geoEntityDbMapping.pointFields.lng +
+                ', ' + geoEntityDbMapping.pointFields.alt +
+                (geoEntityDbMapping.pointFields.time
+                        ? ', ' + geoEntityDbMapping.pointFields.time
+                        : ''
+                ) +
+                ')' +
+                ' VALUES(?, ?, ?, ?' +
+                (geoEntityDbMapping.pointFields.time
+                        ? ', ?'
+                        : ''
+                ) +
+                ')';
+
+        const me = this;
+        console.trace('call saveGpxPointsToDatabase sql', deleteSqlQuery);
+        return SqlUtils.executeRawSqlQueryData(this.knex, deleteSqlQuery).then( () => {
+            const promises = [];
+            for (const geoElement of geoElements) {
+                for (const point of geoElement.points) {
+                    promises.push ( function () {
+                        const insertSqlQuery: RawSqlQueryData = {
+                            sql: sql,
+                            parameters: [entity.id, point.lat, point.lng, point.alt]
+                        };
+
+                        if (geoEntityDbMapping.pointFields.time) {
+                            insertSqlQuery.parameters.push(point['time']);
+                        }
+
+                        console.trace('call saveGpxPointsToDatabase sql', insertSqlQuery);
+                        return SqlUtils.executeRawSqlQueryData(me.knex, insertSqlQuery);
+                    });
+                }
+            }
+
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
+                console.log('DONE - saveGpxPointsToDatabase for: ', entity.type, entity.id, entity.name);
+                return Promise.resolve(entity);
+            }).catch(reason => {
+                return Promise.reject(reason);
+            });
+        });
     }
 
     public exportGpxToFile(entity: GeoEntity, force: boolean): Promise<GeoEntity> {

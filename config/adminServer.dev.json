@@ -207,6 +207,43 @@
                     }
                 ]
             },
+            "DATA: convertTxtLogsToGpx": {
+                "description": "convert TxtLogs to gpx",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
+                            "action": "convertTxtLogsToGpx",
+                            "backend": "config/backend.dev.json",
+                            "parallel": 20,
+                            "profile": "track"
+                        }
+                    }
+                ]
+            },
+            "DATA: saveGpxPointsToDatabase": {
+                "description": "save GpxPoints to database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
+                            "action": "saveGpxPointsToDatabase",
+                            "backend": "config/backend.dev.json",
+                            "parallel": 20,
+                            "profile": "track"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
+                            "action": "saveGpxPointsToDatabase",
+                            "backend": "config/backend.dev.json",
+                            "parallel": 20,
+                            "profile": "route"
+                        }
+                    }
+                ]
+            },
             "DATA: dbExtractMediaCoorFromGpsTrackPoints": {
                 "description": "extract image/video-coor from trackpoints",
                 "commands": [
