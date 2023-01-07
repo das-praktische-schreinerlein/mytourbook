@@ -1,8 +1,9 @@
 import {GeoEntity, GeoEntityDbMapping, GeoEntityTableDbMapping} from '../shared/tdoc-commons/model/backend-geo.types';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
+import {GeoDateUtils} from '@dps/mycms-commons/dist/geo-commons/services/geodate.utils';
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import fs from 'fs';
-import {BackendGeoGpxParser, BackendGeoTxtParser} from '../shared/tdoc-commons/services/backend-geo.parser';
+import {BackendGeoGpxParser, BackendGeoTxtParser} from './backend-geo.parser';
 import {GeoElementType} from '@dps/mycms-commons/dist/geo-commons/model/geoElementTypes';
 import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
 import {AbstractBackendGeoService} from '../shared/tdoc-commons/services/abstract-backend-geo.service';
@@ -266,7 +267,10 @@ export class BackendGeoService implements AbstractBackendGeoService {
                         };
 
                         if (geoEntityDbMapping.pointFields.time) {
-                            insertSqlQuery.parameters.push(point['time']);
+                            const time = point['time']
+                                ? GeoDateUtils.getLocalDateTimeForLatLng(point)
+                                : undefined;
+                            insertSqlQuery.parameters.push(time);
                         }
 
                         console.trace('call saveGpxPointsToDatabase sql', insertSqlQuery);

@@ -2,7 +2,8 @@ import {GeoElementType} from '@dps/mycms-commons/dist/geo-commons/model/geoEleme
 import {AbstractGeoParser} from '@dps/mycms-commons/dist/geo-commons/services/geo.parser';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
 import {AbstractGeoTxtParser} from '@dps/mycms-commons/dist/geo-commons/services/geotxt.parser';
-import {BackendGeoElement, BackendLatLng, BackendLatLngTime} from '../model/backend-geo.types';
+import {BackendGeoElement, BackendLatLng, BackendLatLngTime} from '../shared/tdoc-commons/model/backend-geo.types';
+import {DOMParser} from '@xmldom/xmldom';
 
 export class BackendGeoUtils  {
     public static createLatLng(lat: string | number, lng: string | number, alt?: number, time?: Date): BackendLatLng {
@@ -26,7 +27,7 @@ export class BackendGeoUtils  {
     }
 
     public static createGeoElement(type: GeoElementType, points: BackendLatLng[], name: string): BackendGeoElement {
-        return new BackendGeoElement(type, points, name)
+        return new BackendGeoElement(type, points, name);
     }
 
     public static calcDistance(from: BackendLatLng, to: BackendLatLng): number {

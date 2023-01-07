@@ -18,7 +18,7 @@ import {
 import {BackendConfigType} from './backend.commons';
 import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '@dps/mycms-commons/dist/search-commons/services/itemsjs.dataimporter';
 import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
-import {BackendGeoGpxParser, BackendGeoTxtParser} from '../shared/tdoc-commons/services/backend-geo.parser';
+import {BackendGeoGpxParser, BackendGeoTxtParser} from './backend-geo.parser';
 import {BackendGeoService} from './backend-geo.service';
 import {TourDocSqlMytbDbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb.config';
 

@@ -204,6 +204,7 @@
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
     "@risingstack/protect": "1.2.0",
+    "@xmldom/xmldom": "0.8.6",
     "angular-2-dropdown-multiselect": "1.9.0",
     "angular2-cookie-law": "7.0.1",
     "angulartics2": "7.5.2",
