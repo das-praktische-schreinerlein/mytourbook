@@ -98,7 +98,7 @@ export class BackendGeoService implements AbstractBackendGeoService {
             parameters: dbValues.concat([entity.id])
         };
 
-        console.trace('call updateGeoEntity sql', updateSqlQuery, entity);
+        // console.trace('call updateGeoEntity sql', updateSqlQuery, entity);
         return SqlUtils.executeRawSqlQueryData(this.knex, updateSqlQuery).then( () => {
             console.log('DONE - updateGeoEntity for: ', entity.type, entity.id, entity.name, fieldsToUpdate);
             return Promise.resolve(entity);
@@ -255,7 +255,7 @@ export class BackendGeoService implements AbstractBackendGeoService {
                 ')';
 
         const me = this;
-        console.trace('call saveGpxPointsToDatabase sql', deleteSqlQuery);
+        // console.trace('call saveGpxPointsToDatabase sql', deleteSqlQuery);
         return SqlUtils.executeRawSqlQueryData(this.knex, deleteSqlQuery).then( () => {
             const promises = [];
             for (const geoElement of geoElements) {
@@ -273,7 +273,7 @@ export class BackendGeoService implements AbstractBackendGeoService {
                             insertSqlQuery.parameters.push(time);
                         }
 
-                        console.trace('call saveGpxPointsToDatabase sql', insertSqlQuery);
+                        // console.trace('call saveGpxPointsToDatabase sql', insertSqlQuery);
                         return SqlUtils.executeRawSqlQueryData(me.knex, insertSqlQuery);
                     });
                 }
