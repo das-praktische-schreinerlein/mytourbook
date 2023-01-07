@@ -69,6 +69,8 @@ export class BackendGeoService implements AbstractBackendGeoService {
             }
 
             return Promise.resolve(undefined);
+        }).catch(reason => {
+            return Promise.reject(reason);
         });
     }
 
@@ -102,6 +104,8 @@ export class BackendGeoService implements AbstractBackendGeoService {
         return SqlUtils.executeRawSqlQueryData(this.knex, updateSqlQuery).then( () => {
             console.log('DONE - updateGeoEntity for: ', entity.type, entity.id, entity.name, fieldsToUpdate);
             return Promise.resolve(entity);
+        }).catch(reason => {
+            return Promise.reject(reason);
         });
     }
 
@@ -126,6 +130,8 @@ export class BackendGeoService implements AbstractBackendGeoService {
                 this.sqlQueryBuilder.extractDbResult(dbResults, this.knex.client['config']['client']), records);
 
             return Promise.resolve(records);
+        }).catch(reason => {
+            return Promise.reject(reason);
         });
     }
 
@@ -147,6 +153,8 @@ export class BackendGeoService implements AbstractBackendGeoService {
                 this.sqlQueryBuilder.extractDbResult(dbResults, this.knex.client['config']['client']), records);
 
             return Promise.resolve(records);
+        }).catch(reason => {
+            return Promise.reject(reason);
         });
     }
 
@@ -168,6 +176,8 @@ export class BackendGeoService implements AbstractBackendGeoService {
                 this.sqlQueryBuilder.extractDbResult(dbResults, this.knex.client['config']['client']), records);
 
             return Promise.resolve(records);
+        }).catch(reason => {
+            return Promise.reject(reason);
         });
     }
 
@@ -263,7 +273,10 @@ export class BackendGeoService implements AbstractBackendGeoService {
                     promises.push ( function () {
                         const insertSqlQuery: RawSqlQueryData = {
                             sql: sql,
-                            parameters: [entity.id, point.lat, point.lng, point.alt]
+                            parameters: [entity.id, point.lat, point.lng,
+                                point.alt !== undefined && !isNaN(point.alt)
+                                    ? point.alt
+                                    : null]
                         };
 
                         if (geoEntityDbMapping.pointFields.time) {
@@ -285,6 +298,8 @@ export class BackendGeoService implements AbstractBackendGeoService {
             }).catch(reason => {
                 return Promise.reject(reason);
             });
+        }).catch(reason => {
+            return Promise.reject(reason);
         });
     }
 
