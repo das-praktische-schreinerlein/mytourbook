@@ -43,7 +43,8 @@
 - build: added goals for modules-statistics
 - frontend: hide copyright-footer if configured
 - frontend: improved map-handling on maps and map-editor
-- frontend+backend: added gpx-export, gpx-track-handling 
+- frontend+backend: added gpx-export, gpx-track-handling
+- backend: improved logging-config
 
 ### new features
 - viewer: added viewer as separate environment to view static data without backend
@@ -83,6 +84,7 @@
 - frontend: improved imports for bootstrap-modules
 - frontend: hide copyright-footer if configured
 - frontend: improved map-handling on maps and map-editor 
+- backend: improved logging-config
 
 ### bug fixes
 - backend: fixed media-export of dependent records
