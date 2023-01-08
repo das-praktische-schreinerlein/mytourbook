@@ -20,10 +20,11 @@ if (argv['help'] || argv['usage']) {
 
 // disable debug-logging
 const debug = argv['debug'] || false;
+console.log("Debug-level level/log/trace", debug, !(!debug), !(!debug || debug === true || parseInt(debug, 10) < 1));
 if (!debug) {
     console.log = function() {};
 }
-if (!debug || debug === false || parseInt(debug, 10) < 1) {
+if (!debug || debug === true || parseInt(debug, 10) < 1) {
     console.trace = function() {};
     console.debug = function() {};
 }

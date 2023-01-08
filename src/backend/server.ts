@@ -34,6 +34,8 @@ const bindIp = serverConfig.backendConfig.bindIp ? serverConfig.backendConfig.bi
 const tcpBacklog = serverConfig.backendConfig.tcpBacklog ? serverConfig.backendConfig.tcpBacklog : 511;
 app.listen(serverConfig.backendConfig.port, bindIp,  tcpBacklog, function () {
     console.log('MyTB app listening on ip/port/tcpBacklog', bindIp, serverConfig.backendConfig.port, tcpBacklog);
+
+    console.log("Debug-level level/log/trace", debug, !(!debug), !(!debug || debug === true || parseInt(debug, 10) < 1));
     if (!debug) {
         console.log = function() {};
     }
@@ -41,5 +43,8 @@ app.listen(serverConfig.backendConfig.port, bindIp,  tcpBacklog, function () {
         console.trace = function() {};
         console.debug = function() {};
     }
+
+    console.log("log enabled");
+    console.trace("trace enabled");
 });
 
