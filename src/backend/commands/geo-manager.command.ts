@@ -10,7 +10,7 @@ import {
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
-import {BackendGeoService} from '../modules/backend-geo.service';
+import {BackendGeoService} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.service';
 import {TourGeoManagerModule} from '../modules/tdoc-geo-manager-module';
 
 export class GeoManagerCommand extends CommonAdminCommand {

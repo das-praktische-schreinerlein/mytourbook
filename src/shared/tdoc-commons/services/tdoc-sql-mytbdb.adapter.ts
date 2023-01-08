@@ -61,9 +61,9 @@ import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
 import {TourDocObjectDetectionImageObjectRecord} from '../model/records/tdocobjectdetectectionimageobject-record';
 import {TourDocSqlMytbDbObjectDetectionProcessingAdapter} from './tdoc-sql-mytbdb-objectdetection-processing.adapter';
-import {CommonActiontagGpxExportAdapter, GpxExportActionTagForm} from './common-actiontag-gpx-export.adapter';
-import {CommonActiontagGpxSavePointsAdapter, GpxSavePointsActionTagForm} from './common-actiontag-gpx-points.adapter';
-import {AbstractBackendGeoService} from './abstract-backend-geo.service';
+import {CommonActiontagGpxExportAdapter, GpxExportActionTagForm} from '@dps/mycms-commons/dist/geo-commons/actiontags/common-actiontag-gpx-export.adapter';
+import {CommonActiontagGpxSavePointsAdapter, GpxSavePointsActionTagForm} from '@dps/mycms-commons/dist/geo-commons/actiontags/common-actiontag-gpx-points.adapter';
+import {AbstractBackendGeoService} from '@dps/mycms-commons/dist/geo-commons/backend/abstract-backend-geo.service';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;

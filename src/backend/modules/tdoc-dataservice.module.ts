@@ -18,9 +18,10 @@ import {
 import {BackendConfigType} from './backend.commons';
 import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '@dps/mycms-commons/dist/search-commons/services/itemsjs.dataimporter';
 import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
-import {BackendGeoGpxParser, BackendGeoTxtParser} from './backend-geo.parser';
-import {BackendGeoService} from './backend-geo.service';
+import {BackendGeoGpxParser, BackendGeoTxtParser} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.parser';
+import {BackendGeoService} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.service';
 import {TourDocSqlMytbDbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb.config';
+import {TourDocBackendGeoService} from './tdoc-backend-geo.service';
 
 export interface SqlConnectionConfig {
     client: 'sqlite3' | 'mysql';
@@ -251,7 +252,7 @@ export class TourDocDataServiceModule {
         const geoGpxUtils = new GeoGpxUtils();
         const gpxParser = new BackendGeoGpxParser(geoGpxUtils);
         const txtParser = new BackendGeoTxtParser();
-        const geoService = new BackendGeoService(backendConfig, knex(options.knexOpts), gpxParser, txtParser, geoGpxUtils,
+        const geoService = new TourDocBackendGeoService(backendConfig, knex(options.knexOpts), gpxParser, txtParser, geoGpxUtils,
             TourDocSqlMytbDbConfig.geoEntityDbMapping);
 
         return geoService;

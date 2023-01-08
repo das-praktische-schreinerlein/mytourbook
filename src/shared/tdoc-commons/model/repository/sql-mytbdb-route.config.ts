@@ -9,7 +9,7 @@ import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/servi
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
-import {GeoEntityDbMapping} from '../backend-geo.types';
+import {GeoEntityDbMapping} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.types';
 
 export class SqlMytbDbRouteConfig {
     public static readonly tableConfig: TableConfig = {

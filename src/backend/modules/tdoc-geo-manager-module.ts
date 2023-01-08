@@ -1,4 +1,4 @@
-import {BackendGeoService} from './backend-geo.service';
+import {BackendGeoService} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.service';
 import * as Promise_serial from 'promise-serial';
 
 export class TourGeoManagerModule  {
