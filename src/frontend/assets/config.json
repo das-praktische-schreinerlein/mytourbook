@@ -1430,7 +1430,7 @@
                 {
                     "key": "gpxSavePoints",
                     "type": "tag",
-                    "name": "\u1F4CC saveGpxPointsToDatabase",
+                    "name": "\uD83D\uDCCC saveGpxPointsToDatabase",
                     "shortName": "&#128204",
                     "payload": {
                         "value": 3
@@ -2570,7 +2570,7 @@
                 {
                     "key": "gpxSavePoints",
                     "type": "tag",
-                    "name": "\u1F4CC saveGpxPointsToDatabase",
+                    "name": "\uD83D\uDCCC saveGpxPointsToDatabase",
                     "shortName": "&#128204",
                     "payload": {
                         "value": 3
