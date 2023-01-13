@@ -220,15 +220,15 @@ export class AppService extends GenericAppService {
                     me.pdocDataService.setWritable(true);
                     return me.pdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
-                // console.log('initially loaded pdocs from server', records);
-                me.pdocDataService.setWritable(false);
-                me.tdocDataService.setWritable(me.appConfig.permissions.tdocWritable);
-                return resolve(true);
-            }).catch(function onError(reason: any) {
-                console.error('loading appdata failed:', reason);
-                me.pdocDataService.setWritable(false);
-                return reject(false);
-            });
+                    // console.log('initially loaded pdocs from server', records);
+                    me.pdocDataService.setWritable(false);
+                    me.tdocDataService.setWritable(me.appConfig.permissions.tdocWritable);
+                    return resolve(true);
+                }).catch(function onError(reason: any) {
+                    console.error('loading appdata failed:', reason);
+                    me.pdocDataService.setWritable(false);
+                    return reject(false);
+                });
         });
     }
 

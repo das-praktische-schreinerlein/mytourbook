@@ -8,6 +8,7 @@ For more information take a look at documentation:
 - [changelog](docs/CHANGELOG.md) 
 - [installation instructions](docs/INSTALL.md)
 - [configuration instructions](docs/CONFIGURATION.md)
+- [import external-data](docs/IMPORT-EXTERNAL-DATA.md)
 - [usage instructions](docs/DATAIMPORT.md)
 - [administration instructions](docs/ADMIN.md)
 - [credits for used libraries](docs/CREDITS.md)
