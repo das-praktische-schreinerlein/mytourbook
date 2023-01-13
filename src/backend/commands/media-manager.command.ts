@@ -430,7 +430,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                                     'staticTDocsFiles');
                             }
                         );
-        });
+                });
 
                 break;
             case 'inlineDataOnViewerFile':

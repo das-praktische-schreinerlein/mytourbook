@@ -11,7 +11,7 @@ import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-com
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {Router} from '@angular/router';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
-import {TourDocContentUtils} from '../..//../shared-tdoc/services/tdoc-contentutils.service';
+import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {TourDocAssignFormComponent} from './tdoc-assignform.component';
 import {FormBuilder} from '@angular/forms';
 import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../shared/tdoc-commons/services/tdoc-data.store';
