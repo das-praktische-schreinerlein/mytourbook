@@ -18,28 +18,45 @@
   - will convert poi-import/poi_import.geojson -> poi_import-dump.json
   - will import (insert only not already found records) poi_import-dump.json and rename it afterwards
 
-### Import poi-data manually
-- do it on cmd
-```
-for %%f in (F:\playground\mytb-tes\/mytbbase\poi-downloads\*.geojson) do (
-    echo %%~nf
+### prepare files
+- convert geojson files via windows cmd
+```cmd
+for %f in (D:\docs\osm-poi-geojson\*.geojson) do (
+    echo %~nf
     node dist\backend\serverAdmin.js ^
         --debug ^
         --command convertTourDoc ^
         --action convertGeoJsonToTourDoc ^
         --adminclibackend config/adminCli.dev.json ^
         --backend config/backend.dev.json ^
-        --srcFile %%~nf ^
+        --srcFile D:\docs\osm-poi-geojson\%~nf.geojson ^
         --mode RESPONSE ^
-        --file F:/playground/mytb-test/mytbbase/import/poi_import-dump.json ^
-        --renameFilIfExists true
+        --file D:\docs\osm-poi-geojson\%~nf.tdoc.json ^
+        --renameFileIfExists true
+)
+```
+
+### prepare a static viewer
+- create viewer-files for directory-entries via bash
+```bash
+FILTER=D:/docs/osm-poi-geojson/*.tdoc.json
+FILES=`echo $FILTER | sed "s/ /,/g"`
+echo $FILES
+sbin/generateViewerFileForStaticData.sh D:/docs/osm-poi-geojson/ $FILES mytb-pois
+```
+
+### import files into database
+- import files via windows cmd
+```cmd
+for %f in (F:\playground\mytb-tes\/mytbbase\poi-downloads\*.tdoc.json) do (
+    echo %~nf
     node dist\backend\serverAdmin.js ^
         --debug ^
         --command loadTourDoc ^
         --action loadDocs ^
         --adminclibackend config/adminCli.dev.json ^
         --backend config/backend.dev.json ^
-        --file F:/playground/mytb-test/mytbbase/import/poi_import-dump.json ^
+        --file F:/playground/mytb-test/mytbbase/import/%~nf.tdoc.json ^
         --renameFileAfterSuccess true
 )
 ```

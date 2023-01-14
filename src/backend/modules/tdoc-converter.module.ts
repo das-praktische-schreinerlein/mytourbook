@@ -45,7 +45,7 @@ export class TourDocImportConverterModule {
                 ? 'https://www.openstreetmap.org/'
                 : undefined;
             const sourceKeyword = flgOsmImport
-                ? 'SOURCE_openstreetmap/'
+                ? 'SOURCE_openstreetmap'
                 : 'SOURCE_GeoJson';
 
             if (rootType !== 'FeatureCollection') {
