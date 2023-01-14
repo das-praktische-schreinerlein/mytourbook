@@ -272,8 +272,8 @@ export class AppService extends GenericAppService {
                     const tdocs = [];
                     for (let i = 0; i < arrayOfResults.length; i++) {
                         const data = arrayOfResults[i];
-                        if (data['mdocs']) {
-                            const exportRecords = data['mdocs'].map(doc => {
+                        if (data['tdocs']) {
+                            const exportRecords = data['tdocs'].map(doc => {
                                 return importer.extendAdapterDocument(doc);
                             });
 

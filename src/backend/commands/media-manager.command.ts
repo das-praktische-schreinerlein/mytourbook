@@ -131,7 +131,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         let searchForm: TourDocSearchForm;
         const processingOptions: ProcessingOptions = {
             ignoreErrors: Number.parseInt(argv['ignoreErrors'], 10) || 0,
-            parallel: Number.parseInt(argv['parallel'], 10)
+            parallel: Number.parseInt(argv['parallel'], 10),
         };
         const pageNum = Number.parseInt(argv['pageNum'], 10);
         const actiontype = argv['actiontype'];
@@ -368,15 +368,16 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     exportBaseFileName: exportName,
                     directoryProfile: directoryProfile,
                     fileNameProfile: fileNameProfile,
-                    resolutionProfile: resolutionProfile
+                    resolutionProfile: resolutionProfile,
+                    jsonBaseElement: 'tdocs'
                 }).then((result) => {
                     if (!createHtml || !srcFile) {
                         return Promise.resolve(result);
                     }
 
-                    const exportJsonFile = exportDir + '/' + exportName + '.mdocexport.json';
+                    const exportJsonFile = exportDir + '/' + exportName + '.tdocsexport.json';
                     return viewerManagerModule.generateViewerHtmlFile(srcFile,  [exportJsonFile],
-                        exportDir + '/' + exportName + '.html', 100, 'mdocs',
+                        exportDir + '/' + exportName + '.html', 100, 'tdocs',
                         function (html: string) {
                             return viewerManagerModule.htmlConfigConverter(html, 'staticTDocsFiles'); },
                         function (html: string, jsonPFileName: string) {
@@ -414,10 +415,10 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     return promise;
                 }
 
-                promise = FileUtils.mergeJsonFiles(srcFiles, exportDir + '/' + exportName + '-merged.mdocexport.json', 'id', 'mdocs')
+                promise = FileUtils.mergeJsonFiles(srcFiles, exportDir + '/' + exportName + '-merged.tdocexport.json', 'id', 'tdocs')
                     .then((resultFile) => {
                         return viewerManagerModule.generateViewerHtmlFile(srcFile, [resultFile],
-                            exportDir + '/' + exportName + '.html', 100, 'mdocs',
+                            exportDir + '/' + exportName + '.html', 100, 'tdocs',
                             function (html: string) {
                                 return viewerManagerModule.htmlConfigConverter(html, 'staticTDocsFiles');
                             },

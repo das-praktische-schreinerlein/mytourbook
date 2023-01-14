@@ -337,7 +337,7 @@
                             "exportDir": "F:/playground/mytb-test/export/favorites/",
                             "createViewer": "html",
                             "srcFile": "F:/Projekte/mytourbook_dev/dist/static/mytbviewer/de/index.viewer.full.html",
-                            "srcFiles": "F:/playground/mytb-test/export/favorites/favorites-top-images.mdocexport.json,F:/playground/mytb-test/export/favorites/favorites-top-videos.mdocexport.json"
+                            "srcFiles": "F:/playground/mytb-test/export/favorites/favorites-top-images.tdocsexport.json,F:/playground/mytb-test/export/favorites/favorites-top-videos.tdocsexport.json"
                         }
                     },
                     {

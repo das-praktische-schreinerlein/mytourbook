@@ -1,4 +1,4 @@
-window.importStaticDataTDocsJsonP = `{ "mdocs": [
+window.importStaticDataTDocsJsonP = `{ "tdocs": [
 {},
 {}]}`;
 

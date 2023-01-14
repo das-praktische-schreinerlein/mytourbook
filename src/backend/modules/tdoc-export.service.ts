@@ -47,6 +47,7 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
                             processingOptions: MediaExportProcessingOptions & ProcessingOptions & ExportProcessingOptions): Promise<{}> {
         const me = this;
         const exportResults: ExportProcessingResult<TourDocRecord>[]  = [];
+        processingOptions.jsonBaseElement = 'tdocs';
         const callback = function(mdoc: TourDocRecord): Promise<{}>[] {
             return [
                 me.exportMediaRecordFiles(mdoc, processingOptions, exportResults)
@@ -117,6 +118,7 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
             imageResolutions: imageResolutions,
             videoResolutions: videoResolutions
         }
+        processingOptions.jsonBaseElement = 'tdocs';
         switch (tdoc.type) {
             case 'IMAGE':
             case 'VIDEO':

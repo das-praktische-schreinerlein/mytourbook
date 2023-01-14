@@ -53,7 +53,7 @@ for CHUNKFILE in ${RESULTBASE}*.js; do
 
   echo "preparing $CHUNKFILE"
   sed -i 's/`/''/g' $CHUNKFILE
-  sed -i '1s/^/window.importStaticDataTDocsJsonP = \`{ "mdocs": [\n/' $CHUNKFILE
+  sed -i '1s/^/window.importStaticDataTDocsJsonP = \`{ "tdocs": [\n/' $CHUNKFILE
   sed -i 's/\\/\\\\/g' $CHUNKFILE
   sed -i 's/\}\]\}[ \r\n]*$/},/g' $CHUNKFILE
   echo '{}]}`;' >> $CHUNKFILE
