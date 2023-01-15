@@ -18,10 +18,25 @@
   - will convert poi-import/poi_import.geojson -> poi_import-dump.json
   - will import (insert only not already found records) poi_import-dump.json and rename it afterwards
 
-### prepare files
+### do it per scripts
 - convert geojson files via windows cmd
 ```cmd
-for %f in (D:\docs\osm-poi-geojson\*.geojson) do (
+sbin\osm-geojson-convert.bat
+```
+- create viewer-files for directory-entries via bash
+```bash
+sbin/osm-geojson-generate-viewer.sh
+```
+- import files via windows cmd
+```cmd
+sbin\osm-geojson-import.bat
+```
+
+### do it manually
+- convert geojson files via windows cmd
+```cmd
+OSMDIR=F:\playground\osm-poi-geojson
+for %f in (%OSMDIR%\*.geojson) do (
     echo %~nf
     node dist\backend\serverAdmin.js ^
         --debug ^
@@ -29,26 +44,24 @@ for %f in (D:\docs\osm-poi-geojson\*.geojson) do (
         --action convertGeoJsonToTourDoc ^
         --adminclibackend config/adminCli.dev.json ^
         --backend config/backend.dev.json ^
-        --srcFile D:\docs\osm-poi-geojson\%~nf.geojson ^
+        --srcFile %OSMDIR%\%~nf.geojson ^
         --mode RESPONSE ^
-        --file D:\docs\osm-poi-geojson\%~nf.tdoc.json ^
+        --file %OSMDIR%\%~nf.tdoc.json ^
         --renameFileIfExists true
 )
 ```
-
-### prepare a static viewer
 - create viewer-files for directory-entries via bash
 ```bash
-FILTER=D:/docs/osm-poi-geojson/*.tdoc.json
+OSMDIR=F:/playground/osm-poi-geojson
+FILTER=$OSMDIR/*.tdoc.json
 FILES=`echo $FILTER | sed "s/ /,/g"`
 echo $FILES
-sbin/generateViewerFileForStaticData.sh D:/docs/osm-poi-geojson/ $FILES mytb-pois
+sbin/generateViewerFileForStaticData.sh $OSMDIR/ $FILES mytb-pois
 ```
-
-### import files into database
 - import files via windows cmd
 ```cmd
-for %f in (F:\playground\mytb-tes\/mytbbase\poi-downloads\*.tdoc.json) do (
+OSMDIR=F:\playground\osm-poi-geojson
+for %f in (%OSMDIR%\*.tdoc.json) do (
     echo %~nf
     node dist\backend\serverAdmin.js ^
         --debug ^
@@ -56,7 +69,7 @@ for %f in (F:\playground\mytb-tes\/mytbbase\poi-downloads\*.tdoc.json) do (
         --action loadDocs ^
         --adminclibackend config/adminCli.dev.json ^
         --backend config/backend.dev.json ^
-        --file F:/playground/mytb-test/mytbbase/import/%~nf.tdoc.json ^
+        --file %OSMDIR%/%~nf.tdoc.json ^
         --renameFileAfterSuccess true
 )
 ```

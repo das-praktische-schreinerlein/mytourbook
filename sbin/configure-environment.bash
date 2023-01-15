@@ -6,6 +6,9 @@ MYTB=${MYSCRIPTPATH}/../
 MYTBTOOLS=${MYTB}/sbin/
 LIRETOOLS=/cygdrive/f/Projekte/liretools/
 
+OSMDIR=F:/playground/osm-poi-geojson
+W_OSMDIR="F:\playground\osm-poi-geojson"
+
 DIGIFOTOS_BASEDIR=/cygdrive/f/playground/mytb-test/Bilder/digifotos/
 VIDEOS_BASEDIR=/cygdrive/f/playground/mytb-test/Bilder/Videos/
 EXPORT_BASEDIR=/cygdrive/f/playground/mytb-test/export/
