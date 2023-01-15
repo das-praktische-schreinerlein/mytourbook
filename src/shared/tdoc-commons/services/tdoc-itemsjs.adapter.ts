@@ -329,7 +329,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
     };
 
     constructor(config: any, records: any, itemsJsConfig: ExtendedItemsJsConfig) {
-        console.debug('init itemsjs with config', itemsJsConfig, records);
+        console.debug('init itemsjs with config', itemsJsConfig, records ? records.length : 0);
         super(config, new TourDocAdapterResponseMapper(config), records, itemsJsConfig);
     }
 

@@ -303,7 +303,7 @@ export class AppService extends GenericAppService {
                     return Promise.reject(reason);
                 });
             }).then(function onDocParsed(tdocs: any[]) {
-                console.log('initially loaded tdocs from assets', tdocs);
+                console.log('initially loaded tdocs from assets', tdocs ? tdocs.length : 0);
                 const records = importer.mapToItemJsDocuments(tdocs);
                 const tdocAdapter = new TourDocItemsJsAdapter(options, records, itemsJsConfig);
 

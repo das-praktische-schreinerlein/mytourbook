@@ -29,7 +29,7 @@ export class FallbackHttpClient {
             if (element) {
                 cachedJsonpSrc = element.innerHTML;
                 console.debug('SKIPPPED - loaded dataName/scriptUrl/varName from inline',
-                    dataName, scriptUrl, varName, cachedJsonpSrc);
+                    dataName, scriptUrl, varName);
                 try {
                     const result = JSON.parse(cachedJsonpSrc);
                     me.addToCache(scriptUrl, cachedJsonpSrc);
