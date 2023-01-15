@@ -20,7 +20,6 @@ for %f in (%OSMDIR%\*.tdoc.json) do (
         --file %OSMDIR%/%%~nf.tdoc.json ^
         --renameFileAfterSuccess true
 )
-)
 
 cd %CWD%
 
