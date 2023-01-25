@@ -3,7 +3,6 @@ import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocSearchForm} from '../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
 import {SqlConnectionConfig} from './tdoc-dataservice.module';
@@ -21,6 +20,15 @@ import {TourDocServerPlaylistService} from './tdoc-serverplaylist.service';
 import {TourDocExportService} from './tdoc-export.service';
 import {TourDocMediaFileImportManager} from './tdoc-mediafile-import.service';
 import * as Promise_serial from 'promise-serial';
+import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
+import {FfprobeData} from 'fluent-ffmpeg';
+import {TourDocImageRecord} from '../shared/tdoc-commons/model/records/tdocimage-record';
+import {TourDocVideoRecord} from '../shared/tdoc-commons/model/records/tdocvideo-record';
+import {
+    TourDocMediaMetaRecord,
+    TourDocMediaMetaRecordFactory,
+    TourDocMediaMetaRecordValidator
+} from '../shared/tdoc-commons/model/records/tdocmediameta-record';
 
 export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourDocRecord, TourDocSearchForm,
     TourDocSearchResult, TourDocDataService, TourDocServerPlaylistService, TourDocExportService> {
@@ -51,7 +59,37 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
             this.getFileExtensionToTypeMappings());
     }
 
-    public readMetadataForCommonDocRecord(tdoc: TourDocRecord): Promise<{}> {
+    public syncExistingMetaDataFromFiles(searchForm: TourDocSearchForm, processingOptions: ProcessingOptions): Promise<{}> {
+        this.initKnex();
+        const me = this;
+        const callback = function(tdoc: TourDocRecord): Promise<{}>[] {
+            return [me.syncExistingMetaDataFromFile(tdoc)];
+        };
+
+        return this.dataService.batchProcessSearchResult(searchForm, callback, {
+            loadDetailsMode: undefined,
+            loadTrack: false,
+            showFacets: false,
+            showForm: false
+        }, processingOptions);
+    }
+
+    public syncExistingMetaDataFromFile(tdoc: TourDocRecord): Promise<{}> {
+        const me = this;
+        try {
+            return this.readMetadataForCommonDocRecord(tdoc).then(value => {
+                return me.updateMetaDataOfCommonDocRecord(tdoc, value);
+            }).catch(error => {
+                console.warn('error while syncExistingMetaDataFromFile', tdoc.id, error);
+                return Promise.reject(error);
+            });
+        } catch (exception) {
+            console.warn('exception while syncExistingMetaDataFromFile', tdoc.id, exception);
+            return Promise.reject(exception);
+        }
+    }
+
+    public readMetadataForCommonDocRecord(tdoc: TourDocRecord): Promise<{} | FfprobeData> {
         const tdocImages = tdoc.get('tdocimages');
         if (tdocImages !== undefined  && tdocImages.length > 0) {
             return this.readExifForCommonDocImageRecord(tdocImages[0]);
@@ -63,6 +101,90 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
 
         console.warn('no image or video found for ' + tdoc.id);
         return utils.resolve({});
+    }
+
+    public updateMetaDataOfCommonDocRecord(tdoc: TourDocRecord, metadata: {} | FfprobeData): Promise<{}> {
+        let updateFlag = false;
+
+        switch (tdoc.type.toLowerCase()) {
+            case 'image':
+                updateFlag = this.mapImageMetaDataToImageDoc(tdoc, <{}> metadata) || updateFlag;
+                break;
+            case 'video':
+                updateFlag = this.mapVideoMetaDataToVideoDoc(tdoc, <FfprobeData> metadata) || updateFlag;
+                break;
+            default:
+                console.warn('unknown type for tdoc.id', tdoc.type, tdoc.id);
+                return Promise.resolve(false);
+        }
+
+        if (updateFlag) {
+            const mediaMeta: TourDocMediaMetaRecord = tdoc.get('tdocmediameta');
+            if (!mediaMeta || !mediaMeta.isValid()) {
+                const errors = TourDocMediaMetaRecordValidator.instance.validate(mediaMeta);
+                return Promise.reject('cant update tdoc because of validation-errors for id:' + tdoc.id + ' errors:' + errors);
+            }
+
+            let updateMediaMetaSqlQuery: RawSqlQueryData = undefined;
+            switch (tdoc.type.toLowerCase()) {
+                case 'image':
+                    updateMediaMetaSqlQuery = {
+                        sql:
+                            'UPDATE IMAGE SET' +
+                            '  i_datefile = ?,' +
+                            '  i_daterecording = ?,' +
+                            '  i_filesize = ?,' +
+                            '  i_metadata = ?,' +
+                            '  i_resolution = ?' +
+                            '  WHERE i_id in (?)',
+                        parameters: [
+                            mediaMeta.fileCreated || null,
+                            mediaMeta.recordingDate || null,
+                            mediaMeta.fileSize || null,
+                            mediaMeta.metadata || null,
+                            mediaMeta.resolution || null,
+                            tdoc.id.replace('IMAGE_', '')
+                        ]
+                    };
+                    break;
+                case 'video':
+                    updateMediaMetaSqlQuery = {
+                        sql:
+                            'UPDATE VIDEO SET' +
+                            '  v_datefile = ?,' +
+                            '  v_daterecording = ?,' +
+                            '  v_duration = ?,' +
+                            '  v_filesize = ?,' +
+                            '  v_metadata = ?,' +
+                            '  v_resolution = ?' +
+                            '  WHERE v_id in (?)',
+                        parameters: [
+                            mediaMeta.fileCreated || null,
+                            mediaMeta.recordingDate || null,
+                            mediaMeta.dur || null,
+                            mediaMeta.fileSize || null,
+                            mediaMeta.metadata || null,
+                            mediaMeta.resolution || null,
+                            tdoc.id.replace('VIDEO_', '')
+                        ]
+                    };
+                    break;
+                default:
+                    console.warn('unknown type for tdoc.id', tdoc.type, tdoc.id);
+                    return Promise.reject('unknown type:"' + tdoc.type + '" for tdoc.id:' + tdoc.id);
+            }
+
+            console.log('update metadata for tdoc id:', tdoc.id);
+            return SqlUtils.executeRawSqlQueryData(this.knex, updateMediaMetaSqlQuery).then(result => {
+                console.debug('updated metadata of tdoc id:', tdoc.id, updateMediaMetaSqlQuery, result);
+                return Promise.resolve(result);
+            }).catch(error => {
+                console.error('error while updating metadata of tdoc id:', tdoc.id, updateMediaMetaSqlQuery);
+                return Promise.reject(error);
+            });
+        } else {
+            return Promise.resolve(false);
+        }
     }
 
     public scaleCommonDocRecordMediaWidth(tdoc: TourDocRecord, width: number, addResolutionType?: string): Promise<{}> {
@@ -313,33 +435,25 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                         return;
                     }
 
-                    this.mediaManager.readExifForImage(baseDir + '/' + fileInfo.dir + '/' + fileInfo.name).then(value => {
+                    this.mediaManager.readExifForImage(baseDir + '/' + fileInfo.dir + '/' + fileInfo.name).then(exifData => {
                         // Exif-dates are not in UTC they are in localtimezone
-                        if (value === undefined || value === null) {
+                        if (exifData === undefined || exifData === null) {
                             console.warn('no exif found for ' + fileInfo.name + ' details:' + fileInfo);
                             resolve(records);
                             return;
                         }
 
-                        let creationDate = BeanUtils.getValue(value, 'exif.DateTimeOriginal');
-                        if (creationDate === undefined || creationDate === null) {
-                            creationDate = new Date(BeanUtils.getValue(value, 'format.tags.creation_time'));
-                        }
-
-                        if (creationDate === undefined || creationDate === null) {
+                        const imageRecordingDate = this.mediaFileImportManager.extractImageRecordingDate(exifData);
+                        if (imageRecordingDate === undefined || imageRecordingDate === null) {
                             console.warn('no exif.DateTimeOriginal or format.tags.creation_time found for ' + fileInfo.name +
-                                ' details:' + fileInfo + ' exif:' + creationDate);
+                                ' details:' + fileInfo + ' exif:' + exifData);
                             resolve(records);
                             return;
                         }
 
-                        const myDate = new Date();
-                        myDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), 0);
-                        myDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
+                        fileInfo.exifDate = imageRecordingDate;
 
-                        fileInfo.exifDate = myDate;
-                        const localExifDate = DateUtils.parseDateStringWithLocaltime(
-                            DateUtils.dateToLocalISOString(fileInfo.exifDate));
+                        const localExifDate = DateUtils.parseDateStringWithLocaltime(DateUtils.dateToLocalISOString(fileInfo.exifDate));
                         localExifDate.setMilliseconds(0);
                         const exifDateInSSinceEpoch = Math.round(localExifDate.getTime() / 1000);
 
@@ -531,6 +645,52 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
         };
 
         return knex(options.knexOpts);
+    }
+
+    protected mapImageMetaDataToImageDoc(tdoc: TourDocRecord, exifData: {}): boolean {
+        const tdocImages = tdoc.get('tdocimages');
+        if (tdocImages === undefined || tdocImages.length <= 0) {
+            console.warn('no image found for ' + tdoc.id);
+            return false;
+        }
+
+        const image: TourDocImageRecord = tdocImages[0];
+        let mediaMeta = tdoc.get('tdocmediameta');
+        if (!mediaMeta) {
+            mediaMeta = this.dataService.getMapper(this.dataService.getBaseMapperName())
+                ['datastore']
+                ._mappers['tdocmediameta']
+                .createRecord(TourDocMediaMetaRecordFactory.instance.getSanitizedValues(
+                    {tdoc_id: tdoc.id, fileName: image.fileName}, {}));
+            tdoc.set('tdocmediameta', mediaMeta);
+        }
+
+        return this.mediaFileImportManager.mapImageDataToMediaMetaDoc(
+            tdoc.id, (<BackendConfigType>this.backendConfig).apiRoutePicturesStaticDir + '/pics_full/' + image.fileName,
+            mediaMeta, exifData);
+    }
+
+    protected mapVideoMetaDataToVideoDoc(tdoc: TourDocRecord, videoMetaData: FfprobeData): boolean {
+        const tdocVideos = tdoc.get('tdocvideos');
+        if (tdocVideos === undefined || tdocVideos.length <= 0) {
+            console.warn('no video found for ' + tdoc.id);
+            return false;
+        }
+
+        const video: TourDocVideoRecord = tdocVideos[0];
+        let mediaMeta = tdoc.get('tdocmediameta');
+        if (!mediaMeta) {
+            mediaMeta = this.dataService.getMapper(this.dataService.getBaseMapperName())
+                ['datastore']
+                ._mappers['tdocmediameta']
+                .createRecord(TourDocMediaMetaRecordFactory.instance.getSanitizedValues(
+                    {tdoc_id: tdoc.id, fileName: video.fileName}, {}));
+            tdoc.set('tdocmediameta', mediaMeta);
+        }
+
+        return this.mediaFileImportManager.mapVideoDataToMediaMetaDoc(
+            tdoc.id, (<BackendConfigType>this.backendConfig).apiRoutePicturesStaticDir + '/video_full/' + video.fileName,
+            mediaMeta, videoMetaData);
     }
 
 }

@@ -56,6 +56,7 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         noCoordinates: true,
         noFavoriteChildren: true,
         noMainFavoriteChildren: true,
+        noMetaOnly: true,
         noSubType: true,
         initial_s: true,
         objects_txt: true,

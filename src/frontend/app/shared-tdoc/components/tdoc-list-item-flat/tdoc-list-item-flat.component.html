@@ -81,6 +81,8 @@
     </div>
     <div class="col-2 ratetech layout-big">
         <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+        <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                            [small]="true"></app-cdoc-mediameta>
     </div>
     <div class="col-3 location layout-big">
         <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
@@ -163,6 +165,8 @@
                                 <app-tdoc-linked-infos [record]="listItem.currentRecord" [small]="false"></app-tdoc-linked-infos>
                             </ng-container>
                         </ng-container>
+                        <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                                            [small]="true"></app-cdoc-mediameta>
 
                         <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
                         <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
@@ -228,6 +232,8 @@
                     <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
                     <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
                 </ng-container>
+                <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                                    [small]="true"></app-cdoc-mediameta>
                 <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
                 <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
             </div>

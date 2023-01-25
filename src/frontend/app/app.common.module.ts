@@ -1,6 +1,6 @@
 import {AppComponent} from './components/app/app.component';
 import {AppService} from './services/app.service';
-import {NgbCollapseModule, NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCollapseModule, NgbDropdownModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {NavbarComponent} from './components/navbar/navbar.component';
 import {ToastrModule} from 'ngx-toastr';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
@@ -70,7 +70,7 @@ export function getAngulartics2Providers(): any {
     ],
     imports: [
         HttpClientModule,
-        NgbCollapseModule, NgbDropdownModule,
+        NgbCollapseModule, NgbDropdownModule, NgbTooltipModule,
         BrowserModule.withServerTransition({appId: 'tdoc-app'}),
         ToastrModule.forRoot(),
         TranslateModule.forRoot({

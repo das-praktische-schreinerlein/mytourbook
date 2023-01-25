@@ -40,6 +40,8 @@ import {TourDocLinkedPlaylistRecord, TourDocLinkedPlaylistRecordRelation} from '
 import {TourDocLinkedPlaylistRecordSchema} from '../model/schemas/tdoclinkedplaylist-record-schema';
 import {TourDocLinkedPoiRecord, TourDocLinkedPoiRecordRelation} from '../model/records/tdoclinkedpoi-record';
 import {TourDocLinkedPoiRecordSchema} from '../model/schemas/tdoclinkedpoi-record-schema';
+import {TourDocMediaMetaRecord, TourDocMediaMetaRecordRelation} from '../model/records/tdocmediameta-record';
+import {TourDocMediaMetaRecordSchema} from '../model/schemas/tdocmediameta-record-schema';
 
 describe('TourDocAdapterResponseMapper', () => {
     let datastore: TourDocDataStore;
@@ -79,6 +81,8 @@ describe('TourDocAdapterResponseMapper', () => {
             TourDocLinkedPlaylistRecordSchema, TourDocLinkedPlaylistRecordRelation);
         datastore.defineMapper('tdoclinkedpoi', TourDocLinkedPoiRecord,
             TourDocLinkedPoiRecordSchema, TourDocLinkedPoiRecordRelation);
+        datastore.defineMapper('tdocmediameta', TourDocMediaMetaRecord,
+            TourDocMediaMetaRecordSchema, TourDocMediaMetaRecordRelation);
         mapper = datastore.getMapper('tdoc');
     });
 

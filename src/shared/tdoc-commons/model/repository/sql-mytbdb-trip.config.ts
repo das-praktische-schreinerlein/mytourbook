@@ -453,6 +453,7 @@ export class SqlMytbDbTripConfig {
             conflictingRates: '"conflictingRates"',
             noFavoriteChildren: '"666dummy999"',
             noMainFavoriteChildren: '"noMainFavoriteChildren"',
+            noMetaOnly: '"666dummy999"',
             noCoordinates: '"666dummy999"',
             noLocation: 'trip.l_id',
             noRoute: '"666dummy999"',

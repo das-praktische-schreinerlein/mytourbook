@@ -452,6 +452,7 @@ export class SqlMytbDbLocationConfig {
             doublettes: '"doublettes"',
             noFavoriteChildren: '"666dummy999"',
             noMainFavoriteChildren: '"666dummy999"',
+            noMetaOnly: '"666dummy999"',
             noCoordinates: '"noCoordinates"',
             noLocation: 'location.l_parent_id',
             noRoute: '"666dummy999"',

@@ -54,6 +54,8 @@
                 <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
                 <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
                 <app-tdoc-datatech [record]="listItem.currentRecord" [flat]="true"></app-tdoc-datatech >
+                <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                                    [small]="true"></app-cdoc-mediameta>
             </div>
         </ng-container>
     </ng-container>
@@ -106,6 +108,8 @@
             <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                 <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
             </ng-container>
+            <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                                [small]="true"></app-cdoc-mediameta>
         </div>
     </ng-container>
 
@@ -159,6 +163,8 @@
             <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                 <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
             </ng-container>
+            <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                                [small]="true"></app-cdoc-mediameta>
         </div>
     </ng-container>
 </div>

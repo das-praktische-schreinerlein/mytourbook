@@ -416,6 +416,7 @@ export class SqlMytbDbInfoConfig {
             conflictingRates: '"666dummy999"',
             noFavoriteChildren: '"666dummy999"',
             noMainFavoriteChildren: '"666dummy999"',
+            noMetaOnly: '"666dummy999"',
             noCoordinates: '"666dummy999"',
             noLocation: 'info.l_id',
             noRoute: '"666dummy999"',

@@ -16,6 +16,7 @@ import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
 import {TourDocLinkedPlaylistRecord} from '../model/records/tdoclinkedplaylist-record';
 import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
 import {TourDocObjectDetectionImageObjectRecord} from '../model/records/tdocobjectdetectectionimageobject-record';
+import {TourDocMediaMetaRecordFactory} from '../model/records/tdocmediameta-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     private readonly _objectSeparator = ';;';
@@ -143,6 +144,14 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['data_info_baseloc_s'] = BeanUtils.getValue(props, 'tdocdatainfo.baseloc');
         values['data_info_destloc_s'] = BeanUtils.getValue(props, 'tdocdatainfo.destloc');
         values['data_info_section_details_s'] = BeanUtils.getValue(props, 'tdocdatainfo.sectionDetails');
+
+        values['mediameta_duration_i'] = BeanUtils.getValue(props, 'tdocmediameta.dur');
+        values['mediameta_filecreated_dt'] = BeanUtils.getValue(props, 'tdocmediameta.fileCreated');
+        values['mediameta_filename_s'] = BeanUtils.getValue(props, 'tdocmediameta.fileName');
+        values['mediameta_filesize_i'] = BeanUtils.getValue(props, 'tdocmediameta.fileSize');
+        values['mediameta_metadata_txt'] = BeanUtils.getValue(props, 'tdocmediameta.metadata');
+        values['mediameta_recordingdate_dt'] = BeanUtils.getValue(props, 'tdocmediameta.recordingDate');
+        values['mediameta_resolution_s'] = BeanUtils.getValue(props, 'tdocmediameta.resolution');
 
         values['info_name_s'] = BeanUtils.getValue(props, 'tdocinfo.name');
         values['info_desc_txt'] = BeanUtils.getValue(props, 'tdocinfo.desc');
@@ -272,6 +281,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         const infoMapper = mapper['datastore']._mappers['tdocinfo'];
         const ratePersMapper = mapper['datastore']._mappers['tdocratepers'];
         const rateTechMapper = mapper['datastore']._mappers['tdocratetech'];
+        const mediaMetaMapper = mapper['datastore']._mappers['tdocmediameta'];
 
         const values = {};
         values['id'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'id', undefined);
@@ -522,6 +532,29 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 TourDocDataInfoRecordFactory.instance.getSanitizedValues(dataInfoValues, {})));
         } else {
             record.set('tdocdatainfo', undefined);
+        }
+
+        const mediaMetaValues = {};
+        mediaMetaValues['dur'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'mediameta_duration_i', undefined);
+        mediaMetaValues['fileSize'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'mediameta_filesize_i', undefined);
+        mediaMetaValues['fileCreated'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'mediameta_filecreated_dt', undefined);
+        mediaMetaValues['fileName'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'mediameta_filename_s', undefined);
+        mediaMetaValues['metadata'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'mediameta_metadata_txt', undefined);
+        mediaMetaValues['recordingDate'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'mediameta_recordingdate_dt', undefined);
+        mediaMetaValues['resolution'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'mediameta_resolution_s', undefined);
+        let mediaMetaSet = false;
+        for (const field in mediaMetaValues) {
+            if (mediaMetaValues[field] !== undefined && mediaMetaValues[field] !== 0) {
+                mediaMetaSet = true;
+                break;
+            }
+        }
+
+        if (mediaMetaSet) {
+            record.set('tdocmediameta', mediaMetaMapper.createRecord(
+                TourDocMediaMetaRecordFactory.instance.getSanitizedValues(mediaMetaValues, {})));
+        } else {
+            record.set('tdocmediameta', undefined);
         }
 
         const infoValues = {};

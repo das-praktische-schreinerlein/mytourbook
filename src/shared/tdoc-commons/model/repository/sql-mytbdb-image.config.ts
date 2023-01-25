@@ -121,6 +121,7 @@ export class SqlMytbDbImageConfig {
             {
                 profile: 'image_objectdetections',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", COALESCE(image_object.io_id, ""),' +
+                    ' ":::fileName=", COALESCE(image.i_calced_path, ""),' +
                     ' ":::key=", COALESCE(image_object.io_obj_type, ""),' +
                     ' ":::detector=", COALESCE(image_object.io_detector, ""),' +
                     ' ":::imgWidth=", COALESCE(image_object.io_img_width, ""),' +
@@ -133,7 +134,7 @@ export class SqlMytbDbImageConfig {
                     ' ":::category=", objects.o_category,' +
                     ' ":::precision=", COALESCE(image_object.io_precision, ""),' +
                     ' ":::state=", COALESCE(image_object.io_state, "")) ORDER BY objects.o_name SEPARATOR ";;") AS i_objectdetections ' +
-                    'FROM image_object' +
+                    'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id ' +
                     ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                     '            AND image_object.io_detector=objects_key.ok_detector ' +
                     ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
@@ -203,6 +204,11 @@ export class SqlMytbDbImageConfig {
             'l_lochirarchietxt',
             'l_lochirarchieids',
             'i_calced_path AS i_fav_url_txt',
+            'i_datefile',
+            'i_daterecording',
+            'i_filesize',
+            'i_metadata',
+            'i_resolution',
             'k_altitude_asc',
             'k_altitude_desc',
             'i_gps_ele',
@@ -579,6 +585,7 @@ export class SqlMytbDbImageConfig {
             conflictingRates: '"666dummy999"',
             noFavoriteChildren: '"666dummy999"',
             noMainFavoriteChildren: '"666dummy999"',
+            noMetaOnly: 'COALESCE(i_metadata, "noMetaOnly")',
             noCoordinates: '"666dummy999"',
             noLocation: 'image.l_id',
             noRoute: '"666dummy999"',
@@ -627,6 +634,11 @@ export class SqlMytbDbImageConfig {
             'image.i_rate_motive': ':rate_pers_motive_i:',
             'image.i_rate_wichtigkeit': ':rate_pers_wichtigkeit_i:',
             'image.i_meta_name': ':name_s:',
+            'image.i_datefile': ':mediameta_filecreated_dt:',
+            'image.i_daterecording': ':mediameta_recordingdate_dt:',
+            'image.i_filesize': ':mediameta_filesize_i:',
+            'image.i_metadata': ':mediameta_metadata_txt:',
+            'image.i_resolution': ':mediameta_resolution_s:',
             'image.i_dir': 'SUBSTRING(":i_fav_url_txt:", 1, CHARINDEX("/", ":i_fav_url_txt:") - 1)',
             'image.i_file': 'SUBSTRING(":i_fav_url_txt:", CHARINDEX("/", ":i_fav_url_txt:"))'
         },
@@ -663,6 +675,12 @@ export class SqlMytbDbImageConfig {
             geo_lat_s: 'i_gps_lat',
             geo_loc_p: 'i_gps_loc',
             i_fav_url_txt: 'i_fav_url_txt',
+            mediameta_filecreated_dt: 'i_datefile',
+            mediameta_filename_s: 'i_fav_url_txt',
+            mediameta_filesize_i: 'i_filesize',
+            mediameta_metadata_txt: 'i_metadata',
+            mediameta_recordingdate_dt: 'i_daterecording',
+            mediameta_resolution_s: 'i_resolution',
             rate_pers_ausdauer_i: 'k_rate_ausdauer',
             rate_pers_bildung_i: 'k_rate_bildung',
             rate_pers_gesamt_i: 'i_rate',

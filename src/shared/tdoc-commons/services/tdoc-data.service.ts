@@ -42,6 +42,8 @@ import {TourDocLinkedPlaylistRecordSchema} from '../model/schemas/tdoclinkedplay
 import {BaseJoinRecord} from '@dps/mycms-commons/dist/search-commons/model/records/basejoin-record';
 import {TourDocLinkedPoiRecord, TourDocLinkedPoiRecordRelation} from '../model/records/tdoclinkedpoi-record';
 import {TourDocLinkedPoiRecordSchema} from '../model/schemas/tdoclinkedpoi-record-schema';
+import {TourDocMediaMetaRecord, TourDocMediaMetaRecordRelation} from '../model/records/tdocmediameta-record';
+import {TourDocMediaMetaRecordSchema} from '../model/schemas/tdocmediameta-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -95,6 +97,8 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             TourDocRatePersonalRecordRelation);
         this.dataStore.defineMapper('tdocratetech', TourDocRateTechRecord, TourDocRateTechRecordSchema,
             TourDocRateTechRecordRelation);
+        this.dataStore.defineMapper('tdocmediameta', TourDocMediaMetaRecord,
+            TourDocMediaMetaRecordSchema, TourDocMediaMetaRecordRelation);
         this.dataStore.defineMapper('tdocodimageobject', TourDocObjectDetectionImageObjectRecord,
             TourDocObjectDetectionImageObjectRecordSchema, TourDocObjectDetectionImageObjectRecordRelation);
         this.dataStore.defineMapper('tdocnavigationobject', TourDocNavigationObjectRecord,

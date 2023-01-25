@@ -658,6 +658,7 @@ export class SqlMytbDbTrackConfig {
             conflictingRates: '"conflictingRates"',
             noFavoriteChildren: '"noFavoriteChildren"',
             noMainFavoriteChildren: '"noMainFavoriteChildren"',
+            noMetaOnly: '"666dummy999"',
             noCoordinates: '"666dummy999"',
             noLocation: 'kategorie.l_id',
             noRoute: 'kategorie.t_id',

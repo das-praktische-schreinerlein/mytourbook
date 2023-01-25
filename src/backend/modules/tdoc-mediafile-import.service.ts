@@ -15,6 +15,13 @@ import {
 import {Adapter} from 'js-data-adapter';
 import * as Promise_serial from 'promise-serial';
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
+import {BaseMediaMetaRecordType} from '@dps/mycms-commons/dist/search-commons/model/records/basemediameta-record';
+import * as ffmpeg from 'fluent-ffmpeg';
+import {FfprobeData} from 'fluent-ffmpeg';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
+import {DescValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
+import {TourDocMediaMetaRecordFactory} from '../shared/tdoc-commons/model/records/tdocmediameta-record';
 
 export interface TourMediaImportContainerType {
     FILES: MediaImportFileContainerType;
@@ -27,11 +34,14 @@ export interface TourMediaImportContainerType {
 export class TourDocMediaFileImportManager  {
     protected readonly backendConfig: BackendConfigType;
     protected readonly dataService: TourDocDataService;
+    protected readonly mediaManager: MediaManagerModule;
+    protected readonly jsonValidationRule = new DescValidationRule(false);
 
-    constructor(backendConfig: BackendConfigType, dataService: TourDocDataService,
+    constructor(backendConfig: BackendConfigType, dataService: TourDocDataService, mediaManager: MediaManagerModule,
                 protected skipCheckForExistingFilesInDataBase: boolean) {
         this.backendConfig = backendConfig;
         this.dataService = dataService;
+        this.mediaManager = mediaManager;
     }
 
     public generateTourDocRecordsFromMediaDir(baseDir: string, mediaTypes: {}): Promise<TourDocRecord[]> {
@@ -94,7 +104,7 @@ export class TourDocMediaFileImportManager  {
     }
 
     public generateTourDocForImportContainer(container: TourMediaImportContainerType, mediaTypes: {},
-                                              mapper: Mapper, responseMapper: TourDocAdapterResponseMapper): Promise<TourDocRecord[]> {
+                                             mapper: Mapper, responseMapper: TourDocAdapterResponseMapper): Promise<TourDocRecord[]> {
         const me = this;
         const funcs = [];
         const records: TourDocRecord[] = [];
@@ -149,26 +159,44 @@ export class TourDocMediaFileImportManager  {
 
     public createRecordsForMediaData(mapper: Mapper, responseMapper: GenericAdapterResponseMapper, path: string, records: TourDocRecord[],
                                      container: TourMediaImportContainerType, fileStats: fs.Stats, type: string): Promise<{}> {
-        const file = pathLib.basename(path);
-        const dir = pathLib.dirname(path);
-        const date = fileStats.mtime;
-        const values = {
+        const mediaMeta = TourDocMediaMetaRecordFactory.createSanitized({});
+        switch (type) {
+            case 'IMAGE':
+                return this.readExifForCommonDocImageFile(path).then(exifData => {
+                    return this.mapImageDataToMediaMetaDoc('new', path, mediaMeta, exifData);
+                }).then(updateFlag => {
+                    return this.createRecordsForMediaMetaData(mapper, responseMapper, records, container, mediaMeta, type);
+                });
+            case 'VIDEO':
+                return this.readMetadataForCommonDocVideoFile(path).then(videoMetaData => {
+                    return this.mapVideoDataToMediaMetaDoc('new', path, mediaMeta, videoMetaData);
+                }).then(updateFlag => {
+                    return this.createRecordsForMediaMetaData(mapper, responseMapper, records, container, mediaMeta, type);
+                });
+            default:
+                return Promise.reject('unknown mediatype:' + type + ' for path:' + path);
+        }
+    }
+
+    public createRecordsForMediaMetaData(mapper: Mapper, responseMapper: GenericAdapterResponseMapper, records: TourDocRecord[],
+            container: TourMediaImportContainerType, mediaMeta: BaseMediaMetaRecordType, type: string): Promise<{}> {
+
+        const date = DateUtils.parseDate(mediaMeta.recordingDate || mediaMeta.fileCreated);
+        const mediaValues = {
             datestart_dt: date,
             dateend_dt: date,
             dateshow_dt: date
         };
-        let trackName = dir || file;
-        let locationName = dir || file;
 
-        // normalize trackName
+        // location
+        let locationName = pathLib.dirname(mediaMeta.fileName) || pathLib.basename(mediaMeta.fileName);
         let dateStr = '';
-        const matcher = trackName.match(/(\d\d\d\d)(\d\d)(\d\d){0,1}-(.*)?/);
+        const matcher = locationName.match(/(\d\d\d\d)(\d\d)(\d\d){0,1}-(.*)?/);
         if (matcher) {
             dateStr = (matcher[3] ? matcher[3] + '.' : '') + matcher[2] + '.' + matcher[1];
             locationName = (matcher[4] ? matcher[4] : 'Unbekannt');
         }
 
-        // normalize locationName
         const words = locationName.split('-');
         locationName = '';
         for (let word of words) {
@@ -176,7 +204,6 @@ export class TourDocMediaFileImportManager  {
             locationName = locationName.concat(word).concat(' ');
         }
         locationName = locationName.trim();
-        trackName = (locationName + ' ' + dateStr).trim();
 
         let location: TourDocRecord = container.LOCATION[locationName];
         if (location === undefined) {
@@ -192,8 +219,10 @@ export class TourDocMediaFileImportManager  {
             records.push(location);
             container.LOCATION[locationName] = location;
         }
-        values['loc_id_i'] = location.locId;
+        mediaValues['loc_id_i'] = location.locId;
 
+        // trackdata
+        const trackName = (locationName + ' ' + dateStr).trim();
         let track: TourDocRecord = container.TRACK[trackName];
         if (track === undefined) {
             track = <TourDocRecord>responseMapper.mapResponseDocument(mapper, {
@@ -212,7 +241,8 @@ export class TourDocMediaFileImportManager  {
             records.push(track);
             container.TRACK[trackName] = track;
         }
-        values['track_id_i'] = track.trackId;
+        mediaValues['track_id_i'] = track.trackId;
+
         if (DateUtils.parseDate(track.datestart).getTime() > DateUtils.parseDate(date).getTime()) {
             track.datestart = date;
         }
@@ -220,22 +250,35 @@ export class TourDocMediaFileImportManager  {
             track.dateend = date;
         }
 
-        if (type === 'IMAGE') {
-            values['i_fav_url_txt'] = path;
-            values['image_id_i'] = records.length + 1;
+        // mediadata
+        switch (type) {
+            case 'IMAGE':
+                mediaValues['i_fav_url_txt'] = mediaMeta.fileName;
+                mediaValues['image_id_i'] = records.length + 1;
+                break;
+            case'VIDEO':
+                mediaValues['v_fav_url_txt'] = mediaMeta.fileName;
+                mediaValues['video_id_i'] = records.length + 1;
+                break;
         }
-        if (type === 'VIDEO') {
-            values['v_fav_url_txt'] = path;
-            values['video_id_i'] = records.length + 1;
-        }
-        values['type_s'] = type;
-        values['id'] = type + '_' + (records.length + 1);
-        values['name_s'] = trackName + ' ' + DateUtils.formatDateTime(date);
-        const tdoc = <TourDocRecord>responseMapper.mapResponseDocument(mapper, values, {});
-        container[type][path] = tdoc;
+
+        mediaValues['type_s'] = type;
+        mediaValues['id'] = type + '_' + (records.length + 1);
+        mediaValues['name_s'] = trackName + ' ' + DateUtils.formatDateTime(date);
+
+        mediaValues['mediameta_duration_i'] = mediaMeta.dur;
+        mediaValues['mediameta_filesize_i'] = mediaMeta.fileSize;
+        mediaValues['mediameta_filesize_i'] = mediaMeta.fileSize;
+        mediaValues['mediameta_filecreated_dt'] = mediaMeta.fileCreated;
+        mediaValues['mediameta_metadata_txt'] = mediaMeta.metadata;
+        mediaValues['mediameta_recordingdate_dt'] = mediaMeta.recordingDate;
+        mediaValues['mediameta_resolution_s'] = mediaMeta.resolution;
+
+        const tdoc = <TourDocRecord>responseMapper.mapResponseDocument(mapper, mediaValues, {});
+        container[type][mediaMeta.fileName] = tdoc;
         records.push(tdoc);
 
-        return Promise.resolve(values);
+        return Promise.resolve(mediaValues);
     }
 
     public checkMediaFile(path: string, type):
@@ -285,6 +328,248 @@ export class TourDocMediaFileImportManager  {
 
                 return Promise.resolve({ readyToImport: true, hint: 'file not exits in database'});
             });
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public mapImageDataToMediaMetaDoc(reference: string, fullFilePath: string, mediaMeta: BaseMediaMetaRecordType,
+                                      exifData: {}): boolean {
+        let updateFlag = false;
+
+        if (exifData) {
+            // see https://exiv2.org/tags.html
+            const exifResolution = this.extractImageResolution(exifData);
+            const newResolution = exifResolution
+                ? exifResolution
+                : mediaMeta.resolution;
+            if (mediaMeta.resolution !== newResolution) {
+                console.debug('mapMetaDataToImageDoc: resolution changed for id old/new', reference, mediaMeta.resolution, newResolution);
+
+                updateFlag = true;
+                mediaMeta.resolution = newResolution;
+            }
+
+            const exifDate = this.extractImageRecordingDate(exifData);
+            const newRecordingDate = exifDate
+                ? exifDate
+                : mediaMeta.recordingDate;
+            if (DateUtils.dateToLocalISOString(mediaMeta.recordingDate) !== DateUtils.dateToLocalISOString(newRecordingDate)) {
+                console.debug('mapMetaDataToImageDoc: recordingDate changed for id old/new',
+                    reference, mediaMeta.recordingDate, newRecordingDate);
+
+                updateFlag = true;
+                mediaMeta.recordingDate = DateUtils.dateToLocalISOString(newRecordingDate);
+            }
+        } else {
+            mediaMeta.resolution = undefined;
+            mediaMeta.recordingDate = undefined;
+            console.debug('mapMetaDataToImageDoc: metadata empty so reset resolution/recordingDate for id old/new', reference);
+        }
+
+        const metadata = this.prepareImageMetadata(exifData);
+        updateFlag = this.mapMetaDataToCommonMediaDoc(fullFilePath, mediaMeta, metadata, reference) || updateFlag;
+
+        return updateFlag;
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public mapVideoDataToMediaMetaDoc(reference: string, fullFilePath: string, mediaMeta: BaseMediaMetaRecordType,
+                                      videoMetaData: FfprobeData): boolean {
+        let updateFlag = false;
+
+        if (videoMetaData) {
+            const videoResolution = this.extractVideoResolution(videoMetaData);
+            const newResolution = videoResolution
+                ? videoResolution
+                : mediaMeta.resolution;
+            if (mediaMeta.resolution !== newResolution) {
+                console.debug('mapVideoDataToMediaMetaDoc: resolution changed for id old/new',
+                    reference, mediaMeta.resolution, newResolution);
+
+                updateFlag = true;
+                mediaMeta.resolution = newResolution;
+            }
+
+            const videoRecordingDate = this.extractVideoRecordingDate(videoMetaData);
+            const newRecordingDate = videoRecordingDate
+                ? videoRecordingDate
+                : mediaMeta.recordingDate;
+            if (DateUtils.dateToLocalISOString(mediaMeta.recordingDate) !== DateUtils.dateToLocalISOString(newRecordingDate)) {
+                console.debug('mapVideoDataToMediaMetaDoc: recordingDate changed for id old/new', reference,
+                    mediaMeta.recordingDate, newRecordingDate);
+
+                updateFlag = true;
+                mediaMeta.recordingDate = DateUtils.dateToLocalISOString(newRecordingDate);
+            }
+
+            const videoDuration = this.extractVideoDuration(videoMetaData);
+            const newDuration = videoDuration
+                ? videoDuration
+                : mediaMeta.dur;
+            if (mediaMeta.dur !== newDuration) {
+                console.debug('mapVideoDataToMediaMetaDoc: duration changed for id old/new', reference, mediaMeta.dur, newDuration);
+
+                updateFlag = true;
+                mediaMeta.dur = newDuration;
+            }
+        } else {
+            mediaMeta.dur = undefined;
+            mediaMeta.resolution = undefined;
+            mediaMeta.recordingDate = undefined;
+            console.debug('mapVideoDataToMediaMetaDoc: metadata empty so reset duration/resolution/recordingDate for id old/new',
+                reference);
+        }
+
+        const metadata = this.prepareVideoMetadata(videoMetaData)
+        updateFlag = this.mapMetaDataToCommonMediaDoc(fullFilePath, mediaMeta, metadata, reference) || updateFlag;
+
+        return updateFlag;
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public mapMetaDataToCommonMediaDoc(mediaFilePath: string, mediaMeta: BaseMediaMetaRecordType, metadata: any,
+                                       reference: string) {
+        let updateFlag = false;
+        const newMetadata = this.jsonValidationRule.sanitize(
+            JSON.stringify({metadata: metadata}, (key, value) => {
+                if (value !== null) {
+                    return value
+                }
+            })
+                .replace('\\n', ' ').replace('\\r', '')
+        );
+
+        const fileStats = fs.statSync(mediaFilePath)
+        const newFilesize = fileStats
+            ? fileStats.size
+            : mediaMeta.fileSize;
+        const newFilecreated = fileStats
+            ? fileStats.mtime
+            : mediaMeta.fileCreated;
+
+        if (mediaMeta.metadata !== newMetadata) {
+            console.debug('mapMetaDataToCommonMediaDoc: metadata changed for id old/new', reference,
+                '\n   OLD:\n', mediaMeta.metadata,
+                '\n   NEW:\n', newMetadata);
+
+            updateFlag = true;
+            mediaMeta.metadata = newMetadata;
+        }
+
+        if (mediaMeta.fileSize !== newFilesize) {
+            console.debug('mapMetaDataToCommonMediaDoc: fileSize changed for id old/new', reference, mediaMeta.fileSize, newFilesize);
+
+            updateFlag = true;
+            mediaMeta.fileSize = newFilesize;
+        }
+
+        if (DateUtils.dateToLocalISOString(mediaMeta.fileCreated) !== DateUtils.dateToLocalISOString(newFilecreated)) {
+            console.debug('mapMetaDataToCommonMediaDoc: fileCreated changed for id old/new', reference, mediaMeta.fileCreated,
+                newFilecreated, DateUtils.dateToLocalISOString(mediaMeta.fileCreated), DateUtils.dateToLocalISOString(newFilecreated));
+
+            updateFlag = true;
+            mediaMeta.fileCreated = DateUtils.dateToLocalISOString(newFilecreated);
+        }
+
+        return updateFlag;
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public prepareVideoMetadata(videoMetaData: FfprobeData): FfprobeData {
+        if (BeanUtils.getValue(videoMetaData, 'format.filename')) {
+            videoMetaData['format']['filename'] = undefined;
+        }
+
+        return videoMetaData;
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public extractVideoResolution(videoMetaData: FfprobeData) {
+        return (videoMetaData.streams
+            && videoMetaData.streams.length > 0
+            && videoMetaData.streams[0].width > 0
+            && videoMetaData.streams[0].height > 0)
+            ? videoMetaData.streams[0].width + 'x' + videoMetaData.streams[0].height
+            : undefined;
+    }
+
+    public extractVideoRecordingDate(videoMetaData: FfprobeData): Date {
+        const creationDate = videoMetaData.format && videoMetaData.format.tags['creation_time']
+            ? new Date(videoMetaData.format.tags['creation_time'])
+            : undefined
+        if (creationDate === undefined || creationDate === null) {
+            return undefined
+        }
+
+        const localDate = new Date();
+        localDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(),
+            creationDate.getUTCMilliseconds());
+        localDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
+
+        return localDate;
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public extractVideoDuration(videoMetaData: FfprobeData): number {
+        return videoMetaData.format && videoMetaData.format.duration
+            ? Math.ceil(videoMetaData.format.duration)
+            : undefined;
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public prepareImageMetadata(exifData: {}): {} {
+        if (BeanUtils.getValue(exifData, 'exif.MakerNote')) {
+            exifData['exif']['MakerNote'] = '...';
+        }
+        if (BeanUtils.getValue(exifData, 'exif.UserComment')) {
+            exifData['exif']['UserComment'] = '...';
+        }
+
+        return exifData;
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public extractImageResolution(exifData: {}) {
+        return (BeanUtils.getValue(exifData, 'image.ImageWidth') > 0
+            && BeanUtils.getValue(exifData, 'image.ImageHeight') > 0)
+            ? BeanUtils.getValue(exifData, 'image.ImageWidth')
+            + 'x'
+            + BeanUtils.getValue(exifData, 'image.ImageHeight')
+            : undefined;
+    }
+
+    // TODO move to commons mediaFileImportManager
+    public extractImageRecordingDate(exifData: {}): Date {
+        let creationDate = BeanUtils.getValue(exifData, 'exif.DateTimeOriginal');
+        if (creationDate === undefined || creationDate === null) {
+            creationDate = new Date(BeanUtils.getValue(exifData, 'format.tags.creation_time'));
+        }
+
+        if (creationDate === undefined || creationDate === null) {
+            return undefined
+        }
+
+        const localDate = new Date();
+        localDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), 0);
+        localDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
+
+        return localDate;
+    }
+
+    protected readExifForCommonDocImageFile(fileName: string): Promise<{}> {
+        return this.mediaManager.readExifForImage(fileName);
+    }
+
+    protected readMetadataForCommonDocVideoFile(fileName): Promise<FfprobeData> {
+        return new Promise<FfprobeData>((resolve, reject) => {
+            ffmpeg.ffprobe(fileName,
+                function(err, metadata) {
+                    if (err) {
+                        reject('error while reading video-metadata: ' + err);
+                    }
+
+                    resolve(metadata);
+                });
+        });
     }
 
 }

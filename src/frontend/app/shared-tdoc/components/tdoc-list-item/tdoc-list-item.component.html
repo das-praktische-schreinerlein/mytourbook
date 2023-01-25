@@ -73,6 +73,8 @@
             </ngb-panel>
             <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.tdoc.title">
                 <ng-template ngbPanelContent>
+                    <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                                        [small]="false"></app-cdoc-mediameta>
                     <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"
                                               *ngIf="(showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE')"></app-cdoc-odobjectdetails>
                     <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
@@ -145,6 +147,8 @@
             <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
             <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
             <div style="display: inline-block">
+                <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                                    [small]="false"></app-cdoc-mediameta>
                 <app-tdoc-ratepers [record]="listItem.currentRecord" style="float: left"></app-tdoc-ratepers>
                 <app-tdoc-datatech [record]="listItem.currentRecord" style="float: right"></app-tdoc-datatech >
                 <app-tdoc-ratetech [record]="listItem.currentRecord" style="float: left"></app-tdoc-ratetech>

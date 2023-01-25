@@ -533,6 +533,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocdatatech.altMax': {},
                 'tdocdatatech.dist': {},
                 'tdocdatatech.dur': {},
+                'tdocmediameta.dur': {},
+                'tdocmediameta.fileSize': {},
                 'trackId': {},
                 'tripId': {}
             },
@@ -568,6 +570,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocratetech.ks': {},
                 'tdocratetech.overall': {},
                 'tdocratetech.schneeschuh': {},
+                'tdocmediameta.metadata': {},
+                'tdocmediameta.resolution': {},
                 // must be set to get option-values
                 'tdocimgobj.state': { labelPrefix: 'label.odimgobject.state.', values: Object.values(ObjectDetectionState)}
             },
@@ -708,6 +712,14 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             delete values['tdocodimageobjects'];
         }
 
+        // TODO introduce dateBeanFieldConfig, objectBeanFieldConfig in commons
+        values['tdocmediameta.fileCreated'] = Array.isArray(values['tdocmediameta_fileCreated'])
+            ? values['tdocmediameta_fileCreated'][0]
+            : values['tdocmediameta_fileCreated'];
+        values['tdocmediameta.recordingDate'] = Array.isArray(values['tdocmediameta_recordingDate'])
+            ? values['tdocmediameta_recordingDate'][0]
+            : values['tdocmediameta_recordingDate'];
+
         return super.prepareSubmitValues(values);
     }
 
@@ -731,6 +743,15 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.joinIndexes['imageObjects'] = TourDocJoinUtils.appendLinkedObjectDetectionsToDefaultFormValueConfig(record, valueConfig, 'tdocimgobj_');
         } else {
             this.joinIndexes['imageObjects'] = [];
+        }
+
+        if (record.get('tdocmediameta')) {
+            if (record.get('tdocmediameta')['fileCreated']) {
+                valueConfig['tdocmediameta_fileCreated'] = [DateUtils.dateToLocalISOString(record.get('tdocmediameta')['fileCreated'])];
+            }
+            if (record.get('tdocmediameta')['recordingDate']) {
+                valueConfig['tdocmediameta_recordingDate'] = [DateUtils.dateToLocalISOString(record.get('tdocmediameta')['recordingDate'])];
+            }
         }
 
         return valueConfig;

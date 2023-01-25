@@ -55,6 +55,8 @@
                         <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
                     </ng-container>
                 </ng-container>
+                <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
+                                    [small]="true"></app-cdoc-mediameta>
                 <ng-container *ngIf="!short">
                     <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsSmall'"
                                      (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>

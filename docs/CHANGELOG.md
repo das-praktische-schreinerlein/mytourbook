@@ -4,9 +4,10 @@
 
 ## 7.5.0
 - database: removed unused fields
+- add mediameta-components
 
 ### new features
-- none
+- backend/frontend: add mediameta-components
 
 ### improvements
 - database: removed unused fields

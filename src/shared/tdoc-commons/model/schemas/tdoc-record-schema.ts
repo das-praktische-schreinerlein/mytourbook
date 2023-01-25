@@ -20,10 +20,10 @@ export const TourDocRecordSchema = new Schema({
 
         blocked: {type: 'number'},
 
-// TODO
-//        dateshow: {type: 'Date'},
-//        datestart: {type: 'Date'},
-//        dateend: {type: 'Date'},
+        // TODO: add type validation ifor date in later version -> but date-values can be string|Date
+        dateshow: {},
+        datestart: {},
+        dateend: {},
         descTxt: {type: 'string'},
         descMd: {type: 'string'},
         descHtml: {type: 'string'},

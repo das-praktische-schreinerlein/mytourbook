@@ -55,6 +55,7 @@ import {
     TourDocLinkedPlaylistRecordValidator
 } from './tdoclinkedplaylist-record';
 import {TourDocLinkedPoiRecord, TourDocLinkedPoiRecordFactory, TourDocLinkedPoiRecordValidator} from './tdoclinkedpoi-record';
+import {TourDocMediaMetaRecord, TourDocMediaMetaRecordFactory, TourDocMediaMetaRecordValidator} from './tdocmediameta-record';
 
 export interface TourDocRecordType extends CommonDocRecordType {
     locId: number;
@@ -132,7 +133,16 @@ export let TourDocRecordRelation: BaseEntityRecordRelationsType = {
             mapperKey: 'tdocratetech',
             factory: TourDocRateTechRecordFactory.instance,
             validator: TourDocRateTechRecordValidator.instance
-        }
+        },
+        tdocmediameta: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocmediameta',
+            mapperKey: 'tdocmediameta',
+            factory: TourDocMediaMetaRecordFactory.instance,
+            validator: TourDocMediaMetaRecordValidator.instance
+        },
     },
     hasMany: {
         tdocimage: {
@@ -361,16 +371,19 @@ export class TourDocRecordFactory extends CommonDocRecordFactory {
                 return TourDocDataTechRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocdatainfo':
                 return TourDocDataInfoRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocmediameta':
+                return TourDocMediaMetaRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocratepers':
+                return TourDocRatePersonalRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocratetech':
+                return TourDocRateTechRecordFactory.instance.getSanitizedValues(values, {});
+
             case 'tdocinfo':
                 return TourDocInfoRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocimages':
                 return TourDocImageRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocvideos':
                 return TourDocVideoRecordFactory.instance.getSanitizedValues(values, {});
-            case 'tdocratepers':
-                return TourDocRatePersonalRecordFactory.instance.getSanitizedValues(values, {});
-            case 'tdocratetech':
-                return TourDocRateTechRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdoclinkedroutes':
                 return TourDocLinkedRouteRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdoclinkedinfos':
@@ -422,10 +435,13 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocDataTechRecordValidator.instance.validate(<TourDocDataTechRecord>doc, errFieldPrefix);
             case 'tdocdatainfo':
                 return TourDocDataInfoRecordValidator.instance.validate(<TourDocDataInfoRecord>doc, errFieldPrefix);
+            case 'tdocmediameta':
+                return TourDocMediaMetaRecordValidator.instance.validate(<TourDocMediaMetaRecord>doc, errFieldPrefix);
             case 'tdocratepers':
                 return TourDocRatePersonalRecordValidator.instance.validate(<TourDocRatePersonalRecord>doc, errFieldPrefix);
             case 'tdocratetech':
                 return TourDocRateTechRecordValidator.instance.validate(<TourDocRateTechRecord>doc, errFieldPrefix);
+
             case 'tdocinfo':
                 return TourDocInfoRecordValidator.instance.validate(<TourDocInfoRecord>doc, errFieldPrefix);
             case 'tdocimages':
@@ -458,16 +474,19 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocDataTechRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocdatainfo':
                 return TourDocDataInfoRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdocmediameta':
+                return TourDocMediaMetaRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdocratepers':
+                return TourDocRatePersonalRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdocratetech':
+                return TourDocRateTechRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+
             case 'tdocinfo':
                 return TourDocInfoRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocimages':
                 return TourDocImageRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocvideos':
                 return TourDocVideoRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
-            case 'tdocratepers':
-                return TourDocRatePersonalRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
-            case 'tdocratetech':
-                return TourDocRateTechRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdoclinkedroutes':
                 return TourDocLinkedRouteRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdoclinkedinfos':

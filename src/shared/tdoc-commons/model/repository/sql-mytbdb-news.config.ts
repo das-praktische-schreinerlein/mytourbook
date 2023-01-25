@@ -369,6 +369,7 @@ export class SqlMytbDbNewsConfig {
             conflictingRates: '"conflictingRates"',
             noFavoriteChildren: '"666dummy999"',
             noMainFavoriteChildren: '"noMainFavoriteChildren"',
+            noMetaOnly: '"666dummy999"',
             noCoordinates: '"666dummy999"',
             noLocation: '"666dummy999"',
             noRoute: '"666dummy999"',

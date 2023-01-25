@@ -83,7 +83,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 'nonblocked'], undefined),
             additionalMappingsFile: new SimpleConfigFilePathValidationRule(false),
             rotate: new NumberValidationRule(false, 1, 360, 0),
-            force: new KeywordValidationRule(false),
+            force: new WhiteListValidationRule(false, [true, false, 'true', 'false'], false),
             createViewer: new WhiteListValidationRule(false, [true, false, 'html', 'htmlWithoutImage'], false),
             skipCheckForExistingFilesInDataBase : new KeywordValidationRule(false),
             renameFileIfExists:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)
@@ -91,7 +91,8 @@ export class MediaManagerCommand extends CommonAdminCommand {
     }
 
     protected definePossibleActions(): string[] {
-        return ['readImageDates', 'readVideoDates', 'scaleImages', 'scaleVideos',
+        return ['readImageDates', 'readVideoDates', 'readImageMetaData', 'readVideoMetaData',
+            'scaleImages', 'scaleVideos',
             'exportImageFiles', 'exportRouteFiles', 'exportTrackFiles', 'exportVideoFiles',
             'generateHtmlViewerFileForExport', 'inlineDataOnViewerFile',
             'generateTourDocsFromMediaDir',
@@ -150,6 +151,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const createHtml = argv['createHtml'];
         const exportDir = argv['exportDir'];
         const exportName = argv['exportName'];
+        const force = argv['force'] === true || argv['force'] === 'true';
 
         // TODO skipMediaCheck... as option
 
@@ -164,7 +166,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         };
         const playlistService = new TourDocServerPlaylistService(playlistConfig);
         const tourDocMediaFileExportManager = new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService);
-        const tourDocMediaFileImportManager = new TourDocMediaFileImportManager(backendConfig, dataService,
+        const tourDocMediaFileImportManager = new TourDocMediaFileImportManager(backendConfig, dataService, mediaManagerModule,
             skipCheckForExistingFilesInDataBase);
         const tourDocExportManager = new TourDocExportService(backendConfig, dataService, playlistService, tourDocMediaFileExportManager,
             new TourDocAdapterResponseMapper(backendConfig));
@@ -178,6 +180,9 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 searchForm = new TourDocSearchForm({ type: 'image', sort: 'dateAsc',
                     pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+                if (!force) {
+                    searchForm.moreFilter = 'noMetaOnly:noMetaOnly'
+                }
                 console.log('START processing: readMediaDates', searchForm, processingOptions);
 
                 promise = tdocManagerModule.readAndUpdateMediaDates(searchForm, processingOptions);
@@ -186,10 +191,35 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 searchForm = new TourDocSearchForm({ type: 'video', sort: 'dateAsc',
                     pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+                if (!force) {
+                    searchForm.moreFilter = 'noMetaOnly:noMetaOnly'
+                }
                 console.log('START processing: readMediaDates', searchForm, processingOptions);
 
                 promise = tdocManagerModule.readAndUpdateMediaDates(searchForm, processingOptions);
 
+                break;
+            case 'readImageMetaData':
+                processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
+                searchForm = new TourDocSearchForm({ type: 'image', sort: 'dateAsc',
+                    pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+                if (!force) {
+                    searchForm.moreFilter = 'noMetaOnly:noMetaOnly'
+                }
+                console.log('START processing: readMp3MetaData', searchForm, processingOptions);
+
+                promise = tdocManagerModule.syncExistingMetaDataFromFiles(searchForm, processingOptions);
+                break;
+            case 'readVideoMetaData':
+                processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
+                searchForm = new TourDocSearchForm({ type: 'video', sort: 'dateAsc',
+                    pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+                if (!force) {
+                    searchForm.moreFilter = 'noMetaOnly:noMetaOnly'
+                }
+                console.log('START processing: readMp3MetaData', searchForm, processingOptions);
+
+                promise = tdocManagerModule.syncExistingMetaDataFromFiles(searchForm, processingOptions);
                 break;
             case 'scaleImages':
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 5;

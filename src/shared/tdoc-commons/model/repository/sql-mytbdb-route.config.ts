@@ -806,6 +806,7 @@ export class SqlMytbDbRouteConfig {
             conflictingRates: '"666dummy999"',
             noFavoriteChildren: '"666dummy999"',
             noMainFavoriteChildren: '"666dummy999"',
+            noMetaOnly: '"666dummy999"',
             noCoordinates: '"666dummy999"',
             noLocation: 'tour.l_id',
             noRoute: '"666dummy999"',
