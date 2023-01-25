@@ -160,18 +160,20 @@ export class TourDocMediaFileImportManager  {
 
     public createRecordsForMediaData(mapper: Mapper, responseMapper: GenericAdapterResponseMapper, path: string, records: TourDocRecord[],
                                      container: TourMediaImportContainerType, fileStats: fs.Stats, type: string): Promise<{}> {
-        const mediaMeta = TourDocMediaMetaRecordFactory.createSanitized({});
+        const mediaMeta = TourDocMediaMetaRecordFactory.createSanitized({ fileName: path});
         switch (type) {
             case 'IMAGE':
-                return this.readExifForCommonDocImageFile(path).then(exifData => {
-                    return this.mapImageDataToMediaMetaDoc('new', path, mediaMeta, exifData);
-                }).then(updateFlag => {
+                const absoluteImagePath = (<BackendConfigType>this.backendConfig).apiRoutePicturesStaticDir + '/pics_full/' + path;
+                return this.readExifForCommonDocImageFile(absoluteImagePath).then(exifData => {
+                    return this.mapImageDataToMediaMetaDoc('new', absoluteImagePath, mediaMeta, exifData);
+                }).then(() => {
                     return this.createRecordsForMediaMetaData(mapper, responseMapper, records, container, mediaMeta, type);
                 });
             case 'VIDEO':
-                return this.readMetadataForCommonDocVideoFile(path).then(videoMetaData => {
-                    return this.mapVideoDataToMediaMetaDoc('new', path, mediaMeta, videoMetaData);
-                }).then(updateFlag => {
+                const absoluteVideoPath = (<BackendConfigType>this.backendConfig).apiRouteVideosStaticDir + '/video_full/' + path;
+                return this.readMetadataForCommonDocVideoFile(absoluteVideoPath).then(videoMetaData => {
+                    return this.mapVideoDataToMediaMetaDoc('new', absoluteVideoPath, mediaMeta, videoMetaData);
+                }).then(() => {
                     return this.createRecordsForMediaMetaData(mapper, responseMapper, records, container, mediaMeta, type);
                 });
             default:
