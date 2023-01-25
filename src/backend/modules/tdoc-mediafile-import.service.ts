@@ -485,7 +485,7 @@ export class TourDocMediaFileImportManager  {
     }
 
     public extractVideoRecordingDate(videoMetaData: FfprobeData): Date {
-        // extract from filename for mobiles
+        // TODO extract from filename for mobiles
         const fileName = BeanUtils.getValue(videoMetaData, 'format.filename');
         if (fileName && fileName.length > 10) {
             // extract date from filename: 20170813_130434.
