@@ -10,9 +10,9 @@ INSERT INTO playlist (p_id, p_name, p_meta_desc,
 -- ##################
 -- import location
 -- ##################
-INSERT INTO location (l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ, l_lochirarchietxt, l_lochirarchieids,
+INSERT INTO location (l_id, l_gesperrt, l_meta_shortdesc, l_name, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ, l_lochirarchietxt, l_lochirarchieids,
                       l_geo_state, l_calced_id, l_calced_subtype, l_calced_gps_loc, l_calced_gps_lat, l_calced_gps_lon, l_calced_altMaxFacet)
-    SELECT l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ, l_lochirarchietxt, l_lochirarchieids,
+    SELECT l_id, l_gesperrt, l_meta_shortdesc, l_name, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ, l_lochirarchietxt, l_lochirarchieids,
            l_geo_state, CONCAT("LOCATION", "_", l_id), l_calced_subtype, l_calced_gps_loc, l_calced_gps_lat, l_calced_gps_lon, l_calced_altMaxFacet
     FROM importmytbdb_location;
 
@@ -157,9 +157,9 @@ SET
 -- ##################
 -- import trip
 -- ##################
-INSERT INTO trip (tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url,
+INSERT INTO trip (tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ,
         tr_calced_id, tr_calced_dur, tr_calced_durFacet, tr_calced_dateonly, tr_calced_week, tr_calced_month, tr_calced_year)
-    SELECT tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url,
+    SELECT tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ,
         CONCAT("TRIP", "_", tr_id), tr_calced_dur, tr_calced_durFacet,
         DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, "ISO")), WEEK(tr_datevon), MONTH(tr_datevon), YEAR(tr_datevon)
     FROM importmytbdb_trip;

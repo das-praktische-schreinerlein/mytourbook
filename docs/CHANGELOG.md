@@ -2,6 +2,22 @@
  
 # Versions
 
+## 7.5.0
+- database: removed unused fields
+
+### new features
+- none
+
+### improvements
+- database: removed unused fields
+
+### bug fixes
+- none
+
+### breaking changes
+- none
+
+
 ## 7.4.0 (2023-01-19)
 - use commons 5.6.0
 - added viewer as separate environment to view static data without backend
