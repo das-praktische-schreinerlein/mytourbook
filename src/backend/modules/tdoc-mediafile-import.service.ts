@@ -461,6 +461,10 @@ export class TourDocMediaFileImportManager  {
 
     // TODO move to commons mediaFileImportManager
     public prepareVideoMetadata(videoMetaData: FfprobeData): FfprobeData {
+        if (!videoMetaData) {
+            return undefined;
+        }
+
         if (BeanUtils.getValue(videoMetaData, 'format.filename')) {
             videoMetaData['format']['filename'] = undefined;
         }
@@ -503,6 +507,10 @@ export class TourDocMediaFileImportManager  {
 
     // TODO move to commons mediaFileImportManager
     public prepareImageMetadata(exifData: {}): {} {
+        if (!exifData) {
+            return undefined;
+        }
+
         if (BeanUtils.getValue(exifData, 'exif.MakerNote')) {
             exifData['exif']['MakerNote'] = '...';
         }
