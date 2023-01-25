@@ -6,6 +6,7 @@ import {ItemsJsConfig} from '@dps/mycms-commons/dist/search-commons/services/ite
 import {GenericItemsJsAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
 import {ExtendedItemsJsConfig} from '@dps/mycms-commons/dist/search-commons/services/itemsjs.dataimporter';
 
+// tslint:disable:no-console
 export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public static itemsJsConfig: ExtendedItemsJsConfig = {
         skipMediaCheck: true,

@@ -31,6 +31,7 @@ export interface TourMediaImportContainerType {
     VIDEO: MediaImportRecordContainerType | TourDocRecord;
 }
 
+// tslint:disable:no-console
 export class TourDocMediaFileImportManager  {
     protected readonly backendConfig: BackendConfigType;
     protected readonly dataService: TourDocDataService;

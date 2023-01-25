@@ -34,6 +34,7 @@ export interface ObjectDetectionManagerBackendConfig {
     };
 }
 
+// tslint:disable:no-console
 export abstract class CommonQueuedObjectDetectionProcessingService {
     protected sqlQueryBuilder: SqlQueryBuilder;
     protected requestQueueName: string;

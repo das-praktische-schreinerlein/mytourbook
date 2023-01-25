@@ -30,6 +30,7 @@ import {
     TourDocMediaMetaRecordValidator
 } from '../shared/tdoc-commons/model/records/tdocmediameta-record';
 
+// tslint:disable:no-console
 export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourDocRecord, TourDocSearchForm,
     TourDocSearchResult, TourDocDataService, TourDocServerPlaylistService, TourDocExportService> {
     private knex;
