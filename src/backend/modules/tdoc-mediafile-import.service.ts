@@ -485,6 +485,16 @@ export class TourDocMediaFileImportManager  {
     }
 
     public extractVideoRecordingDate(videoMetaData: FfprobeData): Date {
+        // extract from filename for mobiles
+        const fileName = BeanUtils.getValue(videoMetaData, 'format.filename');
+        if (fileName && fileName.length > 10) {
+            // extract date from filename: 20170813_130434.
+            //const fileNameDate = new Date();
+            //fileNameDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), 0)
+            // fileNameDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
+            // return fileNameDate;
+        }
+
         const creationDate = videoMetaData.format && videoMetaData.format.tags['creation_time']
             ? new Date(videoMetaData.format.tags['creation_time'])
             : undefined
@@ -493,8 +503,7 @@ export class TourDocMediaFileImportManager  {
         }
 
         const localDate = new Date();
-        localDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(),
-            creationDate.getUTCMilliseconds());
+        localDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), 0)
         localDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
 
         return localDate;
