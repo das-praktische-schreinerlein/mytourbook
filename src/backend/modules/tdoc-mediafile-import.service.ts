@@ -338,10 +338,7 @@ export class TourDocMediaFileImportManager  {
 
         if (exifData) {
             // see https://exiv2.org/tags.html
-            const exifResolution = this.extractImageResolution(exifData);
-            const newResolution = exifResolution
-                ? exifResolution
-                : mediaMeta.resolution;
+            const newResolution = this.extractImageResolution(exifData);
             if (mediaMeta.resolution !== newResolution) {
                 console.debug('mapMetaDataToImageDoc: resolution changed for id old/new', reference, mediaMeta.resolution, newResolution);
 
@@ -349,10 +346,7 @@ export class TourDocMediaFileImportManager  {
                 mediaMeta.resolution = newResolution;
             }
 
-            const exifDate = this.extractImageRecordingDate(exifData);
-            const newRecordingDate = exifDate
-                ? exifDate
-                : mediaMeta.recordingDate;
+            const newRecordingDate = this.extractImageRecordingDate(exifData);
             if (DateUtils.dateToLocalISOString(mediaMeta.recordingDate) !== DateUtils.dateToLocalISOString(newRecordingDate)) {
                 console.debug('mapMetaDataToImageDoc: recordingDate changed for id old/new',
                     reference, mediaMeta.recordingDate, newRecordingDate);
@@ -378,10 +372,7 @@ export class TourDocMediaFileImportManager  {
         let updateFlag = false;
 
         if (videoMetaData) {
-            const videoResolution = this.extractVideoResolution(videoMetaData);
-            const newResolution = videoResolution
-                ? videoResolution
-                : mediaMeta.resolution;
+            const newResolution = this.extractVideoResolution(videoMetaData);
             if (mediaMeta.resolution !== newResolution) {
                 console.debug('mapVideoDataToMediaMetaDoc: resolution changed for id old/new',
                     reference, mediaMeta.resolution, newResolution);
@@ -390,10 +381,7 @@ export class TourDocMediaFileImportManager  {
                 mediaMeta.resolution = newResolution;
             }
 
-            const videoRecordingDate = this.extractVideoRecordingDate(videoMetaData);
-            const newRecordingDate = videoRecordingDate
-                ? videoRecordingDate
-                : mediaMeta.recordingDate;
+            const newRecordingDate = this.extractVideoRecordingDate(videoMetaData);
             if (DateUtils.dateToLocalISOString(mediaMeta.recordingDate) !== DateUtils.dateToLocalISOString(newRecordingDate)) {
                 console.debug('mapVideoDataToMediaMetaDoc: recordingDate changed for id old/new', reference,
                     mediaMeta.recordingDate, newRecordingDate);
@@ -402,10 +390,7 @@ export class TourDocMediaFileImportManager  {
                 mediaMeta.recordingDate = DateUtils.dateToLocalISOString(newRecordingDate);
             }
 
-            const videoDuration = this.extractVideoDuration(videoMetaData);
-            const newDuration = videoDuration
-                ? videoDuration
-                : mediaMeta.dur;
+            const newDuration = this.extractVideoDuration(videoMetaData);
             if (mediaMeta.dur !== newDuration) {
                 console.debug('mapVideoDataToMediaMetaDoc: duration changed for id old/new', reference, mediaMeta.dur, newDuration);
 
@@ -442,10 +427,10 @@ export class TourDocMediaFileImportManager  {
         const fileStats = fs.statSync(mediaFilePath)
         const newFilesize = fileStats
             ? fileStats.size
-            : mediaMeta.fileSize;
+            : undefined;
         const newFilecreated = fileStats
             ? fileStats.mtime
-            : mediaMeta.fileCreated;
+            : undefined;
 
         if (mediaMeta.metadata !== newMetadata) {
             console.debug('mapMetaDataToCommonMediaDoc: metadata changed for id old/new', reference,
