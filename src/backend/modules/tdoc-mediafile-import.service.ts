@@ -535,11 +535,18 @@ export class TourDocMediaFileImportManager  {
 
     // TODO move to commons mediaFileImportManager
     public extractImageResolution(exifData: {}) {
-        return (BeanUtils.getValue(exifData, 'image.ImageWidth') > 0
-            && BeanUtils.getValue(exifData, 'image.ImageHeight') > 0)
-            ? BeanUtils.getValue(exifData, 'image.ImageWidth')
+        if  (BeanUtils.getValue(exifData, 'image.ImageWidth') > 0
+            && BeanUtils.getValue(exifData, 'image.ImageHeight') > 0) {
+            return BeanUtils.getValue(exifData, 'image.ImageWidth')
+                + 'x'
+                + BeanUtils.getValue(exifData, 'image.ImageHeight')
+        }
+
+        return (BeanUtils.getValue(exifData, 'exif.PixelXDimension') > 0
+            && BeanUtils.getValue(exifData, 'exif.PixelYDimension') > 0)
+            ? BeanUtils.getValue(exifData, 'exif.PixelXDimension')
             + 'x'
-            + BeanUtils.getValue(exifData, 'image.ImageHeight')
+            + BeanUtils.getValue(exifData, 'exif.PixelYDimension')
             : undefined;
     }
 
