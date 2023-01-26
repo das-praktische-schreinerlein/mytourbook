@@ -523,6 +523,9 @@ export class TourDocMediaFileImportManager  {
             return undefined;
         }
 
+        if (BeanUtils.getValue(exifData, 'image.PrintIM')) {
+            exifData['image']['PrintIM'] = undefined;
+        }
         if (BeanUtils.getValue(exifData, 'exif.MakerNote')) {
             exifData['exif']['MakerNote'] = '...';
         }
