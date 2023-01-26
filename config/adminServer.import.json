@@ -116,7 +116,7 @@
                             "action": "readImageMetaData",
                             "force": false,
                             "ignoreErrors": 0,
-                            "backend": "config/backend.dev.json"
+                            "backend": "config/backend.import.json"
                         }
                     },
                     {
@@ -125,7 +125,7 @@
                             "action": "readVideoMetaData",
                             "force": false,
                             "ignoreErrors": 0,
-                            "backend": "config/backend.dev.json"
+                            "backend": "config/backend.import.json"
                         }
                     }
                 ]
