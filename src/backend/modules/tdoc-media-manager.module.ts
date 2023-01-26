@@ -454,7 +454,8 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
 
                         fileInfo.exifDate = imageRecordingDate;
 
-                        const localExifDate = DateUtils.parseDateStringWithLocaltime(DateUtils.dateToLocalISOString(fileInfo.exifDate));
+                        const localExifDate = DateUtils.parseDateStringWithLocaltime(
+                            DateUtils.dateToLocalISOString(fileInfo.exifDate));
                         localExifDate.setMilliseconds(0);
                         const exifDateInSSinceEpoch = Math.round(localExifDate.getTime() / 1000);
 

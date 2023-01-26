@@ -11,6 +11,7 @@ import {BackendConfigType} from './backend.commons';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocExportService} from './tdoc-export.service';
 import {TourDocMediaFileImportManager} from './tdoc-mediafile-import.service';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 
 describe('TourDocMediaManagerModule', () => {
     const backendConfig = {
@@ -33,6 +34,12 @@ describe('TourDocMediaManagerModule', () => {
         }
     }
 
+    class TestTourDocMediaFileImportManager extends TourDocMediaFileImportManager {
+        public extractImageRecordingDate(exifData: {}): Date {
+            return BeanUtils.getValue(exifData, 'exif.DateTimeOriginal');
+        }
+    }
+
     class TestTourDocMediaManagerModule extends TourDocMediaManagerModule {
         public myKnex;
         constructor(protected backendConfig, dataService: TourDocDataService, mediaManager: MediaManagerModule,
@@ -49,6 +56,7 @@ describe('TourDocMediaManagerModule', () => {
 
     let service: TestTourDocMediaManagerModule;
     const mediaManagerModule = new TestMediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
+    const mediaFileImportManager = new TestTourDocMediaFileImportManager(backendConfig.imageMagicAppPath, null, null, null);
 
     const basedir = 'bladir';
     const fileInfo: FileInfoType = {
@@ -260,11 +268,11 @@ describe('TourDocMediaManagerModule', () => {
             ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
             '       "IMAGE" AS type, "EXIFDATE" AS matching,       ? AS matchingDetails, 0.9 AS matchingScore' +
             '  FROM image  WHERE UNIX_TIMESTAMP(i_date)        BETWEEN ? AND ?',
-        parameters: ['exifdate:1579150', 1579149, 1579151]
+        parameters: ['exifdate:1582750', 1582749, 1582751]
     };
 
     beforeEach(() => {
-        service = new TestTourDocMediaManagerModule(backendConfig, null, mediaManagerModule, null, null);
+        service = new TestTourDocMediaManagerModule(backendConfig, null, mediaManagerModule, null, mediaFileImportManager);
     });
 
     describe('findCommonDocRecordsForFileInfo matching none found', () => {
