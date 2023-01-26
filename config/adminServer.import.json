@@ -115,7 +115,6 @@
                             "command": "mediaManager",
                             "action": "readImageMetaData",
                             "force": false,
-                            "ignoreErrors": 0,
                             "backend": "config/backend.import.json"
                         }
                     },
@@ -124,7 +123,6 @@
                             "command": "mediaManager",
                             "action": "readVideoMetaData",
                             "force": false,
-                            "ignoreErrors": 0,
                             "backend": "config/backend.import.json"
                         }
                     }
