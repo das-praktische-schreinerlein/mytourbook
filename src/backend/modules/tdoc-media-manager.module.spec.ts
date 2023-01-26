@@ -36,7 +36,20 @@ describe('TourDocMediaManagerModule', () => {
 
     class TestTourDocMediaFileImportManager extends TourDocMediaFileImportManager {
         public extractImageRecordingDate(exifData: {}): Date {
-            return BeanUtils.getValue(exifData, 'exif.DateTimeOriginal');
+            let creationDate = BeanUtils.getValue(exifData, 'exif.DateTimeOriginal');
+            if (creationDate === undefined || creationDate === null) {
+                creationDate = new Date(BeanUtils.getValue(exifData, 'format.tags.creation_time'));
+            }
+
+            if (creationDate === undefined || creationDate === null) {
+                return undefined
+            }
+
+            const localDate = new Date();
+            localDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), 0);
+            localDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
+
+            return localDate;
         }
     }
 
@@ -268,7 +281,7 @@ describe('TourDocMediaManagerModule', () => {
             ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
             '       "IMAGE" AS type, "EXIFDATE" AS matching,       ? AS matchingDetails, 0.9 AS matchingScore' +
             '  FROM image  WHERE UNIX_TIMESTAMP(i_date)        BETWEEN ? AND ?',
-        parameters: ['exifdate:1582750', 1582749, 1582751]
+        parameters: ['exifdate:1579150', 1579149, 1579151]
     };
 
     beforeEach(() => {
