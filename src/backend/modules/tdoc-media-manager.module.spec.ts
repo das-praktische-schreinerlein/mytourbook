@@ -11,7 +11,6 @@ import {BackendConfigType} from './backend.commons';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocExportService} from './tdoc-export.service';
 import {TourDocMediaFileImportManager} from './tdoc-mediafile-import.service';
-import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 
 describe('TourDocMediaManagerModule', () => {
     const backendConfig = {
@@ -34,25 +33,6 @@ describe('TourDocMediaManagerModule', () => {
         }
     }
 
-    class TestTourDocMediaFileImportManager extends TourDocMediaFileImportManager {
-        public extractImageRecordingDate(exifData: {}): Date {
-            let creationDate = BeanUtils.getValue(exifData, 'exif.DateTimeOriginal');
-            if (creationDate === undefined || creationDate === null) {
-                creationDate = new Date(BeanUtils.getValue(exifData, 'format.tags.creation_time'));
-            }
-
-            if (creationDate === undefined || creationDate === null) {
-                return undefined
-            }
-
-            const localDate = new Date();
-            localDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), 0);
-            localDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
-
-            return localDate;
-        }
-    }
-
     class TestTourDocMediaManagerModule extends TourDocMediaManagerModule {
         public myKnex;
         constructor(protected backendConfig, dataService: TourDocDataService, mediaManager: MediaManagerModule,
@@ -69,7 +49,7 @@ describe('TourDocMediaManagerModule', () => {
 
     let service: TestTourDocMediaManagerModule;
     const mediaManagerModule = new TestMediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
-    const mediaFileImportManager = new TestTourDocMediaFileImportManager(backendConfig.imageMagicAppPath, null, null, null);
+    const mediaFileImportManager = new TourDocMediaFileImportManager(backendConfig.imageMagicAppPath, null, null, null);
 
     const basedir = 'bladir';
     const fileInfo: FileInfoType = {
