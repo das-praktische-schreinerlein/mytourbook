@@ -536,7 +536,7 @@ export class SqlMytbDbVideoConfig {
             'video.v_rate_wichtigkeit': ':rate_pers_wichtigkeit_i:',
             'video.v_meta_name': ':name_s:',
             'video.v_datefile': ':mediameta_filecreated_dt:',
-            'video.v_daterecording': ':mediameta_filecreated_dt:',
+            'video.v_daterecording': ':mediameta_recordingdate_dt:',
             'video.v_duration': ':mediameta_duration_i:',
             'video.v_filesize': ':mediameta_filesize_i:',
             'video.v_metadata': ':mediameta_metadata_txt:',

@@ -182,7 +182,7 @@ export class TourDocMediaFileImportManager  {
     }
 
     public createRecordsForMediaMetaData(mapper: Mapper, responseMapper: GenericAdapterResponseMapper, records: TourDocRecord[],
-            container: TourMediaImportContainerType, mediaMeta: BaseMediaMetaRecordType, type: string): Promise<{}> {
+                                         container: TourMediaImportContainerType, mediaMeta: BaseMediaMetaRecordType, type: string): Promise<{}> {
 
         const date = DateUtils.parseDate(mediaMeta.recordingDate || mediaMeta.fileCreated);
         const mediaValues = {
@@ -337,6 +337,11 @@ export class TourDocMediaFileImportManager  {
     public mapImageDataToMediaMetaDoc(reference: string, fullFilePath: string, mediaMeta: BaseMediaMetaRecordType,
                                       exifData: {}): boolean {
         let updateFlag = false;
+        const fileNameDate = this.extractDateFromFileName(fullFilePath);
+        if (fileNameDate) {
+            console.debug('mapImageDataToMediaMetaDoc: use fileNameDate as recordingDate for id', reference,
+                fileNameDate, fullFilePath);
+        }
 
         if (exifData) {
             // see https://exiv2.org/tags.html
@@ -348,7 +353,7 @@ export class TourDocMediaFileImportManager  {
                 mediaMeta.resolution = newResolution;
             }
 
-            const newRecordingDate = this.extractImageRecordingDate(exifData);
+            const newRecordingDate = fileNameDate || this.extractImageRecordingDate(exifData);
             if (DateUtils.dateToLocalISOString(mediaMeta.recordingDate) !== DateUtils.dateToLocalISOString(newRecordingDate)) {
                 console.debug('mapMetaDataToImageDoc: recordingDate changed for id old/new',
                     reference, mediaMeta.recordingDate, newRecordingDate);
@@ -358,7 +363,7 @@ export class TourDocMediaFileImportManager  {
             }
         } else {
             mediaMeta.resolution = undefined;
-            mediaMeta.recordingDate = undefined;
+            mediaMeta.recordingDate = fileNameDate;
             console.debug('mapMetaDataToImageDoc: metadata empty so reset resolution/recordingDate for id old/new', reference);
         }
 
@@ -372,6 +377,11 @@ export class TourDocMediaFileImportManager  {
     public mapVideoDataToMediaMetaDoc(reference: string, fullFilePath: string, mediaMeta: BaseMediaMetaRecordType,
                                       videoMetaData: FfprobeData): boolean {
         let updateFlag = false;
+        const fileNameDate = this.extractDateFromFileName(fullFilePath);
+        if (fileNameDate) {
+            console.debug('mapVideoDataToMediaMetaDoc: use fileNameDate as recordingDate for id', reference,
+               fileNameDate, fullFilePath);
+        }
 
         if (videoMetaData) {
             const newResolution = this.extractVideoResolution(videoMetaData);
@@ -383,7 +393,7 @@ export class TourDocMediaFileImportManager  {
                 mediaMeta.resolution = newResolution;
             }
 
-            const newRecordingDate = this.extractVideoRecordingDate(videoMetaData);
+            const newRecordingDate = fileNameDate || this.extractVideoRecordingDate(videoMetaData);
             if (DateUtils.dateToLocalISOString(mediaMeta.recordingDate) !== DateUtils.dateToLocalISOString(newRecordingDate)) {
                 console.debug('mapVideoDataToMediaMetaDoc: recordingDate changed for id old/new', reference,
                     mediaMeta.recordingDate, newRecordingDate);
@@ -402,7 +412,7 @@ export class TourDocMediaFileImportManager  {
         } else {
             mediaMeta.dur = undefined;
             mediaMeta.resolution = undefined;
-            mediaMeta.recordingDate = undefined;
+            mediaMeta.recordingDate = fileNameDate;
             console.debug('mapVideoDataToMediaMetaDoc: metadata empty so reset duration/resolution/recordingDate for id old/new',
                 reference);
         }
@@ -484,17 +494,8 @@ export class TourDocMediaFileImportManager  {
             : undefined;
     }
 
+    // TODO move to commons
     public extractVideoRecordingDate(videoMetaData: FfprobeData): Date {
-        // TODO extract from filename for mobiles
-        const fileName = BeanUtils.getValue(videoMetaData, 'format.filename');
-        if (fileName && fileName.length > 10) {
-            // extract date from filename: 20170813_130434.
-            //const fileNameDate = new Date();
-            //fileNameDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), 0)
-            // fileNameDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
-            // return fileNameDate;
-        }
-
         const creationDate = videoMetaData.format && videoMetaData.format.tags['creation_time']
             ? new Date(videoMetaData.format.tags['creation_time'])
             : undefined
@@ -575,6 +576,20 @@ export class TourDocMediaFileImportManager  {
                     resolve(metadata);
                 });
         });
+    }
+
+    public extractDateFromFileName(fileName: string): Date {
+        if (fileName && fileName.length > 10) {
+            const matcher = pathLib.parse(fileName).name.match(/(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/);
+            if (matcher) {
+                const fileNameDate = new Date();
+                fileNameDate.setHours(Number(matcher[4]), Number(matcher[5]), Number(matcher[6]), 0)
+                fileNameDate.setFullYear(Number(matcher[1]), Number(matcher[2]) - 1, Number(matcher[3]));
+                return fileNameDate;
+            }
+        }
+
+        return undefined;
     }
 
 }

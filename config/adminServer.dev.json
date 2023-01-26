@@ -103,6 +103,29 @@
                     }
                 ]
             },
+            "MEDIAIMPORT: readMediaMetaData": {
+                "description": "read mediameta-data from media-files",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "readImageMetaData",
+                            "force": false,
+                            "ignoreErrors": 50,
+                            "backend": "config/backend.dev.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "readVideoMetaData",
+                            "force": false,
+                            "ignoreErrors": 50,
+                            "backend": "config/backend.dev.json"
+                        }
+                    }
+                ]
+            },
             "MEDIAIMPORT: scaleMedia": {
                 "description": "scale media on media-directory",
                 "commands": [
