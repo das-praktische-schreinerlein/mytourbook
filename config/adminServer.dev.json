@@ -84,48 +84,6 @@
                     }
                 ]
             },
-            "MEDIAIMPORT: readMediaDates": {
-                "description": "read media-dates from media-directory",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "mediaManager",
-                            "action": "readImageDates",
-                            "backend": "config/backend.dev.json"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "mediaManager",
-                            "action": "readVideoDates",
-                            "backend": "config/backend.dev.json"
-                        }
-                    }
-                ]
-            },
-            "MEDIAIMPORT: readMediaMetaData": {
-                "description": "read mediameta-data from media-files",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "mediaManager",
-                            "action": "readImageMetaData",
-                            "force": false,
-                            "ignoreErrors": 50,
-                            "backend": "config/backend.dev.json"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "mediaManager",
-                            "action": "readVideoMetaData",
-                            "force": false,
-                            "ignoreErrors": 50,
-                            "backend": "config/backend.dev.json"
-                        }
-                    }
-                ]
-            },
             "MEDIAIMPORT: scaleMedia": {
                 "description": "scale media on media-directory",
                 "commands": [
@@ -226,20 +184,6 @@
                             "command": "dbAdmin",
                             "action": "fixture-fix-gpx-timecorrector",
                             "backend": "config/backend.dev.json"
-                        }
-                    }
-                ]
-            },
-            "DATA: convertTxtLogsToGpx": {
-                "description": "convert TxtLogs to gpx",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "geoManagerCommand",
-                            "action": "convertTxtLogsToGpx",
-                            "backend": "config/backend.dev.json",
-                            "parallel": 20,
-                            "profile": "track"
                         }
                     }
                 ]

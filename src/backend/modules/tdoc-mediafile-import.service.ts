@@ -380,7 +380,7 @@ export class TourDocMediaFileImportManager  {
         const fileNameDate = this.extractDateFromFileName(fullFilePath);
         if (fileNameDate) {
             console.debug('mapVideoDataToMediaMetaDoc: use fileNameDate as recordingDate for id', reference,
-               fileNameDate, fullFilePath);
+                fileNameDate, fullFilePath);
         }
 
         if (videoMetaData) {
@@ -427,14 +427,13 @@ export class TourDocMediaFileImportManager  {
     public mapMetaDataToCommonMediaDoc(mediaFilePath: string, mediaMeta: BaseMediaMetaRecordType, metadata: any,
                                        reference: string) {
         let updateFlag = false;
-        const newMetadata = this.jsonValidationRule.sanitize(
-            JSON.stringify({metadata: metadata}, (key, value) => {
-                if (value !== null) {
-                    return value
-                }
-            })
-                .replace('\\n', ' ').replace('\\r', '')
-        );
+        const newMetadata = metadata
+            ? this.jsonValidationRule.sanitize(
+                this.jsonStringify(metadata, undefined, undefined, 20)
+                    .replace('\\n', ' ')
+                    .replace('\\r', '')
+            )
+            : undefined;
 
         const fileStats = fs.statSync(mediaFilePath)
         const newFilesize = fileStats
@@ -450,7 +449,7 @@ export class TourDocMediaFileImportManager  {
                 '\n   NEW:\n', newMetadata);
 
             updateFlag = true;
-            mediaMeta.metadata = newMetadata;
+            mediaMeta.metadata = newMetadata || ''; // set to empty string to identify metaadata as processed
         }
 
         if (mediaMeta.fileSize !== newFilesize) {
@@ -538,6 +537,13 @@ export class TourDocMediaFileImportManager  {
 
     // TODO move to commons mediaFileImportManager
     public extractImageResolution(exifData: {}) {
+        if  (BeanUtils.getValue(exifData, 'nativeImage.width') > 0
+            && BeanUtils.getValue(exifData, 'nativeImage.height') > 0) {
+            return BeanUtils.getValue(exifData, 'nativeImage.width')
+                + 'x'
+                + BeanUtils.getValue(exifData, 'nativeImage.height')
+        }
+
         if  (BeanUtils.getValue(exifData, 'image.ImageWidth') > 0
             && BeanUtils.getValue(exifData, 'image.ImageHeight') > 0) {
             return BeanUtils.getValue(exifData, 'image.ImageWidth')
@@ -556,7 +562,7 @@ export class TourDocMediaFileImportManager  {
     // TODO move to commons mediaFileImportManager
     public extractImageRecordingDate(exifData: {}): Date {
         let creationDate = BeanUtils.getValue(exifData, 'exif.DateTimeOriginal');
-        if (creationDate === undefined || creationDate === null) {
+        if ((creationDate === undefined || creationDate === null) && BeanUtils.getValue(exifData, 'format.tags.creation_time')) {
             creationDate = new Date(BeanUtils.getValue(exifData, 'format.tags.creation_time'));
         }
 
@@ -573,6 +579,10 @@ export class TourDocMediaFileImportManager  {
 
     protected readExifForCommonDocImageFile(fileName: string): Promise<{}> {
         return this.mediaManager.readExifForImage(fileName);
+    }
+
+    protected readMetadataForCommonDocImageFile(fileName: string): Promise<{}> {
+        return this.mediaManager.readMetadataForImage(fileName);
     }
 
     protected readMetadataForCommonDocVideoFile(fileName): Promise<FfprobeData> {
@@ -600,6 +610,41 @@ export class TourDocMediaFileImportManager  {
         }
 
         return undefined;
+    }
+
+    // TODO move to BeanUtils
+    public jsonStringify(object: any, whiteList ?: string[], blackList ?: string[], removeBuffersGreaterThan ?: number): string {
+        if (!object) {
+            return undefined;
+        }
+
+        return JSON.stringify(object, (key, value) => {
+            if (value === null || value === undefined) {
+                return undefined;
+            }
+
+            if (whiteList && whiteList.length > 0 && !whiteList.includes(key)) {
+                return undefined;
+            }
+
+            if (blackList && blackList.length > 0 && blackList.includes(key)) {
+                return undefined;
+            }
+
+            if (removeBuffersGreaterThan !== undefined && removeBuffersGreaterThan > -1 &&
+                (
+                    (value['type'] === 'Buffer' && value['data'] && value['data'].length > removeBuffersGreaterThan) ||
+                    (Buffer.isBuffer(value) && value.length > removeBuffersGreaterThan)
+                )) {
+                return undefined;
+            }
+
+            if ((typeof value === 'string' || value instanceof String)) {
+                value = value.trim();
+            }
+
+            return value;
+        });
     }
 
 }

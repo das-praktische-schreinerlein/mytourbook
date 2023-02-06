@@ -88,46 +88,6 @@
                     }
                 ]
             },
-            "MEDIAIMPORT: readMediaDates": {
-                "description": "read media-dates from media-directory",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "mediaManager",
-                            "action": "readImageDates",
-                            "backend": "config/backend.import.json"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "mediaManager",
-                            "action": "readVideoDates",
-                            "backend": "config/backend.import.json"
-                        }
-                    }
-                ]
-            },
-            "MEDIAIMPORT: readMediaMetaData": {
-                "description": "read mediameta-data from media-files",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "mediaManager",
-                            "action": "readImageMetaData",
-                            "force": false,
-                            "backend": "config/backend.import.json"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "mediaManager",
-                            "action": "readVideoMetaData",
-                            "force": false,
-                            "backend": "config/backend.import.json"
-                        }
-                    }
-                ]
-            },
             "MEDIAIMPORT: scaleMedia": {
                 "description": "scale media from media-directory",
                 "commands": [
