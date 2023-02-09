@@ -5,6 +5,7 @@
 ## 7.5.0
 - database: removed unused fields
 - add mediameta-components
+- fix gpx-editor
 
 ### new features
 - backend/frontend: add mediameta-components
@@ -13,7 +14,7 @@
 - database: removed unused fields
 
 ### bug fixes
-- none
+- frontend: fix gpx-editor
 
 ### breaking changes
 - none

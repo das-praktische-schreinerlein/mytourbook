@@ -17,7 +17,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 import {LatLng} from 'leaflet';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
 import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
-import {DefaultTrackColors} from '../../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {DefaultTrackColors} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 // TODO move to commons
 @Component({
@@ -161,7 +161,9 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                         type = 'TRACK';
                         this.lastName = geoElement.name;
                         trackSrc = '<trk><trkseg>';
-                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                        const trackStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElement);
+                        trackStatistic['type'] = type;
+                        trackStatistics.push(trackStatistic);
 
                         trackSrc += geoElement.points.map(value => {
                             return '<trkpt lat="' + value.lat + '" lon="' + value.lng + '">' +
@@ -176,7 +178,9 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                         type = 'ROUTE';
                         this.lastName = geoElement.name;
                         trackSrc = '<rte>';
-                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                        const routeStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElement);
+                        routeStatistic['type'] = type;
+                        trackStatistics.push(routeStatistic);
 
                         trackSrc += geoElement.points.map(value => {
                             return '<rtept lat="' + value.lat + '" lon="' + value.lng + '"><ele>' + value.alt + '</ele></rtept>';
@@ -188,7 +192,9 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                     case GeoElementType.WAYPOINT:
                         type = 'LOCATION';
                         this.lastName = geoElement.name;
-                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                        const locStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElement);
+                        locStatistic['type'] = type;
+                        trackStatistics.push(locStatistic);
 
                         trackSrc += geoElement.points.map(value => {
                             return '<wpt lat="' + value.lat + '" lon="' + value.lng + '"></wpt>';
