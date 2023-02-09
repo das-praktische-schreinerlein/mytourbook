@@ -218,7 +218,7 @@
     "deep-equal": "1.1.1",
     "detect-browser": "4.8.0",
     "domino": "2.1.5",
-    "express": "4.17.1",
+    "express": "4.17.3",
     "express-ipfilter": "1.1.2",
     "fast-exif": "1.0.1",
     "fluent-ffmpeg": "2.1.2",
