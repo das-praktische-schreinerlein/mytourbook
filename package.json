@@ -241,7 +241,7 @@
     "leaflet-editable-polyline": "1.0.8",
     "leaflet.markercluster": "1.4.1",
     "lz-string": "1.4.4",
-    "marked": "0.8.2",
+    "marked": "4.0.10",
     "minimist": "1.2.5",
     "music-metadata": "6.4.0",
     "mysql": "2.18.1",
