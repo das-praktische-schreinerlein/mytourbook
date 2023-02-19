@@ -9,7 +9,7 @@
     "set_this_for_solrgoal_withsolr": "install-solr-doit",
     "set_this_for_solrgoal_withouthsolr": "noop",
     "imagemagicgoal": "install-imagemagic-dosymlink",
-    "imagemagicdownloadurl": "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-7.1.0-portable-Q16-HDRI-x86.zip",
+    "imagemagicdownloadurl": "https://download.imagemagick.org/archive/binaries/ImageMagick-7.1.0-62-portable-Q16-HDRI-x86.zip",
     "imagemagicsharedpath": "F:/ProgrammeShared/ImageMagick/",
     "set_this_for_imagemagicgoal_withdownload": "install-imagemagic-doinstall",
     "set_this_for_imagemagicgoal_withsymlink": "install-imagemagic-dosymlink"
@@ -121,13 +121,18 @@
       "linux": "./node_modules/.bin/rimraf contrib/imagemagic && ./node_modules/.bin/mkdirp contrib/imagemagic",
       "win32": "node_modules\\.bin\\rimraf contrib/imagemagic && node_modules\\.bin\\mkdirp contrib/imagemagic"
     },
-    "install-imagemagic-download": "cd contrib && cross-var curl $npm_package_config_imagemagicdownloadurl -o imagemagic.zip",
-    "install-imagemagic-unpack": "cd contrib && tar xf imagemagic.zip -C imagemagic",
+    "install-imagemagic-download": "cd contrib && cd imagemagic && cross-var curl $npm_package_config_imagemagicdownloadurl -o imagemagic.zip",
+    "install-imagemagic-unpack": "cross-os install-imagemagic-unpack-os",
+    "install-imagemagic-unpack-os": {
+      "darwin": "cd contrib/imagemagic && ../../node_modules/.bin/extract-zip imagemagic.zip",
+      "linux": "cd contrib/imagemagic && ../../node_modules/.bin/extract-zip imagemagic.zip",
+      "win32": "cd contrib\\imagemagic && ..\\..\\node_modules\\.bin\\extract-zip imagemagic.zip"
+    },
     "install-imagemagic-cleanout": "cross-os install-imagemagic-cleanout-os",
     "install-imagemagic-cleanout-os": {
-      "darwin": "./node_modules/.bin/rimraf contrib/imagemagic.zip",
-      "linux": "./node_modules/.bin/rimraf contrib/imagemagic.zip",
-      "win32": "node_modules\\.bin\\rimraf contrib/imagemagic.zip"
+      "darwin": "./node_modules/.bin/rimraf contrib/imagemagic/imagemagic.zip",
+      "linux": "./node_modules/.bin/rimraf contrib/imagemagic/imagemagic.zip",
+      "win32": "node_modules\\.bin\\rimraf contrib/imagemagic/imagemagic.zip"
     },
     "install-imagemagic-symlink": "cd contrib && cross-var symlink-dir $npm_package_config_imagemagicsharedpath imagemagic",
     "install-solr": "cross-var npm run $npm_package_config_solrgoal",
@@ -290,6 +295,7 @@
     "db-migrate-mysql": "2.1.1",
     "db-migrate-sqlite3": "0.4.0",
     "enhanced-resolve": "4.1.1",
+    "extract-zip": "2.0.1",
     "inline-source": "7.0.0",
     "istanbul": "0.4.5",
     "istanbul-api": "1.3.7",
