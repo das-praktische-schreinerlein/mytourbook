@@ -12,6 +12,7 @@
 
 ### improvements
 - database: removed unused fields
+- database: added important sql-fixtures for sqlite
 
 ### bug fixes
 - frontend: fix gpx-editor

@@ -19,7 +19,8 @@ SELECT k_id,
        diffKIMax,
        diffKKtpMin,
        diffKKtpMax
-FROM (SELECT k_id,
+FROM (
+        SELECT k_id,
              k_name,
              TIMESTAMPDIFF(MINUTE, minKtpDate, minIDate)  diffKtpIMin,
              TIMESTAMPDIFF(MINUTE, maxKtpDate, maxIDate)  diffKtpIMax,
@@ -33,7 +34,8 @@ FROM (SELECT k_id,
              K_DATEBIS,
              maxKtpDate,
              maxIDate
-      FROM (SELECT kategorie.k_id,
+      FROM (
+            SELECT kategorie.k_id,
                    k_name,
                    K_DATEVON,
                    K_DATEBIS,
@@ -45,7 +47,9 @@ FROM (SELECT k_id,
                      INNER JOIN kategorie_tourpoint kt ON kategorie.K_ID = kt.K_ID
                      INNER JOIN video i ON kategorie.K_ID = i.K_ID
             WHERE kategorie.k_id
-            GROUP BY kategorie.k_id, kategorie.k_name, K_DATEVON, K_DATEBIS) kats) katStats
+            GROUP BY kategorie.k_id, kategorie.k_name, K_DATEVON, K_DATEBIS
+            ) kats
+    ) katStats
 WHERE true
 -- only new after migration from java to nodejs
      AND katStats.k_id > 2646
@@ -64,14 +68,17 @@ UPDATE video toupdate,
     FROM video, kategorie_tourpoint ktp
     WHERE video.v_id
           AND video.v_GPS_ELE is null
-          AND ktp.KTP_ID=(SELECT distinct ktp_id
+          AND ktp.KTP_ID=
+            (
+            SELECT distinct ktp_id
             FROM kategorie_tourpoint
             WHERE kategorie_tourpoint.k_id=video.k_id
                   AND ABS(UNIX_TIMESTAMP(ktp_date) - UNIX_TIMESTAMP(video.v_date)) < 300
                   -- only new after migration from java to nodejs
                   AND kategorie_tourpoint.k_id > 2646
             ORDER BY ABS(UNIX_TIMESTAMP(ktp_date) - UNIX_TIMESTAMP(video.v_date)) ASC
-            LIMIT 1)
+            LIMIT 1
+            )
      GROUP BY video.v_id
   ) grouped
 SET
@@ -86,7 +93,8 @@ WHERE toupdate.v_id=grouped.v_id
       -- must pass trackpoint/video restrictions
       k_id IN (
             SELECT k_id
-            FROM (SELECT k_id,
+            FROM (
+                SELECT k_id,
                          k_name,
                          TIMESTAMPDIFF(MINUTE, minKtpDate, minIDate)  diffKtpIMin,
                          TIMESTAMPDIFF(MINUTE, maxKtpDate, maxIDate)  diffKtpIMax,
@@ -100,7 +108,8 @@ WHERE toupdate.v_id=grouped.v_id
                          K_DATEBIS,
                          maxKtpDate,
                          maxIDate
-                  FROM (SELECT kategorie.k_id,
+                  FROM (
+                        SELECT kategorie.k_id,
                                k_name,
                                K_DATEVON,
                                K_DATEBIS,
@@ -112,7 +121,9 @@ WHERE toupdate.v_id=grouped.v_id
                                  INNER JOIN kategorie_tourpoint kt ON kategorie.K_ID = kt.K_ID
                                  INNER JOIN video i ON kategorie.K_ID = i.K_ID
                         WHERE kategorie.k_id
-                        GROUP BY kategorie.k_id, kategorie.k_name, K_DATEVON, K_DATEBIS) kats) katStats
+                        GROUP BY kategorie.k_id, kategorie.k_name, K_DATEVON, K_DATEBIS
+                        ) kats
+                ) katStats
             WHERE true
                 -- only diff between video and trackpoints max30minutes
                 --    and (abs(diffKtpIMin) > 30 or abs(diffKtpIMax) > 30)

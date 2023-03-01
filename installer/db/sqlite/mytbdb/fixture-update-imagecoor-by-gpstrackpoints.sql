@@ -20,28 +20,27 @@ SELECT k_id,
        diffKKtpMin,
        diffKKtpMax
 FROM (
-        SELECT k_id,
+    SELECT k_id,
              k_name,
-             TIMESTAMPDIFF(MINUTE, minKtpDate, minIDate)  diffKtpIMin,
-             TIMESTAMPDIFF(MINUTE, maxKtpDate, maxIDate)  diffKtpIMax,
-             TIMESTAMPDIFF(MINUTE, K_DATEVON, minIDate)   diffKIMin,
-             TIMESTAMPDIFF(MINUTE, K_DATEBIS, maxIDate)   diffKIMax,
-             TIMESTAMPDIFF(MINUTE, K_DATEVON, minKtpDate) diffKKtpMin,
-             TIMESTAMPDIFF(MINUTE, K_DATEBIS, maxKtpDate) diffKKtpMax,
+             (STRFTIME('%s', minIDate) - STRFTIME('%s', minKtpDate)) / 60  diffKtpIMin,
+             (STRFTIME('%s', maxIDate) - STRFTIME('%s', maxKtpDate)) / 60  diffKtpIMax,
+             (STRFTIME('%s', minIDate) - STRFTIME('%s', K_DATEVON)) / 60   diffKIMin,
+             (STRFTIME('%s', maxIDate) - STRFTIME('%s', K_DATEBIS)) / 60   diffKIMax,
+             (STRFTIME('%s', minKtpDate) - STRFTIME('%s', K_DATEVON)) / 60 diffKKtpMin,
+             (STRFTIME('%s', maxKtpDate) - STRFTIME('%s', K_DATEBIS)) / 60 diffKKtpMax,
              K_DATEVON,
              minKtpDate,
              minIDate,
              K_DATEBIS,
              maxKtpDate,
              maxIDate
-      FROM (
-            SELECT kategorie.k_id,
+      FROM (SELECT kategorie.k_id,
                    k_name,
                    K_DATEVON,
                    K_DATEBIS,
-                   min(ktp_date) minKtpDate,
+                   min(datetime(ktp_date / 1000, 'auto', 'localtime')) minKtpDate,
                    min(i_date)   minIDate,
-                   max(ktp_date) maxKtpDate,
+                   max(datetime(ktp_date / 1000, 'auto', 'localtime')) maxKtpDate,
                    max(i_date)   maxIDate
             FROM kategorie
                      INNER JOIN kategorie_tourpoint kt ON kategorie.K_ID = kt.K_ID
@@ -52,7 +51,7 @@ FROM (
     ) katStats
 WHERE true
 -- only new after migration from java to nodejs
-     AND katStats.k_id > 2646
+--     AND katStats.k_id > 2646
 -- only diff between image and trackpoints max30minutes
 --    AND (ABS(diffKtpIMin) > 30 or ABS(diffKtpIMax) > 30)
 -- only where images and trackpoints inside trackdata
@@ -63,31 +62,36 @@ ORDER BY katStats.K_DATEVON
  */
 ;
 
-UPDATE image toupdate,
- (SELECT distinct image.i_id, ktp.KTP_ID, i_date, ktp_date, ktp_ele, ktp_lat, ktp_lon
-    FROM image, kategorie_tourpoint ktp
+UPDATE image
+SET
+    I_GPS_ELE=grouped.KTP_ELE,
+    I_GPS_LAT=grouped.KTP_LAT,
+    I_GPS_LON=grouped.KTP_LON
+FROM
+ (
+ SELECT distinct image.i_id, ktp.KTP_ID, image.i_date, datetime(ktp_date / 1000, 'auto', 'localtime'), ktp_ele, ktp_lat, ktp_lon
+    FROM image inner join kategorie_tourpoint ktp
     WHERE image.i_id
           AND image.I_GPS_ELE is null
-          AND ktp.KTP_ID=
-            (
-            SELECT distinct ktp_id
-            FROM kategorie_tourpoint
-            WHERE kategorie_tourpoint.k_id=image.k_id
-                  AND ABS(UNIX_TIMESTAMP(ktp_date) - UNIX_TIMESTAMP(image.i_date)) < 300
-                  -- only new after migration from java to nodejs
-                  AND kategorie_tourpoint.k_id > 2646
-            ORDER BY ABS(UNIX_TIMESTAMP(ktp_date) - UNIX_TIMESTAMP(image.i_date)) ASC
-            LIMIT 1
-            )
+          AND ktp.KTP_ID in
+              (SELECT distinct ktp_id
+                FROM (
+                    SELECT distinct ktp_id,
+                          ABS(STRFTIME('%s', image.i_date) - STRFTIME('%s', datetime(ktp_date / 1000, 'auto', 'localtime'))) / 60 as timedist
+                        FROM kategorie_tourpoint
+                        WHERE kategorie_tourpoint.k_id=image.k_id
+                          AND ABS(STRFTIME('%s', image.i_date) - STRFTIME('%s', datetime(ktp_date / 1000, 'auto', 'localtime'))) / 60 < 300
+                          -- only new after migration from java to nodejs
+                          -- AND kategorie_tourpoint.k_id > 2646
+                     )
+                ORDER BY timedist ASC
+                LIMIT 1
+                )
      GROUP BY image.i_id
-  ) grouped
-SET
-    toupdate.I_GPS_ELE=grouped.KTP_ELE,
-    toupdate.I_GPS_LAT=grouped.KTP_LAT,
-    toupdate.I_GPS_LON=grouped.KTP_LON
-WHERE toupdate.i_id=grouped.i_id
+  ) AS grouped
+WHERE image.i_id=grouped.i_id
   -- only new after migration from java to nodejs
-  AND toupdate.k_id > 2646
+  -- AND toupdate.k_id > 2646
   AND (
       -- static whitelist
       k_id IN (-1
@@ -98,33 +102,32 @@ WHERE toupdate.i_id=grouped.i_id
             FROM (
                 SELECT k_id,
                          k_name,
-                         TIMESTAMPDIFF(MINUTE, minKtpDate, minIDate)  diffKtpIMin,
-                         TIMESTAMPDIFF(MINUTE, maxKtpDate, maxIDate)  diffKtpIMax,
-                         TIMESTAMPDIFF(MINUTE, K_DATEVON, minIDate)   diffKIMin,
-                         TIMESTAMPDIFF(MINUTE, K_DATEBIS, maxIDate)   diffKIMax,
-                         TIMESTAMPDIFF(MINUTE, K_DATEVON, minKtpDate) diffKKtpMin,
-                         TIMESTAMPDIFF(MINUTE, K_DATEBIS, maxKtpDate) diffKKtpMax,
+                         (STRFTIME('%s', minIDate) - STRFTIME('%s', kats.minKtpDate)) / 60  diffKtpIMin,
+                         (STRFTIME('%s', maxIDate) - STRFTIME('%s', maxKtpDate)) / 60  diffKtpIMax,
+                         (STRFTIME('%s', minIDate) - STRFTIME('%s', K_DATEVON)) / 60   diffKIMin,
+                         (STRFTIME('%s', maxIDate) - STRFTIME('%s', K_DATEBIS)) / 60   diffKIMax,
+                         (STRFTIME('%s', minKtpDate) - STRFTIME('%s', K_DATEVON)) / 60 diffKKtpMin,
+                         (STRFTIME('%s', maxKtpDate) - STRFTIME('%s', K_DATEBIS)) / 60 diffKKtpMax,
                          K_DATEVON,
                          minKtpDate,
                          minIDate,
                          K_DATEBIS,
                          maxKtpDate,
                          maxIDate
-                  FROM (
-                        SELECT kategorie.k_id,
+                  FROM (SELECT kategorie.k_id,
                                k_name,
                                K_DATEVON,
                                K_DATEBIS,
-                               min(ktp_date) minKtpDate,
+                               min(datetime(ktp_date / 1000, 'auto', 'localtime')) minKtpDate,
                                min(i_date)   minIDate,
-                               max(ktp_date) maxKtpDate,
+                               max(datetime(ktp_date / 1000, 'auto', 'localtime')) maxKtpDate,
                                max(i_date)   maxIDate
                         FROM kategorie
                                  INNER JOIN kategorie_tourpoint kt ON kategorie.K_ID = kt.K_ID
                                  INNER JOIN image i ON kategorie.K_ID = i.K_ID
                         WHERE kategorie.k_id
                         GROUP BY kategorie.k_id, kategorie.k_name, K_DATEVON, K_DATEBIS
-                        ) kats
+                        ) AS kats
                 ) katStats
             WHERE true
                 -- only diff between image and trackpoints max30minutes
