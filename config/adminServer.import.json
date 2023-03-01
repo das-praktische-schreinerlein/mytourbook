@@ -107,6 +107,67 @@
                     }
                 ]
             },
+            "DATA: dbRemoveDuplicates": {
+                "description": "remove duplicates on database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-keyword",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-info",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-location",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-route",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-track",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-video",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-image",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "fixture-remove-duplicates-keyword",
+                            "backend": "config/backend.import.json"
+                        }
+                    }
+                ]
+            },
             "DATA: dbFixTourMinDates": {
                 "description": "fix tour-min-dates on database",
                 "commands": [
@@ -114,6 +175,41 @@
                         "parameters": {
                             "command": "dbAdmin",
                             "action": "fixture-update-tour-min-dates",
+                            "backend": "config/backend.import.json"
+                        }
+                    }
+                ]
+            },
+            "DATA: saveGpxPointsToDatabase": {
+                "description": "save GpxPoints to database",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
+                            "action": "saveGpxPointsToDatabase",
+                            "backend": "config/backend.import.json",
+                            "parallel": 20,
+                            "profile": "track"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
+                            "action": "saveGpxPointsToDatabase",
+                            "backend": "config/backend.import.json",
+                            "parallel": 20,
+                            "profile": "route"
+                        }
+                    }
+                ]
+            },
+            "DATA: dbExtractMediaCoorFromGpsTrackPoints": {
+                "description": "extract image/video-coor from trackpoints",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbAdmin",
+                            "action": "action-update-media-coor-by-gpstrackpoints",
                             "backend": "config/backend.import.json"
                         }
                     }
