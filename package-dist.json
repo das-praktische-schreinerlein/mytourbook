@@ -69,7 +69,7 @@
     "knex": "0.19.5",
     "mysql": "2.18.1",
     "redis": "3.0.2",
-    "sqlite3": "4.2.0",
+    "sqlite3": "5.1.4",
     "vid-streamer": "1.0.0"
   },
   "devDependencies": {}

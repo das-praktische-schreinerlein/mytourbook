@@ -1026,10 +1026,10 @@ export class SqlMytbDbRouteConfig {
         fields: {
             type: '"ROUTE"',
             id: 'tour.t_id',
-            name: 'tour.t_name',
+            name: 't_name',
             locHirarchie: 'location.l_lochirarchietxt',
-            gpsTrackSrc: 'tour.t_gpstracks_gpx',
-            gpsTrackBasefile: 'tour.t_gpstracks_basefile'
+            gpsTrackSrc: 't_gpstracks_gpx',
+            gpsTrackBasefile: 't_gpstracks_basefile'
         },
         pointTable: 'tourpoint',
         pointFields: {

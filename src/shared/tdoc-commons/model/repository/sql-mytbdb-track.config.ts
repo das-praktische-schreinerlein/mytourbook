@@ -852,11 +852,11 @@ export class SqlMytbDbTrackConfig {
         fields: {
             type: '"TRACK"',
             id: 'kategorie.k_id',
-            name: 'kategorie.k_name',
+            name: 'k_name',
             locHirarchie: 'location.l_lochirarchietxt',
-            gpsTrackTxt: 'kategorie.k_gpstracks_txt',
-            gpsTrackSrc: 'kategorie.k_gpstracks_gpx_source',
-            gpsTrackBasefile: 'kategorie.k_gpstracks_basefile'
+            gpsTrackTxt: 'k_gpstracks_txt',
+            gpsTrackSrc: 'k_gpstracks_gpx_source',
+            gpsTrackBasefile: 'k_gpstracks_basefile'
         },
         pointTable: 'kategorie_tourpoint',
         pointFields: {
