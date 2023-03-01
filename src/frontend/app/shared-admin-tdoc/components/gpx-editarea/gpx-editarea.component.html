@@ -76,7 +76,7 @@
                                     *ngIf="trackSegmentStatistics[idx].type === 'TRACK'"
                                     i18n="deleteTrackSegment label|Label for button: deleteTrackSegment@@label.editareaform.tdoc.deleteTrackSegment">Delete</button>
                             <button (click)="mergeTrackSegment(idx)" class="btn btn-sm"
-                                    *ngIf="idx > 0 && trackSegmentStatistics.type === 'TRACK' && trackSegmentStatistics[idx].dateStart && trackSegmentStatistics[idx-1].dateEnd"
+                                    *ngIf="idx > 0 && trackSegmentStatistics[idx].type === 'TRACK' && trackSegmentStatistics[idx].dateStart && trackSegmentStatistics[idx-1].dateEnd"
                                     [ngClass]="(trackSegmentStatistics[idx].dateStart.getTime() - trackSegmentStatistics[idx-1].dateEnd.getTime()) < 10*60*1000 ? 'btn-action' : ''">
                                 <span i18n="mergeTrackSegment label|Label for button: mergeTrackSegment@@label.editareaform.tdoc.mergeTrackSegment">Merge</span>
                             </button>
