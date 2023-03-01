@@ -6,6 +6,7 @@
 - database: removed unused fields
 - add mediameta-components
 - fix gpx-editor
+- bumped up sqlite3 to 5.1.4
 
 ### new features
 - backend/frontend: add mediameta-components
@@ -13,6 +14,7 @@
 ### improvements
 - database: removed unused fields
 - database: added important sql-fixtures for sqlite
+- deps: bumped up sqlite3 to 5.1.4 (sqlite v3.40.0)
 
 ### bug fixes
 - frontend: fix gpx-editor
