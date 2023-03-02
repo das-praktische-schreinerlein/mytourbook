@@ -1,9 +1,8 @@
 -- delete duplicated keywords;
 
 -- ------------------------------------;
--- ----------- image;
+-- ----------- image_keyword;
 -- ------------------------------------;
-
 update image_keyword as UpdateKeywords inner join
     (select joined_keyword.kw_id as old_kw_id, keyword.kw_name, doubleKeywords.new_kw_id
      from image_keyword as joined_keyword

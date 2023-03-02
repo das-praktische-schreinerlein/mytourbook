@@ -1,7 +1,7 @@
 -- delete duplicated keywords;
 
 -- ------------------------------------;
--- ----------- kategorie;
+-- ----------- kategorie_keyword;
 -- ------------------------------------;
 update kategorie_keyword as UpdateKeywords inner join
     (select joined_keyword.kw_id as old_kw_id, keyword.kw_name, doubleKeywords.new_kw_id

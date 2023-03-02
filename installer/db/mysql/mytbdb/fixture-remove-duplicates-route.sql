@@ -1,9 +1,8 @@
 -- delete duplicated keywords;
 
 -- ------------------------------------;
--- ----- tour;
+-- ----- tour_keyword;
 -- ------------------------------------;
-
 update tour_keyword as UpdateKeywords inner join
     (select joined_keyword.kw_id as old_kw_id, keyword.kw_name, doubleKeywords.new_kw_id
      from tour_keyword as joined_keyword
