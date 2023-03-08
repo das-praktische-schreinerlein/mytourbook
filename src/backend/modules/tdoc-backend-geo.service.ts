@@ -1,5 +1,9 @@
 import {GeoEntityTableDbMapping} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.types';
-import {BackendGeoGpxParser, BackendGeoTxtParser} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.parser';
+import {
+    BackendGeoGpxParser,
+    BackendGeoJsonParser,
+    BackendGeoTxtParser
+} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.parser';
 import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
 import {HierarchyConfig} from '@dps/mycms-commons/dist/commons/utils/hierarchy.utils';
 import {BackendGeoService} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.service';
@@ -18,12 +22,13 @@ export class TourDocBackendGeoService extends BackendGeoService {
                 knex,
                 gpxParser: BackendGeoGpxParser,
                 txtParser: BackendGeoTxtParser,
+                jsonParser: BackendGeoJsonParser,
                 gpxUtils: GeoGpxUtils,
                 geoEntityDbMapping: GeoEntityTableDbMapping) {
         super({
             hierarchyConfig: TourDocBackendGeoService.hierarchyConfig,
             apiRouteTracksStaticDir: backendConfig.apiRouteTracksStaticDir
-        }, knex,  gpxParser, txtParser, gpxUtils, geoEntityDbMapping);
+        }, knex,  gpxParser, txtParser, jsonParser, gpxUtils, geoEntityDbMapping);
     }
 
 }

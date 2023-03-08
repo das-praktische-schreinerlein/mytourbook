@@ -7,9 +7,13 @@
 - add mediameta-components
 - fix gpx-editor
 - bumped up sqlite3 to 5.1.4
+- added support to generate geo-json-files
+- fix solr-password-initialisation
 
 ### new features
 - backend/frontend: add mediameta-components
+- backend: added support to generate geo-json-files
+- backend: fix solr-password-initialisation
 
 ### improvements
 - database: removed unused fields

@@ -25,7 +25,7 @@ export class GeoManagerCommand extends CommonAdminCommand {
     }
 
     protected definePossibleActions(): string[] {
-        return ['convertGarminTxtToGpx', 'saveGpxPointsToDatabase', 'exportGpxToFile'];
+        return ['convertGarminTxtToGpx', 'saveGpxPointsToDatabase', 'exportGpxToFile', 'exportJsonToFile'];
     }
 
     protected processCommandArgs(argv: {}): Promise<any> {
@@ -59,6 +59,10 @@ export class GeoManagerCommand extends CommonAdminCommand {
                 break;
             case 'exportGpxToFile':
                 promise = tdocGeoManagerModule.processExportGpxToFile(profile, perPage, force);
+
+                break;
+            case 'exportJsonToFile':
+                promise = tdocGeoManagerModule.processExportJsonToFile(profile, perPage, force);
 
                 break;
             default:

@@ -237,8 +237,8 @@
                     }
                 ]
             },
-            "EXPORT: exportGpxTracks": {
-                "description": "export gpx-files to export-track-directory",
+            "EXPORT: exportTracks (gpx, json": {
+                "description": "export gpx/json-files to export-track-directory",
                 "commands": [
                     {
                         "parameters": {
@@ -252,7 +252,25 @@
                     {
                         "parameters": {
                             "command": "geoManagerCommand",
+                            "action": "exportJsonToFile",
+                            "backend": "config/backend.dev.json",
+                            "parallel": 20,
+                            "profile": "track"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
                             "action": "exportGpxToFile",
+                            "backend": "config/backend.dev.json",
+                            "parallel": 20,
+                            "profile": "route"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "geoManagerCommand",
+                            "action": "exportJsonToFile",
                             "backend": "config/backend.dev.json",
                             "parallel": 20,
                             "profile": "route"

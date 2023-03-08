@@ -62,4 +62,22 @@ export class TourGeoManagerModule  {
         })
     }
 
+    public processExportJsonToFile(entityType: string, parallel: number, force: boolean): Promise<any> {
+        const me = this;
+
+        return this.backendGeoService.readGeoEntitiesWithGpx(entityType).then(entities => {
+            const promises = [];
+            for (const entity of entities) {
+                promises.push(function () {
+                    return me.backendGeoService.exportJsonToFile(entity, force);
+                });
+            }
+
+            return Promise_serial(promises, {parallelize: parallel}).then(() => {
+                return Promise.resolve('DONE - exported json-files');
+            }).catch(reason => {
+                return Promise.reject(reason);
+            });
+        })
+    }
 }

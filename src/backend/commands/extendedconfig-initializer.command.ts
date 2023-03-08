@@ -77,33 +77,18 @@ export class ExtendedConfigInitializerCommand extends ConfigInitializerCommand {
         return PasswordUtils.createSolrPasswordHash(newpassword).then(solrPasswordHash => {
             const me = this;
             const promises = [];
-            promises.push(function () {
-                return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
-                    me.configbasepath + '/backend.dev.json', newpassword, false);
-            });
-            promises.push(function () {
-                return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
-                    me.configbasepath + '/backend.beta.json', newpassword, false);
-            });
-            promises.push(function () {
-                return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
-                    me.configbasepath + '/backend.prod.json', newpassword, false);
-            });
-            promises.push(function () {
-                return ConfigInitializerUtil.replaceSolrPasswordInDbPublishConfig(
-                    me.configbasepath + '/dbpublish.json', newpassword, false);
-            });
+
             promises.push(function () {
                 return ConfigInitializerUtil.replaceSolrDefaultPasswordHashInSolrConfig(
                     me.solrconfigbasepath + '/security.json', solrPasswordHash, false);
             });
+
             promises.push(function () {
-                return ConfigInitializerUtil.replaceSolrUserPasswordInSolrConfig(
-                    me.solrconfigbasepath + '/security.json', 'mytbread', solrPasswordHash, false);
+                return me.setSolrReadPasswords(newpassword, solrPasswordHash);
             });
+
             promises.push(function () {
-                return ConfigInitializerUtil.replaceSolrUserPasswordInSolrConfig(
-                    me.solrconfigbasepath + '/security.json', 'mycmsread', solrPasswordHash, false);
+                return me.setSolrWritePasswords(newpassword, solrPasswordHash);
             });
 
             return Promise_serial(promises, {parallelize: 1}).then(() => {
@@ -111,6 +96,66 @@ export class ExtendedConfigInitializerCommand extends ConfigInitializerCommand {
             }).catch(reason => {
                 return Promise.reject(reason);
             });
+        });
+    }
+
+    protected setSolrReadPasswords(newpassword: string, solrPasswordHash: string): Promise<any> {
+        if (newpassword === undefined || newpassword.length < 8 || solrPasswordHash === undefined || solrPasswordHash.length < 8) {
+            return Promise.reject('valid newpassword required');
+        }
+
+        const me = this;
+        const promises = [];
+        promises.push(function () {
+            return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
+                me.configbasepath + '/backend.dev.json', newpassword, false);
+        });
+        promises.push(function () {
+            return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
+                me.configbasepath + '/backend.beta.json', newpassword, false);
+        });
+        promises.push(function () {
+            return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
+                me.configbasepath + '/backend.prod.json', newpassword, false);
+        });
+
+        promises.push(function () {
+            return ConfigInitializerUtil.replaceSolrUserPasswordInSolrConfig(
+                me.solrconfigbasepath + '/security.json', 'mytbread', solrPasswordHash, false);
+        });
+
+        return Promise_serial(promises, {parallelize: 1}).then(() => {
+            return Promise.resolve('DONE - setSolrPasswords');
+        }).catch(reason => {
+            return Promise.reject(reason);
+        });
+    }
+
+    protected setSolrWritePasswords(newpassword: string, solrPasswordHash: string): Promise<any> {
+        if (newpassword === undefined || newpassword.length < 8 || solrPasswordHash === undefined || solrPasswordHash.length < 8) {
+            return Promise.reject('valid newpassword required');
+        }
+
+        const me = this;
+        const promises = [];
+
+        promises.push(function () {
+            return ConfigInitializerUtil.replaceSolrPasswordInDbPublishConfig(
+                me.configbasepath + '/dbpublish.json', newpassword, false);
+        });
+        promises.push(function () {
+            return ConfigInitializerUtil.replaceSolrUserPasswordInSolrConfig(
+                me.solrconfigbasepath + '/security.json', 'mytbadmin', solrPasswordHash, false);
+        });
+        promises.push(function () {
+            return ConfigInitializerUtil.replaceSolrUserPasswordInSolrConfig(
+                me.solrconfigbasepath + '/security.json', 'mytbupdate', solrPasswordHash, false);
+        });
+
+        return Promise_serial(promises, {parallelize: 1}).then(() => {
+            return Promise.resolve('DONE - setSolrPasswords');
+        }).catch(reason => {
+            return Promise.reject(reason);
         });
     }
 
