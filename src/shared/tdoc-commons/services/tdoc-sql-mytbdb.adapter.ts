@@ -444,6 +444,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         } else if ((table === 'track' || table === 'route') && actionTagForm.type === 'tag') {
             if (actionTagForm.key.startsWith('gpxExport')) {
                 return this.actionTagGpxExportAdapter.executeActionTagExportGpx(table, id, <GpxExportActionTagForm>actionTagForm);
+            } else if (actionTagForm.key.startsWith('geoJsonExport')) {
+                return this.actionTagGpxExportAdapter.executeActionTagExportGeoJson(table, id, <GpxExportActionTagForm>actionTagForm);
             } else if (actionTagForm.key.startsWith('gpxSavePoints')) {
                 return this.actionTagGpxSavePointsAdapter.executeActionTagGpxPointToDatabase(table, id,
                     <GpxSavePointsActionTagForm>actionTagForm);
