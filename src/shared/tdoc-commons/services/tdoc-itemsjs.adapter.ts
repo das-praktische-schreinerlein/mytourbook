@@ -128,7 +128,11 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 size: 1000
             },
             'month_is': {
-                mapField: 'dateshow_dt',
+                filterFunction: function(record) {
+                    return record['dateshow_dt']
+                        ? new Date(record['dateshow_dt']).getMonth() + 1
+                        : undefined
+                },
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
@@ -226,7 +230,11 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 size: 1000
             },
             'year_is': {
-                mapField: 'dateshow_dt',
+                filterFunction: function(record) {
+                    return record['dateshow_dt']
+                        ? new Date(record['dateshow_dt']).getFullYear()
+                        : undefined
+                },
                 conjunction: false,
                 sort: 'term',
                 order: 'asc',
