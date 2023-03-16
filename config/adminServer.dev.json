@@ -307,7 +307,7 @@
                             "directoryProfile": "default",
                             "fileNameProfile": "default",
                             "playlists": "",
-                            "rateMinFilter": "",
+                            "rateMinFilter": 1,
                             "parallel": 20,
                             "resolutionProfile": "default",
                             "showNonBlockedOnly": "showall"
