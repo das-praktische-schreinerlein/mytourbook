@@ -2,7 +2,7 @@
  
 # Versions
 
-## 7.5.0
+## 7.5.0 (2023-03-18)
 - database: removed unused fields
 - add mediameta-components
 - fix gpx-editor
