@@ -274,6 +274,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
 
         if (showTrack) {
             let storeUrl;
+            // TODO make it configurable json/gpx
             if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
                 storeUrl = this.appService.getAppConfig()['tracksBaseUrl'] + 'json/' + record.id;
             } else {
