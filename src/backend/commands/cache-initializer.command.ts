@@ -4,11 +4,11 @@ import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {TourDocServerModule} from '../modules/tdoc-server.module';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
+import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
-    CommonAdminCommand,
-    SimpleConfigFilePathValidationRule
-} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
-import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+    SimpleConfigFilePathValidationRule,
+    ValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export class CacheInitializerCommand extends CommonAdminCommand {
 

@@ -1,12 +1,13 @@
 import * as fs from 'fs';
 import {utils} from 'js-data';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
+import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
-    CommonAdminCommand,
+    KeywordValidationRule,
     SimpleConfigFilePathValidationRule,
-    SimpleFilePathValidationRule
-} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
-import {KeywordValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+    SimpleFilePathValidationRule,
+    ValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import * as Promise_serial from 'promise-serial';

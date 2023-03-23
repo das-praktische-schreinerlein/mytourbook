@@ -15,16 +15,14 @@ import {MediaExportResolutionProfiles, TourDocExportService} from '../modules/td
 import {TourDocServerPlaylistService, TourDocServerPlaylistServiceConfig} from '../modules/tdoc-serverplaylist.service';
 import {TourDocMediaFileImportManager} from '../modules/tdoc-mediafile-import.service';
 import {MediaExportProcessingOptions} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-mediafile-export.service';
-import {
-    CommonAdminCommand,
-    SimpleConfigFilePathValidationRule,
-    SimpleFilePathValidationRule
-} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
+import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
     IdCsvValidationRule,
     KeywordValidationRule,
     NumberValidationRule,
-    RegExValidationReplaceRule,
+    SimpleConfigFilePathValidationRule,
+    SimpleFilePathListValidationRule,
+    SimpleFilePathValidationRule,
     SolrValidationRule,
     ValidationRule,
     WhiteListValidationRule
@@ -32,16 +30,7 @@ import {
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import {ViewerManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/viewer-manager.module';
-import * as XRegExp from 'xregexp/lib';
 import {BackendConfigType} from '../modules/backend.commons';
-
-export class SimpleFilePathListValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required,
-            new XRegExp('^[-,_.a-zA-Z0-9\:\/\\\\ \\p{LC}]*$', 'gi'),
-            new XRegExp('[-,_.a-zA-Z0-9\:\/\\\\ \\p{LC}]*', 'gi'), '', 4096);
-    }
-}
 
 export class MediaManagerCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {

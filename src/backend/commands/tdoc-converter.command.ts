@@ -3,12 +3,13 @@ import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {TourDocImportConverterModule} from '../modules/tdoc-converter.module';
 import {TourDocSolrAdapter} from '../shared/tdoc-commons/services/tdoc-solr.adapter';
-import {ValidationRule, WhiteListValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {
-    CommonAdminCommand,
     SimpleConfigFilePathValidationRule,
-    SimpleFilePathValidationRule
-} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
+    SimpleFilePathValidationRule,
+    ValidationRule,
+    WhiteListValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';

@@ -1,11 +1,9 @@
 import * as fs from 'fs';
-import {
-    CommonAdminCommand,
-    SimpleConfigFilePathValidationRule
-} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
+import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
     KeywordValidationRule,
     NumberValidationRule,
+    SimpleConfigFilePathValidationRule,
     ValidationRule,
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';

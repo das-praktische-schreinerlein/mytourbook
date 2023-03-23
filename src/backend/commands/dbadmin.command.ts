@@ -1,6 +1,8 @@
 import * as fs from 'fs';
-import {SimpleConfigFilePathValidationRule} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
-import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {
+    SimpleConfigFilePathValidationRule,
+    ValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {AbstractDbCommand, DbCommandOptions} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract-db.command';
 import {BackendConfigType} from '../modules/backend.commons';
 
