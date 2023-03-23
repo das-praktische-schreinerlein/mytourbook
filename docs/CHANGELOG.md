@@ -2,7 +2,7 @@
  
 # Versions
 
-## 7.5.0 (2023-03-18)
+## 8.0.0
 - use commons 6.0.0
 - bumped up deps
 
