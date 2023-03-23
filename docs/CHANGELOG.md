@@ -3,6 +3,24 @@
 # Versions
 
 ## 7.5.0 (2023-03-18)
+- use commons 6.0.0
+- bumped up deps
+
+### new features
+- none
+
+### improvements
+- use commons 6.0.0
+- bumped up deps
+
+### bug fixes
+- none
+
+### breaking changes
+- bumped up deps
+
+
+## 7.5.0 (2023-03-18)
 - database: removed unused fields
 - add mediameta-components
 - fix gpx-editor
