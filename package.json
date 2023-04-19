@@ -12,7 +12,9 @@
     "imagemagicdownloadurl": "https://download.imagemagick.org/archive/binaries/ImageMagick-7.1.0-62-portable-Q16-HDRI-x86.zip",
     "imagemagicsharedpath": "F:/ProgrammeShared/ImageMagick/",
     "set_this_for_imagemagicgoal_withdownload": "install-imagemagic-doinstall",
-    "set_this_for_imagemagicgoal_withsymlink": "install-imagemagic-dosymlink"
+    "set_this_for_imagemagicgoal_withsymlink": "install-imagemagic-dosymlink",
+    "set_viewerpassword_to_generate_viewer_with_password_protection_viewerpassword": "",
+    "viewerpassword": ""
   },
   "scripts": {
     "adminserver-serve-dev": "node dist/backend/adminServer.js --adminbackend config/adminServer.dev.json --firewall config/adminfirewall.dev.json --debug true",
@@ -55,13 +57,13 @@
     "build-prod-de": "ng build frontend --base-href=/mytb/de/ --configuration=prod-de --aot true --output-path dist/static/mytb/de",
     "build-prod-en": "ng build frontend --base-href=/mytb/en/ --configuration=prod-en --aot true --output-path dist/static/mytb/en",
     "build-viewer": "npm run build-viewer-de && npm run build-viewer-en && npm run build-after-copy-overrides-dist-viewer",
-    "build-viewer-de": "ng build frontend --configuration=viewer-de --aot true --output-path dist/static/mytbviewer/de && npm run build-after-copy-preinline-de && node devtools/create-allinone-html.js dist/static/mytbviewer/de/index.viewer.html dist/static/mytbviewer/de/index.viewer.full.html",
-    "build-viewer-en": "ng build frontend --configuration=viewer-en --aot true --output-path dist/static/mytbviewer/en && npm run build-after-copy-preinline-en && node devtools/create-allinone-html.js dist/static/mytbviewer/en/index.viewer.html dist/static/mytbviewer/en/index.viewer.full.html",
+    "build-viewer-de": "ng build frontend --configuration=viewer-de --aot true --output-path dist/static/mytbviewer/de && npm run build-after-copy-preinline-de && cross-var node devtools/create-allinone-html.js dist/static/mytbviewer/de/index.viewer.html dist/static/mytbviewer/de/index.viewer.full.html \"\" noexclusions $npm_package_config_viewerpassword",
+    "build-viewer-en": "ng build frontend --configuration=viewer-en --aot true --output-path dist/static/mytbviewer/en && npm run build-after-copy-preinline-en && cross-var node devtools/create-allinone-html.js dist/static/mytbviewer/en/index.viewer.html dist/static/mytbviewer/en/index.viewer.full.html \"\" noexclusions $npm_package_config_viewerpassword",
     "build-viewer-de-stats": "ng build frontend --configuration=viewer-de --aot true --stats-json true --output-path dist/static/mytbviewer/de && npm run build-after-copy-preinline-de && node devtools/create-allinone-html.js dist/static/mytbviewer/de/index.viewer.html dist/static/mytbviewer/de/index.viewer.full.html",
     "build-after-copy-contrib": "cpx --include-empty-dirs \"contrib/**/*\" dist/contrib/ && cpx --include-empty-dirs --verbose \"installer/solr/**/*\" dist/contrib/solr/server/solr/",
     "build-after-copy-contrib-solrlang": "cpx --include-empty-dirs --verbose \"contrib/solr/contrib/lang/*.*\" dist/contrib/solr/server/solr/coremytbbeta/conf/lang/ && cpx --include-empty-dirs --verbose \"contrib/solr/contrib/lang/*.*\" dist/contrib/solr/server/solr/coremytbprod/conf/lang/",
-    "build-after-copy-preinline-de": "cpx --include-empty-dirs --verbose \"node_modules/lz-string/libs/lz-string.min.js\" dist/static/mytbviewer/de/",
-    "build-after-copy-preinline-en": "cpx --include-empty-dirs --verbose \"node_modules/lz-string/libs/lz-string.min.js\" dist/static/mytbviewer/en/",
+    "build-after-copy-preinline-de": "cpx --include-empty-dirs --verbose \"node_modules/lz-string/libs/lz-string.min.js\" dist/static/mytbviewer/de/ && cpx --include-empty-dirs --verbose \"devtools/webloader.js\" dist/static/mytbviewer/de/",
+    "build-after-copy-preinline-en": "cpx --include-empty-dirs --verbose \"node_modules/lz-string/libs/lz-string.min.js\" dist/static/mytbviewer/en/ && cpx --include-empty-dirs --verbose \"devtools/webloader.js\" dist/static/mytbviewer/en/",
     "build-after-copy-overrides-config": "cpx --include-empty-dirs --verbose \"overrides/after-build/config/**/*.*\" config/",
     "build-after-copy-overrides-dist-viewer": "cpx --include-empty-dirs --verbose \"overrides/after-build/dist/mytbviewer/**/*.*\" dist/static/mytbviewer/",
     "build-after-copy-overrides-dist-dev": "cpx --include-empty-dirs --verbose \"overrides/after-build/dist/mytbdev/**/*.*\" dist/static/mytbdev/ && cpx --include-empty-dirs \"overrides/after-build/dist/mytbdev/**/*.*\" dist/mytbdev-server/",
