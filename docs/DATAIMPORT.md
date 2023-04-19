@@ -89,6 +89,7 @@ start-app.bat dev
 - [run data-management-scripts in admin-area](http://localhost:4001/mytbdev/de/#)
 
 ### OPTIONAL data-management: sync with external playlist-directories
+- copy images from Phone\Interner gemeinsamer Speicher\Android\data\org.telegram.messenger\files\Telegram\Telegram Images
 - check playlist-directory with images against database
 ```
 bash

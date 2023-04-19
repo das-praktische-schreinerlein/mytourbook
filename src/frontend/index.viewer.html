@@ -11,7 +11,12 @@
     <meta name="keywords" lang="de" content="Touren, Bilder, Berichte, Infos">
     <meta name="robots" content="index,follow">
 
+    <script type="text/javascript">
+        document.decompressJsSrc = []
+    </script>
+
     <script inline type="text/javascript" src="lz-string.min.js"></script>
+    <script inline type="text/javascript" src="webloader.js"></script>
 
     <script>document.write('<base href="' + document.location + '" />');</script>
     <style>
@@ -66,7 +71,7 @@
 <app-root>Loading...</app-root>
 
 <img id="dummyBannerLoader" src="assets/images/banner-big.gif" style="display: none" alt="">
-<script>
+<script type="text/javascript">
     function inlineBannerUtil() {
         var dummyBannerImage = document.getElementById('dummyBannerLoader');
         if (!dummyBannerImage) {
@@ -89,4 +94,11 @@
 </script>
 
 </body>
+
+<script type="text/javascript">
+    WebLoader.loadAllDocuments(
+        WebCrypt.getDefaultCryptConfig(),
+        document.decompressJsSrc);
+</script>
+
 </html>

@@ -2,6 +2,22 @@
  
 # Versions
 
+## 8.0.0
+- added optional password-encryption of static-viewer-version
+
+### new features
+- added optional password-encryption of static-viewer-version
+
+### improvements
+- none
+
+### bug fixes
+- none
+
+### breaking changes
+- none
+
+
 ## 7.5.0 (2023-03-18)
 - database: removed unused fields
 - add mediameta-components
