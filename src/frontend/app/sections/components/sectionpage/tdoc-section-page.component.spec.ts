@@ -9,7 +9,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {PDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing/pdoc-dataservice-stubs';
-import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {StaticPagesDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/staticpages-data.service';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
@@ -44,7 +44,7 @@ describe('SectionPageComponent', () => {
             providers: [
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
-                { provide: PDocDataService, useValue: new PDocDataServiceStub() },
+                { provide: StaticPagesDataService, useValue: new PDocDataServiceStub() },
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonRoutingService,
                 PlatformService,

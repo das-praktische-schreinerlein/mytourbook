@@ -3,7 +3,7 @@ import {SitemapConfig, SitemapGeneratorModule} from '@dps/mycms-server-commons/d
 import {PDocSearchForm} from '@dps/mycms-commons/dist/pdoc-commons/model/forms/pdoc-searchform';
 import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
-import {PDocDataServiceModule} from '../modules/pdoc-dataservice.module';
+import {PagesDataserviceModule} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/modules//pages-dataservice.module';
 import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
@@ -68,8 +68,8 @@ export class SiteMapGeneratorCommand extends CommonAdminCommand {
                 }
             });
             return SitemapGeneratorModule.generateSiteMapFiles(
-                PDocDataServiceModule.getDataService('pdocSolr' + sitemapConfig.locale + 'ReadOnly', generatorConfig.backendConfig,
-                    sitemapConfig.locale),
+                PagesDataserviceModule.getDataService('pdocSolr' + sitemapConfig.locale + 'ReadOnly', generatorConfig.backendConfig,
+                    sitemapConfig.locale).getSearchService(),
                 sitemapConfig,
                 new PDocSearchForm({})
             );

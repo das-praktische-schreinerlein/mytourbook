@@ -9,6 +9,7 @@ import {
     CommonSqlConnectionConfigType,
     CommonVideoBackendConfigType
 } from '@dps/mycms-server-commons/dist/backend-commons/modules/backend.commons';
+import {CommonPDocBackendConfigType} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/modules/pdoc-backend.commons';
 import {ObjectDetectionManagerBackendConfig} from '../shared/tdoc-commons/services/common-queued-object-detection-processing.service';
 
 // tslint:disable-next-line:no-empty-interface
@@ -31,9 +32,8 @@ export interface BackendConfigType extends CommonBackendConfigType<KeywordMapper
     CommonAudioBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonImageBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonVideoBackendConfigType<KeywordMapperConfigType, CacheConfig>,
+    CommonPDocBackendConfigType<SqlConnectionConfigType>,
     ObjectDetectionManagerBackendConfig {
-    nodejsBinaryPath: string,
-    inlineJsPath: string,
     tdocDataStoreAdapter: string,
     tdocWritable: boolean,
     tdocImportConverterAdditionalKeywords?: string[],

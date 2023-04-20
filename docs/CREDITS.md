@@ -48,7 +48,6 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
     - [request-ip](https://www.npmjs.com/package/request-ip)
 - data-framework
     - [js-data](https://www.npmjs.com/package/js-data)
-    - [js-data-express](https://www.npmjs.com/package/js-data-express)
     - [js-data-http](https://www.npmjs.com/package/js-data-http)
     - [js-data-http-node](https://www.npmjs.com/package/js-data-http-node)
     - [js-data-sql](https://www.npmjs.com/package/js-data-sql)
@@ -161,7 +160,6 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
     - [request-ip](https://www.npmjs.com/package/request-ip)
 - data-framework
     - [js-data](https://www.npmjs.com/package/js-data)
-    - [js-data-express](https://www.npmjs.com/package/js-data-express)
 - storage-adapter
     - [redis](https://www.npmjs.com/package/redis)
 - media

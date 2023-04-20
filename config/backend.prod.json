@@ -46,6 +46,7 @@
             "filename": "F:/playground/mytb-test/mytdatabase/mytbexportproddb.sqlite"
         }
     },
+    "startPDocApi": false,
     "cacheConfig": {
         "cacheRedisUrl": "redis://localhost:6379/",
         "cacheRedisPass": "blablub",

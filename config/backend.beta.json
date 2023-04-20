@@ -46,6 +46,7 @@
             "filename": "F:/playground/mytb-test/mytdatabase/mytbexportdbbeta.sqlite"
         }
     },
+    "startPDocApi": false,
     "cacheConfig": {
     },
     "port": 4101,

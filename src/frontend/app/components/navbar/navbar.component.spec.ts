@@ -7,7 +7,7 @@ import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/route
 import {ToastrService} from 'ngx-toastr';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {StaticPagesDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/staticpages-data.service';
 import {PDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing/pdoc-dataservice-stubs';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
@@ -27,7 +27,7 @@ describe('NavbarComponent', () => {
 
             providers: [
                 TranslateService,
-                { provide: PDocDataService, useValue: new PDocDataServiceStub() },
+                { provide: StaticPagesDataService, useValue: new PDocDataServiceStub() },
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: GenericAppService, useValue: new AppServiceStub() },

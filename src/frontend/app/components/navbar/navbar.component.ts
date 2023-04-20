@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@an
 import {ActivatedRoute} from '@angular/router';
 import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {ToastrService} from 'ngx-toastr';
-import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {StaticPagesDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/staticpages-data.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {DataMode} from '../../../shared/tdoc-commons/model/datamode.enum';
@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
     public isExpanded = false;
 
     constructor(private route: ActivatedRoute, private toastr: ToastrService, private appService: GenericAppService,
-                private pdocDataService: PDocDataService, private pageUtils: PageUtils, private cd: ChangeDetectorRef) {
+                private pagesDataService: StaticPagesDataService, private pageUtils: PageUtils, private cd: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -51,7 +51,7 @@ export class NavbarComponent implements OnInit {
         this.route.data.subscribe(
             (data: { pdocs: PDocRecord[] }) => {
                 me.sections = [];
-                this.pdocDataService.getById('menu', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
+                this.pagesDataService.getById('menu', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
                     me.sections = me.getSubSections(pdoc);
                     me.cd.markForCheck();
                 }).catch(function onNotFound(error) {
@@ -70,7 +70,7 @@ export class NavbarComponent implements OnInit {
     }
 
     getSubSections(pdoc: PDocRecord): PDocRecord[] {
-        return this.pdocDataService.getSubDocuments(pdoc);
+        return this.pagesDataService.getSubDocuments(pdoc);
     }
 
     doEndFullPage() {

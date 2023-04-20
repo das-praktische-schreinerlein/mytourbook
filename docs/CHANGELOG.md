@@ -6,18 +6,23 @@
 - use commons 6.0.0
 - bumped up deps
 - added optional password-encryption of static-viewer-version
+- backend/frontend: move generic page-modules to commons
+- backend/frontend: add page-management
 
 ### new features
 - added optional password-encryption of static-viewer-version
+- backend/frontend: add page-management
 
 ### improvements
 - use commons 6.0.0
 - bumped up deps
+- backend/frontend: move generic page-modules to commons
 
 ### bug fixes
-- none
+- none 
 
 ### breaking changes
+- use commons-6.0.0
 - bumped up deps
 
 
@@ -421,6 +426,8 @@ run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages
 - moved common action-tag-components and navigation-components from mytourbook to frontend-commons
 - moved full implementation of actions and actiontags to commons
 - bumped up deps
+- backend/frontend: add page-management
+- backend/frontend: move generic page-modules to commons
 
 ### new features
 - backend: added job to find corresponding TourDocRecords for media

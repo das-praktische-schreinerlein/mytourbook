@@ -51,7 +51,7 @@
         },
         "facetCacheConfig": {
             "datastore": {
-                "scriptPath": "node_modules/@dps/mycms-commons/dist/facetcache-commons/model/db/mysql"
+                "scriptPath": "node_modules/@dps/mycms-commons/dist/facetcache-commons/model/db/sqlite3"
             },
             "facets": [
             ],
@@ -68,6 +68,33 @@
         "solrCoreTourDoc": "http://localhost:9999/solr/coremytbbeta/",
         "solrCoreTourDocReadUsername": "mytbread",
         "solrCoreTourDocReadPassword": "SolrRocks"
+    },
+    "startPDocApi": true,
+    "pdocDataStoreAdapter": "PDocSqlAdapter",
+    "pdocWritable": true,
+    "PDocSqlAdapter": {
+        "client": "sqlite3",
+        "connection": {
+            "filename": "F:/playground/mytb-test/mytbbase/import/mytbdb_import.sqlite"
+        },
+        "facetCacheUsage": {
+            "active": false,
+            "entities": {
+            }
+        },
+        "facetCacheConfig": {
+            "datastore": {
+                "scriptPath": "node_modules/@dps/mycms-commons/dist/facetcache-commons/model/db/sqlite3"
+            },
+            "facets": [
+            ],
+            "checkInterval": 2
+        }
+    },
+    "PDocSolrAdapter": {
+        "solrCorePDoc": "http://localhost:9999/solr/coremytbbeta/",
+        "solrCorePDocReadUsername": "mytbread",
+        "solrCorePDocReadPassword": "SolrRocks"
     },
     "objectDetectionConfig": {
         "redisQueue": {

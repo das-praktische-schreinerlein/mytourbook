@@ -85,6 +85,38 @@
         "solrCoreTourDocReadUsername": "mytbread",
         "solrCoreTourDocReadPassword": "SolrRocks"
     },
+    "startPDocApi": true,
+    "pdocDataStoreAdapter": "PDocSqlAdapter",
+    "pdocWritable": true,
+    "PDocSqlAdapter": {
+        "client": "mysql",
+        "connection": {
+            "host": "localhost",
+            "user": "testmytbdb",
+            "password": "testmytbdb",
+            "database": "testmytbdb",
+            "port": "3306",
+            "filename": "F:/playground/mytb-test/mytdatabase/mytbdb.sqlite"
+        },
+        "facetCacheUsage": {
+            "active": false,
+            "entities": {
+            }
+        },
+        "facetCacheConfig": {
+            "datastore": {
+                "scriptPath": "node_modules/@dps/mycms-commons/dist/facetcache-commons/model/db/mysql"
+            },
+            "facets": [
+            ],
+            "checkInterval": 2
+        }
+    },
+    "PDocSolrAdapter": {
+        "solrCorePDoc": "http://localhost:9999/solr/coremytbbeta/",
+        "solrCorePDocReadUsername": "mytbread",
+        "solrCorePDocReadPassword": "SolrRocks"
+    },
     "objectDetectionConfig": {
         "redisQueue": {
             "host": "localhost",

@@ -1,27 +1,19 @@
 {
     "routerErrorsConfigs" : {
-        "pdocsearch_de": {
-            "pattern": "/api/v1/de/pdocsearch.*",
-            "file": "pdocsearch.json"
-        },
-        "pdocsearch_en": {
-            "pattern": "/api/v1/en/pdocsearch.*",
-            "file": "pdocsearch.json"
-        },
         "pdoc_de": {
-            "pattern": "/api/v1/de/pdoc/$",
+            "pattern": "/api/v1/de/pages/$",
             "file": "pdocsearch.json"
         },
         "pdoc_en": {
-            "pattern": "/api/v1/de/pdoc/$",
+            "pattern": "/api/v1/de/pages/$",
             "file": "pdocsearch.json"
         },
         "pdoc_params_de": {
-            "pattern": "/api/v1/de/pdoc/.+",
+            "pattern": "/api/v1/de/pages/.+",
             "file": "pdoc.json"
         },
         "pdoc_params_en": {
-            "pattern": "/api/v1/de/pdoc/.+",
+            "pattern": "/api/v1/de/pages/.+",
             "file": "pdoc.json"
         },
         "tdocsearch_de": {

@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {LayoutService, LayoutSizeData} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
-import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {StaticPagesDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/staticpages-data.service';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {TourDocSearchForm, TourDocSearchFormFactory} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
@@ -127,14 +127,14 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         'VIDEO',
         'ALL'];
 
-    constructor(route: ActivatedRoute, pdocDataService: PDocDataService, private cdocDataService: TourDocDataService,
+    constructor(route: ActivatedRoute, pagesDataService: StaticPagesDataService, private cdocDataService: TourDocDataService,
                 commonRoutingService: CommonRoutingService, private searchFormConverter: TourDocSearchFormConverter,
                 errorResolver: ErrorResolver, private tdocRoutingService: CommonDocRoutingService,
                 toastr: ToastrService, pageUtils: PageUtils,
                 angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, platformService: PlatformService,
                 layoutService: LayoutService, appService: GenericAppService, private translateService: TranslateService) {
-        super(route, pdocDataService, commonRoutingService, errorResolver, toastr,
+        super(route, pagesDataService, commonRoutingService, errorResolver, toastr,
             pageUtils, angularMarkdownService, angularHtmlService, cd, trackingProvider, platformService,
             layoutService, appService);
     }

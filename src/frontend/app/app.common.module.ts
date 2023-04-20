@@ -12,8 +12,8 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {SectionsModule} from './sections/sections.module';
-import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
-import {PDocDataStore} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.store';
+import {StaticPagesDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/staticpages-data.service';
+import {StaticPagesDataStore} from '@dps/mycms-commons/dist/pdoc-commons/services/staticpages-data.store';
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorPageComponent} from './components/errorpage/errorpage.component';
 import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
@@ -98,9 +98,9 @@ export function getAngulartics2Providers(): any {
         TourDocTeamFilterConfig,
         TourDocDataStore,
         TourDocDataService,
-        PDocDataStore,
+        StaticPagesDataStore,
         TourDocAlbumService,
-        PDocDataService,
+        StaticPagesDataService,
         TourDocDataCacheService,
         SearchFormUtils,
         {provide: GenericTrackingService, useClass: TrackingService},
