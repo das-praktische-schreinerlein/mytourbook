@@ -246,7 +246,6 @@
     "jimp": "0.12.1",
     "jquery": "3.6.3",
     "js-data": "3.0.8",
-    "js-data-express": "1.0.1",
     "js-data-http": "3.0.1",
     "knex": "0.20.10",
     "leaflet": "1.9.3",
@@ -275,7 +274,7 @@
     "validator": "13.9.0",
     "vid-streamer": "1.0.0",
     "vis": "4.21.0",
-    "xregexp": "4.4.1",
+    "xregexp": "4.3.0",
     "zone.js": "0.10.3"
   },
   "devDependencies": {
