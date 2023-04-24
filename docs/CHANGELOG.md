@@ -8,6 +8,7 @@
 - added optional password-encryption of static-viewer-version
 - backend/frontend: move generic page-modules to commons
 - backend/frontend: add page-management
+- frontend: improved table-layout
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -17,6 +18,8 @@
 - use commons 6.0.0
 - bumped up deps
 - backend/frontend: move generic page-modules to commons
+- frontend: improved table-layout
+- frontend: moved track-colors, TextEditorComponent, FormUtils and GeoParserDeterminer to commons
 
 ### bug fixes
 - none 
