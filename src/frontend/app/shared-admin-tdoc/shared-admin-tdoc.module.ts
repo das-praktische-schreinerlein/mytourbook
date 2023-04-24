@@ -17,7 +17,6 @@ import {TourDocReplaceFormComponent} from './components/tdoc-replaceform/tdoc-re
 import {TourDocAssignFormComponent} from './components/tdoc-assignform/tdoc-assignform.component';
 import {RouterModule} from '@angular/router';
 import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.component';
-import {TextEditorComponent} from './components/text-editor/text-editor.component';
 import {TourDocSelectSearchComponent} from './components/tdoc-selectsearch/tdoc-selectsearch.component';
 import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor.component';
 import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
@@ -36,7 +35,6 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
         TourDocAssignPlaylistFormComponent,
         GpxEditLocComponent,
         TourDocSelectSearchComponent,
-        TextEditorComponent,
         OdImageEditorComponent
     ],
     imports: [
@@ -66,7 +64,6 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
         TourDocAssignPlaylistFormComponent,
         GpxEditLocComponent,
         TourDocSelectSearchComponent,
-        TextEditorComponent,
         OdImageEditorComponent
     ]
 })

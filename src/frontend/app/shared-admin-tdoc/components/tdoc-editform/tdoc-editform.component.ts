@@ -30,7 +30,7 @@ import {LatLngTime} from '@dps/mycms-frontend-commons/dist/angular-maps/services
 import {GpxEditAreaComponent} from '../gpx-editarea/gpx-editarea.component';
 import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocJoinUtils} from '../../../shared-tdoc/services/tdoc-join.utils';
-import {FormUtils} from '../../../shared-tdoc/services/form.utils';
+import {FormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/form.utils';
 import {ObjectDetectionDetectedObjectType, ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 import {
     TourDocObjectDetectionImageObjectRecord,
@@ -39,11 +39,11 @@ import {
 import {TourDocImageRecord} from '../../../../shared/tdoc-commons/model/records/tdocimage-record';
 import {LatLng} from 'leaflet';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
-import {CommonDocEditorCommandComponentConfig} from '../text-editor/text-editor.component';
+import {CommonDocEditorCommandComponentConfig} from '@dps/mycms-frontend-commons/dist/angular-commons/components/text-editor/text-editor.component';
 import {SafeUrl} from '@angular/platform-browser';
 import {OdImageEditorComponent} from '../odimage-editor/odimage-editor.component';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
-import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
+import {GeoParserDeterminer} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo-parser.determiner';
 
 export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
     editorCommands: CommonDocEditorCommandComponentConfig;

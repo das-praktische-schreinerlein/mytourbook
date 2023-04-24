@@ -1,6 +1,6 @@
 import {TourDocRecord, TourDocRecordFactory} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocLinkedPoiRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedpoi-record';
-import {FormUtils} from './form.utils';
+import {FormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/form.utils';
 import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedroute-record';
 import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
 import {TourDocObjectDetectionImageObjectRecord} from '../../../shared/tdoc-commons/model/records/tdocobjectdetectectionimageobject-record';

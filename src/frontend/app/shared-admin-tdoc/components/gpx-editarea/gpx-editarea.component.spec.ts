@@ -18,7 +18,7 @@ import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-com
 import {Router} from '@angular/router';
 import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
-import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
+import {GeoParserDeterminer} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo-parser.determiner';
 import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
 import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geojson.parser';
 import {GeoTxtParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geotxt.parser';

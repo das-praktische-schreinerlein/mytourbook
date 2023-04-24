@@ -33,7 +33,7 @@ import {TourDocTrackDescSuggesterService} from '../../services/tdoc-track-desc-s
 import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
 import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.service';
-import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
+import {GeoParserDeterminer} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo-parser.determiner';
 import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
 import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geojson.parser';
 import {GeoTxtParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geotxt.parser';
