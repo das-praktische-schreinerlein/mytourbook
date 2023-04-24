@@ -110,7 +110,7 @@
 </ng-template>
 
 <ng-template #resultContainer let-searchFormLayout=searchFormLayout>
-    <div class="container">
+    <div class="container hidden-print">
         <app-cdoc-list-header [searchResult]="searchResult"
                               [perPage]="perPage"
                               [layout]="layout"
@@ -120,7 +120,7 @@
                               (layoutChange)="onLayoutChange($event)"
                               (pageChange)="onPageChange($event, false)" ></app-cdoc-list-header>
     </div>
-    <div class="container">
+    <div class="container hidden-print">
         <app-tdoc-multiactionheader [multiActionManager]="multiActionManager"
                                     [searchResult]="searchResult"
                                     [selectValueMap]="multiActionSelectValueMap"

@@ -228,3 +228,11 @@ app-cdoc-extended-object-properties div.label {
 app-cdoc-extended-object-properties div.value {
     min-width: 15px !IMPORTANT;
 }
+
+
+/*******************
+ * value-tables
+ *******************/
+td.entry, td.value {
+    vertical-align: top;
+}
