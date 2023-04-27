@@ -61,8 +61,14 @@ import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 import {TourDocLinkedPoiRecord} from '../model/records/tdoclinkedpoi-record';
 import {TourDocObjectDetectionImageObjectRecord} from '../model/records/tdocobjectdetectectionimageobject-record';
 import {TourDocSqlMytbDbObjectDetectionProcessingAdapter} from './tdoc-sql-mytbdb-objectdetection-processing.adapter';
-import {CommonActiontagGpxExportAdapter, GpxExportActionTagForm} from '@dps/mycms-commons/dist/geo-commons/actiontags/common-actiontag-gpx-export.adapter';
-import {CommonActiontagGpxSavePointsAdapter, GpxSavePointsActionTagForm} from '@dps/mycms-commons/dist/geo-commons/actiontags/common-actiontag-gpx-points.adapter';
+import {
+    CommonActiontagGpxExportAdapter,
+    GpxExportActionTagForm
+} from '@dps/mycms-commons/dist/geo-commons/actiontags/common-actiontag-gpx-export.adapter';
+import {
+    CommonActiontagGpxSavePointsAdapter,
+    GpxSavePointsActionTagForm
+} from '@dps/mycms-commons/dist/geo-commons/actiontags/common-actiontag-gpx-points.adapter';
 import {AbstractBackendGeoService} from '@dps/mycms-commons/dist/geo-commons/backend/abstract-backend-geo.service';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
@@ -468,37 +474,5 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         return this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, adapterQuery, <AdapterOpts>opts);
     }
 
-
-    // TODO move to commons
-    protected remapFulltextFilter(adapterQuery: AdapterQuery, tableConfig: TableConfig, fulltextFilterName: string,
-                                  fulltextNewTrigger: string, fulltextNewFilterName: string, fullTextNewAction: string) {
-        if (adapterQuery.where && adapterQuery.where[fulltextFilterName] &&
-            tableConfig.filterMapping.hasOwnProperty(fulltextNewFilterName)) {
-            const filter = adapterQuery.where[fulltextFilterName];
-            const action = Object.getOwnPropertyNames(filter)[0];
-            const value: string[] = adapterQuery.where[fulltextFilterName][action];
-
-            if (value.join(' ')
-                .includes(fulltextNewTrigger)) {
-
-                const fulltextValues = [];
-                adapterQuery.where[fulltextNewFilterName] = [];
-                for (let fulltextValue of value) {
-                    fulltextValue = fulltextValue.split(fulltextNewTrigger)
-                        .join('')
-                        .trim();
-                    if (fulltextValue && fulltextValue.length > 0) {
-                        fulltextValues.push(fulltextValue);
-                    }
-                }
-
-                adapterQuery.where[fulltextNewFilterName] = {};
-                adapterQuery.where[fulltextNewFilterName][fullTextNewAction] = fulltextValues;
-
-                adapterQuery.where[fulltextFilterName] = undefined;
-                delete adapterQuery.where[fulltextFilterName];
-            }
-        }
-    }
 }
 
