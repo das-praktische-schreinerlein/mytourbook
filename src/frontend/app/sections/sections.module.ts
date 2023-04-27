@@ -18,7 +18,7 @@ import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commo
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
-import {FrontendPDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/frontend-pdoc-commons.module';
+import {FrontendSectionCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-section-commons/frontend-section-commons.module';
 
 @NgModule({
     declarations: [
@@ -32,7 +32,7 @@ import {FrontendPDocCommonsModule} from '@dps/mycms-frontend-commons/dist/fronte
         FormsModule,
         ReactiveFormsModule,
         SharedTourDocModule,
-        FrontendPDocCommonsModule,
+        FrontendSectionCommonsModule,
         SectionsRoutingModule,
         FrontendCommonDocCommonsModule
     ],

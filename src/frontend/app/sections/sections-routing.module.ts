@@ -6,8 +6,8 @@ import {SectionsSearchFormResolver} from './resolver/sections-searchform.resolve
 import {SectionsPDocRecordResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/sections-pdoc-details.resolver';
 import {SectionsTourDocRecordResolver} from './resolver/sections-tdoc-details.resolver';
 import {SectionsBaseUrlResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
-import {SectionBarComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/sectionbar/sectionbar.component';
-import {SectionComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/section/section.component';
+import {SectionBarComponent} from '@dps/mycms-frontend-commons/dist/frontend-section-commons/components/sectionbar/sectionbar.component';
+import {SectionComponent} from '@dps/mycms-frontend-commons/dist/frontend-section-commons/components/section/section.component';
 import {TourDocSectionPageComponent} from './components/sectionpage/tdoc-section-page.component';
 
 const sectionRoutes: Routes = [

@@ -18,7 +18,9 @@ import {GenericTrackingService} from '@dps/mycms-frontend-commons/dist/angular-c
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {environment} from '../../../../environments/environment';
-import {SectionPageComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/sectionpage/section-page.component';
+import {
+    SectionPageComponent
+} from '@dps/mycms-frontend-commons/dist/frontend-section-commons/components/sectionpage/section-page.component';
 import {TranslateService} from '@ngx-translate/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 
