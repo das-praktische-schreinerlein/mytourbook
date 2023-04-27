@@ -6,7 +6,7 @@ import {ToastrService} from 'ngx-toastr';
 import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
-import {CommonRoutingService, RoutingState} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {GenericTrackingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/generic-tracking.service';
@@ -23,7 +23,6 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocModalCreatepageComponent extends TourDocCreatepageComponent {
-    modal = true;
 
     constructor(protected route: ActivatedRoute, protected cdocRoutingService: TourDocRoutingService,
                 protected toastr: ToastrService, contentUtils: TourDocContentUtils,
@@ -32,10 +31,11 @@ export class TourDocModalCreatepageComponent extends TourDocCreatepageComponent 
                 protected angularHtmlService: AngularHtmlService, protected cd: ChangeDetectorRef,
                 protected trackingProvider: GenericTrackingService, protected appService: GenericAppService,
                 protected platformService: PlatformService, protected layoutService: LayoutService,
-                protected tdocDataService: TourDocDataService, protected router: Router) {
+                protected tdocDataService: TourDocDataService, router: Router) {
         super(route, cdocRoutingService, toastr, contentUtils, errorResolver, pageUtils, commonRoutingService,
             angularMarkdownService, angularHtmlService, cd, trackingProvider, appService,
-            platformService, layoutService, tdocDataService);
+            platformService, layoutService, tdocDataService, router);
+        this.modal = true;
     }
 
     submitSave(values: {}) {
@@ -49,24 +49,6 @@ export class TourDocModalCreatepageComponent extends TourDocCreatepageComponent 
             }
         );
         return false;
-    }
-
-    // TODO add cancel to commons
-    submitCancelModal() {
-        this.closeModal();
-
-        return false;
-    }
-
-    // TODO add modal to commons
-    protected closeModal() {
-        const me = this;
-        me.router.navigate(['', { outlets: { 'modaledit': null }, primary: '' }],
-            { relativeTo: me.route.parent // <--- PARENT activated route.
-            }
-        ).then(value => {
-            me.commonRoutingService.setRoutingState(RoutingState.DONE);
-        });
     }
 
 }

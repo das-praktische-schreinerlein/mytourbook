@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {Layout, LayoutService, LayoutSizeData} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
@@ -60,7 +60,6 @@ export interface TourDocShowpageComponentAvailableTabs {
 })
 export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
     TourDocDataService> {
-    modal = false;
     tracks: TourDocRecord[] = [];
     geoTracks: {
         IMAGE?: TourDocRecord[];
@@ -167,9 +166,10 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
                 angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, protected searchFormConverter: TourDocSearchFormConverter,
-                layoutService: LayoutService, protected elRef: ElementRef) {
+                layoutService: LayoutService, protected elRef: ElementRef, router: Router) {
         super(route, cdocRoutingService, toastr, contentUtils, errorResolver, pageUtils, commonRoutingService,
-            angularMarkdownService, angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment);
+            angularMarkdownService, angularHtmlService, cd, trackingProvider, appService, platformService, layoutService,
+            environment, router);
     }
 
     onRouteTracksFound(searchresult: TourDocSearchResult) {

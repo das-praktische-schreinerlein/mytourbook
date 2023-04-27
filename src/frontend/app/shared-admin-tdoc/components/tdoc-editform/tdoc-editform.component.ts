@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {TourDocRecord, TourDocRecordFactory, TourDocRecordValidator} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {TourDocRecordSchema} from '../../../../shared/tdoc-commons/model/schemas/tdoc-record-schema';
@@ -39,7 +39,9 @@ import {
 import {TourDocImageRecord} from '../../../../shared/tdoc-commons/model/records/tdocimage-record';
 import {LatLng} from 'leaflet';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
-import {CommonDocEditorCommandComponentConfig} from '@dps/mycms-frontend-commons/dist/angular-commons/components/text-editor/text-editor.component';
+import {
+    CommonDocEditorCommandComponentConfig
+} from '@dps/mycms-frontend-commons/dist/angular-commons/components/text-editor/text-editor.component';
 import {SafeUrl} from '@angular/platform-browser';
 import {OdImageEditorComponent} from '../odimage-editor/odimage-editor.component';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
@@ -179,14 +181,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     mainImageUrl: SafeUrl   = undefined;
     mainImageObject: TourDocObjectDetectionImageObjectRecord = undefined;
 
-    // TODO add modal to commons
-    @Input()
-    public modal ? = false;
-
-    // TODO add cancel to commons
-    @Output()
-    public cancelModal: EventEmitter<boolean> = new EventEmitter();
-
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocSearchFormUtils: TourDocSearchFormUtils,
                 protected searchFormUtils: SearchFormUtils, protected tdocDataService: TourDocDataService,
@@ -194,7 +188,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 protected tourDocNameSuggesterService: TourDocNameSuggesterService,
                 protected tourDocDescSuggesterService: TourDocDescSuggesterService,
                 protected router: Router, protected geoParserService: GeoParserDeterminer) {
-    super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
+    super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils, router);
     }
 
     onInputChanged(value: any, field: string): boolean {
@@ -381,45 +375,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 });
             }
         }
-
-        return false;
-    }
-
-    // TODO add cancel to commons
-    submitCancelModal(event: Event): boolean {
-        this.cancelModal.emit(false);
-
-        return false;
-    }
-
-    // TODO add modal to commons
-    onCreateNewLink(key: string, id: string): boolean {
-        const me = this;
-        // open modal dialog
-        me.router.navigate([{ outlets: { 'modaledit': ['modaledit', 'create', key, id] } }]).then(value => {
-            // check for closing modal dialog and routechange -> update facets
-            const subscription = me.router.events.subscribe((val) => {
-                subscription.unsubscribe();
-                me.fillFacets(me.record)
-            });
-        });
-
-
-        return false;
-    }
-
-    // TODO add modal to commons
-    onShowEntityLink(key: string, id: string): boolean {
-        const me = this;
-        // open modal dialog
-        me.router.navigate([{ outlets: { 'modalshow': ['modalshow', 'show', key, key + '_' + id] } }]).then(value => {
-            // check for closing modal dialog and routechange -> update facets
-            const subscription = me.router.events.subscribe((val) => {
-                subscription.unsubscribe();
-                me.fillFacets(me.record)
-            });
-        });
-
 
         return false;
     }

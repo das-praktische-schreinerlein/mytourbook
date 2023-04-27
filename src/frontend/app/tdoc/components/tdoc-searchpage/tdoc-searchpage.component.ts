@@ -6,7 +6,7 @@ import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdo
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {ToastrService} from 'ngx-toastr';
-import {Layout, LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
@@ -30,7 +30,6 @@ import {Location} from '@angular/common';
 import {MapState, TourDocMapStateService} from '../../../shared-tdoc/services/tdoc-mapstate.service';
 
 export interface TourDocSearchpageComponentConfig extends CommonDocSearchpageComponentConfig {
-    defaultLayoutPerType: {};
 }
 
 @Component({
@@ -54,18 +53,16 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         flgProfileMapAvailable: false,
     }
 
-    defaultLayoutPerType = {};
-
     constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService, errorResolver: ErrorResolver,
                 tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,
                 protected cdocRoutingService: TourDocRoutingService, toastr: ToastrService, pageUtils: PageUtils,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, layoutService: LayoutService, searchFormUtils: SearchFormUtils,
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService,
-                protected elRef: ElementRef, protected location: Location, protected mapStateService: TourDocMapStateService) {
+                protected elRef: ElementRef, location: Location, protected mapStateService: TourDocMapStateService) {
         super(route, commonRoutingService, errorResolver, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
-            tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment);
+            tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment, location);
     }
 
     onMapTourDocClicked(tdoc: TourDocRecord) {
@@ -146,52 +143,6 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         super.doCheckSearchResultAfterSearch(searchResult);
 
         this.mapStateService.doCheckSearchResultAfterSearch(this.mapState, searchResult)
-    }
-
-    // TODO move to commons
-    protected setPageLayoutAndStyles(): void {
-        let defaultLayout = this.searchForm.type && this.defaultLayoutPerType
-            ? TourDocSearchFormConverter.layoutFromString(this.defaultLayoutPerType[this.searchForm.type.toUpperCase()])
-            : undefined;
-        if (defaultLayout === undefined) {
-            defaultLayout = Layout.FLAT;
-        }
-
-        if (this.searchForm['layout'] !== undefined) {
-            this.layout = this.searchForm['layout'];
-        } else {
-            this.layout = defaultLayout;
-        }
-
-        super.setPageLayoutAndStyles();
-
-        if (this.searchForm['layout'] !== undefined && this.searchForm['layout'] !== this.layout) {
-            this.searchForm['layout'] = this.layout;
-        }
-
-        if (this.searchForm['hideForm'] !== undefined) {
-            this.onShowFormChanged(!this.searchForm['hideForm']);
-        }
-    }
-
-    onLayoutChange(layout: Layout): boolean {
-        if (this.searchForm['layout'] !== layout) {
-            this.searchForm['layout'] = layout;
-            this.cdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
-            this.location.go(this.cdocRoutingService.getLastSearchUrl());
-        }
-
-        return super.onLayoutChange(layout);
-    }
-
-    onShowFormChanged(showForm: boolean) {
-        if (this.searchForm['hideForm'] !== !showForm) {
-            this.searchForm['hideForm'] = !showForm;
-            this.cdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
-            this.location.go(this.cdocRoutingService.getLastSearchUrl());
-        }
-
-        return super.onShowFormChanged(showForm);
     }
 
 }

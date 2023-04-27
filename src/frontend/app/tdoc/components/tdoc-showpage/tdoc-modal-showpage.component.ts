@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef} from '@angular/core';
 import {TourDocShowpageComponent} from './tdoc-showpage.component';
-import {CommonRoutingService, RoutingState} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {ToastrService} from 'ngx-toastr';
@@ -22,8 +22,6 @@ import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/se
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocModalShowpageComponent extends TourDocShowpageComponent {
-    modal = true;
-
     constructor(route: ActivatedRoute, cdocRoutingService: TourDocRoutingService,
                 toastr: ToastrService, contentUtils: TourDocContentUtils,
                 errorResolver: ErrorResolver, pageUtils: PageUtils, commonRoutingService: CommonRoutingService,
@@ -33,25 +31,8 @@ export class TourDocModalShowpageComponent extends TourDocShowpageComponent {
                 layoutService: LayoutService, protected elRef: ElementRef, protected router: Router) {
         super(route, cdocRoutingService, toastr, contentUtils, errorResolver, pageUtils, commonRoutingService,
             angularMarkdownService, angularHtmlService, cd, trackingProvider, appService, platformService,
-            searchFormConverter, layoutService, elRef);
-    }
-
-    // TODO add cancel to commons
-    submitCloseModal() {
-        this.closeModal();
-
-        return false;
-    }
-
-    // TODO add modal to commons
-    protected closeModal() {
-        const me = this;
-        me.router.navigate(['', { outlets: { 'modalshow': null }, primary: '' }],
-            { relativeTo: me.route.parent // <--- PARENT activated route.
-            }
-        ).then(value => {
-            me.commonRoutingService.setRoutingState(RoutingState.DONE);
-        });
+            searchFormConverter, layoutService, elRef, router);
+        this.modal = true;
     }
 
     protected configureProcessingOfResolvedData(): void {

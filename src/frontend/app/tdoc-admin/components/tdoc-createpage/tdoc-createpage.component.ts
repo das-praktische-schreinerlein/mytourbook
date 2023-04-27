@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
@@ -32,8 +32,6 @@ import {
 export class TourDocCreatepageComponent
     extends CommonDocCreatepageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
     tracks: TourDocRecord[] = [];
-    modal = false;
-
     constructor(protected route: ActivatedRoute, protected cdocRoutingService: TourDocRoutingService,
                 protected toastr: ToastrService, contentUtils: TourDocContentUtils,
                 protected errorResolver: ErrorResolver, protected pageUtils: PageUtils,
@@ -41,9 +39,9 @@ export class TourDocCreatepageComponent
                 protected angularHtmlService: AngularHtmlService, protected cd: ChangeDetectorRef,
                 protected trackingProvider: GenericTrackingService, protected appService: GenericAppService,
                 protected platformService: PlatformService, protected layoutService: LayoutService,
-                protected tdocDataService: TourDocDataService) {
+                protected tdocDataService: TourDocDataService, router: Router) {
         super(route, cdocRoutingService, toastr, contentUtils, errorResolver, pageUtils, commonRoutingService, angularMarkdownService,
-            angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment, tdocDataService);
+            angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment, tdocDataService, router);
     }
 
     protected getComponentConfig(config: {}): CommonDocCreatepageComponentConfig {
