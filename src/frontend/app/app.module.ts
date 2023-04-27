@@ -32,11 +32,13 @@ import {PDocPageDescSuggesterService} from './shared-admin-pdoc/services/pdoc-pa
 import {PDocActionTagService} from './shared-pdoc/services/pdoc-actiontag.service';
 import {PDocAdminActionTagService} from './shared-admin-pdoc/services/pdoc-admin-actiontag.service';
 import {PDocDataCacheService} from './shared-pdoc/services/pdoc-datacache.service';
+import {PDocActionTagsComponent} from './shared-pdoc/components/pdoc-actiontags/pdoc-actiontags.component';
 
 registerLocaleData(localeDe);
 
 @NgModule({
     entryComponents: [
+        PDocActionTagsComponent,
         PDocReplaceFormComponent,
         PDocAssignFormComponent,
         TourDocObjectDetectionObjectKeyEditFormComponent,

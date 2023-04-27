@@ -44,6 +44,8 @@ import {FallbackHttpClient} from './services/fallback-http-client';
 import {TourDocMapStateService} from './shared-tdoc/services/tdoc-mapstate.service';
 import {NgModule} from '@angular/core';
 import {AppCommonRoutingModule} from './app.common.router';
+import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {PDocDataStore} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.store';
 
 registerLocaleData(localeDe);
 
@@ -98,6 +100,8 @@ export function getAngulartics2Providers(): any {
         TourDocTeamFilterConfig,
         TourDocDataStore,
         TourDocDataService,
+        PDocDataStore,
+        PDocDataService,
         StaticPagesDataStore,
         TourDocAlbumService,
         StaticPagesDataService,
