@@ -1,0 +1,16 @@
+<div class="row card-deck" *ngIf="searchResult != undefined && searchResult.currentRecords.length > 0">
+    <ng-container [ngSwitch]="layout">
+        <ng-container *ngSwitchCase="Layout.FLAT">
+            <app-pdoc-list-item-flat [record]="record"
+                                      [layout]="layout"
+                                      (show)="onShow($event)"
+                                      *ngFor="let record of searchResult.currentRecords; let idx = index"></app-pdoc-list-item-flat>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+            <app-pdoc-list-item class="card pdoc-list-item" [record]="record"
+                                [layout]="layout"
+                                (show)="onShow($event)"
+                                *ngFor="let record of searchResult.currentRecords; let idx = index"></app-pdoc-list-item>
+        </ng-container>
+    </ng-container>
+</div>

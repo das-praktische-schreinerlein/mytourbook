@@ -1,4 +1,4 @@
-import {CommonEnvironment} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/common-environment';
+import {CommonEnvironment} from '@dps/mycms-frontend-commons/dist/frontend-section-commons/common-environment';
 import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export interface AppEnvironment extends CommonEnvironment {
@@ -13,6 +13,8 @@ export interface AppEnvironment extends CommonEnvironment {
     useVideoAssetStoreUrls: boolean;
     useAudioAssetStoreUrls: boolean;
     skipMediaCheck?: boolean,
+    pdocWritable: boolean;
+    pdocActionTagWritable: boolean;
     tdocWritable: boolean;
     tdocActionTagWritable: boolean;
     tdocMaxItemsPerAlbum: number;

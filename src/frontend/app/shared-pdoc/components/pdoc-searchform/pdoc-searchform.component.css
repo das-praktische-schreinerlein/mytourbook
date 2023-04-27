@@ -1,0 +1,14 @@
+div.humanReadableSearchFilter {
+    display: inline;
+}
+
+.label-active {
+    font-weight: bold;
+}
+
+input {
+    font-weight: bold;
+}
+.btn-configure {
+    font-size: 12px;
+}

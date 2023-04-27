@@ -1,0 +1,164 @@
+<form [formGroup]="editFormGroup" class="form-control-sm" (ngSubmit)="submitSave($event)" *ngIf="record !== undefined">
+    <ng-container [ngSwitch]="record.type">
+        <ng-container *ngSwitchCase="'PAGE'">
+            <ng-container *ngTemplateOutlet="formPage"></ng-container>
+        </ng-container>
+
+    </ng-container>
+
+    <ng-template #formPage>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.pdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputPagetype"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <div class="row">
+            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
+        </div>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+    </ng-template>
+
+    <ng-template #linkCreateNew let-key="key" let-id="id">
+        <a (click)="onCreateNewLink(key, id)" *ngIf="modal === false">🐣</a>
+    </ng-template>
+
+    <ng-template #linkShowSelectEntity let-key="key" let-formElementName="formElementName">
+        <a (click)="onShowEntityLink(key, editFormGroup.getRawValue()[formElementName][0])"
+           *ngIf="editFormGroup.getRawValue()[formElementName] !== undefined
+            && editFormGroup.getRawValue()[formElementName] !== null
+            && editFormGroup.getRawValue()[formElementName].length === 1">🔎</a>
+    </ng-template>
+
+    <ng-template #linkShowEntity let-key="key" let-formElementName="formElementName">
+        <a (click)="onShowEntityLink(key, editFormGroup.getRawValue()[formElementName][0])"
+           *ngIf="editFormGroup.getRawValue()[formElementName] !== undefined
+            && editFormGroup.getRawValue()[formElementName] !== null">🔎</a>
+    </ng-template>
+
+    <ng-template #inputName>
+        <div class="col-sm-6 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.pdoc.name">Name:</label>
+            <input formControlName="name"
+                   required="required"
+                   class="form-control"
+                   type="text"
+                   placeholder="name"
+                   i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.pdoc.name"
+                   (ngModelChange)="onInputChanged($event, 'name')">
+            <span class="" (click)="recommendName()">&#x27F8; Generate</span>
+        </div>
+    </ng-template>
+
+    <ng-template #inputPagetype>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="loctype label|Label for filter: loctype@@label.searchform.pdoc.loctype">Regiontype:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['subTypePageType']"
+                                     [settings]="settingsSelectActionType"
+                                     [texts]="textsSelectActionType"
+                                     (ngModelChange)="onInputChanged($event, 'subtype')"
+                                     required="required"
+                                     formControlName="subtype"
+                                     ngDefaultControl
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputDesc let-recommend="recommend">
+        <app-text-editor
+            [descTxt]="editFormGroup.getRawValue()['descTxt']"
+            [descTxtRecommended]="descTxtRecommended"
+            [editorCommands]="editorCommands"
+            [recommendAvailable]="recommend"
+            (recommendDesc)="recommendDesc()"
+            (changeDesc)="setValue('descTxt', $event)"></app-text-editor>
+    </ng-template>
+
+    <ng-template #inputNumber let-key="key" let-formControlName="formControlName" let-recommend="recommend" let-step="step" let-min="min" let-max="max">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}"
+                   class="form-control"
+                   type="number"
+                   step="{{step ? step : '1'}}"
+                   min="{{min ? min : ''}}"
+                   max="{{max ? max : ''}}"
+                   placeholder="{{key}}"
+                   (ngModelChange)="onInputChanged($event, formControlName)">
+            <span class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend"
+                  (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</span>
+        </div>
+    </ng-template>
+
+    <ng-template #inputTextTech let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}"
+                   class="form-control"
+                   type="text" placeholder="{{key}}"
+                   [attr.list]="formControlName"
+                   (ngModelChange)="onInputChanged($event, formControlName)">
+            <datalist [attr.id]="formControlName" *ngIf="inputSuggestionValues[formControlName]">
+                <option *ngFor="let suggestion of inputSuggestionValues[formControlName]">{{suggestion}}</option>
+            </datalist>
+        </div>
+    </ng-template>
+
+    <ng-template #inputText let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-6 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}"
+                   class="form-control"
+                   type="text"
+                   placeholder="{{key}}"
+                   [attr.list]="formControlName"
+                   (ngModelChange)="onInputChanged($event, formControlName)">
+            <datalist [attr.id]="formControlName" *ngIf="inputSuggestionValues[formControlName]">
+                <option *ngFor="let suggestion of inputSuggestionValues[formControlName]">{{suggestion}}</option>
+            </datalist>
+        </div>
+    </ng-template>
+
+    <ng-template #showText let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-6 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input class="form-control"
+                   type="text"
+                   value="{{editFormGroup.getRawValue()[formControlName] ? editFormGroup.getRawValue()[formControlName] : ''}}"
+                   disabled="disabled">
+        </div>
+    </ng-template>
+
+    <ng-template #submitRow>
+        <div class="row">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <ng-container *ngIf="availableForwardModes == null || availableForwardModes.length <= 0">
+                    <button type="submit" (click)="submitSave($event, false)" class="btn btn-action btn-sm" i18n="button edit pdoc|Buttontext to edit pdoc@@button.form.pdoc.edit">Save</button>
+                    <button type="submit" (click)="submitSave($event, true)" *ngIf="backToSearch" class="btn btn-action btn-sm" i18n="button editAndSearch pdoc|Buttontext to editAndSearch pdoc@@button.form.pdoc.editAndSearch">Save and Search</button>
+                </ng-container>
+                <ng-container *ngIf="availableForwardModes != null && availableForwardModes.length > 0">
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.SHOW)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.SHOW)"
+                            class="btn btn-action btn-sm" i18n="button edit pdoc|Buttontext to edit pdoc@@button.form.pdoc.edit">Save</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SEARCH)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SEARCH)"
+                            class="btn btn-action btn-sm" i18n="button editAndSearch pdoc|Buttontext to editAndSearch pdoc@@button.form.pdoc.editAndSearch">Save and Search</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_SHOW)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_SHOW)"
+                            class="btn btn-action btn-sm" i18n="button editAndShowSource pdoc|Buttontext to editAndShowSource pdoc@@button.form.pdoc.editAndShowSource">Save and Show Source</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_EDIT)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_EDIT)"
+                            class="btn btn-action btn-sm" i18n="button editAndEditSource pdoc|Buttontext to editAndEditSource pdoc@@button.form.pdoc.editAndEditSource">Save and Edit Source</button>
+                </ng-container>
+                <button type="submit" (click)="submitCancelModal($event)" *ngIf="modal" class="btn btn-action btn-sm" i18n="button cancel pdoc|Buttontext to cancel pdoc@@button.form.pdoc.cancel">Cancel</button>
+            </div>
+        </div>
+    </ng-template>
+
+</form>

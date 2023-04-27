@@ -19,6 +19,9 @@ import {DataMode} from '../../shared/tdoc-commons/model/datamode.enum';
 import {ToastrService} from 'ngx-toastr';
 import {ExtendedItemsJsConfig, ItemsJsDataImporter} from '@dps/mycms-commons/dist/search-commons/services/itemsjs.dataimporter';
 import {TourDocRecordRelation} from '../../shared/tdoc-commons/model/records/tdoc-record';
+import {PDocDataStore} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.store';
+import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {PDocHttpAdapter} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-http.adapter';
 
 @Injectable()
 export class AppService extends GenericAppService {
@@ -37,6 +40,8 @@ export class AppService extends GenericAppService {
             adminWritable: environment.adminWritable,
             tdocWritable: environment.tdocWritable,
             tdocActionTagWritable: environment.tdocActionTagWritable,
+            pdocWritable: environment.pdocWritable,
+            pdocActionTagWritable: environment.pdocActionTagWritable,
             allowAutoPlay: environment.allowAutoPlay,
             m3uAvailable: environment.m3uAvailable,
         },
@@ -62,6 +67,8 @@ export class AppService extends GenericAppService {
             adminWritable: environment.adminWritable,
             tdocWritable: environment.tdocWritable,
             tdocActionTagWritable: environment.tdocActionTagWritable,
+            pdocWritable: environment.pdocWritable,
+            pdocActionTagWritable: environment.pdocActionTagWritable,
             allowAutoPlay: environment.allowAutoPlay,
             m3uAvailable: environment.m3uAvailable,
         },
@@ -87,6 +94,8 @@ export class AppService extends GenericAppService {
             adminWritable: environment.adminWritable,
             tdocWritable: environment.tdocWritable,
             tdocActionTagWritable: environment.tdocActionTagWritable,
+            pdocWritable: environment.pdocWritable,
+            pdocActionTagWritable: environment.pdocActionTagWritable,
             allowAutoPlay: environment.allowAutoPlay,
             m3uAvailable: environment.m3uAvailable,
         },
@@ -99,6 +108,7 @@ export class AppService extends GenericAppService {
     };
 
     constructor(private tdocDataService: TourDocDataService, private tdocDataStore: TourDocDataStore,
+                private pdocDataService: PDocDataService, private pdocDataStore: PDocDataStore,
                 private pagesDataService: StaticPagesDataService, private pagesDataStore: StaticPagesDataStore,
                 @Inject(LOCALE_ID) private locale: string,
                 private http: HttpClient, private commonRoutingService: CommonRoutingService,
@@ -209,15 +219,19 @@ export class AppService extends GenericAppService {
             }
         };
         const tdocAdapter = new TourDocHttpAdapter(options);
+        const pdocAdapter = new PDocHttpAdapter(options);
 
         this.tdocDataStore.setAdapter('http', undefined, '', {});
+        this.pdocDataStore.setAdapter('http', undefined, '', {});
         this.pagesDataStore.setAdapter('http', undefined, '', {});
 
         this.pagesDataService.clearLocalStore();
         this.tdocDataService.clearLocalStore();
+        this.pdocDataService.clearLocalStore();
 
         this.pagesDataService.setWritable(false);
         this.tdocDataService.setWritable(false);
+        this.pdocDataService.setWritable(false);
 
         return new Promise<boolean>((resolve, reject) => {
             me.backendHttpClient.makeHttpRequest({ method: 'get', url: options.basePath + 'pages/', withCredentials: true })
@@ -229,8 +243,10 @@ export class AppService extends GenericAppService {
                 // console.log('initially loaded pdocs from server', records);
                 me.pagesDataService.setWritable(false);
                 me.tdocDataService.setWritable(me.appConfig.permissions.tdocWritable);
+                me.pdocDataService.setWritable(me.appConfig.permissions.pdocWritable);
 
                 me.tdocDataStore.setAdapter('http', tdocAdapter, '', {});
+                me.pdocDataStore.setAdapter('http', pdocAdapter, '', {});
 
                 return resolve(true);
             }).catch(function onError(reason: any) {

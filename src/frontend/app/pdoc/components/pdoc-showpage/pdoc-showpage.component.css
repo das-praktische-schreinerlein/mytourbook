@@ -1,0 +1,15 @@
+.show-page {
+    display: block;
+}
+
+span.fx-bg-name {
+    width: 100%;
+}
+
+a.a-navigation span.name {
+    max-width: 200px;
+    text-overflow: ellipsis;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+}

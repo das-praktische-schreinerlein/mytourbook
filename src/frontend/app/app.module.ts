@@ -22,11 +22,23 @@ import {TourDocActionTagService} from './shared-tdoc/services/tdoc-actiontag.ser
 import {TourDocAdminActionTagService} from './shared-admin-tdoc/services/tdoc-admin-actiontag.service';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import {PDocAdminModule} from './pdoc-admin/pdoc-admin.module';
+import {SharedAdminPDocModule} from './shared-admin-pdoc/shared-admin-pdoc.module';
+import {PDocAssignFormComponent} from './shared-admin-pdoc/components/pdoc-assignform/pdoc-assignform.component';
+import {PDocReplaceFormComponent} from './shared-admin-pdoc/components/pdoc-replaceform/pdoc-replaceform.component';
+import {PDocNameSuggesterService} from './shared-admin-pdoc/services/pdoc-name-suggester.service';
+import {PDocDescSuggesterService} from './shared-admin-pdoc/services/pdoc-desc-suggester.service';
+import {PDocPageDescSuggesterService} from './shared-admin-pdoc/services/pdoc-page-desc-suggester.service';
+import {PDocActionTagService} from './shared-pdoc/services/pdoc-actiontag.service';
+import {PDocAdminActionTagService} from './shared-admin-pdoc/services/pdoc-admin-actiontag.service';
+import {PDocDataCacheService} from './shared-pdoc/services/pdoc-datacache.service';
 
 registerLocaleData(localeDe);
 
 @NgModule({
     entryComponents: [
+        PDocReplaceFormComponent,
+        PDocAssignFormComponent,
         TourDocObjectDetectionObjectKeyEditFormComponent,
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
@@ -35,11 +47,18 @@ registerLocaleData(localeDe);
     ],
     imports: [
         AppCommonModule,
+        SharedAdminPDocModule,
+        PDocAdminModule,
         SharedAdminTourDocModule,
         TourDocAdminModule,
         AppRoutingModule
     ],
     providers: [
+        {provide: PDocActionTagService, useClass: PDocAdminActionTagService},
+        PDocDataCacheService,
+        PDocNameSuggesterService,
+        PDocDescSuggesterService,
+        PDocPageDescSuggesterService,
         {provide: TourDocActionTagService, useClass: TourDocAdminActionTagService},
         TourDocNameSuggesterService,
         TourDocDescSuggesterService,

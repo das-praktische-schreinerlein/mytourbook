@@ -1,0 +1,17 @@
+<ng-container *ngIf="record != undefined">
+    <div class="container content-container">
+        <div class="card-block">
+            <div class="picture-small" style="float: left; margin-right: 10px">
+                <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
+            </div>
+            <h5><span class="fx-bg-name">{{record.name}}</span></h5>
+        </div>
+    </div>
+    <div class="container content-container">
+        <div class="container">
+            <app-pdoc-editform [record]="record"
+                               [availableForwardModes]="suggestedForwardModes"
+                               (saveAndForward)="submitSaveAndForward($event)"></app-pdoc-editform>
+        </div>
+    </div>
+</ng-container>

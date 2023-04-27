@@ -1,0 +1,11 @@
+table.rate {
+    display: inline-block;
+    border: 1px solid black;
+}
+ul.props {
+    list-style: none;
+    font-size: 0.75rem;
+}
+span.fx-bg-name {
+    width: 100%;
+}
