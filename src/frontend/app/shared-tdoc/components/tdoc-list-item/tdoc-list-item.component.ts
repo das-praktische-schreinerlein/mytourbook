@@ -13,7 +13,7 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
     styleUrls: ['./tdoc-list-item.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TourDocListItemComponent  extends CommonDocListItemComponent {
+export class TourDocListItemComponent extends CommonDocListItemComponent {
     protected mapFlagSymbol = '&#128681';
     protected mapFlagAvailable = false;
 
@@ -31,7 +31,7 @@ export class TourDocListItemComponent  extends CommonDocListItemComponent {
     imageWidth = 0;
 
     constructor(contentUtils: TourDocContentUtils, cd: ChangeDetectorRef, layoutService: LayoutService) {
-        super(contentUtils, cd, layoutService, );
+        super(contentUtils, cd, layoutService);
         this.listLayoutName = 'default';
     }
 
