@@ -17,7 +17,7 @@ import {
     CommonDocSearchpageComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-searchpage.component';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
-import {environment} from '../../../../environments/environment';
+import {environment} from '../../../../../environments/environment';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {PDocActionTagService} from '../../../shared-pdoc/services/pdoc-actiontag.service';
 import {PDocSearchFormUtils} from '../../../shared-pdoc/services/pdoc-searchform-utils.service';

@@ -54,10 +54,10 @@
 
     <ng-template #inputPagetype>
         <div class="col-sm-4 input-group input-group-sm">
-            <label class="col-xs-4 col-form-label mr-2" i18n="loctype label|Label for filter: loctype@@label.searchform.pdoc.loctype">Regiontype:</label>
+            <label class="col-xs-4 col-form-label mr-2" i18n="pagetype label|Label for filter: loctype@@label.searchform.pdoc.pagetype">Seitentyp:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['subTypePageType']"
-                                     [settings]="settingsSelectActionType"
-                                     [texts]="textsSelectActionType"
+                                     [settings]="settingsSelectPageType"
+                                     [texts]="textsSelectPageType"
                                      (ngModelChange)="onInputChanged($event, 'subtype')"
                                      required="required"
                                      formControlName="subtype"

@@ -15,8 +15,8 @@ import {PDocSearchResult} from '@dps/mycms-commons/dist/pdoc-commons/model/conta
 
 @Component({
     selector: 'app-pdoc-replaceform',
-    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component.html',
-    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component.css'],
+    templateUrl: '../../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component.html',
+    styleUrls: ['../../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PDocReplaceFormComponent

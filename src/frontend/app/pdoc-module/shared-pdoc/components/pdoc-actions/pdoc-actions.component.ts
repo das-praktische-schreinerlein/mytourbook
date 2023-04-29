@@ -13,8 +13,8 @@ import {PDocActionTagService} from '../../services/pdoc-actiontag.service';
 
 @Component({
     selector: 'app-pdoc-action',
-    templateUrl: '../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.html',
-    styleUrls: ['../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.css'],
+    templateUrl: '../../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.html',
+    styleUrls: ['../../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PDocActionsComponent extends CommonDocActionsComponent<PDocRecord, PDocSearchForm, PDocSearchResult, PDocDataService> {

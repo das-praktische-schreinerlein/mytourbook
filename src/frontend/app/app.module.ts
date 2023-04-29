@@ -22,17 +22,17 @@ import {TourDocActionTagService} from './shared-tdoc/services/tdoc-actiontag.ser
 import {TourDocAdminActionTagService} from './shared-admin-tdoc/services/tdoc-admin-actiontag.service';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
-import {PDocAdminModule} from './pdoc-admin/pdoc-admin.module';
-import {SharedAdminPDocModule} from './shared-admin-pdoc/shared-admin-pdoc.module';
-import {PDocAssignFormComponent} from './shared-admin-pdoc/components/pdoc-assignform/pdoc-assignform.component';
-import {PDocReplaceFormComponent} from './shared-admin-pdoc/components/pdoc-replaceform/pdoc-replaceform.component';
-import {PDocNameSuggesterService} from './shared-admin-pdoc/services/pdoc-name-suggester.service';
-import {PDocDescSuggesterService} from './shared-admin-pdoc/services/pdoc-desc-suggester.service';
-import {PDocPageDescSuggesterService} from './shared-admin-pdoc/services/pdoc-page-desc-suggester.service';
-import {PDocActionTagService} from './shared-pdoc/services/pdoc-actiontag.service';
-import {PDocAdminActionTagService} from './shared-admin-pdoc/services/pdoc-admin-actiontag.service';
-import {PDocDataCacheService} from './shared-pdoc/services/pdoc-datacache.service';
-import {PDocActionTagsComponent} from './shared-pdoc/components/pdoc-actiontags/pdoc-actiontags.component';
+import {PDocAdminModule} from './pdoc-module/pdoc-admin/pdoc-admin.module';
+import {SharedAdminPDocModule} from './pdoc-module/shared-admin-pdoc/shared-admin-pdoc.module';
+import {PDocAssignFormComponent} from './pdoc-module/shared-admin-pdoc/components/pdoc-assignform/pdoc-assignform.component';
+import {PDocReplaceFormComponent} from './pdoc-module/shared-admin-pdoc/components/pdoc-replaceform/pdoc-replaceform.component';
+import {PDocNameSuggesterService} from './pdoc-module/shared-admin-pdoc/services/pdoc-name-suggester.service';
+import {PDocDescSuggesterService} from './pdoc-module/shared-admin-pdoc/services/pdoc-desc-suggester.service';
+import {PDocPageDescSuggesterService} from './pdoc-module/shared-admin-pdoc/services/pdoc-page-desc-suggester.service';
+import {PDocActionTagService} from './pdoc-module/shared-pdoc/services/pdoc-actiontag.service';
+import {PDocAdminActionTagService} from './pdoc-module/shared-admin-pdoc/services/pdoc-admin-actiontag.service';
+import {PDocDataCacheService} from './pdoc-module/shared-pdoc/services/pdoc-datacache.service';
+import {PDocActionTagsComponent} from './pdoc-module/shared-pdoc/components/pdoc-actiontags/pdoc-actiontags.component';
 
 registerLocaleData(localeDe);
 

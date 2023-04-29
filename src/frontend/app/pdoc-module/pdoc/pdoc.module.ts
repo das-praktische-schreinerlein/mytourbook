@@ -24,9 +24,9 @@ import {PDocSearchFormResolver} from '../shared-pdoc/resolver/pdoc-searchform.re
 import {PDocRecordResolver} from '../shared-pdoc/resolver/pdoc-details.resolver';
 import {PDocRoutingService} from '../shared-pdoc/services/pdoc-routing.service';
 import {PDocDataStore} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.store';
-import {PDocShowpageComponent} from '../pdoc/components/pdoc-showpage/pdoc-showpage.component';
-import {PDocSearchpageComponent} from '../pdoc/components/pdoc-searchpage/pdoc-searchpage.component';
-import {PDocModalShowpageComponent} from '../pdoc/components/pdoc-showpage/pdoc-modal-showpage.component';
+import {PDocShowpageComponent} from './components/pdoc-showpage/pdoc-showpage.component';
+import {PDocSearchpageComponent} from './components/pdoc-searchpage/pdoc-searchpage.component';
+import {PDocModalShowpageComponent} from './components/pdoc-showpage/pdoc-modal-showpage.component';
 import {PDocRoutingModule} from './pdoc-routing.module';
 
 @NgModule({

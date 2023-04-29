@@ -21,7 +21,7 @@ import {
     CommonDocShowpageComponent,
     CommonDocShowpageComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-showpage.component';
-import {environment} from '../../../../environments/environment';
+import {environment} from '../../../../../environments/environment';
 import {PDocRoutingService} from '../../../shared-pdoc/services/pdoc-routing.service';
 import {PDocContentUtils} from '../../../shared-pdoc/services/pdoc-contentutils.service';
 import {PDocSearchFormConverter} from '../../../shared-pdoc/services/pdoc-searchform-converter.service';
