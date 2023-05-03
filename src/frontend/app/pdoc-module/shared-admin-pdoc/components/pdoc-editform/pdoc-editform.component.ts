@@ -42,12 +42,22 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
     public optionsSelect: {
         'pageId': IMultiSelectOption[];
         'subType': IMultiSelectOption[];
+        'langkey': IMultiSelectOption[];
         'subTypePageType': IMultiSelectOption[];
     };
 
     public settingsSelectPageType = this.defaultSelectSetting;
+    public settingsSelectLangkey = this.defaultSelectSetting;
 
     public textsSelectPageType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Action ausgewählt',
+        checkedPlural: 'Aktion ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '--',
+        allSelected: 'alles'};
+
+    public textsSelectLangkey: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Action ausgewählt',
         checkedPlural: 'Aktion ausgewählt',
@@ -133,15 +143,22 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
             suggestionConfigs: suggestionConfig,
             editPrefix: prefix,
             numBeanFieldConfig: {
-                'paged': {}
             },
             stringBeanFieldConfig: {
+                'css': {},
+                'heading': {},
+                'key': {},
+                'langkey': {
+                    labelPrefix: '',
+                    values: ['de', 'en']
+                },
                 'subtype': {},
                 'subTypePageType': {
-                    labelPrefix: 'p_',
-                    values: [0, 1, 2, 3, 4, 5, 6, 101, 102, 103, 104, 105, 106, 110, 111,
-                        120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136]
-                }
+                    labelPrefix: '',
+                    values: ['SectionOverviewPage', 'SimplePage', 'SectionPage', '']
+                },
+                'teaser': {},
+                'theme': {}
             },
             stringArrayBeanFieldConfig: {
             },
@@ -150,6 +167,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
             optionsSelect: {
                 'pageId': [],
                 'subType': [],
+                'langkey': [],
                 'subTypePageType': []
             }
         };
@@ -182,7 +200,6 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
                 (formValueConfig['subtype'][0]  + '')
                     .replace(/p_/g, '');
         }
-
     }
 
     protected updateFormComponents(): void {

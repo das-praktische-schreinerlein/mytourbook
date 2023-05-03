@@ -6,11 +6,9 @@
         <br clear="all" />
         <div class="card-footer text-right" style="width: 100%">
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
-                <!-- TODO
                 <app-pdoc-action [record]="record"
                                  [type]="'actionTagsBig'"
                                  (actionTagEvent)="onActionTagEvent($event)"></app-pdoc-action>
-                                 -->
                 <a [href]="getBackToShowUrl()" (click)="submitBackToShow()" class="btn btn-action btn-sm"
                    i18n="link back2show pdoc|Linktext back to show pdoc@@a.edit.pdoc.back2show">Back to Show</a>
                 <a [href]="getBackToSearchUrl()" (click)="submitBackToSearch()" class="btn btn-action btn-sm"

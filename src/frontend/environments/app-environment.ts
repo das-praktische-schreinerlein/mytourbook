@@ -15,6 +15,7 @@ export interface AppEnvironment extends CommonEnvironment {
     skipMediaCheck?: boolean,
     pdocWritable: boolean;
     pdocActionTagWritable: boolean;
+    pdocEmptyDefaultSearchTypes: string,
     tdocWritable: boolean;
     tdocActionTagWritable: boolean;
     tdocMaxItemsPerAlbum: number;

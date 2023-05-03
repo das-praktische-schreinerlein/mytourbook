@@ -1,5 +1,6 @@
 import {ComponentFactoryResolver, Injectable, Type} from '@angular/core';
 import {DynamicComponentService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/dynamic-components.service';
+import {PDocActionTagsComponent} from '../components/pdoc-actiontags/pdoc-actiontags.component';
 
 @Injectable()
 export class PDocDynamicComponentService extends DynamicComponentService {
@@ -13,7 +14,7 @@ export class PDocDynamicComponentService extends DynamicComponentService {
             case 'actionTagsSmall':
             case 'actionTagsBig':
             case 'actionTagsFlat':
-              // TODO return PDocActionTagsComponent;
+              return PDocActionTagsComponent;
         }
 
         return null;

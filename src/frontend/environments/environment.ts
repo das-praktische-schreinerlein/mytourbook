@@ -25,6 +25,7 @@ export const environment: AppEnvironment = {
     skipMediaCheck: false,
     pdocWritable: true,
     pdocActionTagWritable: true,
+    pdocEmptyDefaultSearchTypes: 'page',
     tdocWritable: true,
     tdocActionTagWritable: true,
     allowAutoPlay: true,

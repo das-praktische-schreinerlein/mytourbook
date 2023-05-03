@@ -15,12 +15,15 @@ export class PDocSearchFormUtils extends CommonDocSearchFormUtils {
         return this.searchFormUtils.getFacetValues(searchResult, 'subtype_ss', '', '');
     }
 
-    getPageTypeValues(searchResult: PDocSearchResult): any[] {
-        return this.searchFormUtils.getFacetValues(searchResult, 'pagetype_ss', '', '');
+    getKeyValues(searchResult: PDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'key_ss', '', '');
     }
 
-    getPageValues(searchResult: PDocSearchResult): any[] {
-        return this.searchFormUtils.getFacetValues(searchResult, 'page_id_is', '', '');
+    getLangkeyValues(searchResult: PDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'langkey_ss', '', '');
     }
 
+    getThemeValues(searchResult: PDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'theme_ss', '', '');
+    }
 }

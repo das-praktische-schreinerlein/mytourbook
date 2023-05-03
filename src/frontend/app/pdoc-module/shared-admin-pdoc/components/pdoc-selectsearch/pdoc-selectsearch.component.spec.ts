@@ -19,6 +19,7 @@ import {Router} from '@angular/router';
 import {PDocContentUtils} from '../../../shared-pdoc/services/pdoc-contentutils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {PDocActionTagService} from '../../../shared-pdoc/services/pdoc-actiontag.service';
+import {PDocAlbumService} from '../../../shared-pdoc/services/pdoc-album.service';
 
 describe('PDocSelectSearchComponent', () => {
     let component: PDocSelectSearchComponent;
@@ -37,6 +38,7 @@ describe('PDocSelectSearchComponent', () => {
                 { provide: PDocDataService, useValue: new PDocDataServiceStub() },
                 { provide: Router, useValue: new RouterStub() },
                 PDocActionTagService,
+                PDocAlbumService,
                 CommonRoutingService,
                 CommonDocRoutingService,
                 SearchFormUtils,

@@ -13,7 +13,27 @@
                 <ng-container *ngTemplateOutlet="inputName"></ng-container>
                 <ng-container *ngTemplateOutlet="inputPagetype"></ng-container>
             </div>
+
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'key', formControlName: 'key'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputLangkey"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'theme', formControlName: 'theme'}"></ng-container>
+            </div>
+
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'heading', formControlName: 'heading'}"></ng-container>
+            </div>
+
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'css', formControlName: 'css'}"></ng-container>
+            </div>
+
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'teaser', formControlName: 'teaser'}"></ng-container>
+            </div>
+
         </fieldset>
+
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <div class="row">
             <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
@@ -54,13 +74,27 @@
 
     <ng-template #inputPagetype>
         <div class="col-sm-4 input-group input-group-sm">
-            <label class="col-xs-4 col-form-label mr-2" i18n="pagetype label|Label for filter: loctype@@label.searchform.pdoc.pagetype">Seitentyp:</label>
+            <label class="col-xs-4 col-form-label mr-2" i18n="pagetype label|Label for filter: pagetype@@label.searchform.pdoc.pagetype">Seitentyp:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['subTypePageType']"
                                      [settings]="settingsSelectPageType"
                                      [texts]="textsSelectPageType"
                                      (ngModelChange)="onInputChanged($event, 'subtype')"
                                      required="required"
                                      formControlName="subtype"
+                                     ngDefaultControl
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputLangkey>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="Langkey label|Label for filter: Langkey@@label.searchform.pdoc.Langkey">Sprache:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['langkey']"
+                                     [settings]="settingsSelectLangkey"
+                                     [texts]="textsSelectLangkey"
+                                     (ngModelChange)="onInputChanged($event, 'langkey')"
+                                     required="required"
+                                     formControlName="langkey"
                                      ngDefaultControl
                                      class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
         </div>
@@ -128,6 +162,17 @@
                    type="text"
                    value="{{editFormGroup.getRawValue()[formControlName] ? editFormGroup.getRawValue()[formControlName] : ''}}"
                    disabled="disabled">
+        </div>
+    </ng-template>
+
+    <ng-template #inputTextArea let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-6 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <textarea formControlName="{{formControlName}}"
+                   class="form-control"
+                   placeholder="{{key}}"
+                   (ngModelChange)="onInputChanged($event, formControlName)">
+            </textarea>
         </div>
     </ng-template>
 

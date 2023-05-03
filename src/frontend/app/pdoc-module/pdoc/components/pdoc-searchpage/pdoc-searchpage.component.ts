@@ -70,4 +70,13 @@ export class PDocSearchpageComponent extends CommonDocSearchpageComponent<PDocRe
         this.defaultLayoutPerType = componentConfig.defaultLayoutPerType;
     }
 
+    protected doPreChecksBeforeSearch(): boolean {
+        if ((this.searchForm.type === undefined || this.searchForm.type === '')
+            && environment.pdocEmptyDefaultSearchTypes !== undefined && environment.pdocEmptyDefaultSearchTypes !== '') {
+            this.searchForm.type = environment.pdocEmptyDefaultSearchTypes;
+            return this.redirectToSearch();
+        }
+
+        return super.doPreChecksBeforeSearch();
+    }
 }

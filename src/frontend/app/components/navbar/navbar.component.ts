@@ -6,6 +6,7 @@ import {StaticPagesDataService} from '@dps/mycms-commons/dist/pdoc-commons/servi
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {DataMode} from '../../../shared/tdoc-commons/model/datamode.enum';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-navbar',
@@ -17,6 +18,7 @@ export class NavbarComponent implements OnInit {
     private config;
     sections: PDocRecord[];
     availableDataModes: DataMode[] = [];
+    pdocWritable = false;
     albumAllowed = false;
     public isExpanded = false;
 
@@ -28,24 +30,28 @@ export class NavbarComponent implements OnInit {
         // Subscribe to route params
         const me = this;
         this.appService.getAppState().subscribe(appState => {
+            this.albumAllowed = false;
+            this.pdocWritable = false;
+            this.availableDataModes = [];
+
             if (appState === AppState.Ready) {
                 this.config = this.appService.getAppConfig();
-                me.cd.markForCheck();
-
                 if (this.config && this.config.availableDataModes.length > 1) {
                     this.availableDataModes = this.config.availableDataModes;
                 } else {
-                    this.config.availableDataModes = [];
+                    this.availableDataModes = [];
                 }
 
                 if (this.config && this.config['tdocMaxItemsPerAlbum'] > 0) {
                     this.albumAllowed = true;
-                    return;
                 }
 
-            }
+                if (environment.pdocWritable === true) {
+                    this.pdocWritable = true;
+                }
 
-            this.albumAllowed = false;
+                me.cd.markForCheck();
+            }
         });
 
         this.route.data.subscribe(

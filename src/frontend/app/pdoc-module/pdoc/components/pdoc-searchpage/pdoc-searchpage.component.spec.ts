@@ -30,6 +30,7 @@ import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PDocContentUtils} from '../../../shared-pdoc/services/pdoc-contentutils.service';
 import {Location} from '@angular/common';
+import {PDocAlbumService} from '../../../shared-pdoc/services/pdoc-album.service';
 
 describe('PDocSearchpageComponent', () => {
     let component: PDocSearchpageComponent;
@@ -64,6 +65,7 @@ describe('PDocSearchpageComponent', () => {
                 LayoutService,
                 PDocSearchFormUtils,
                 PDocActionTagService,
+                PDocAlbumService,
                 PDocContentUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]

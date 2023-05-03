@@ -37,94 +37,22 @@ export class PDocRecordCreateResolver extends CommonDocRecordCreateResolver<PDoc
 
     protected configureDefaultFieldToSet(type: string, fields: string[]): void {
         switch (type.toLowerCase()) {
-            case 'track':
-            case 'route':
-                fields.push('gpsTrackSrc', 'gpsTrackState', 'locId', 'subtype');
-                fields.push('pdocratepers.gesamt',
-                    'pdocratepers.ausdauer',
-                    'pdocratepers.bildung',
-                    'pdocratepers.kraft',
-                    'pdocratepers.mental',
-                    'pdocratepers.motive',
-                    'pdocratepers.schwierigkeit',
-                    'pdocratepers.wichtigkeit',
-                    'pdocratetech.overall',
-                    'pdocratetech.klettern',
-                    'pdocratetech.ks',
-                    'pdocratetech.bergtour',
-                    'pdocratetech.firn',
-                    'pdocratetech.gletscher',
-                    'pdocratetech.schneeschuh',
-                    'pdocdatatech.altAsc',
-                    'pdocdatatech.altDesc',
-                    'pdocdatatech.altMin',
-                    'pdocdatatech.altMax',
-                    'pdocdatatech.dist',
-                    'pdocdatatech.dur',
-                    'pdocdatainfo.baseloc',
-                    'pdocdatainfo.destloc',
-                    'pdocdatainfo.region',
-                    'pdocdatainfo.sectionDetails',
-                    'pdoclinkedinfos'
-                    );
-                break;
-            case 'trip':
-                fields.push('datestart', 'dateend', 'locId');
-                break;
-            case 'poi':
-                fields.push('locId');
-
-                // remove desc... it will not be used here...
-                for (const field of ['keywords', 'desc', 'descTxt', 'descMd']) {
-                    const index = fields.indexOf(field);
-                    if (index > -1) {
-                        fields.splice(index, 1);
-                    }
-                }
-                break;
-            case 'news':
-                fields.push('datestart', 'dateend');
-                break;
-            case 'info':
-                fields.push(
-                    'locId', 'subtype',
-                    'pdocinfo.shortDesc', 'pdocinfo.reference', 'pdocinfo.publisher');
-                break;
-            case 'image':
-            case 'video':
-                fields.push('datestart', 'locId');
-                fields.push('pdocratepers.gesamt',
-                    'pdocratepers.motive',
-                    'pdocratepers.wichtigkeit');
-                break;
-            case 'location':
-                fields.push('gpsTrackSrc', 'gpsTrackState', 'geoLon', 'geoLat', 'geoLoc', 'subtype');
-                fields.push('locIdParent');
-                break;
-            case 'odimgobject':
-                fields.push('datestart', 'imageId', 'pdocimages');
+            case 'page':
+                fields.push('css', 'langkey', 'subtype', 'theme');
                 break;
         }
     }
 
     protected copyDefaultFields(type: string, pdoc: PDocRecord, values: {}): void {
         switch (type.toLowerCase()) {
-            case 'info':
-            case 'location':
-            case 'track':
-            case 'route':
+            case 'page':
                 if (values['keywords'] === undefined || values['keywords'] === null || values['keywords'] === '') {
                     values['keywords'] = 'KW_TODOKEYWORDS';
                 }
         }
 
         switch (type.toLowerCase()) {
-            case 'info':
-            case 'news':
-            case 'trip':
-            case 'location':
-            case 'track':
-            case 'route':
+            case 'page':
                 if (values['descTxt'] === undefined || values['descTxt'] === null || values['descTxt'] === '') {
                     values['descTxt'] = 'TODODESC';
                 }
@@ -132,17 +60,10 @@ export class PDocRecordCreateResolver extends CommonDocRecordCreateResolver<PDoc
     }
 
     protected setDefaultFields(type: string, values: {}): void {
-        if (type.toLowerCase() === 'location') {
-            values['locIdParent'] = 1;
-        }
     }
 
     protected getNameReplacements(): [RegExp, string][] {
         return this.getCommonReplacements('components.pdoc-create-resolver.nameReplacements');
-    }
-
-    protected getLocationReplacements(): [RegExp, string][] {
-        return this.getCommonReplacements('components.pdoc-create-resolver.locationReplacements');
     }
 
     protected getCommonReplacements(configKey: string): [RegExp, string][] {

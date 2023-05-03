@@ -22,17 +22,16 @@ export class PDocPageDescSuggesterService
     protected appendFiltersToListItemSearchForm(searchForm: PDocSearchForm, form: {}, environment: CommonDocListSuggesterEnvironment) {
         searchForm.sort = 'ratePers';
         searchForm.perPage = 20;
-        searchForm.type = 'ROUTE';
+        searchForm.type = 'PAGE';
     }
 
     protected getConfiguration(environment: CommonDocListSuggesterEnvironment): CommonDocListSuggesterConfiguration {
         return BeanUtils.getValue(this.appService.getAppConfig(), 'components.pdoc-location-desc-suggester') ||  {
             nameReplacements: this.DEFAULT_NAME_REPLACEMENTS,
-            listItemTemplate: '- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n',
+            listItemTemplate: '- [{{LISTITEM.name}}](ptdoc/show/page/{{LISTITEM.id}})\n',
             listItemsFallbackTemplate: '',
-            footerTemplate: '\nAber am Besten ihr schaut selbst :-)\n',
-            headingTemplate: '\n{{MAINITEM.name}} als Teil der TODO_PARENTREGION liegt umgeben von TODO_NACHBARN.\n\n' +
-                'Mit seinen wunderschönen Bergen, Wäldern, Seen, Museen lädt es geradezu für einen Besuch ein\n\n**Routen**\n'
+            footerTemplate: '\nHier könnte Ihre Werbung stehen :-)\n',
+            headingTemplate: '\nInhalt der Seite: {{MAINITEM.name}}\n'
         };
     }
 

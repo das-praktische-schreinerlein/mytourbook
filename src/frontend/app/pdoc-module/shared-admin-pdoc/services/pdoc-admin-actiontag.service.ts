@@ -29,13 +29,15 @@ import {
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component';
 import {PDocAssignJoinFormComponent} from '../components/pdoc-assignjoinform/pdoc-assignjoinform.component';
 import {PDocActionTagService} from '../../shared-pdoc/services/pdoc-actiontag.service';
+import {PDocAlbumService} from '../../shared-pdoc/services/pdoc-album.service';
 
 @Injectable()
 export class PDocAdminActionTagService extends PDocActionTagService {
     constructor(router: Router, cdocDataService: PDocDataService,
+                albumService: PDocAlbumService,
                 appService: GenericAppService, protected modalService: NgbModal,
                 protected toastr: ToastrService) {
-        super(router, cdocDataService, appService, modalService, toastr);
+        super(router, cdocDataService, albumService, appService, toastr);
         this.configureComponent({});
     }
 

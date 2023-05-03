@@ -66,12 +66,12 @@
         <div class="row hidden-print">
             <ng-container>
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectSubType && optionsSelectSubType.length > 0">
-                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('subType').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="subType label|Label for filter: subType@@label.searchform.pdoc.subType">Action:</label>
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('subtype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="subType label|Label for filter: subType@@label.searchform.pdoc.subType">Seitentyp:</label>
                     <ng-container *ngIf="optionsSelectSubType.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectSubType"
                                                  [settings]="settingsSelectSubType"
                                                  [texts]="textsSelectSubType"
-                                                 formControlName="subType"
+                                                 formControlName="subtype"
                                                  ngDefaultControl
                                                  class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
                                                  (onAdded)="onChangeSelect()"
@@ -93,12 +93,12 @@
             <legend i18n="what label|Label for fieldset: what@@label.searchform.pdoc.legend.what">&#x26bd; Was</legend>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectSubType && optionsSelectSubType.length > 0">
-                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('subType').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="subType label|Label for filter: subType@@label.searchform.pdoc.subType">Action:</label>
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('subtype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="subType label|Label for filter: subType@@label.searchform.pdoc.subType">Seitentyp:</label>
                     <ng-container *ngIf="optionsSelectSubType.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectSubType"
                                                  [settings]="settingsSelectSubType"
                                                  [texts]="textsSelectSubType"
-                                                 formControlName="subType"
+                                                 formControlName="subtype"
                                                  ngDefaultControl
                                                  class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
                                                  (onAdded)="onChangeSelect()"
@@ -106,7 +106,7 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm')">
-                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('type').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="type label|Label for filter: type@@label.searchform.pdoc.type">Types:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('type').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="type label|Label for filter: type@@label.searchform.pdoc.type">Typen:</label>
                     <ss-multiselect-dropdown [options]="optionsSelectType"
                                              [settings]="settingsSelectType"
                                              [texts]="textsSelectType"
@@ -150,6 +150,32 @@
                                                  [settings]="settingsSelectWhat"
                                                  [texts]="textsSelectWhat"
                                                  formControlName="what"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectTheme && optionsSelectTheme.length > 0">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('theme').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="theme label|Label for filter: theme@@label.searchform.pdoc.theme">Theme:</label>
+                    <ng-container *ngIf="optionsSelectTheme.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectTheme"
+                                                 [settings]="settingsSelectTheme"
+                                                 [texts]="textsSelectTheme"
+                                                 formControlName="theme"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectLangkey && optionsSelectLangkey.length > 0">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('langkey').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="langkey label|Label for filter: langkey@@label.searchform.pdoc.langkey">Sprache:</label>
+                    <ng-container *ngIf="optionsSelectLangkey.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectLangkey"
+                                                 [settings]="settingsSelectLangkey"
+                                                 [texts]="textsSelectLangkey"
+                                                 formControlName="langkey"
                                                  ngDefaultControl
                                                  class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
                                                  (onAdded)="onChangeSelect()"

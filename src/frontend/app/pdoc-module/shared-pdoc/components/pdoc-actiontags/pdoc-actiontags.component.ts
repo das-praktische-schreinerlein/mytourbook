@@ -6,6 +6,7 @@ import {
     CommonDocActionTagsComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
+import {PDocAlbumService} from '../../services/pdoc-album.service';
 
 @Component({
     selector: 'app-pdoc-actiontags',
@@ -14,9 +15,10 @@ import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PDocActionTagsComponent extends CommonDocActionTagsComponent {
-    constructor(protected appService: GenericAppService, protected contentUtils: PDocContentUtils,
-                protected cd: ChangeDetectorRef) {
-        super(appService, contentUtils, undefined, cd);
+    constructor(appService: GenericAppService, contentUtils: PDocContentUtils,
+                albumService: PDocAlbumService,
+                cd: ChangeDetectorRef) {
+        super(appService, contentUtils, albumService, cd);
     }
 
     protected getComponentConfig(config: {}): CommonDocActionTagsComponentConfig {

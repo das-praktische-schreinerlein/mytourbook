@@ -17,6 +17,7 @@ import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-com
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PDocContentUtils} from '../../services/pdoc-contentutils.service';
+import {PDocAlbumService} from '../../services/pdoc-album.service';
 
 describe('PDocActionsComponent', () => {
     let component: PDocActionsComponent;
@@ -33,6 +34,7 @@ describe('PDocActionsComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
                 NgbModal,
+                PDocAlbumService,
                 PDocDynamicComponentService,
                 DynamicComponentService,
                 ComponentFactoryResolver,

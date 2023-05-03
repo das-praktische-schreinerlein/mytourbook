@@ -2890,6 +2890,13 @@
         "cdoc-listheader": {
             "allowAutoplay": false
         },
+        "pdoc-showpage": {
+            "allowedQueryParams": [],
+            "availableTabs": {
+                "ALL_ENTRIES": true,
+                "PAGE": true
+            }
+        },
         "pdoc-sectionpage": {
             "pageContainerOrder": [
                 "contentContainer",
@@ -2961,6 +2968,139 @@
                 "objectDetectionDone": true
             }
         },
+        "pdoc-editor-commands": {
+            "singleCommands": [
+                {
+                    "label": "😃",
+                    "command": "&#128515;"
+                }
+            ],
+            "rangeCommands": [
+                {
+                    "label": "<h1>",
+                    "commandStart": "# ",
+                    "commandEnd": "\n"
+                },
+                {
+                    "label": "<h2>",
+                    "commandStart": "## ",
+                    "commandEnd": "\n"
+                },
+                {
+                    "label": "<h3>",
+                    "commandStart": "### ",
+                    "commandEnd": "\n"
+                },
+                {
+                    "label": "<bold>",
+                    "commandStart": "**",
+                    "commandEnd": "**"
+                },
+                {
+                    "label": "<li>",
+                    "commandStart": "   - ",
+                    "commandEnd": "\n"
+                },
+                {
+                    "label": "<ol>",
+                    "commandStart": "   1. ",
+                    "commandEnd": "\n"
+                }
+            ]
+        },
+        "pdoc-searchpage": {
+            "availableCreateActionTypes": "PAGE"
+        },
+        "pdoc-actions": {
+            "actionTags": [
+                {
+                    "key": "edit",
+                    "type": "edit",
+                    "name": "\uD83D\uDD89 Edit",
+                    "shortName": "&#x1f589",
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["PAGE", "page"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.pdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "New Page by Page",
+                    "shortName": "\uD83D\uDC23Page",
+                    "payload": {
+                        "type": "PAGE"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["PAGE", "page"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.pdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "replace",
+                    "type": "replace",
+                    "name": "\uD83D\uDDD1 Replace",
+                    "shortName": "&#128465",
+                    "payload": {
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["PAGE", "page"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.pdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                }
+            ]
+        },
         "cdoc-odobjectdetails": {
             "defaultShowKeyAsTooltip": true,
             "defaultFilterForNameToShowNameAndKey": ["bla", "Defa.*", "Default"]
@@ -2974,6 +3114,22 @@
                 "list-item-flat-big": "short",
                 "show-big": "long"
             }
+        },
+        "pdoc-create-resolver": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+            ]
+        },
+        "pdoc-page-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](ptdoc/show/page/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nHier könnte Ihre Werbung stehen :-)\n",
+            "headingTemplate": "\nInhalt der Seite: {{MAINITEM.name}}\n"
         },
         "tdoc-create-resolver": {
             "locationReplacements": [

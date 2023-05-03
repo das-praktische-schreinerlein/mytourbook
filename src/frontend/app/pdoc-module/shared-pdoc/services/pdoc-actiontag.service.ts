@@ -9,14 +9,15 @@ import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdo
 import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {PDocSearchForm} from '@dps/mycms-commons/dist/pdoc-commons/model/forms/pdoc-searchform';
 import {PDocSearchResult} from '@dps/mycms-commons/dist/pdoc-commons/model/container/pdoc-searchresult';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
+import {PDocAlbumService} from './pdoc-album.service';
 
 @Injectable()
 export class PDocActionTagService extends CommonDocActionTagService<PDocRecord, PDocSearchForm, PDocSearchResult,
     PDocDataService> {
     constructor(router: Router, cdocDataService: PDocDataService,
-               appService: GenericAppService, protected modalService: NgbModal,
+               albumService: PDocAlbumService,
+               appService: GenericAppService,
                 protected toastr: ToastrService) {
         super(router, cdocDataService, undefined, undefined, appService);
         this.configureComponent({});

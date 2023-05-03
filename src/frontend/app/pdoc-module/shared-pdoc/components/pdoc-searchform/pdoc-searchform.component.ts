@@ -4,17 +4,17 @@ import {PDocSearchForm} from '@dps/mycms-commons/dist/pdoc-commons/model/forms/p
 import {PDocSearchResult} from '@dps/mycms-commons/dist/pdoc-commons/model/container/pdoc-searchresult';
 import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
+import {PDocSearchFormUtils} from '../../services/pdoc-searchform-utils.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ToastrService} from 'ngx-toastr';
+import {PDocDataCacheService} from '../../services/pdoc-datacache.service';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
+import {PDocSearchFormConverter} from '../../services/pdoc-searchform-converter.service';
 import {
     CommonDocSearchformComponent
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-searchform/cdoc-searchform.component';
 import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
-import {PDocSearchFormUtils} from '../../services/pdoc-searchform-utils.service';
-import {PDocSearchFormConverter} from '../../services/pdoc-searchform-converter.service';
-import {PDocDataCacheService} from '../../services/pdoc-datacache.service';
 
 @Component({
     selector: 'app-pdoc-searchform',
@@ -24,14 +24,41 @@ import {PDocDataCacheService} from '../../services/pdoc-datacache.service';
 })
 export class PDocSearchformComponent
     extends CommonDocSearchformComponent<PDocRecord, PDocSearchForm, PDocSearchResult, PDocDataService> {
+    public optionsSelectKey: IMultiSelectOption[] = [];
+    public optionsSelectLangkey: IMultiSelectOption[] = [];
     public optionsSelectSubType: IMultiSelectOption[] = [];
+    public optionsSelectTheme: IMultiSelectOption[] = [];
 
+    public settingsSelectKey = this.defaultSeLectSettings;
+    public settingsSelectLangkey = this.defaultSeLectSettings;
     public settingsSelectSubType = this.defaultSeLectSettings;
+    public settingsSelectTheme = this.defaultSeLectSettings;
 
+    public textsSelectKey: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Key ausgewählt',
+        checkedPlural: 'Key ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'alles'};
+    public textsSelectLangkey: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Sprache ausgewählt',
+        checkedPlural: 'Sprache ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'alles'};
     public textsSelectSubType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
-        checked: 'Action ausgewählt',
-        checkedPlural: 'Aktion ausgewählt',
+        checked: 'Typ ausgewählt',
+        checkedPlural: 'Typ ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'alles'};
+    public textsSelectTheme: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Theme ausgewählt',
+        checkedPlural: 'Theme ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'alles'};
@@ -54,6 +81,11 @@ export class PDocSearchformComponent
             fulltext: '',
             subtype: [],
             type: [],
+
+            key: [],
+            langkey: [],
+            theme: [],
+
             sort: '',
             perPage: 10,
             pageNum: 1
@@ -68,7 +100,11 @@ export class PDocSearchformComponent
             fulltext: values.fulltext,
             moreFilter: values.moreFilter,
             subtype: [(values.subtype ? values.subtype.split(/,/) : [])],
-            type: [(values.type ? values.type.split(/,/) : [])]
+            type: [(values.type ? values.type.split(/,/) : [])],
+
+            key: [(values.key ? values.key.split(/,/) : [])],
+            langkey: [(values.langkey ? values.langkey.split(/,/) : [])],
+            theme: [(values.theme ? values.theme.split(/,/) : [])],
         });
     }
 
@@ -77,6 +113,14 @@ export class PDocSearchformComponent
         const me = this;
 
         const rawValues = this.searchFormGroup.getRawValue();
+        this.optionsSelectKey = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.pdocSearchFormUtils.getKeyValues(pdocSearchSearchResult), true, [], true),
+            rawValues['key']);
+        this.optionsSelectLangkey = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.pdocSearchFormUtils.getLangkeyValues(pdocSearchSearchResult), true, [], true),
+            rawValues['langkey']);
         this.optionsSelectSubType = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.pdocSearchFormUtils.getSubTypeValues(pdocSearchSearchResult), true, [], true)
@@ -90,6 +134,10 @@ export class PDocSearchformComponent
                     return a.name.localeCompare(b.name);
                 }),
             rawValues['subtype']);
+        this.optionsSelectTheme = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.pdocSearchFormUtils.getThemeValues(pdocSearchSearchResult), true, [], true),
+            rawValues['theme']);
     }
 
     protected updateAvailabilityFlags(pdocSearchSearchResult: PDocSearchResult) {
@@ -101,7 +149,7 @@ export class PDocSearchformComponent
 
     updateFormState(state?: boolean): void {
         if (state !== undefined) {
-            this.showForm = this.showDetails = this.showFulltext = this.showMeta = this.showSpecialFilter = this.showWhat;
+            this.showForm = this.showDetails = this.showFulltext = this.showMeta = this.showSpecialFilter = this.showWhat = state;
         } else {
             this.showForm = this.showDetails || this.showFulltext || this.showMeta || this.showSpecialFilter || this.showWhat;
         }

@@ -18,6 +18,7 @@ export const environment: AppEnvironment = {
     useVideoAssetStoreUrls: false,
     pdocWritable: false,
     pdocActionTagWritable: false,
+    pdocEmptyDefaultSearchTypes: 'page',
     tdocWritable: false,
     tdocActionTagWritable: false,
     allowAutoPlay: false,

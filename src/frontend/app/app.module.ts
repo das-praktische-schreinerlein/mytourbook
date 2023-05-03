@@ -33,6 +33,8 @@ import {PDocActionTagService} from './pdoc-module/shared-pdoc/services/pdoc-acti
 import {PDocAdminActionTagService} from './pdoc-module/shared-admin-pdoc/services/pdoc-admin-actiontag.service';
 import {PDocDataCacheService} from './pdoc-module/shared-pdoc/services/pdoc-datacache.service';
 import {PDocActionTagsComponent} from './pdoc-module/shared-pdoc/components/pdoc-actiontags/pdoc-actiontags.component';
+import {PDocDynamicComponentService} from './pdoc-module/shared-pdoc/services/pdoc-dynamic-components.service';
+import {PDocAlbumService} from './pdoc-module/shared-pdoc/services/pdoc-album.service';
 
 registerLocaleData(localeDe);
 
@@ -56,6 +58,8 @@ registerLocaleData(localeDe);
         AppRoutingModule
     ],
     providers: [
+        PDocDynamicComponentService,
+        PDocAlbumService,
         {provide: PDocActionTagService, useClass: PDocAdminActionTagService},
         PDocDataCacheService,
         PDocNameSuggesterService,
