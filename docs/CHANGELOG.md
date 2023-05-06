@@ -22,7 +22,7 @@
 - frontend: moved track-colors, TextEditorComponent, FormUtils and GeoParserDeterminer to commons
 
 ### bug fixes
-- none 
+- frontend/backend: added joins to resolver and possibility to add joins on create
 
 ### breaking changes
 - use commons-6.0.0
@@ -429,8 +429,6 @@ run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages
 - moved common action-tag-components and navigation-components from mytourbook to frontend-commons
 - moved full implementation of actions and actiontags to commons
 - bumped up deps
-- backend/frontend: add page-management
-- backend/frontend: move generic page-modules to commons
 
 ### new features
 - backend: added job to find corresponding TourDocRecords for media

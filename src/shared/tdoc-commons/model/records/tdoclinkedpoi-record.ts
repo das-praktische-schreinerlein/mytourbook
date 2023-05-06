@@ -22,7 +22,7 @@ export interface TourDocLinkedPoiRecordType extends BaseJoinRecordType {
 
 export class TourDocLinkedPoiRecord extends BaseJoinRecord implements TourDocLinkedPoiRecordType {
     static linkedPoiFields = {...BaseJoinRecord.joinFields,
-        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(true)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false)),
         position: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
             new NumberValidationRule(true, 1, 999999999999, undefined)),
         poitype: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,

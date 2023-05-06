@@ -64,15 +64,22 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                     'tdocdatainfo.baseloc',
                     'tdocdatainfo.destloc',
                     'tdocdatainfo.region',
-                    'tdocdatainfo.sectionDetails',
-                    'tdoclinkedinfos'
+                    'tdocdatainfo.sectionDetails'
                     );
+                fields.push(
+                    'tdoclinkedinfos',
+                    'tdoclinkedpois',
+                    'tdoclinkedroutes'
+                );
                 break;
             case 'trip':
                 fields.push('datestart', 'dateend', 'locId');
                 break;
             case 'poi':
                 fields.push('locId');
+                fields.push(
+                    'tdoclinkedinfos'
+                );
 
                 // remove desc... it will not be used here...
                 for (const field of ['keywords', 'desc', 'descTxt', 'descMd']) {
@@ -100,6 +107,9 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
             case 'location':
                 fields.push('gpsTrackSrc', 'gpsTrackState', 'geoLon', 'geoLat', 'geoLoc', 'subtype');
                 fields.push('locIdParent');
+                fields.push(
+                    'tdoclinkedinfos'
+                );
                 break;
             case 'odimgobject':
                 fields.push('datestart', 'imageId', 'tdocimages');
