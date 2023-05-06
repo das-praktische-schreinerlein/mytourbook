@@ -12,7 +12,7 @@
 - none
 
 ### bug fixes
-- none
+- frontend/backend: added joins to resolver and possibility to add joins on create
 
 ### breaking changes
 - none
