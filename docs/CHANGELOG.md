@@ -6,6 +6,7 @@
 - use commons 6.0.0
 - bumped up deps
 - added optional password-encryption of static-viewer-version
+- frontend/backend: added joins to resolver and possibility to add joins on create
 - backend/frontend: move generic page-modules to commons
 - backend/frontend: add page-management
 - frontend: improved table-layout
