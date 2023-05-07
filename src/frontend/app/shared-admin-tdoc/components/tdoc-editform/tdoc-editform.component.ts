@@ -44,6 +44,7 @@ import {SafeUrl} from '@angular/platform-browser';
 import {OdImageEditorComponent} from '../odimage-editor/odimage-editor.component';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
 import {GeoParserDeterminer} from '../../../shared-tdoc/services/geo-parser.determiner';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
     editorCommands: CommonDocEditorCommandComponentConfig;
@@ -59,6 +60,9 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     TourDocDataService> {
     private trackStatisticService = new TrackStatisticService();
     private personsFound: StructuredKeywordState[] = [];
+    private nameReplacementConfig: [RegExp, string][] = [];
+    private possibleKeywords = [];
+
 
     public Layout = Layout;
     public optionsSelect: {
@@ -509,6 +513,24 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             editorCommands.rangeCommands = BeanUtils.getValue(config, 'components.tdoc-editor-commands.rangeCommands');
         }
 
+        this.nameReplacementConfig = [];
+        if (BeanUtils.getValue(config, 'components.tdoc-poi-select.nameReplacements')) {
+            this.nameReplacementConfig = StringUtils.createReplacementsFromConfigArray(
+                BeanUtils.getValue(config, 'components.tdoc-poi-select.nameReplacements'));
+        }
+
+        this.possibleKeywords = [];
+        if (BeanUtils.getValue(config, 'components.tdoc-keywords.structuredKeywords')) {
+            const possibleKeywords = [];
+            BeanUtils.getValue(config, 'components.tdoc-keywords.structuredKeywords')
+                .map(keywordConfig => keywordConfig['keywords'])
+                .forEach(keywords =>
+                    keywords.forEach(keyword => possibleKeywords.push(keyword)
+                    )
+                );
+            this.possibleKeywords = possibleKeywords;
+        }
+
         const defaultConfig: TurDocEditformComponentConfig = {
             editorCommands: editorCommands,
             suggestionConfigs: suggestionConfig,
@@ -791,12 +813,27 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected preparePoiFiltersForType(record: TourDocRecord): void {
-        const name = FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), 'name');
-        this.poiSearchNames = ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(fieldName => {
+        const name = StringUtils.doReplacements(
+            FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), 'name'),
+            this.nameReplacementConfig);
+
+        let poiSearchNames = [];
+        ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(fieldName => {
             return FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), fieldName);
-        }).concat(name
-            ? name.split(/[ ,;:\/]+/)
-            : []);
+        }).concat(name)
+            .filter(str => str !== undefined && str !== '')
+            .map(str => str.split(/ *-> *|[- ,;:\/]+/))
+            .forEach(strArr => {
+                strArr.forEach(value => poiSearchNames.push(value))
+            });
+
+        // TODO remove keywords
+        poiSearchNames = StringUtils.uniqueKeywords(poiSearchNames.join(','))
+            .filter(str => str.length > 2)
+            .filter(str => !this.possibleKeywords.includes(str));
+
+
+        this.poiSearchNames = poiSearchNames;
 
         this.poiSearchBasePosition = record.geoLat !== undefined
             ? new LatLng(Number(record.geoLat), Number(record.geoLon))

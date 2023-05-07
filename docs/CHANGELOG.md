@@ -4,12 +4,13 @@
 
 ## 8.0.0
 - added optional password-encryption of static-viewer-version
+- frontend: improved filter-suggestion for poi-search
 
 ### new features
 - added optional password-encryption of static-viewer-version
 
 ### improvements
-- none
+- frontend: improved filter-suggestion for poi-search
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create
