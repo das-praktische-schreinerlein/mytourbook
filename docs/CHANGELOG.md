@@ -6,6 +6,7 @@
 - use commons 6.0.0
 - bumped up deps
 - added optional password-encryption of static-viewer-version
+- frontend: improved filter-suggestion for poi-search
 - frontend/backend: added joins to resolver and possibility to add joins on create
 - backend/frontend: move generic page-modules to commons
 - backend/frontend: add page-management
@@ -16,6 +17,7 @@
 - backend/frontend: add page-management
 
 ### improvements
+- frontend: improved filter-suggestion for poi-search
 - use commons 6.0.0
 - bumped up deps
 - backend/frontend: move generic page-modules to commons

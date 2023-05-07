@@ -3195,6 +3195,13 @@
             "listItemsFallbackTemplate": "",
             "footerTemplate": "\nMehr dazu hier.\n",
             "headingTemplate": "**Was für ein Trip**\n\n"
+        },
+        "tdoc-poi-select": {
+            "nameReplacements": [
+                ["\\d+", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", ""],
+                ["(mit | ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", ""]
+            ]
         }
     },
     "services": {
