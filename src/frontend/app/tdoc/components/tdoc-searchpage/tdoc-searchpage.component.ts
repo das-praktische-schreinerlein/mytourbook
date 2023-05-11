@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
@@ -59,14 +59,18 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, layoutService: LayoutService, searchFormUtils: SearchFormUtils,
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService,
-                protected elRef: ElementRef, location: Location, protected mapStateService: TourDocMapStateService) {
+                protected elRef: ElementRef, location: Location, protected mapStateService: TourDocMapStateService,
+                protected router: Router) {
         super(route, commonRoutingService, errorResolver, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
             tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment, location);
     }
 
     onMapTourDocClicked(tdoc: TourDocRecord) {
-        console.log("tdocClicked", tdoc);
+        const me = this;
+        me.router.navigate([{ outlets: { 'modalshow': ['modalshow', 'show', tdoc.type, tdoc.id] } }]).then(value => {});
+
+        return false;
     }
 
     onMapCenterChanged(newCenter: LatLng) {

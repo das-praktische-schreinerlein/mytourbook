@@ -7,6 +7,7 @@
 - bumped up deps
 - added optional password-encryption of static-viewer-version
 - frontend: improved filter-suggestion for poi-search
+- frontend: open modal view on maps + lists
 - frontend/backend: added joins to resolver and possibility to add joins on create
 - backend/frontend: move generic page-modules to commons
 - backend/frontend: add page-management
@@ -14,6 +15,7 @@
 
 ### new features
 - added optional password-encryption of static-viewer-version
+- frontend: open modal view on maps + lists
 - backend/frontend: add page-management
 
 ### improvements

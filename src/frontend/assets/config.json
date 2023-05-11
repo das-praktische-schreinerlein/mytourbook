@@ -663,6 +663,30 @@
         "tdoc-actions": {
             "actionTags": [
                 {
+                    "key": "show",
+                    "type": "show",
+                    "name": "\uD83D\uDD0E Show",
+                    "shortName": "&#x1f50e;",
+                    "payload": {
+                        "outlet": "modalshow"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info", "PLAYLIST", "playlist", "POI", "poi", "ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": []
+                },
+                {
                     "key": "edit",
                     "type": "edit",
                     "name": "\uD83D\uDD89 Edit",
