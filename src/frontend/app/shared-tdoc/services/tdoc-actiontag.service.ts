@@ -34,10 +34,41 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
         };
     }
 
+    protected processActionTagEventShow(actionTagEvent: ActionTagEvent,
+                                        actionTagEventEmitter: EventEmitter<ActionTagEvent>): Promise<TourDocRecord> {
+        actionTagEvent.processed = true;
+        actionTagEvent.error = undefined;
+        actionTagEventEmitter.emit(actionTagEvent);
+
+        if (actionTagEvent.config.payload && actionTagEvent.config.payload['outlet']) {
+            const outlets = {};
+            const outletName = actionTagEvent.config.payload['outlet'];
+            outlets[outletName] = [outletName, 'show', 'anonym', actionTagEvent.record.id];
+
+            return new Promise<TourDocRecord>((resolve, reject) => {
+                this.router.navigate([{outlets: outlets}]).then(value => {
+                    resolve(<TourDocRecord>actionTagEvent.result);
+                }).catch(reason => {
+                    reject(reason);
+                });
+            });
+        } else {
+            return new Promise<TourDocRecord>((resolve, reject) => {
+                this.router.navigate([this.baseEditPath, 'show', 'anonym', actionTagEvent.record.id]).then(value => {
+                    resolve(<TourDocRecord>actionTagEvent.result);
+                }).catch(reason => {
+                    reject(reason);
+                });
+            });
+        }
+    }
+
     protected processActionTagEventUnknown(actionTagEvent: ActionTagEvent,
                                            actionTagEventEmitter: EventEmitter<ActionTagEvent>): Promise<TourDocRecord> {
         if (actionTagEvent.config.type === 'noop') {
             return this.processActionTagEventNoop(actionTagEvent, actionTagEventEmitter);
+        } else if (actionTagEvent.config.type === 'show') {
+            return this.processActionTagEventShow(actionTagEvent, actionTagEventEmitter);
         } else {
             return super.processActionTagEventUnknown(actionTagEvent, actionTagEventEmitter);
         }

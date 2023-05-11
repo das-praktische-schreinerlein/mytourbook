@@ -5,9 +5,11 @@
 ## 8.0.0
 - added optional password-encryption of static-viewer-version
 - frontend: improved filter-suggestion for poi-search
+- frontend: open modal view on maps + lists
 
 ### new features
 - added optional password-encryption of static-viewer-version
+- frontend: open modal view on maps + lists
 
 ### improvements
 - frontend: improved filter-suggestion for poi-search
