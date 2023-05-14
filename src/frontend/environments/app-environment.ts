@@ -13,9 +13,9 @@ export interface AppEnvironment extends CommonEnvironment {
     useVideoAssetStoreUrls: boolean;
     useAudioAssetStoreUrls: boolean;
     skipMediaCheck?: boolean,
-    pdocWritable: boolean;
-    pdocActionTagWritable: boolean;
-    pdocEmptyDefaultSearchTypes: string,
+    pdocWritable?: boolean;
+    pdocActionTagWritable?: boolean;
+    pdocEmptyDefaultSearchTypes?: string,
     tdocWritable: boolean;
     tdocActionTagWritable: boolean;
     tdocMaxItemsPerAlbum: number;
