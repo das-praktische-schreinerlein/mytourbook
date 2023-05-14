@@ -1,10 +1,97 @@
+diff --git a/node_modules/itemsjs/src/helpers.js b/node_modules/itemsjs/src/helpers.js
+index 361175e..b5c0c9c 100644
+--- a/node_modules/itemsjs/src/helpers.js
++++ b/node_modules/itemsjs/src/helpers.js
+@@ -525,6 +525,25 @@ const parse_boolean_query_temp = function (query) {
+   })
+ }
+ 
++const deg2Rad = function (degValue) {
++  return degValue * Math.PI / 180;
++}
++
++const calcRadDistance = function(lat1, lng1, lat2,lng2) {
++  const radius = 6371;
++  const diffLat = lat2 - lat1;
++  const diffLng = lng2 - lng1;
++
++  const a = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
++      Math.sin(diffLng/2) * Math.sin(diffLng/2) * Math.cos(lat1) * Math.cos(lat2);
++  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
++  return radius * c;
++}
++
++const calcDegDistance = function (degLat1, degLng1, degLat2, degLng2) {
++  return calcRadDistance(this.deg2Rad(degLat1), this.deg2Rad(degLng1), this.deg2Rad(degLat2), this.deg2Rad(degLng2))
++}
++
+ module.exports.parse_boolean_query = parse_boolean_query;
+ module.exports.input_to_facet_filters = input_to_facet_filters;
+ module.exports.facets_ids = facets_ids;
+@@ -538,3 +557,7 @@ module.exports.filters_matrix = filters_matrix;
+ module.exports.getBuckets = getBuckets;
+ module.exports.getFacets = getBuckets;
+ module.exports.mergeAggregations = mergeAggregations;
++
++module.exports.deg2Rad = deg2Rad;
++module.exports.calcRadDistance = calcRadDistance;
++module.exports.calcDegDistance = calcDegDistance;
 diff --git a/node_modules/itemsjs/src/lib.js b/node_modules/itemsjs/src/lib.js
-index e5489d1..d96d11e 100644
+index e5489d1..5e418b3 100644
 --- a/node_modules/itemsjs/src/lib.js
 +++ b/node_modules/itemsjs/src/lib.js
-@@ -41,9 +41,18 @@ module.exports.search = function(items, input, configuration, fulltext, facets)
+@@ -40,10 +40,67 @@ module.exports.search = function(items, input, configuration, fulltext, facets)
+     query_ids = new FastBitSet(_ids);
    }
  
++  if (input.spatialQuery) {
++    const nearByItems = [];
++    const nearByIds = [];
++
++    const srcIds = query_ids
++        ? query_ids.array()
++        : filtered_indexes_bitmap.array();
++
++    if (configuration.spatialField) {
++      for (const _id of srcIds) {
++        const item = facets.get_item(_id);
++        if (!item) {
++          console.warn('spatial search - remove element from resultlist - element not found: id', _id);
++          continue;
++        }
++
++        const lat = item[configuration.spatialField + '_lat'];
++        const lng = item[configuration.spatialField + '_lng'];
++        if (!lat || !lng) {
++          console.debug('spatial search - remove element from resultlist - no coordinates: id', item['id']);
++          continue;
++        }
++
++        const distance =
++            helpers.calcDegDistance(input.spatialQuery.lat, input.spatialQuery.lng, lat, lng);
++        if (distance > input.spatialQuery.distance) {
++          console.debug('spatial search - remove element from resultlist - out of distance: id/distance', item['id'], distance);
++          continue;
++        }
++
++        nearByItems.push(item);
++        nearByIds.push(_id);
++        item['distance'] = distance;
++      }
++    } else {
++      console.warn('spatial search - configuration.spatialField not defined - return empty list');
++    }
++
++    if (nearByIds.length !== srcIds.length) {
++      console.debug('spatial search - filtered some elements: src/res', srcIds.length, nearByIds.length);
++      query_ids = new FastBitSet(nearByIds);
++    } else {
++      console.debug('spatial search - filtered no elements results same - src', srcIds.length);
++    }
++  }
++
++
++
    let facets_time = new Date().getTime();
 -  const facet_result = facets.search(input, {
 +
@@ -22,7 +109,7 @@ index e5489d1..d96d11e 100644
    facets_time = new Date().getTime() - facets_time;
  
    if (query_ids) {
-@@ -132,15 +141,18 @@ module.exports.sorted_items = function(items, sort, sortings) {
+@@ -132,15 +189,18 @@ module.exports.sorted_items = function(items, sort, sortings) {
      sort = sortings[sort];
    }
  
