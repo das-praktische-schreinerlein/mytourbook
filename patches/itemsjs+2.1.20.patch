@@ -37,10 +37,10 @@ index 361175e..b5c0c9c 100644
 +module.exports.calcRadDistance = calcRadDistance;
 +module.exports.calcDegDistance = calcDegDistance;
 diff --git a/node_modules/itemsjs/src/lib.js b/node_modules/itemsjs/src/lib.js
-index e5489d1..5e418b3 100644
+index e5489d1..3a9f3df 100644
 --- a/node_modules/itemsjs/src/lib.js
 +++ b/node_modules/itemsjs/src/lib.js
-@@ -40,10 +40,67 @@ module.exports.search = function(items, input, configuration, fulltext, facets)
+@@ -40,10 +40,66 @@ module.exports.search = function(items, input, configuration, fulltext, facets)
      query_ids = new FastBitSet(_ids);
    }
  
@@ -63,7 +63,6 @@ index e5489d1..5e418b3 100644
 +        const lat = item[configuration.spatialField + '_lat'];
 +        const lng = item[configuration.spatialField + '_lng'];
 +        if (!lat || !lng) {
-+          console.debug('spatial search - remove element from resultlist - no coordinates: id', item['id']);
 +          continue;
 +        }
 +
@@ -109,7 +108,7 @@ index e5489d1..5e418b3 100644
    facets_time = new Date().getTime() - facets_time;
  
    if (query_ids) {
-@@ -132,15 +189,18 @@ module.exports.sorted_items = function(items, sort, sortings) {
+@@ -132,15 +188,18 @@ module.exports.sorted_items = function(items, sort, sortings) {
      sort = sortings[sort];
    }
  
