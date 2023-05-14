@@ -39,6 +39,7 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
         actionTagEvent.processed = true;
         actionTagEvent.error = undefined;
         actionTagEventEmitter.emit(actionTagEvent);
+        actionTagEvent.result = actionTagEvent.record;
 
         if (actionTagEvent.config.payload && actionTagEvent.config.payload['outlet']) {
             const outlets = {};

@@ -205,6 +205,10 @@ export class TourDocDataServiceModule {
             throw new Error('config for TourDocItemsJsAdapter not exists');
         }
 
+        const itemsJsConfig: ExtendedItemsJsConfig = TourDocItemsJsAdapter.itemsJsConfig;
+        ItemsJsDataImporter.prepareConfiguration(itemsJsConfig);
+        const importer: ItemsJsDataImporter = new ItemsJsDataImporter(itemsJsConfig);
+
         const tdocs = [];
         const data = TourDocFileUtils.parseRecordSourceFromJson(fs.readFileSync(config.dataFile, { encoding: 'utf8' }));
         const exportRecords = data.map(doc => {
@@ -213,9 +217,6 @@ export class TourDocDataServiceModule {
 
         tdocs.push(...exportRecords);
 
-        const itemsJsConfig: ExtendedItemsJsConfig = TourDocItemsJsAdapter.itemsJsConfig;
-        ItemsJsDataImporter.prepareConfiguration(itemsJsConfig);
-        const importer: ItemsJsDataImporter = new ItemsJsDataImporter(itemsJsConfig);
         const records = importer.mapToItemJsDocuments(tdocs);
         const adapter = new TourDocItemsJsAdapter({mapperConfig: backendConfig.mapperConfig}, records, itemsJsConfig);
         dataStore.setAdapter('http', adapter, '', {});
