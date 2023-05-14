@@ -190,7 +190,7 @@
     "noop": "npm version"
   },
   "private": true,
-  "dependenciyHints": {
+  "dependencyHints": {
     "@babel/runtime": "fixed to prevent 'TypeError: l is undefined' on viewer and builded versions",
     "@babel/runtime-corejs3": "fixed to prevent 'TypeError: l is undefined' on viewer and builded versions",
     "core-js-pure": "fixed to prevent 'TypeError: l is undefined' on viewer and builded versions"
