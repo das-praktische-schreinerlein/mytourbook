@@ -322,7 +322,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     protected getComponentConfig(config: {}): CommonDocShowpageComponentConfig {
         return {
             baseSearchUrl: ['tdoc'].join('/'),
-            baseSearchUrlDefault: ['tdoc'].join('/')
+            baseSearchUrlDefault: ['tdoc'].join('/'),
+            modalOutletName: 'tdocmodalshow'
         };
     }
 

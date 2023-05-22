@@ -48,7 +48,7 @@ import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services
 import {GeoParserDeterminer} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo-parser.determiner';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
-export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
+export interface TourDocEditformComponentConfig extends CommonDocEditformComponentConfig {
     editorCommands: CommonDocEditorCommandComponentConfig;
 }
 
@@ -449,7 +449,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return errors.concat(TourDocRecordValidator.instance.validateValues(record));
     }
 
-    protected getComponentConfig(config: {}): TurDocEditformComponentConfig {
+    protected getComponentConfig(config: {}): TourDocEditformComponentConfig {
         let prefix = '';
         let suggestionConfig = [];
         if (BeanUtils.getValue(config, 'components.tdoc-keywords.keywordSuggestions')) {
@@ -486,7 +486,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.possibleKeywords = possibleKeywords;
         }
 
-        const defaultConfig: TurDocEditformComponentConfig = {
+        const defaultConfig: TourDocEditformComponentConfig = {
             editorCommands: editorCommands,
             suggestionConfigs: suggestionConfig,
             editPrefix: prefix,
@@ -651,7 +651,9 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'subTypeInfoType': [],
                 'trackId': [],
                 'tripId': []
-            }
+            },
+            modalEditOutletName: 'tdocmodaledit',
+            modalShowOutletName: 'tdocmodalshow'
         };
 
         return defaultConfig;

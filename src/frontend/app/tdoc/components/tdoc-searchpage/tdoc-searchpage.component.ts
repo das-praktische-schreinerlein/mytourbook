@@ -68,7 +68,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
 
     onMapTourDocClicked(tdoc: TourDocRecord) {
         const me = this;
-        me.router.navigate([{ outlets: { 'modalshow': ['modalshow', 'show', tdoc.type, tdoc.id] } }]).then(value => {});
+        me.router.navigate([{ outlets: { 'tdocmodalshow': ['tdocmodalshow', 'show', tdoc.type, tdoc.id] } }]).then(value => {});
 
         return false;
     }

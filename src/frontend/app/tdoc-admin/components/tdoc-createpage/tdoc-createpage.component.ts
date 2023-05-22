@@ -48,6 +48,7 @@ export class TourDocCreatepageComponent
         return {
             baseSearchUrl: ['tdoc'].join('/'),
             baseSearchUrlDefault: ['tdoc'].join('/'),
+            modalOutletName: 'tdocmodaledit',
             editAllowed: (BeanUtils.getValue(config, 'permissions.tdocWritable') === true)
         };
     }

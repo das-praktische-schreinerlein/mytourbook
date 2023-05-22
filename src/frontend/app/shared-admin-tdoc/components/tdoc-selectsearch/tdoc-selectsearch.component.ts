@@ -61,7 +61,7 @@ export class TourDocSelectSearchComponent extends AbstractInlineComponent {
     onCreateNewRecord(id: string): boolean {
         const me = this;
         // open modal dialog
-        me.router.navigate([{ outlets: { 'modaledit': ['modaledit', 'create', this.type.toUpperCase(), id] } }]).then(value => {
+        me.router.navigate([{ outlets: { 'tdocmodaledit': ['tdocmodaledit', 'create', this.type.toUpperCase(), id] } }]).then(value => {
             // check for closing modal dialog and routechange -> update facets
             const subscription = me.router.events.subscribe((val) => {
                 subscription.unsubscribe();

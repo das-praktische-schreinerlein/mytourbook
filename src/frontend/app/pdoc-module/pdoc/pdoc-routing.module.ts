@@ -65,7 +65,7 @@ const pdocRoutes: Routes = [
         ]
     },
     {
-        path: 'modalshow',
+        path: 'pdocmodalshow',
         children: [
             {
                 path: 'show/:name/:id',
@@ -78,7 +78,7 @@ const pdocRoutes: Routes = [
                 }
             }
         ],
-        outlet: 'modalshow',
+        outlet: 'pdocmodalshow',
     },
 ];
 

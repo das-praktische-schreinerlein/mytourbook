@@ -169,7 +169,9 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
                 'subType': [],
                 'langkey': [],
                 'subTypePageType': []
-            }
+            },
+            modalEditOutletName: 'pdocmodaledit',
+            modalShowOutletName: 'pdocmodalshow'
         };
 
         return defaultConfig;

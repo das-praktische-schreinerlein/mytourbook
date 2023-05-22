@@ -47,6 +47,7 @@ export class PDocCreatepageComponent
         return {
             baseSearchUrl: ['pdoc'].join('/'),
             baseSearchUrlDefault: ['pdoc'].join('/'),
+            modalOutletName: 'pdocmodaledit',
             editAllowed: (BeanUtils.getValue(config, 'permissions.pdocWritable') === true)
         };
     }

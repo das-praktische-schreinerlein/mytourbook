@@ -668,7 +668,7 @@
                     "name": "\uD83D\uDD0E Show",
                     "shortName": "&#x1f50e;",
                     "payload": {
-                        "outlet": "modalshow"
+                        "outlet": "tdocmodalshow"
                     },
                     "showFilter": [
                         {

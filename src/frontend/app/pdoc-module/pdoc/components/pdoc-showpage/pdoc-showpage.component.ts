@@ -92,7 +92,8 @@ export class PDocShowpageComponent extends CommonDocShowpageComponent<PDocRecord
     protected getComponentConfig(config: {}): CommonDocShowpageComponentConfig {
         return {
             baseSearchUrl: ['pdoc'].join('/'),
-            baseSearchUrlDefault: ['pdoc'].join('/')
+            baseSearchUrlDefault: ['pdoc'].join('/'),
+            modalOutletName: 'pdocmodalshow'
         };
     }
 

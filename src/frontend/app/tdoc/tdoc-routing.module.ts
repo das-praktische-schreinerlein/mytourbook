@@ -97,7 +97,7 @@ const tdocRoutes: Routes = [
         ]
     },
     {
-        path: 'modalshow',
+        path: 'tdocmodalshow',
         children: [
             {
                 path: 'show/:name/:id',
@@ -110,7 +110,7 @@ const tdocRoutes: Routes = [
                 }
             }
         ],
-        outlet: 'modalshow',
+        outlet: 'tdocmodalshow',
     },
 ];
 
