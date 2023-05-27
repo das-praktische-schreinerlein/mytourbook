@@ -155,7 +155,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
                 'subtype': {},
                 'subTypePageType': {
                     labelPrefix: '',
-                    values: ['SectionOverviewPage', 'SimplePage', 'SectionPage', '']
+                    values: ['SectionOverviewPage', 'SimplePage', 'SectionPage']
                 },
                 'teaser': {},
                 'theme': {}
