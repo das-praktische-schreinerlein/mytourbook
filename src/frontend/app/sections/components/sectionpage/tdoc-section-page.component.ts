@@ -23,6 +23,7 @@ import {
 } from '@dps/mycms-frontend-commons/dist/frontend-section-commons/components/sectionpage/section-page.component';
 import {TranslateService} from '@ngx-translate/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
+import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 
 export interface TourDocSectionPageComponentAvailableTabs {
     DESTINATION?: boolean;
@@ -97,6 +98,13 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     };
     availableDoneDashboardRows: TourDocSectionPageComponentDashboardRows = {
     };
+
+    flgShowTopTen = false;
+    flgShowSearch = false;
+    flgShowNews = false;
+    flgShowDashboard = false;
+    flgShowAdminArea = false;
+    flgShowStatisticBoard = false;
 
     private layoutSize: LayoutSizeData;
     private DEFAULT_PAGECONTAINERORDER = [
@@ -536,11 +544,23 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         }
     }
 
+    protected doProcessPageFlags(config: {}, pdoc: PDocRecord): void {
+        this.flgShowTopTen = true && this.flgShowTopTen;
+        this.flgShowSearch = true && pdoc.flgShowSearch;
+        this.flgShowNews = true && pdoc.flgShowNews;
+        this.flgShowDashboard = true && pdoc.flgShowDashboard;
+        this.flgShowAdminArea = true && pdoc.flgShowAdminArea;
+        this.flgShowStatisticBoard = true && pdoc.flags && pdoc.flags.toString().includes('flgShowStatisticBoard');
+    }
+
     protected doProcessAfterResolvedData(config: {}): void {
         this.tdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.tdocRoutingService.setLastSearchUrl(this.getToSearchUrl());
 
-        if (this.pdoc.flags && this.pdoc.flags.toString().includes('flgShowStatisticBoard')) {
+        this.doProcessPageFlags(config, this.pdoc);
+
+        // render flags to component-fields
+        if (this.flgShowStatisticBoard) {
             this.doStatisticSearch('ROUTE');
             this.doStatisticSearch('DESTINATION');
             this.doStatisticSearch('TRACK');

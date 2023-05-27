@@ -61,7 +61,7 @@
                             <ng-container *ngTemplateOutlet="adminAreaContainer"></ng-container>
                         </ng-container>
                         <ng-container *ngSwitchCase="'tagcloudContainer'">
-                            <ng-container *ngIf="pdoc.flgShowTopTen">
+                            <ng-container *ngIf="flgShowTopTen">
                                 <div class="container content-container hidden-print">
                                     <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
                                     <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
@@ -87,19 +87,19 @@
 </ng-template>
 
 <ng-template #searchHintContainer>
-    <ng-container *ngIf="pdoc.flgShowSearch || pdoc.flgShowTopTen">
+    <ng-container *ngIf="flgShowSearch || flgShowTopTen">
         <div class="container content-container sectionpage-hint-content-container hidden-print">
-            <ng-container *ngIf="pdoc.flgShowSearch">
+            <ng-container *ngIf="flgShowSearch">
                 <div class="hint_tosearch">
                     <a class="btn btn-action btn-sm" href="{{getToSearchUrl()}}"
                        (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
             </ng-container>
 
-            <ng-container *ngIf="pdoc.flgShowSearch && pdoc.flgShowTopTen">
+            <ng-container *ngIf="flgShowSearch && flgShowTopTen">
                 <p i18n="text search-or sectionPage|Text to search-or sectionPage@@text.sectionPage.searchOr">oder</p>
             </ng-container>
 
-            <ng-container *ngIf="pdoc.flgShowTopTen">
+            <ng-container *ngIf="flgShowTopTen">
                 <div class="hint_tostoebern" i18n="text pokeAround sectionPage|Text to pokeAround sectionPage@@text.sectionPage.pokeAround">Fröhliches Stöbern :-)</div>
             </ng-container>
         </div>
@@ -126,7 +126,7 @@
 </ng-template>
 
 <ng-template #newsContainer>
-    <ng-container *ngIf="pdoc.flgShowNews">
+    <ng-container *ngIf="flgShowNews">
         <div class="container content-container">
             <app-tdoc-inline-searchpage [label]="'News'"
                                         i18n-label="label section-page NEWS|Label section-page NEWS@@linline-search.label.tdoc.NEWS"
@@ -191,7 +191,7 @@
                i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">Zur Suche</a>
         </div>
     </div>
-    <ng-container *ngIf="pdoc.flgShowTopTen && tdocSearchResult.recordCount > 0">
+    <ng-container *ngIf="flgShowTopTen && tdocSearchResult.recordCount > 0">
         <div class="hidden-print sectionpage-sidebar-tagcloud-container">
             <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
         </div>
@@ -646,7 +646,7 @@
 </ng-template>
 
 <ng-template #topTenContainer>
-    <ng-container *ngIf="pdoc.flgShowTopTen">
+    <ng-container *ngIf="flgShowTopTen">
         <div class="container content-container sectionpage-topten-container">
             <h5><span class="fx-bg-name" i18n="heading shortSearch sectionPage|Heading to shortSearch sectionPage@@heading.sectionPage.shortSearch">Schnellsuche</span></h5>
             <div class="shortsearchform">
@@ -664,7 +664,7 @@
 </ng-template>
 
 <ng-template #dashBoardContainer>
-    <ng-container *ngIf="pdoc.flgShowDashboard
+    <ng-container *ngIf="flgShowDashboard
      && ((availableToDoDashboardRows && objectKeys(availableToDoDashboardRows).length > 0)
         || (availableDoneDashboardRows && objectKeys(availableDoneDashboardRows).length > 0))">
         <div class="container content-container sectionpage-dashBoard-container">
@@ -684,7 +684,7 @@
 </ng-template>
 
 <ng-template #adminAreaContainer>
-    <ng-container *ngIf="pdoc.flgShowAdminArea">
+    <ng-container *ngIf="flgShowAdminArea">
         <div class="container content-container sectionpage-dashBoard-container">
             <ng-container *ngTemplateOutlet="adminArea"></ng-container>
             <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
