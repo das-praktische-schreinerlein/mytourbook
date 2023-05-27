@@ -18,6 +18,7 @@ import {DbAdminCommand} from './dbadmin.command';
 import {MediaImportManagerCommand} from './media-import-manager.command';
 import {TourDocConverterCommand} from './tdoc-converter.command';
 import {GeoManagerCommand} from './geo-manager.command';
+import {PageManagerCommand} from './pdoc-manager.command';
 
 // tslint:disable-next-line:no-empty-interface
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
@@ -37,6 +38,7 @@ export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandC
             'mediaImportManager': new MediaImportManagerCommand(),
             'objectDetectionManager': new ObjectDetectionManagerCommand(),
             'geoManagerCommand': new GeoManagerCommand(),
+            'pageManager': new PageManagerCommand(),
             'facetCacheManager': new FacetCacheManagerCommand(),
             'dbAdmin': new DbAdminCommand(),
             'dbMigrate': new DbMigrateCommand(),
