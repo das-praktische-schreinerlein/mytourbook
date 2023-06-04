@@ -169,13 +169,39 @@
                                                  (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                     </ng-container>
                 </div>
-                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectLangkey && optionsSelectLangkey.length > 0">
-                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('langkey').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="langkey label|Label for filter: langkey@@label.searchform.pdoc.langkey">Sprache:</label>
-                    <ng-container *ngIf="optionsSelectLangkey.length > 0; else noFilterValues">
-                        <ss-multiselect-dropdown [options]="optionsSelectLangkey"
-                                                 [settings]="settingsSelectLangkey"
-                                                 [texts]="textsSelectLangkey"
-                                                 formControlName="langkey"
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectFlags && optionsSelectFlags.length > 0">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('flags').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="flags label|Label for filter: flags@@label.searchform.pdoc.flags">Flags:</label>
+                    <ng-container *ngIf="optionsSelectFlags.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectFlags"
+                                                 [settings]="settingsSelectFlags"
+                                                 [texts]="textsSelectFlags"
+                                                 formControlName="flags"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectFlags && optionsSelectLangkeys.length > 0">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('langkeys').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="langkey label|Label for filter: langkey@@label.searchform.pdoc.langkey">Sprache:</label>
+                    <ng-container *ngIf="optionsSelectLangkeys.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectLangkeys"
+                                                 [settings]="settingsSelectLangkeys"
+                                                 [texts]="textsSelectLangkeys"
+                                                 formControlName="langkeys"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectProfiles && optionsSelectProfiles.length > 0">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('profiles').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="profile label|Label for filter: langkey@@label.searchform.pdoc.profile">Profil:</label>
+                    <ng-container *ngIf="optionsSelectProfiles.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectProfiles"
+                                                 [settings]="settingsSelectProfiles"
+                                                 [texts]="textsSelectProfiles"
+                                                 formControlName="profiles"
                                                  ngDefaultControl
                                                  class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
                                                  (onAdded)="onChangeSelect()"

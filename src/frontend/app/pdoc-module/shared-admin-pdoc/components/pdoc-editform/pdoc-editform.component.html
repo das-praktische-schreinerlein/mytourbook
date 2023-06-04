@@ -16,20 +16,29 @@
 
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputText;context:{key: 'key', formControlName: 'key'}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputLangkey"></ng-container>
-                <ng-container *ngTemplateOutlet="inputText;context:{key: 'theme', formControlName: 'theme'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputSubSectionIds"></ng-container>
+            </div>
+
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputProfiles"></ng-container>
+                <ng-container *ngTemplateOutlet="inputLangkeys"></ng-container>
+            </div>
+            
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputFlags"></ng-container>
             </div>
 
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputText;context:{key: 'heading', formControlName: 'heading'}"></ng-container>
-            </div>
-
-            <div class="row">
-                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'css', formControlName: 'css'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'theme', formControlName: 'theme'}"></ng-container>
             </div>
 
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'teaser', formControlName: 'teaser'}"></ng-container>
+            </div>
+
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'css', formControlName: 'css'}"></ng-container>
             </div>
 
         </fieldset>
@@ -86,15 +95,57 @@
         </div>
     </ng-template>
 
-    <ng-template #inputLangkey>
+    <ng-template #inputFlags>
         <div class="col-sm-4 input-group input-group-sm">
-            <label class="col-xs-4 col-form-label mr-2" i18n="Langkey label|Label for filter: Langkey@@label.searchform.pdoc.Langkey">Sprache:</label>
-            <ss-multiselect-dropdown [options]="optionsSelect['langkey']"
-                                     [settings]="settingsSelectLangkey"
-                                     [texts]="textsSelectLangkey"
-                                     (ngModelChange)="onInputChanged($event, 'langkey')"
+            <label class="col-xs-4 col-form-label mr-2" i18n="Flags label|Label for filter: Flags@@label.searchform.pdoc.Flags">Flags:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['flags']"
+                                     [settings]="settingsSelectFlags"
+                                     [texts]="textsSelectFlags"
+                                     (ngModelChange)="onInputChanged($event, 'flags')"
                                      required="required"
-                                     formControlName="langkey"
+                                     formControlName="flags"
+                                     ngDefaultControl
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputLangkeys>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="Langkeys label|Label for filter: Langkeys@@label.searchform.pdoc.Langkeys">Sprachen:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['langkeys']"
+                                     [settings]="settingsSelectLangkeys"
+                                     [texts]="textsSelectLangkeys"
+                                     (ngModelChange)="onInputChanged($event, 'langkeys')"
+                                     required="required"
+                                     formControlName="langkeys"
+                                     ngDefaultControl
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputProfiles>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="Profiles label|Label for filter: Profiles@@label.searchform.pdoc.Profiles">Profile:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['profiles']"
+                                     [settings]="settingsSelectProfiles"
+                                     [texts]="textsSelectProfiles"
+                                     (ngModelChange)="onInputChanged($event, 'profiles')"
+                                     required="required"
+                                     formControlName="profiles"
+                                     ngDefaultControl
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputSubSectionIds>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="SubSectionIds label|Label for filter: SubSectionIds@@label.searchform.pdoc.SubSectionIds">Unterseiten:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['subSectionIds']"
+                                     [settings]="settingsSelectSubSectionIds"
+                                     [texts]="textsSelectSubSectionIds"
+                                     (ngModelChange)="onInputChanged($event, 'subSectionIds')"
+                                     required="required"
+                                     formControlName="subSectionIds"
                                      ngDefaultControl
                                      class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
         </div>

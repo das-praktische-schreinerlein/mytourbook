@@ -24,27 +24,37 @@ import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdo
 })
 export class PDocSearchformComponent
     extends CommonDocSearchformComponent<PDocRecord, PDocSearchForm, PDocSearchResult, PDocDataService> {
+    public optionsSelectFlags: IMultiSelectOption[] = [];
     public optionsSelectKey: IMultiSelectOption[] = [];
-    public optionsSelectLangkey: IMultiSelectOption[] = [];
+    public optionsSelectLangkeys: IMultiSelectOption[] = [];
+    public optionsSelectProfiles: IMultiSelectOption[] = [];
     public optionsSelectSubType: IMultiSelectOption[] = [];
     public optionsSelectTheme: IMultiSelectOption[] = [];
 
-    public settingsSelectKey = this.defaultSeLectSettings;
-    public settingsSelectLangkey = this.defaultSeLectSettings;
+    public settingsSelectFlags = this.defaultSeLectSettings;
+    public settingsSelectLangkeys = this.defaultSeLectSettings;
+    public settingsSelectProfiles = this.defaultSeLectSettings;
     public settingsSelectSubType = this.defaultSeLectSettings;
     public settingsSelectTheme = this.defaultSeLectSettings;
 
-    public textsSelectKey: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+    public textsSelectFlags: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
-        checked: 'Key ausgewählt',
-        checkedPlural: 'Key ausgewählt',
+        checked: 'Flags ausgewählt',
+        checkedPlural: 'Flags ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'alles'};
-    public textsSelectLangkey: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+    public textsSelectLangkeys: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Sprache ausgewählt',
         checkedPlural: 'Sprache ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'alles'};
+    public textsSelectProfiles: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Profile ausgewählt',
+        checkedPlural: 'Profile ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'alles'};
@@ -82,8 +92,10 @@ export class PDocSearchformComponent
             subtype: [],
             type: [],
 
+            flags: [],
             key: [],
-            langkey: [],
+            langkeys: [],
+            profiles: [],
             theme: [],
 
             sort: '',
@@ -102,8 +114,10 @@ export class PDocSearchformComponent
             subtype: [(values.subtype ? values.subtype.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])],
 
+            flags: [(values.flags ? values.flags.split(/,/) : [])],
             key: [(values.key ? values.key.split(/,/) : [])],
-            langkey: [(values.langkey ? values.langkey.split(/,/) : [])],
+            langkeys: [(values.langkeys ? values.langkeys.split(/,/) : [])],
+            profiles: [(values.profiles ? values.profiles.split(/,/) : [])],
             theme: [(values.theme ? values.theme.split(/,/) : [])],
         });
     }
@@ -113,14 +127,22 @@ export class PDocSearchformComponent
         const me = this;
 
         const rawValues = this.searchFormGroup.getRawValue();
+        this.optionsSelectFlags = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.pdocSearchFormUtils.getFlagsValues(pdocSearchSearchResult), true, [], true),
+            rawValues['flags']);
         this.optionsSelectKey = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.pdocSearchFormUtils.getKeyValues(pdocSearchSearchResult), true, [], true),
             rawValues['key']);
-        this.optionsSelectLangkey = this.searchFormUtils.moveSelectedToTop(
+        this.optionsSelectLangkeys = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.pdocSearchFormUtils.getLangkeyValues(pdocSearchSearchResult), true, [], true),
-            rawValues['langkey']);
+                this.pdocSearchFormUtils.getLangkeysValues(pdocSearchSearchResult), true, [], true),
+            rawValues['langkeys']);
+        this.optionsSelectProfiles = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.pdocSearchFormUtils.getProfilesValues(pdocSearchSearchResult), true, [], true),
+            rawValues['profiles']);
         this.optionsSelectSubType = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.pdocSearchFormUtils.getSubTypeValues(pdocSearchSearchResult), true, [], true)

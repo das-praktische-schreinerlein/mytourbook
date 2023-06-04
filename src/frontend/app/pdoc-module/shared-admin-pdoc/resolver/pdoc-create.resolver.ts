@@ -38,7 +38,7 @@ export class PDocRecordCreateResolver extends CommonDocRecordCreateResolver<PDoc
     protected configureDefaultFieldToSet(type: string, fields: string[]): void {
         switch (type.toLowerCase()) {
             case 'page':
-                fields.push('css', 'langkey', 'subtype', 'theme');
+                fields.push('css', 'flags', 'langkeys', 'profiles', 'subtype', 'subSectionIds', 'theme');
                 break;
         }
     }

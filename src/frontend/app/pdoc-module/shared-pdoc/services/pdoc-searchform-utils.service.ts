@@ -11,6 +11,10 @@ export class PDocSearchFormUtils extends CommonDocSearchFormUtils {
         super(searchFormUtils, searchParameterUtils);
     }
 
+    getFlagsValues(searchResult: PDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'flags_ss', '', '');
+    }
+
     getSubTypeValues(searchResult: PDocSearchResult): any[] {
         return this.searchFormUtils.getFacetValues(searchResult, 'subtype_ss', '', '');
     }
@@ -19,8 +23,12 @@ export class PDocSearchFormUtils extends CommonDocSearchFormUtils {
         return this.searchFormUtils.getFacetValues(searchResult, 'key_ss', '', '');
     }
 
-    getLangkeyValues(searchResult: PDocSearchResult): any[] {
-        return this.searchFormUtils.getFacetValues(searchResult, 'langkey_ss', '', '');
+    getLangkeysValues(searchResult: PDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'langkeys_ss', '', '');
+    }
+
+    getProfilesValues(searchResult: PDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'profiles_ss', '', '');
     }
 
     getThemeValues(searchResult: PDocSearchResult): any[] {

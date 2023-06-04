@@ -56,8 +56,10 @@ export class PDocSearchFormConverter implements GenericSearchFormSearchFormConve
         const whatMap = new Map();
         whatMap.set('keyword', searchForm.what);
         whatMap.set('subtype', searchForm.subtype);
-        whatMap.set('key', searchForm.key);
-        whatMap.set('langkey', searchForm.langkey);
+        whatMap.set('profiles', searchForm.profiles);
+        whatMap.set('flags', searchForm.flags);
+        whatMap.set('langkeys', searchForm.langkeys);
+        whatMap.set('profiles', searchForm.profiles);
         whatMap.set('theme', searchForm.theme);
         whatMap.set('initial', searchForm.initial);
         return this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
@@ -129,15 +131,19 @@ export class PDocSearchFormConverter implements GenericSearchFormSearchFormConve
         moreFilter = moreFilter.replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
-            ['subtype:', 'initial:', 'key:', 'langkey:', 'theme:']);
+            ['subtype:', 'initial:',  'flags:', 'key:', 'langkeys:', 'profiles:', 'theme:']);
         const subtype: string = (whatFilterValues.has('subtype:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('subtype:'), 'subtype:', ',') : '');
         const initial: string = (whatFilterValues.has('initial:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('initial:'), 'initial:', ',') : '');
+        const flags: string = (whatFilterValues.has('flags:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('flags:'), 'flags:', ',') : '');
         const key: string = (whatFilterValues.has('key:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('key:'), 'key:', ',') : '');
-        const langkey: string = (whatFilterValues.has('langkey:') ?
-            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('langkey:'), 'langkey:', ',') : '');
+        const langkeys: string = (whatFilterValues.has('langkeys:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('langkeys:'), 'langkeys:', ',') : '');
+        const profiles: string = (whatFilterValues.has('profiles:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('profiles:'), 'profiles:', ',') : '');
         const theme: string = (whatFilterValues.has('theme:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('theme:'), 'theme:', ',') : '');
 
@@ -147,12 +153,18 @@ export class PDocSearchFormConverter implements GenericSearchFormSearchFormConve
         searchForm.initial = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(initial, /^alles$/, ''),
             defaults['initial'], '');
+        searchForm.flags = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(flags, /^alles$/, ''),
+            defaults['flags'], '');
         searchForm.key = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(key, /^alles$/, ''),
             defaults['key'], '');
-        searchForm.langkey = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
-            this.searchParameterUtils.replacePlaceHolder(langkey, /^alles$/, ''),
-            defaults['langkey'], '');
+        searchForm.langkeys = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(langkeys, /^alles$/, ''),
+            defaults['langkeys'], '');
+        searchForm.profiles = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(profiles, /^alles$/, ''),
+            defaults['profiles'], '');
         searchForm.theme = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(theme, /^alles$/, ''),
             defaults['theme'], '');

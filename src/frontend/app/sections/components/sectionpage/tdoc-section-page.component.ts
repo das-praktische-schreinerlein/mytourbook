@@ -545,19 +545,25 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     }
 
     protected doProcessPageFlags(config: {}, pdoc: PDocRecord): void {
-        this.flgShowTopTen = true && this.flgShowTopTen;
-        this.flgShowSearch = true && pdoc.flgShowSearch;
-        this.flgShowNews = true && pdoc.flgShowNews;
-        this.flgShowDashboard = true && pdoc.flgShowDashboard;
-        this.flgShowAdminArea = true && pdoc.flgShowAdminArea;
-        this.flgShowStatisticBoard = true && pdoc.flags && pdoc.flags.toString().includes('flgShowStatisticBoard');
+        const flags = pdoc.flags
+        ? pdoc.flags.split(',')
+                .map(flag => flag.trim())
+                .filter(flag => flag !== undefined && flag !== '')
+        : [];
+
+        this.flgShowTopTen = flags.includes('flg_ShowTopTen');
+        this.flgShowSearch = flags.includes('flg_ShowSearch');
+        this.flgShowNews = flags.includes('flg_ShowNews');
+        this.flgShowDashboard = flags.includes('flg_ShowDashboard');
+        this.flgShowAdminArea = flags.includes('flg_ShowAdminArea');
+        this.flgShowStatisticBoard = flags.includes('flg_ShowStatisticBoard');
     }
 
     protected doProcessAfterResolvedData(config: {}): void {
+        this.doProcessPageFlags(config, this.pdoc);
+
         this.tdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.tdocRoutingService.setLastSearchUrl(this.getToSearchUrl());
-
-        this.doProcessPageFlags(config, this.pdoc);
 
         // render flags to component-fields
         if (this.flgShowStatisticBoard) {

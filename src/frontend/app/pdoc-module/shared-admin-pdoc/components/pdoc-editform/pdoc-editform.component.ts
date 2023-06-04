@@ -4,7 +4,7 @@ import {FormBuilder} from '@angular/forms';
 import {PDocRecordSchema} from '@dps/mycms-commons/dist/pdoc-commons/model/schemas/pdoc-record-schema';
 import {ToastrService} from 'ngx-toastr';
 import {SchemaValidationError} from 'js-data';
-import {IMultiSelectOption, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
+import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
 import {PDocSearchForm} from '@dps/mycms-commons/dist/pdoc-commons/model/forms/pdoc-searchform';
@@ -25,8 +25,9 @@ import {
 } from '@dps/mycms-frontend-commons/dist/angular-commons/components/text-editor/text-editor.component';
 import {PDocDescSuggesterService} from '../../services/pdoc-desc-suggester.service';
 import {PDocSearchFormUtils} from '../../../shared-pdoc/services/pdoc-searchform-utils.service';
+import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 
-export interface TurDocEditformComponentConfig extends CommonDocEditformComponentConfig {
+export interface PageDocEditformComponentConfig extends CommonDocEditformComponentConfig {
     editorCommands: CommonDocEditorCommandComponentConfig;
 }
 
@@ -41,13 +42,19 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
     public Layout = Layout;
     public optionsSelect: {
         'pageId': IMultiSelectOption[];
+        'flags': IMultiSelectOption[];
         'subType': IMultiSelectOption[];
-        'langkey': IMultiSelectOption[];
+        'langkeys': IMultiSelectOption[];
+        'profiles': IMultiSelectOption[];
+        'subSectionIds': IMultiSelectOption[];
         'subTypePageType': IMultiSelectOption[];
     };
 
     public settingsSelectPageType = this.defaultSelectSetting;
-    public settingsSelectLangkey = this.defaultSelectSetting;
+    public settingsSelectFlags: IMultiSelectSettings = {... this.defaultSelectSetting, selectionLimit: 9999};
+    public settingsSelectLangkeys: IMultiSelectSettings = {... this.defaultSelectSetting, selectionLimit: 9999};
+    public settingsSelectProfiles: IMultiSelectSettings = {... this.defaultSelectSetting, selectionLimit: 9999};
+    public settingsSelectSubSectionIds: IMultiSelectSettings = {... this.defaultSelectSetting, selectionLimit: 9999};
 
     public textsSelectPageType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
@@ -57,10 +64,31 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
         defaultTitle: '--',
         allSelected: 'alles'};
 
-    public textsSelectLangkey: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+    public textsSelectFlags: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
-        checked: 'Action ausgewählt',
-        checkedPlural: 'Aktion ausgewählt',
+        checked: 'Flag ausgewählt',
+        checkedPlural: 'Flags ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '--',
+        allSelected: 'alles'};
+    public textsSelectLangkeys: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Sprache ausgewählt',
+        checkedPlural: 'Sprachen ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '--',
+        allSelected: 'alles'};
+    public textsSelectProfiles: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Profil ausgewählt',
+        checkedPlural: 'Profile ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '--',
+        allSelected: 'alles'};
+    public textsSelectSubSectionIds: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Unterseite ausgewählt',
+        checkedPlural: 'Unterseiten ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: '--',
         allSelected: 'alles'};
@@ -79,7 +107,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
                 protected pdocNameSuggesterService: PDocNameSuggesterService,
                 protected pdocDescSuggesterService: PDocDescSuggesterService,
                 router: Router) {
-    super(fb, toastr, cd, appService, pdocSearchFormUtils, searchFormUtils, pdocDataService, contentUtils, router);
+        super(fb, toastr, cd, appService, pdocSearchFormUtils, searchFormUtils, pdocDataService, contentUtils, router);
     }
 
     onInputChanged(value: any, field: string): boolean {
@@ -119,7 +147,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
         return errors.concat(PDocRecordValidator.instance.validateValues(record));
     }
 
-    protected getComponentConfig(config: {}): TurDocEditformComponentConfig {
+    protected getComponentConfig(config: {}): PageDocEditformComponentConfig {
         let prefix = '';
         let suggestionConfig = [];
         if (BeanUtils.getValue(config, 'components.pdoc-keywords.keywordSuggestions')) {
@@ -138,7 +166,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
             editorCommands.rangeCommands = BeanUtils.getValue(config, 'components.pdoc-editor-commands.rangeCommands');
         }
 
-        const defaultConfig: TurDocEditformComponentConfig = {
+        const defaultConfig: PageDocEditformComponentConfig = {
             editorCommands: editorCommands,
             suggestionConfigs: suggestionConfig,
             editPrefix: prefix,
@@ -148,10 +176,6 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
                 'css': {},
                 'heading': {},
                 'key': {},
-                'langkey': {
-                    labelPrefix: '',
-                    values: ['de', 'en']
-                },
                 'subtype': {},
                 'subTypePageType': {
                     labelPrefix: '',
@@ -161,13 +185,32 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
                 'theme': {}
             },
             stringArrayBeanFieldConfig: {
+                'flags': {
+                    labelPrefix: '',
+                    values: ['flg_ShowSearch', 'flg_ShowNews', 'flg_ShowTopTen', 'flg_ShowAdminArea', 'flg_ShowDashboard', 'flg_ShowStatisticBoard']
+                },
+                'langkeys': {
+                    labelPrefix: '',
+                    values: ['lang_de', 'lang_en']
+                },
+                'profiles': {
+                    labelPrefix: '',
+                    values: ['profile_dev', 'profile_import', 'profile_beta', 'profile_prod', 'profile_viewer']
+                },
+                'subSectionIds': {
+                    labelPrefix: '',
+                    values: []
+                },
             },
             inputSuggestionValueConfig: {
             },
             optionsSelect: {
                 'pageId': [],
                 'subType': [],
-                'langkey': [],
+                'flags': [],
+                'langkeys': [],
+                'profiles': [],
+                'subSectionIds': [],
                 'subTypePageType': []
             },
             modalEditOutletName: 'pdocmodaledit',
@@ -190,7 +233,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
 
     protected createDefaultFormValueConfig(record: PDocRecord): {} {
         const valueConfig = {
-            descTxtRecommended: [],
+            descTxtRecommended: []
         };
 
         return valueConfig;
@@ -201,6 +244,19 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
             formValueConfig['subtype'][0] =
                 (formValueConfig['subtype'][0]  + '')
                     .replace(/p_/g, '');
+        }
+
+        if (record.flags) {
+            formValueConfig['flags'] = [ObjectUtils.uniqueArray(record.flags.split(','))];
+        }
+        if (record.profiles) {
+            formValueConfig['profiles'] = [ObjectUtils.uniqueArray(record.profiles.split(','))];
+        }
+        if (record.langkeys) {
+            formValueConfig['langkeys'] = [ObjectUtils.uniqueArray(record.langkeys.split(','))];
+        }
+        if (record.subSectionIds) {
+            formValueConfig['subSectionIds'] = [ObjectUtils.uniqueArray(record.subSectionIds.split(','))];
         }
     }
 
@@ -214,6 +270,8 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
 
         if (pdocSearchResult !== undefined) {
             const rawValues = this.editFormGroup.getRawValue();
+            me.optionsSelect['subSectionIds'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                me.pdocSearchFormUtils.getKeyValues(pdocSearchResult), true, [], false);
             // console.log('update searchResult', pdocSearchResult);
         } else {
             // console.log('empty searchResult', pdocSearchResult);
