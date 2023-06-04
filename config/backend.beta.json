@@ -1,4 +1,5 @@
 {
+    "profile": "beta",
     "filePathPDocJson": "config/pdocs.json",
     "filePathThemeFilterJson": "config/themeFilterConfig.json",
     "apiVideoServerEnabled": true,

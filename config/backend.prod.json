@@ -1,4 +1,5 @@
 {
+    "profile": "prod",
     "filePathPDocJson": "config/pdocs.json",
     "filePathThemeFilterJson": "config/themeFilterConfig.json",
     "apiVideoServerEnabled": false,

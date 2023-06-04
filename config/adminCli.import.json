@@ -1,4 +1,5 @@
 {
+    "profile": "import",
     "adminWritable": true,
     "availableCommands": {
         "loadTourDoc": [

@@ -1,4 +1,5 @@
 {
+    "profile": "prod",
     "adminWritable": true,
     "availableCommands": {
         "initCache": [
