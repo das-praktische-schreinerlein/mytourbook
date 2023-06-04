@@ -32,6 +32,7 @@
 ### breaking changes
 - use commons-6.0.0
 - bumped up deps
+- use new config
 
 
 ## 7.5.0 (2023-03-18)
