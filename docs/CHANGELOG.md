@@ -12,6 +12,7 @@
 - backend/frontend: move generic page-modules to commons
 - backend/frontend: add page-management
 - frontend: improved table-layout
+- improved sync-viewer for offline-usage
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -25,6 +26,7 @@
 - backend/frontend: move generic page-modules to commons
 - frontend: improved table-layout
 - frontend: moved track-colors, TextEditorComponent, FormUtils and GeoParserDeterminer to commons
+- improved sync-viewer for offline-usage
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create

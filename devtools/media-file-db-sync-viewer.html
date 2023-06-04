@@ -3,10 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <title>MediaFileDbSync-Viewer</title>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <link href="https://datatables.net/download/build/nightly/jquery.dataTables.css" rel="stylesheet" type="text/css" />
-    <script src="https://datatables.net/download/build/nightly/jquery.dataTables.js"></script>
-    <script src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
+
+    <script type="text/javascript">
+        document.decompressJsSrc = []
+    </script>
+
+    <script inline  src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <link inline  href="https://datatables.net/download/build/nightly/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <script inline  src="https://datatables.net/download/build/nightly/jquery.dataTables.js"></script>
+    <script inline  src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
     <style>
         #tools {
             background-color: white;
@@ -53,9 +58,18 @@
 </div>
 
 <script>
+    var config = {
+        importJSONFileRefId: 'importJSONFile',
+        exportJSONLinkRefId: 'exportJSONLink',
+        dataTableRefId: 'syncfiles',
+        fileEntryFields: ['type', 'dir', 'name', 'lastModified', 'exifDate'],
+        dbEntryFields: ['id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate', 'matchingDetails', 'matchingScore']
+    }
+
     var ids = {};
-    function configureUI() {
-        document.getElementById("exportJSONLink").onclick = function(event, link) {
+
+    function configureUI(config) {
+        document.getElementById(config.exportJSONLinkRefId).onclick = function(event, link) {
             event.preventDefault();
             var jsonObj = {
                 "key": "Current",
@@ -68,13 +82,13 @@
         };
 
         // initFileUploader
-        var fileDialog = document.getElementById('importJSONFile');
+        var fileDialog = document.getElementById(config.importJSONFileRefId);
         fileDialog.addEventListener('change', handleImportJSONFileSelect, false);
 
     }
 
     function checkAllIds(value) {
-        $('#syncfiles input[name^="EXPORT_"]').each(function() {
+        $('#' + config.dataTableRefId + ' input[name^="EXPORT_"]').each(function() {
             setIdValue($(this).val(), value);
         });
     }
@@ -88,7 +102,7 @@
     }
 
     function setIdValue(id, value) {
-        var selector = $('#syncfiles input[name^="EXPORT_' + id + '"]');
+        var selector = $('#' + config.dataTableRefId + ' input[name^="EXPORT_' + id + '"]');
         if (value) {
             ids[id] = id;
             selector.prop('checked', true);
@@ -98,174 +112,197 @@
         }
     }
 
+    function mergeToViewerRecord(tdocs) {
+        var data = [];
+        for (const element of tdocs) {
+            var srcEntry = element;
+            var defaultDataTablesEntry = [];
+            for (var k of config.fileEntryFields) {
+                defaultDataTablesEntry.push(srcEntry.file[k]
+                    ? srcEntry.file[k]
+                    : '');
+            }
+
+            var dataTablesEntry;
+            if (srcEntry.records === undefined || srcEntry.records.length <= 0) {
+                dataTablesEntry = [].concat(defaultDataTablesEntry);
+                for (var k of config.dbEntryFields) {
+                    dataTablesEntry.push('');
+                }
+                data.push(dataTablesEntry);
+
+                continue;
+            }
+
+            for (var record of srcEntry.records) {
+                dataTablesEntry = [].concat(defaultDataTablesEntry);
+                for (var k of config.dbEntryFields) {
+                    dataTablesEntry.push(record[k]
+                        ? record[k]
+                        : '');
+                }
+                data.push(dataTablesEntry);
+            }
+        }
+
+        return data;
+    }
+
+    function renderDataTable(srcImageBaseUrl, dbImageBaseUrl, dbVideoBaseUrl, data) {
+        $('#' + config.dataTableRefId).DataTable({
+            "destroy": true,
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            columnDefs: [
+                // 'type', 'dir', 'name', 'lastModified', 'exifDate', 'id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate'
+                {
+                    // matching
+                    "render": function (data, type, row) {
+                        return '<input' +
+                            ' type="checkbox" name="EXPORT_' + row[5] + '" value="' + row[5] + '" ' +
+                            (ids[row[5]] !== undefined ? 'checked ' : ' ') +
+                            ' onclick="toggleIdValue(\'' + row[5] + '\')"' +
+                            '> ' +
+                            (row[6] !== undefined && row[6] !== '' ? row[6] : 'UNMATCHED');
+                    },
+                    "targets": 0,
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        switch (rowData[6]) {
+                            case '':
+                                $(td).css('background-color', '#ff7726');
+                                break;
+                            case 'FILENAME':
+                                $(td).css('background-color', '#fff1a0');
+                                break;
+                            case 'FILEDATE':
+                                $(td).css('background-color', '#fff1a0');
+                                break;
+                            case 'EXIFDATE':
+                                $(td).css('background-color', '#fff1a0');
+                                break;
+                            default:
+                            // NOOP
+                        }
+                    }
+                },
+                {
+                    // id
+                    "render": function (data, type, row) {
+                        return row[5];
+                    },
+                    "targets": 1
+                },
+                {
+                    // file_type
+                    "render": function (data, type, row) {
+                        switch (row[0]) {
+                            case 'IMAGE':
+                                return row[0]
+                                    + '<br><img width="100" src="' + srcImageBaseUrl + row[1] + '/' + row[2] + '">';
+                            case 'VIDEO':
+                                return row[0]
+                                    + '<br><video width="100" src="' + srcImageBaseUrl + row[1] + '/' + row[2] + '">';
+                            default:
+                                return '';
+                        }
+                    },
+                    "targets": 2
+                },
+                {
+                    // db_type
+                    "render": function (data, type, row) {
+                        switch (row[7]) {
+                            case 'IMAGE':
+                                return row[7]
+                                    + '<br><img width="100" src="' + dbImageBaseUrl + row[8] + '/' + row[9] + '">';
+                            case 'VIDEO':
+                                return row[7]
+                                    + '<br><video width="100" src="' + dbVideoBaseUrl + row[8] + '/' + row[9] + '">';
+                            default:
+                                return '';
+                        }
+                    },
+                    "targets": 3
+                },
+                {
+                    // file_dir
+                    "render": function (data, type, row) {
+                        return row[1];
+                    },
+                    "targets": 4
+                },
+                {
+                    // file_name
+                    "render": function (data, type, row) {
+                        return row[2];
+                    },
+                    "targets": 5
+                },
+                {
+                    // db_dir
+                    "render": function (data, type, row) {
+                        return row[8];
+                    },
+                    "targets": 6
+                },
+                {
+                    // db_name
+                    "render": function (data, type, row) {
+                        return row[9];
+                    },
+                    "targets": 7
+                },
+                {
+                    // db_lastModified
+                    "render": function (data, type, row) {
+                        return row[10];
+                    },
+                    "targets": 8
+                },
+                {
+                    // matchingDetails
+                    "render": function (data, type, row) {
+                        return row[12];
+                    },
+                    "targets": 9
+                },
+                {
+                    // matchingScore
+                    "render": function (data, type, row) {
+                        return row[13] !== ''
+                            ? parseFloat(row[13]).toFixed(2)
+                            : '';
+                    },
+                    "targets": 10
+                }
+            ],
+            columns: [
+                {title: "State"},
+                {title: "DbId"},
+                {title: "File"},
+                {title: "Database"},
+                {title: "File.dir"},
+                {title: "File.file"},
+                {title: "DB.dir"},
+                {title: "DB.file"},
+                {title: "DB.lastModified"},
+                {title: "MatchingDetails"},
+                {title: "Score"}
+            ],
+            data: data,
+            pageLength: '10'
+        });
+    }
+
     function loadViewer(json) {
         var srcImageBaseUrl = 'file://' + json.fileBaseDir;
         var dbImageBaseUrl = 'file://' + json.dbImageBaseDir.replace('pics_full', 'pics_x100');
         var dbVideoBaseUrl = 'file://' + json.dbVideoBaseDir.replace('video_full', 'video_x600');
         ids = {};
-        if (json.tdocs) {
-            var data = [];
-            for (var i = 0; i < json.tdocs.length; i++) {
-                var srcEntry = json.tdocs[i];
-                var defaultDataTablesEntry = [];
-                for (var k of ['type', 'dir', 'name', 'lastModified', 'exifDate']) {
-                    defaultDataTablesEntry.push(srcEntry.file[k] ? srcEntry.file[k] : '');
-                }
 
-                var dataTablesEntry;
-                if (srcEntry.records === undefined || srcEntry.records.length <= 0) {
-                    dataTablesEntry = [].concat(defaultDataTablesEntry);
-                    for (var k of ['id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate','matchingDetails', 'matchingScore']) {
-                        dataTablesEntry.push('');
-                    }
-                    data.push(dataTablesEntry);
-                    continue;
-                }
-
-                for (var record of srcEntry.records) {
-                    dataTablesEntry = [].concat(defaultDataTablesEntry);
-                    for (var k of ['id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate', 'matchingDetails', 'matchingScore']) {
-                        dataTablesEntry.push(record[k] ? record[k] : '');
-                    }
-                    data.push(dataTablesEntry);
-                }
-            }
-            $('#syncfiles').DataTable({
-                "destroy": true,
-                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                columnDefs: [
-                    // 'type', 'dir', 'name', 'lastModified', 'exifDate', 'id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate'
-                    {
-                        // matching
-                        "render": function ( data, type, row ) {
-                            return '<input' +
-                                ' type="checkbox" name="EXPORT_'+ row[5] + '" value="'+ row[5] + '" ' +
-                                (ids[row[5]] !== undefined ? 'checked ' : ' ') +
-                                ' onclick="toggleIdValue(\'' + row[5] + '\')"' +
-                                '> ' +
-                                (row[6] !== undefined && row[6] !== '' ? row[6] : 'UNMATCHED');
-                        },
-                        "targets": 0,
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            switch (rowData[6]) {
-                                case '':
-                                    $(td).css('background-color', '#ff7726');
-                                    break;
-                                case 'FILENAME':
-                                    $(td).css('background-color', '#fff1a0');
-                                    break;
-                                case 'FILEDATE':
-                                    $(td).css('background-color', '#fff1a0');
-                                    break;
-                                case 'EXIFDATE':
-                                    $(td).css('background-color', '#fff1a0');
-                                    break;
-                                default:
-                                // NOOP
-                            }
-                        }
-                    },
-                    {
-                        // id
-                        "render": function ( data, type, row ) {
-                            return row[5];
-                        },
-                        "targets": 1
-                    },
-                    {
-                        // file_type
-                        "render": function ( data, type, row ) {
-                            switch (row[0]) {
-                                case 'IMAGE':
-                                    return row[0]  +'<br><img width="100" src="' + srcImageBaseUrl + row[1] + '/' + row[2] + '">';
-                                case 'VIDEO':
-                                    return row[0]  +'<br><video width="100" src="' + srcImageBaseUrl + row[1] + '/' + row[2] + '">';
-                                default:
-                                    return '';
-                            }
-                        },
-                        "targets": 2
-                    },
-                    {
-                        // db_type
-                        "render": function ( data, type, row ) {
-                            switch (row[7]) {
-                                case 'IMAGE':
-                                    return row[7]  +'<br><img width="100" src="' + dbImageBaseUrl + row[8] + '/' + row[9] + '">';
-                                case 'VIDEO':
-                                    return row[7]  +'<br><video width="100" src="' + dbVideoBaseUrl + row[8] + '/' + row[9] + '">';
-                                default:
-                                    return '';
-                            }
-                        },
-                        "targets": 3
-                    },
-                    {
-                        // file_dir
-                        "render": function ( data, type, row ) {
-                            return row[1];
-                        },
-                        "targets": 4
-                    },
-                    {
-                        // file_name
-                        "render": function ( data, type, row ) {
-                            return row[2];
-                        },
-                        "targets": 5
-                    },
-                    {
-                        // db_dir
-                        "render": function ( data, type, row ) {
-                            return row[8];
-                        },
-                        "targets": 6
-                    },
-                    {
-                        // db_name
-                        "render": function ( data, type, row ) {
-                            return row[9];
-                        },
-                        "targets": 7
-                    },
-                    {
-                        // db_lastModified
-                        "render": function ( data, type, row ) {
-                            return row[10];
-                        },
-                        "targets": 8
-                    },
-                    {
-                        // matchingDetails
-                        "render": function ( data, type, row ) {
-                            return row[12];
-                        },
-                        "targets": 9
-                    },
-                    {
-                        // matchingScore
-                        "render": function ( data, type, row ) {
-                            return row[13] !== '' ? parseFloat(row[13]).toFixed(2) : '';
-                        },
-                        "targets": 10
-                    }
-                ],
-                columns: [
-                    { title: "State" },
-                    { title: "DbId" },
-                    { title: "File" },
-                    { title: "Database" },
-                    { title: "File.dir" },
-                    { title: "File.file" },
-                    { title: "DB.dir" },
-                    { title: "DB.file" },
-                    { title: "DB.lastModified" },
-                    { title: "MatchingDetails" },
-                    { title: "Score" }
-                ],
-                data: data,
-                pageLength: '10'
-            });
+        var tdocs = json.tdocs;
+        if (tdocs) {
+            var data = mergeToViewerRecord(tdocs);
+            renderDataTable(srcImageBaseUrl, dbImageBaseUrl, dbVideoBaseUrl, data);
         }
     }
 
@@ -287,7 +324,7 @@
             // read the file
             reader.readAsText(file);
 
-            i = files.length +1000;
+            i = files.length + 1000;
         }
     }
 
@@ -320,7 +357,7 @@
         }
     }
 
-    configureUI();
+    configureUI(config);
 </script>
 </body>
 </html>

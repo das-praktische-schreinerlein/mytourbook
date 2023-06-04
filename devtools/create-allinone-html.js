@@ -60,7 +60,8 @@ var options = {
     rootpath: path.dirname(srcPath),
     swallowErrors: false,
     ignore: ['ico'],
-    handlers: [compressHandler]
+    handlers: [compressHandler],
+    saveRemote: false
 };
 
 
