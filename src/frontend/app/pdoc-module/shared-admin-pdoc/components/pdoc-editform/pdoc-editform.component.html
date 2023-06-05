@@ -15,7 +15,7 @@
             </div>
 
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputText;context:{key: 'key', formControlName: 'key'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'pdoc.key', formControlName: 'key'}"></ng-container>
                 <ng-container *ngTemplateOutlet="inputSubSectionIds"></ng-container>
             </div>
 
@@ -29,16 +29,16 @@
             </div>
 
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputText;context:{key: 'heading', formControlName: 'heading'}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputText;context:{key: 'theme', formControlName: 'theme'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'pdoc.heading', formControlName: 'heading'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'pdoc.theme', formControlName: 'theme'}"></ng-container>
             </div>
 
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'teaser', formControlName: 'teaser'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'pdoc.teaser', formControlName: 'teaser'}"></ng-container>
             </div>
 
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'css', formControlName: 'css'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'pdoc.css', formControlName: 'css'}"></ng-container>
             </div>
 
         </fieldset>

@@ -45,6 +45,15 @@
                         <app-cdoc-tagcloud [label]="'Was'" [facetName]="'subtype_ss'" [max]="99"
                                            (columnClicked)="onTagcloudClicked($event, 'subtype')"
                                            [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Was'" [facetName]="'profiles_ss'" [max]="99"
+                                           (columnClicked)="onTagcloudClicked($event, 'profiles')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Was'" [facetName]="'langkeys_ss'" [max]="99"
+                                           (columnClicked)="onTagcloudClicked($event, 'langkeys')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Was'" [facetName]="'flags_ss'" [max]="99"
+                                           (columnClicked)="onTagcloudClicked($event, 'flags')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
                     </div>
                 </div>
 
