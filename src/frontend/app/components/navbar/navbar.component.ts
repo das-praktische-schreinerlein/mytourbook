@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit {
 
             if (appState === AppState.Ready) {
                 this.config = this.appService.getAppConfig();
-                if (this.config && this.config.availableDataModes.length > 1) {
+                if (this.config && this.config.availableDataModes && this.config.availableDataModes.length > 1) {
                     this.availableDataModes = this.config.availableDataModes;
                 } else {
                     this.availableDataModes = [];
