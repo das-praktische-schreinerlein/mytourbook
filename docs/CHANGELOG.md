@@ -13,6 +13,7 @@
 - backend/frontend: add page-management
 - frontend: improved table-layout
 - improved sync-viewer for offline-usage
+- removed legacy pdoc-editor
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -27,6 +28,7 @@
 - frontend: improved table-layout
 - frontend: moved track-colors, TextEditorComponent, FormUtils and GeoParserDeterminer to commons
 - improved sync-viewer for offline-usage
+- removed legacy pdoc-editor
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create
