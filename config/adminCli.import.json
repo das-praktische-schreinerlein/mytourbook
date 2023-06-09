@@ -2,6 +2,15 @@
     "profile": "import",
     "adminWritable": true,
     "availableCommands": {
+        "loadPDoc": [
+            "*"
+        ],
+        "convertPDoc": [
+            "*"
+        ],
+        "pageManager": [
+            "*"
+        ],
         "loadTourDoc": [
             "*"
         ],

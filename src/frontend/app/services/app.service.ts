@@ -237,6 +237,10 @@ export class AppService extends GenericAppService {
             me.backendHttpClient.makeHttpRequest({ method: 'get', url: options.basePath + 'pages/', withCredentials: true })
                 .then(function onDocsLoaded(res: any) {
                     const docs: any[] = (res['data'] || res.json());
+                    for (const doc of docs) {
+                        me.remapPDoc(doc);
+                    }
+
                     me.pagesDataService.setWritable(true);
                     return me.pagesDataService.addMany(docs);
             }).then(function onDocsAdded(records: BaseEntityRecord[]) {
@@ -288,6 +292,10 @@ export class AppService extends GenericAppService {
                 return Promise.reject('No static pdocs found');
             }).then(function onPDocParsed(docs: any[]) {
                 me.pagesDataService.setWritable(true);
+                for (const doc of docs) {
+                    me.remapPDoc(doc);
+                }
+
                 return me.pagesDataService.addMany(docs);
             }).then(function onPDocsAdded(pdocs: BaseEntityRecord[]) {
                 console.log('initially loaded pdocs from assets', pdocs);
@@ -353,6 +361,12 @@ export class AppService extends GenericAppService {
 
                 return Promise.reject(false);
             });
+    }
+
+    remapPDoc(doc: {}): void {
+        if (doc['key']) {
+            doc['id'] = doc['key'];
+        }
     }
 
 }

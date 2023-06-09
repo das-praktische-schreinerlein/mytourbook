@@ -31,6 +31,7 @@ import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import {ViewerManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/viewer-manager.module';
 import {BackendConfigType} from '../modules/backend.commons';
+import path from 'path';
 
 export class MediaManagerCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
@@ -40,6 +41,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             importDir: new SimpleFilePathValidationRule(false),
             srcFile: new SimpleFilePathValidationRule(false),
             srcFiles: new SimpleFilePathListValidationRule(false),
+            pdocFile: new SimpleFilePathValidationRule(false),
             exportDir: new SimpleFilePathValidationRule(false),
             exportName: new SimpleFilePathValidationRule(false),
             outputDir: new SimpleFilePathValidationRule(false),
@@ -83,7 +85,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         return ['readImageDates', 'readVideoDates', 'readImageMetaData', 'readVideoMetaData',
             'scaleImages', 'scaleVideos',
             'exportImageFiles', 'exportRouteFiles', 'exportTrackFiles', 'exportVideoFiles',
-            'generateHtmlViewerFileForExport', 'inlineDataOnViewerFile',
+            'setPDocsInViewerFile', 'generateHtmlViewerFileForExport', 'inlineDataOnViewerFile',
             'generateTourDocsFromMediaDir',
             'findCorrespondingTourDocRecordsForMedia', 'insertSimilarMatchings',
             'convertVideosFromMediaDirToMP4',
@@ -94,9 +96,12 @@ export class MediaManagerCommand extends CommonAdminCommand {
     }
 
     protected processCommandArgs(argv: {}): Promise<any> {
+        const me = this;
+
         // importDir and outputDir are used in CommonMediaManagerCommand too
         argv['importDir'] = TourDocFileUtils.normalizeCygwinPath(argv['importDir']);
         argv['srcFile'] = TourDocFileUtils.normalizeCygwinPath(argv['srcFile']);
+        argv['pdocFile'] = TourDocFileUtils.normalizeCygwinPath(argv['pdocFile']);
         argv['outputDir'] = TourDocFileUtils.normalizeCygwinPath(argv['outputDir']);
         argv['outputFile'] = TourDocFileUtils.normalizeCygwinPath(argv['outputFile']);
 
@@ -134,6 +139,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const renameFileIfExists = !!argv['renameFileIfExists'];
 
         const srcFile = argv['srcFile'];
+        const pdocFile = argv['pdocFile'];
         const srcFiles: string[] = argv['srcFiles']
             ? argv['srcFiles'].split(',')
             : [];
@@ -409,6 +415,34 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 });
 
                 break;
+            case 'setPDocsInViewerFile':
+                if (srcFile === undefined) {
+                    console.error(action + ' missing parameter - usage: --srcFile SRCFILE', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --srcFile SRCFILE');
+                    return promise;
+                }
+
+                if (pdocFile === undefined) {
+                    console.error(action + ' missing parameter - usage: --pdocFile PDOCFILE', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --pdocFile PDOCFILE');
+                    return promise;
+                }
+
+                promise = viewerManagerModule.generateViewerHtmlFile(srcFile, [pdocFile],
+                    srcFile, 999999999, 'pdocs',
+                    function (html: string) {
+                        return html;
+                    },
+                    function (html: string, jsonPFileName: string) {
+                        return viewerManagerModule.jsonToJsTargetContentConverter(html, jsonPFileName,
+                            'importStaticDataPDocsJsonP');
+                    },
+                    function (html: string, jsonPFilePath: string) {
+                        return me.htmlPDocInlineFileConverter(html, jsonPFilePath,
+                            'staticPDocsFile');
+                    }
+                );
+                break;
             case 'generateHtmlViewerFileForExport':
                 if (createHtml && !srcFile) {
                     console.error(action + ' missing parameter - usage: --srcFile srcFileForHtmlViewer', argv);
@@ -445,8 +479,8 @@ export class MediaManagerCommand extends CommonAdminCommand {
                                 return viewerManagerModule.jsonToJsTargetContentConverter(html, jsonPFileName,
                                     'importStaticDataTDocsJsonP');
                             },
-                            function (html: string, dataFileConfigName: string) {
-                                return viewerManagerModule.htmlInlineFileConverter(html, dataFileConfigName,
+                            function (html: string, jsonPFilePath: string) {
+                                return viewerManagerModule.htmlInlineFileConverter(html, jsonPFilePath,
                                     'staticTDocsFiles');
                             }
                         );
@@ -588,5 +622,16 @@ export class MediaManagerCommand extends CommonAdminCommand {
         }
 
         return promise;
+    }
+
+    public htmlPDocInlineFileConverter(html: string, jsonPFilePath: string, dataFileConfigName: string): string {
+        const fileName = path.basename(jsonPFilePath);
+        html = html.replace(/<\/head>/g,
+            '\n  <script inlineexport type="text/javascript" src="' + fileName + '"></script>\n</head>');
+        const regExp = new RegExp(dataFileConfigName + '": ".*?"', 'g');
+        html = html.replace(regExp,
+            dataFileConfigName + '": "' + fileName + '"');
+
+        return html;
     }
 }

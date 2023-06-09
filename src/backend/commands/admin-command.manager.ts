@@ -19,6 +19,8 @@ import {MediaImportManagerCommand} from './media-import-manager.command';
 import {TourDocConverterCommand} from './tdoc-converter.command';
 import {GeoManagerCommand} from './geo-manager.command';
 import {PageManagerCommand} from './pdoc-manager.command';
+import {PDocLoaderCommand} from './pdoc-loader.command';
+import {PDocConverterCommand} from './pdoc-converter.command';
 
 // tslint:disable-next-line:no-empty-interface
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
@@ -31,7 +33,9 @@ export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandC
             'initConfig': new ExtendedConfigInitializerCommand(),
             'generateSitemap': new SiteMapGeneratorCommand(),
             'generateRedirects': new RedirectGeneratorCommand(),
+            'convertPDoc': new PDocConverterCommand(),
             'convertTourDoc': new TourDocConverterCommand(),
+            'loadPDoc': new PDocLoaderCommand(),
             'loadTourDoc': new TourDocLoaderCommand(),
             'exportTourDoc': new TourDocExporterCommand(),
             'mediaManager': new MediaManagerCommand(),

@@ -247,16 +247,16 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
         }
 
         if (record.flags) {
-            formValueConfig['flags'] = [ObjectUtils.uniqueArray(record.flags.split(','))];
+            formValueConfig['flags'] = [ObjectUtils.uniqueArray(record.flags.replace(/ /g, '').split(','))];
         }
         if (record.profiles) {
-            formValueConfig['profiles'] = [ObjectUtils.uniqueArray(record.profiles.split(','))];
+            formValueConfig['profiles'] = [ObjectUtils.uniqueArray(record.profiles.replace(/ /g, '').split(','))];
         }
         if (record.langkeys) {
-            formValueConfig['langkeys'] = [ObjectUtils.uniqueArray(record.langkeys.split(','))];
+            formValueConfig['langkeys'] = [ObjectUtils.uniqueArray(record.langkeys.replace(/ /g, '').split(','))];
         }
         if (record.subSectionIds) {
-            formValueConfig['subSectionIds'] = [ObjectUtils.uniqueArray(record.subSectionIds.split(','))];
+            formValueConfig['subSectionIds'] = [ObjectUtils.uniqueArray(record.subSectionIds.replace(/ /g, '').split(','))];
         }
     }
 

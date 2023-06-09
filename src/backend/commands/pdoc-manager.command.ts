@@ -1,9 +1,9 @@
 import * as fs from 'fs';
-import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
 import {MediaExportProcessingOptions} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-mediafile-export.service';
 import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
+    IdCsvValidationRule,
     KeywordValidationRule,
     NumberValidationRule,
     SimpleConfigFilePathValidationRule,
@@ -26,13 +26,12 @@ export class PageManagerCommand extends CommonAdminCommand {
             backend: new SimpleConfigFilePathValidationRule(true),
             exportDir: new SimpleFilePathValidationRule(false),
             exportName: new SimpleFilePathValidationRule(false),
-            outputDir: new SimpleFilePathValidationRule(false),
-            outputFile: new SimpleFilePathValidationRule(false),
             ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),
             parallel: new NumberValidationRule(false, 1, 99, 10),
             pageNum: new NumberValidationRule(false, 1, 999999999, 1),
             fulltext: new SolrValidationRule(false),
-            playlists: new KeywordValidationRule(false),
+            profiles: new IdCsvValidationRule(false),
+            langkeys: new IdCsvValidationRule(false),
             directoryProfile: new KeywordValidationRule(false),
             fileNameProfile: new KeywordValidationRule(false)
         };
@@ -40,15 +39,11 @@ export class PageManagerCommand extends CommonAdminCommand {
 
     protected definePossibleActions(): string[] {
         return [
-            'exportPageFiles'
+            'exportPDocFile', 'exportPageFile'
         ];
     }
 
     protected processCommandArgs(argv: {}): Promise<any> {
-        // importDir and outputDir are used in CommonMediaManagerCommand too
-        argv['outputDir'] = TourDocFileUtils.normalizeCygwinPath(argv['outputDir']);
-        argv['outputFile'] = TourDocFileUtils.normalizeCygwinPath(argv['outputFile']);
-
         const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
             return Promise.reject('ERROR - parameters required backendConfig: "--backend"');
@@ -61,23 +56,60 @@ export class PageManagerCommand extends CommonAdminCommand {
 
         let promise: Promise<any>;
         let searchForm: PDocSearchForm;
-        const processingOptions: ProcessingOptions = {
-            ignoreErrors: Number.parseInt(argv['ignoreErrors'], 10) || 0,
-            parallel: Number.parseInt(argv['parallel'], 10),
-        };
-        const pageNum = Number.parseInt(argv['pageNum'], 10);
-        const fulltext = argv['fulltext'];
-        const playlists = argv['playlists'];
 
         const exportDir = argv['exportDir'];
         const exportName = argv['exportName'];
+        const profiles = argv['profiles'];
+        const langkeys = argv['langkeys'];
 
-        const playlistService = new PDocServerPlaylistService();
-        const responseMapper = new PDocAdapterResponseMapper(backendConfig);
-        const pdocExportService: PDocExportService = new PDocExportService(backendConfig, dataService, playlistService, responseMapper);
+        let type = 'UNKNOWN';
+        switch (action) {
+            case 'exportPageFile':
+            case 'exportPDocFile':
+                type = 'page';
+                break;
+        }
 
         switch (action) {
-            case 'exportPageFiles':
+            case 'exportPDocFile':
+                if (exportDir === undefined) {
+                    console.error(action + ' missing parameter - usage: --exportDir EXPORTDIR', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --exportDir EXPORTDIR');
+                    return promise;
+                }
+
+                if (exportName === undefined) {
+                    console.error(action + ' missing parameter - usage: --exportName EXPORTNAME', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --exportName EXPORTNAME');
+                    return promise;
+                }
+
+                searchForm = new PDocSearchForm({
+                    type: type,
+                    profiles: profiles,
+                    langkeys: langkeys,
+                    sort: 'm3uExport',
+                    perPage: 9999
+                });
+                promise = dataService.findCurList(searchForm).then(pdocs => {
+                    fs.writeFileSync(exportDir + '/' + exportName + '.json', JSON.stringify({ pdocs: pdocs}, undefined, ' '));
+                });
+
+                break;
+            case 'exportPageFile':
+
+                const playlistService = new PDocServerPlaylistService();
+                const responseMapper = new PDocAdapterResponseMapper(backendConfig);
+                const pdocExportService: PDocExportService =
+                    new PDocExportService(backendConfig, dataService, playlistService, responseMapper);
+
+                const processingOptions: ProcessingOptions = {
+                    ignoreErrors: Number.parseInt(argv['ignoreErrors'], 10) || 0,
+                    parallel: Number.parseInt(argv['parallel'], 10),
+                };
+                const pageNum = Number.parseInt(argv['pageNum'], 10);
+                const fulltext = argv['fulltext'];
+
                 if (exportDir === undefined) {
                     console.error(action + ' missing parameter - usage: --exportDir EXPORTDIR', argv);
                     promise = Promise.reject(action + ' missing parameter - usage: --exportDir EXPORTDIR');
@@ -104,18 +136,12 @@ export class PageManagerCommand extends CommonAdminCommand {
                     return promise;
                 }
 
-                let type = 'UNKNOWN';
-                switch (action) {
-                    case 'exportPageFiles':
-                        type = 'page';
-                        break;
-                }
-
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 searchForm = new PDocSearchForm({
                     type: type,
                     fulltext: fulltext,
-                    playlists: playlists,
+                    profiles: profiles,
+                    langkeys: langkeys,
                     sort: 'm3uExport',
                     pageNum: Number.isInteger(pageNum) ? pageNum : 1});
                 console.log('START processing: ' + action, searchForm, exportDir, processingOptions);
