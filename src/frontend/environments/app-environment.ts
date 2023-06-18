@@ -2,9 +2,6 @@ import {CommonEnvironment} from '@dps/mycms-frontend-commons/dist/frontend-secti
 import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export interface AppEnvironment extends CommonEnvironment {
-    hideCopyrightFooter?: boolean,
-    assetsPathVersionSnippet: string;
-    assetsPathVersionSuffix: string;
     tracksBaseUrl: string;
     audioBaseUrl: string;
     picsBaseUrl: string;
