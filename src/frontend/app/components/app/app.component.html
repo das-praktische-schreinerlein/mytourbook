@@ -1,6 +1,7 @@
 <section class="tdoc-app">
     <div class="fullpage-background show-on-fullpage-block"></div>
-    <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+    <div class="loading" *ngIf="showLoadingSpinner">Loading {{setShowLoadingSpinner(true)}}</div>
+    <ng-container class="loading" *ngIf="!showLoadingSpinner">{{setShowLoadingSpinner(false)}}</ng-container>
     <div class="container">
         <router-outlet name="navbar"></router-outlet>
         <router-outlet name="tdocmodaledit"></router-outlet>
