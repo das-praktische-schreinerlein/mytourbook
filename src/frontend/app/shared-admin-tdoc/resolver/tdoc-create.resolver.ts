@@ -82,7 +82,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                 );
 
                 // remove desc... it will not be used here...
-                for (const field of ['keywords', 'desc', 'descTxt', 'descMd']) {
+                for (const field of ['keywords', 'desc', 'descMd']) {
                     const index = fields.indexOf(field);
                     if (index > -1) {
                         fields.splice(index, 1);
@@ -168,8 +168,8 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
             case 'location':
             case 'track':
             case 'route':
-                if (values['descTxt'] === undefined || values['descTxt'] === null || values['descTxt'] === '') {
-                    values['descTxt'] = 'TODODESC';
+                if (values['descMd'] === undefined || values['descMd'] === null || values['descMd'] === '') {
+                    values['descMd'] = 'TODODESC';
                 }
         }
     }

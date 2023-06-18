@@ -155,10 +155,8 @@ export class SqlMytbDbInfoConfig {
             'location.l_lochirarchieids AS l_lochirarchieids',
             'if_gesperrt',
             'if_meta_desc',
-            'if_meta_desc AS if_meta_desc_md',
-            'if_meta_desc AS if_meta_desc_html',
-            'if_meta_shortdesc',
-            'if_meta_shortdesc AS if_meta_shortdesc_md'],
+            'if_meta_shortdesc'
+        ],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -454,11 +452,9 @@ export class SqlMytbDbInfoConfig {
         },
         writeMapping: {
             'info.l_id': ':loc_id_i:',
-            'info.if_meta_desc': ':desc_txt:',
+            'info.if_meta_desc': ':desc_md_txt:',
             'info.if_meta_shortdesc': ':info_shortdesc_txt:',
             'info.if_gesperrt': ':blocked_i:',
-//                'info.if_meta_shortdesc_md': ':desc_md_txt:',
-//                'info.if_meta_shortdesc_html': ':desc_html_txt:',
             'info.if_publisher': ':info_publisher_s:',
             'info.if_typ': ':subtype_s:',
             'info.if_url': ':info_reference_s:',
@@ -478,9 +474,7 @@ export class SqlMytbDbInfoConfig {
             geo_lat_s: 'if_gps_lat',
             geo_loc_p: 'if_gps_loc',
             blocked_i: 'if_gesperrt',
-            desc_txt: 'if_meta_desc',
-            desc_md_txt: 'if_meta_desc_md',
-            desc_html_txt: 'if_meta_desc_html',
+            desc_md_txt: 'if_meta_desc',
             info_name_s: 'if_name',
             info_desc_txt: 'if_meta_desc',
             info_shortdesc_txt: 'if_meta_shortdesc',

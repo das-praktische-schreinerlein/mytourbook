@@ -8,7 +8,7 @@
             </div>
             <div class="card-block">
                 <h6 class="card-title"><a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><span class="fx-bg-theme">{{record.name}}</span></a></h6>
-                <p class="card-text">{{record.descTxt | truncate: 100}}</p>
+                <p class="card-text">{{record.descTxt || record.descHtml || record.descMd | truncate: 100}}</p>
                 <a class="btn btn-navigation pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)" i18n="link pdoc listitem|Link show-pdoc listitem@@a.pdocListItem.show">mehr...</a>
                 <app-pdoc-action [record]="listItem.currentRecord" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-pdoc-action>
             </div>

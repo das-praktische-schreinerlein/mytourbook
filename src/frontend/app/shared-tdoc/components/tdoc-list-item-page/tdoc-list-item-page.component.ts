@@ -113,7 +113,7 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
         }
 
         if (!this.platformService.isClient()) {
-            return this.record.descTxt || '';
+            return this.record.descTxt || this.record.descHtml || this.record.descMd  || '';
         }
 
         if (this.record.descHtml) {

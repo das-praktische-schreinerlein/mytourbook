@@ -180,7 +180,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     poiSearchBasePosition: LatLng = undefined;
     poiSearchNames: string[] = [];
 
-    descTxtRecommended  = '';
+    descMdRecommended  = '';
 
     mainImageUrl: SafeUrl   = undefined;
     mainImageObject: TourDocObjectDetectionImageObjectRecord = undefined;
@@ -233,10 +233,10 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.tourDocDescSuggesterService.suggest(
             this.editFormGroup.getRawValue(), {}
         ).then(desc => {
-            this.descTxtRecommended = desc;
+            this.descMdRecommended = desc;
             this.cd.markForCheck();
         }).catch(reason => {
-            this.descTxtRecommended = undefined;
+            this.descMdRecommended = undefined;
             this.cd.markForCheck();
         });
     }
@@ -705,7 +705,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     protected createDefaultFormValueConfig(record: TourDocRecord): {} {
         this.mainImageObject = undefined;
         const valueConfig = {
-            descTxtRecommended: [],
+            descMdRecommended: [],
             dateshow: [DateUtils.dateToLocalISOString(record.dateshow)],
             datestart: [DateUtils.dateToLocalISOString(record.datestart)],
             dateend: [DateUtils.dateToLocalISOString(record.dateend)],

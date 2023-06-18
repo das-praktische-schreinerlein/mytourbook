@@ -84,11 +84,13 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['type_s'] = props.type;
         values['subtype_s'] = props.subtype;
 
+        const desc = values['desc_txt'] || values['desc_html_txt'] || values['desc_md_txt'];
         values['html_txt'] = [
-            values['desc_txt'],
             values['name_s'],
             values['keywords_txt'],
-            values['type_s']].join(' ');
+            values['type_s'],
+            desc
+        ].join(' ');
 
         if (props.get('tdocimages') && props.get('tdocimages').length > 0) {
             const image: TourDocImageRecord = props.get('tdocimages')[0];

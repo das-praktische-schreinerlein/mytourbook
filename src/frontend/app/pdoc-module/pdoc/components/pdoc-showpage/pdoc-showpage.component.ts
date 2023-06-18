@@ -76,7 +76,7 @@ export class PDocShowpageComponent extends CommonDocShowpageComponent<PDocRecord
     }
 
     renderDesc(): string {
-        if (!this.record || this.record.descTxt === undefined || this.record.descTxt.toLowerCase() === 'tododesc') {
+        if (!this.record || this.record.descMd === undefined || this.record.descMd.toLowerCase() === 'tododesc') {
             return;
         }
 

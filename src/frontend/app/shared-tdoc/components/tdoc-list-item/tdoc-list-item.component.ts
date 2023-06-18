@@ -48,11 +48,11 @@ export class TourDocListItemComponent extends CommonDocListItemComponent {
     }
 
     getDesc(): string {
-        if (!this.record || this.record.descTxt === undefined || this.record.descTxt.toLowerCase() === 'tododesc') {
+        if (!this.record || this.record.descMd === undefined || this.record.descMd.toLowerCase() === 'tododesc') {
             return;
         }
 
-        return this.record.descTxt;
+        return this.record.descMd;
     }
 
     protected updateData() {

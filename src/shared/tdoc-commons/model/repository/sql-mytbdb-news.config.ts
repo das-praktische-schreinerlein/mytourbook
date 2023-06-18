@@ -138,8 +138,7 @@ export class SqlMytbDbNewsConfig {
             'MONTH(n_date) AS month',
             'YEAR(n_date) AS year',
             'n_gesperrt',
-            'n_message',
-            'n_message AS n_message_md'],
+            'n_message'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -408,9 +407,7 @@ export class SqlMytbDbNewsConfig {
             'news.n_datevon': ':datestart_dt:',
             'news.n_datebis': ':dateend_dt:',
             'news.n_gesperrt': ':blocked_i:',
-            'news.n_message': ':desc_txt:',
-            'news.n_message_md': ':desc_md_txt:',
-            'news.n_message_html': ':desc_html_txt:',
+            'news.n_message': ':desc_md_txt:',
             'news.n_keywords': ':keywords_txt:',
             'news.n_key': ':key_s:',
             'news.n_headline': ':name_s:'
@@ -423,9 +420,7 @@ export class SqlMytbDbNewsConfig {
             datestart_dt: 'n_datevon',
             dateend_dt: 'n_datebis',
             blocked_i: 'n_gesperrt',
-            desc_txt: 'n_message',
-            desc_md_txt: 'n_message_md',
-            desc_html_txt: 'n_message_html',
+            desc_md_txt: 'n_message',
             keywords_txt: 'n_keywords',
             name_s: 'n_headline',
             type_s: 'type'

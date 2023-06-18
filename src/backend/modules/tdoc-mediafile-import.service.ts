@@ -216,7 +216,7 @@ export class TourDocMediaFileImportManager  {
                 loc_id_i: records.length + 1,
                 name_s: locationName,
                 keywords_txt: 'KW_TODOKEYWORDS',
-                desc_txt: 'TODODESC',
+                desc_md_txt: 'TODODESC',
                 gpstracks_state_i: 0
             }, {});
             records.push(location);
@@ -235,7 +235,7 @@ export class TourDocMediaFileImportManager  {
                 loc_id_i: location.locId,
                 name_s: trackName,
                 keywords_txt: 'KW_TODOKEYWORDS',
-                desc_txt: 'TODODESC',
+                desc_md_txt: 'TODODESC',
                 dateshow_dt: date,
                 datestart_dt: date,
                 dateend_dt: date,

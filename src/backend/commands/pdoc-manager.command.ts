@@ -88,7 +88,7 @@ export class PageManagerCommand extends CommonAdminCommand {
                     type: type,
                     profiles: profiles,
                     langkeys: langkeys,
-                    sort: 'm3uExport',
+                    sort: 'forExport',
                     perPage: 9999
                 });
                 promise = dataService.findCurList(searchForm).then(pdocs => {
@@ -142,7 +142,7 @@ export class PageManagerCommand extends CommonAdminCommand {
                     fulltext: fulltext,
                     profiles: profiles,
                     langkeys: langkeys,
-                    sort: 'm3uExport',
+                    sort: 'forExport',
                     pageNum: Number.isInteger(pageNum) ? pageNum : 1});
                 console.log('START processing: ' + action, searchForm, exportDir, processingOptions);
 

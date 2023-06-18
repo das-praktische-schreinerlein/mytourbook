@@ -153,12 +153,12 @@
 
     <ng-template #inputDesc let-recommend="recommend">
         <app-text-editor
-            [descTxt]="editFormGroup.getRawValue()['descTxt']"
-            [descTxtRecommended]="descTxtRecommended"
+            [descMd]="editFormGroup.getRawValue()['descMd']"
+            [descMdRecommended]="descMdRecommended"
             [editorCommands]="editorCommands"
             [recommendAvailable]="recommend"
             (recommendDesc)="recommendDesc()"
-            (changeDesc)="setValue('descTxt', $event)"></app-text-editor>
+            (changeDesc)="setValue('descMd', $event)"></app-text-editor>
     </ng-template>
 
     <ng-template #inputNumber let-key="key" let-formControlName="formControlName" let-recommend="recommend" let-step="step" let-min="min" let-max="max">

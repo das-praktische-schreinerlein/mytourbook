@@ -37,6 +37,8 @@
 - use commons-6.0.0
 - bumped up deps
 - use new config
+- use new pdoc-config -> see [Migration-instructions](MIGRATION.md)
+- TextEditor, TDoc-Module, Page-Module: improve usage of desc_txt, desc_md...
 
 
 ## 7.5.0 (2023-03-18)

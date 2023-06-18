@@ -53,8 +53,8 @@ export class PDocRecordCreateResolver extends CommonDocRecordCreateResolver<PDoc
 
         switch (type.toLowerCase()) {
             case 'page':
-                if (values['descTxt'] === undefined || values['descTxt'] === null || values['descTxt'] === '') {
-                    values['descTxt'] = 'TODODESC';
+                if (values['descMd'] === undefined || values['descMd'] === null || values['descMd'] === '') {
+                    values['descMd'] = 'TODODESC';
                 }
         }
     }

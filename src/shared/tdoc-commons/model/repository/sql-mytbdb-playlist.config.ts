@@ -88,9 +88,7 @@ export class SqlMytbDbPlaylistConfig {
             'CONCAT("PLAYLIST", "_", playlist.p_id) AS id',
             'playlist.p_id',
             'playlist.p_name',
-            'p_meta_desc',
-            'p_meta_desc AS p_meta_desc_md',
-            'p_meta_desc AS p_meta_desc_html'],
+            'p_meta_desc'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -350,7 +348,7 @@ export class SqlMytbDbPlaylistConfig {
             html: 'CONCAT(p_name, " ", COALESCE(p_meta_desc,""))'
         },
         writeMapping: {
-            'playlist.p_meta_desc': ':desc_txt:',
+            'playlist.p_meta_desc': ':desc_md_txt:',
             'playlist.p_key': ':key_s:',
             'playlist.p_name': ':name_s:'
         },
@@ -358,11 +356,7 @@ export class SqlMytbDbPlaylistConfig {
             id: 'id',
             playlist_id_i: 'p_id',
             playlist_id_is: 'p_id',
-            desc_txt: 'p_meta_desc',
-            desc_md_txt: 'p_meta_desc_md',
-            desc_html_txt: 'p_meta_desc_html',
-            playlist_name_s: 'p_name',
-            playlist_desc_txt: 'p_meta_desc',
+            desc_md_txt: 'p_meta_desc',
             name_s: 'p_name',
             type_s: 'type'
         }

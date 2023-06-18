@@ -175,7 +175,6 @@ export class SqlMytbDbTripConfig {
             'MAX(k_altitude_max) AS k_altitude_max',
             'SUM(k_distance) AS k_distance_sum',
             'tr_meta_shortdesc',
-            'tr_meta_shortdesc AS tr_meta_shortdesc_md',
             'tr_calced_dur AS dur',
             'tr_calced_durFacet AS durFacet'],
         facetConfigs: {
@@ -492,10 +491,8 @@ export class SqlMytbDbTripConfig {
             'trip.l_id': ':loc_id_i:',
             'trip.tr_datevon': ':datestart_dt:',
             'trip.tr_datebis': ':dateend_dt:',
-            'trip.tr_meta_shortdesc': ':desc_txt:',
+            'trip.tr_meta_shortdesc': ':desc_md_txt:',
             'trip.tr_gesperrt': ':blocked_i:',
-//                'trip.tr_meta_shortdesc_md': ':desc_md_txt:',
-//                'trip.tr_meta_shortdesc_html': ':desc_html_txt:',
             'trip.tr_key': ':key_s:',
             'trip.tr_name': ':name_s:'
         },
@@ -521,9 +518,7 @@ export class SqlMytbDbTripConfig {
             datestart_dt: 'tr_datevon',
             dateend_dt: 'tr_datebis',
             blocked_i: 'tr_gesperrt',
-            desc_txt: 'tr_meta_shortdesc',
-            desc_md_txt: 'tr_meta_shortdesc_md',
-            desc_html_txt: 'tr_meta_shortdesc_html',
+            desc_md_txt: 'tr_meta_shortdesc',
             keywords_txt: 'tr_keywords',
             name_s: 'tr_name',
             type_s: 'type'

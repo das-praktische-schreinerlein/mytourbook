@@ -98,7 +98,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
         rangeCommands: []
     };
 
-    descTxtRecommended  = '';
+    descMdRecommended  = '';
 
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected pdocSearchFormUtils: PDocSearchFormUtils,
@@ -129,10 +129,10 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
         this.pdocDescSuggesterService.suggest(
             this.editFormGroup.getRawValue(), {}
         ).then(desc => {
-            this.descTxtRecommended = desc;
+            this.descMdRecommended = desc;
             this.cd.markForCheck();
         }).catch(reason => {
-            this.descTxtRecommended = undefined;
+            this.descMdRecommended = undefined;
             this.cd.markForCheck();
         });
     }
@@ -233,7 +233,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
 
     protected createDefaultFormValueConfig(record: PDocRecord): {} {
         const valueConfig = {
-            descTxtRecommended: []
+            descMdRecommended: []
         };
 
         return valueConfig;

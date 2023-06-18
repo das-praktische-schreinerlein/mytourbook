@@ -105,8 +105,6 @@ describe('TourDocAdapterResponseMapper', () => {
                 'k_dateshow': '2000-01-01T22:00:00.000Z',
                 'k_datevon': '2000-01-01T22:00:00.000Z',
                 'k_meta_shortdesc': 'Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.',
-                'k_meta_shortdesc_md': 'Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.',
-                'k_meta_shortdesc_html': 'Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.',
                 'k_keywords': 'Ausflug, KW_Bootfahren, KW_Frühling'
             };
             const expected  = {
@@ -114,9 +112,7 @@ describe('TourDocAdapterResponseMapper', () => {
                 'trackId': 9,
                 'dateshow': '2000-01-01T23:00:00',
                 'datestart': '2000-01-01T23:00:00',
-                'descTxt': 'Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.',
                 'descMd': 'Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.',
-                'descHtml': 'Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.',
                 'keywords': 'Ausflug, KW_Bootfahren, KW_Frühling',
                 'name': 'Ausflug Liepnitzsee 01.01.2000',
                 'type': 'TRACK',
@@ -151,17 +147,11 @@ describe('TourDocAdapterResponseMapper', () => {
                 'keywords_txt': [
                     'KW_Bootfahren,,KW_Frühling,,KW_Kurztour'
                 ],
-                'desc_html_txt': [
-                    '<p>Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.</p>'
-                ],
                 'persons_txt': [
                     'Micha'
                 ],
                 'name_s': 'Ausflug Liepnitzsee 01.01.2000',
                 'track_id_i': 9,
-                'desc_txt': [
-                    '\nJetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.\n'
-                ],
                 'dateshow_dt': '2000-01-01T00:00:00Z',
                 'navigation_objects_clob': [
                     'navid=TRACK_8:::name=Dienstreise 01.01.2000:::navtype=PREDECESSOR',
@@ -181,9 +171,7 @@ describe('TourDocAdapterResponseMapper', () => {
                 'techName': 'ausflug_liepnitzsee_01_01_2000',
                 'trackId': 9,
                 'dateshow': '2000-01-01T01:00:00',
-                'descTxt': '\nJetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.\n',
                 'descMd': 'Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.',
-                'descHtml': '<p>Jetzt ist wirklich Frühling und damit Zeit für eine 2h Wassertretertour auf dem Liepnitzsee.</p>',
                 'keywords': 'KW_Bootfahren, KW_Frühling, KW_Kurztour',
                 'name': 'Ausflug Liepnitzsee 01.01.2000',
                 'persons': 'Micha',
