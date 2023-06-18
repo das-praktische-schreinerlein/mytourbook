@@ -175,6 +175,7 @@ export class PDocEditformComponent extends CommonDocEditformComponent<PDocRecord
             stringBeanFieldConfig: {
                 'css': {},
                 'heading': {},
+                'image': {},
                 'key': {},
                 'subtype': {},
                 'subTypePageType': {

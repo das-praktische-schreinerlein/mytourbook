@@ -63,7 +63,7 @@ export class PDocConverterCommand extends CommonAdminCommand {
                 return Promise.reject('exportfile already exists');
             }
 
-            const newFile = dataFileName + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-export.MOVED';
+            const newFile = dataFileName + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-migration.MOVED';
             fileCheckPromise = FileUtils.moveFile(dataFileName, newFile, false);
         } else {
             fileCheckPromise = Promise.resolve();

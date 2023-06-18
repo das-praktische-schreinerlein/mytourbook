@@ -14,8 +14,8 @@ import {PDocSearchResult} from '@dps/mycms-commons/dist/pdoc-commons/model/conta
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
 import {PDocServerPlaylistService} from './pdoc-serverplaylist.service';
 import {PDocAdapterResponseMapper} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-adapter-response.mapper';
-import {ProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-search.service';
-import {ExportProcessingOptions} from '@dps/mycms-commons/src/search-commons/services/cdoc-export.service';
+import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
+import {ExportProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-export.service';
 
 export class PDocExportService extends CommonDocDocExportService<PDocRecord, PDocSearchForm, PDocSearchResult,
     PDocDataService, PDocServerPlaylistService> {

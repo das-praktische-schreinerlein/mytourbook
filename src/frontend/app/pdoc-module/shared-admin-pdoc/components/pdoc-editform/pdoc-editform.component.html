@@ -21,20 +21,24 @@
 
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputProfiles"></ng-container>
+            </div>
+
+            <div class="row">
                 <ng-container *ngTemplateOutlet="inputLangkeys"></ng-container>
             </div>
-            
+
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputFlags"></ng-container>
             </div>
-
+            
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputText;context:{key: 'pdoc.heading', formControlName: 'heading'}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputText;context:{key: 'pdoc.theme', formControlName: 'theme'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'pdoc.teaser', formControlName: 'teaser'}"></ng-container>
             </div>
 
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputTextArea;context:{key: 'pdoc.teaser', formControlName: 'teaser'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'pdoc.image', formControlName: 'image'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'pdoc.theme', formControlName: 'theme'}"></ng-container>
             </div>
 
             <div class="row">
