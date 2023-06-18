@@ -26,9 +26,9 @@ export class PDocPageDescSuggesterService
     }
 
     protected getConfiguration(environment: CommonDocListSuggesterEnvironment): CommonDocListSuggesterConfiguration {
-        return BeanUtils.getValue(this.appService.getAppConfig(), 'components.pdoc-location-desc-suggester') ||  {
+        return BeanUtils.getValue(this.appService.getAppConfig(), 'components.pdoc-page-desc-suggester') ||  {
             nameReplacements: this.DEFAULT_NAME_REPLACEMENTS,
-            listItemTemplate: '- [{{LISTITEM.name}}](ptdoc/show/page/{{LISTITEM.id}})\n',
+            listItemTemplate: '- [{{LISTITEM.name}}](pdoc/show/page/{{LISTITEM.id}})\n',
             listItemsFallbackTemplate: '',
             footerTemplate: '\nHier könnte Ihre Werbung stehen :-)\n',
             headingTemplate: '\nInhalt der Seite: {{MAINITEM.name}}\n'
