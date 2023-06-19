@@ -386,6 +386,39 @@
                             "action": "exportPDocFile",
                             "backend": "config/backend.import.json",
                             "exportName": "pdocs",
+                            "exportDir": "./dist/static/mytbviewer/de/assets/",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocViewerFile",
+                            "backend": "config/backend.import.json",
+                            "exportName": "static.mytbpdocs",
+                            "exportDir": "./dist/static/mytbviewer/de/assets/staticdata/",
+                            "exportId": "assets/staticdata/static.mytbpdocs.js",
+                            "profiles": "profile_viewer",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "inlineDataOnViewerFile",
+                            "backend": "config/backend.import.json",
+                            "inlineProfile": "all",
+                            "srcFile": "dist/static/mytbviewer/de/index.viewer.html",
+                            "outputFile": "dist/static/mytbviewer/de/index.viewer.full.html"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.import.json",
+                            "exportName": "pdocs",
                             "exportDir": "./dist/static/mytbdev/de/assets/",
                             "profiles": "profile_static",
                             "langkeys": "lang_de"
@@ -412,34 +445,11 @@
                             "profiles": "profile_static",
                             "langkeys": "lang_de"
                         }
-                    },
-                    {
-                        "parameters": {
-                            "command": "pageManager",
-                            "action": "exportPDocFile",
-                            "backend": "config/backend.import.json",
-                            "exportName": "pdocs",
-                            "exportDir": "./dist/static/mytbviewer/de/assets/",
-                            "profiles": "profile_static",
-                            "langkeys": "lang_de"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "pageManager",
-                            "action": "exportPDocViewerFile",
-                            "backend": "config/backend.import.json",
-                            "exportName": "static.mytbpdocs",
-                            "exportDir": "./dist/static/mytbviewer/de/assets/staticdata/",
-                            "exportId": "assets/staticdata/static.mytbpdocs.js",
-                            "profiles": "profile_viewer",
-                            "langkeys": "lang_de"
-                        }
                     }
                 ]
             },
             "PUBLISH Pages: exportPagesToSrc": {
-                "description": "export pages to dist",
+                "description": "export pages to src",
                 "commands": [
                     {
                         "parameters": {

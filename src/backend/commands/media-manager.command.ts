@@ -44,6 +44,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             pdocFile: new SimpleFilePathValidationRule(false),
             exportDir: new SimpleFilePathValidationRule(false),
             exportName: new SimpleFilePathValidationRule(false),
+            inlineProfile: new KeywordValidationRule(false),
             outputDir: new SimpleFilePathValidationRule(false),
             outputFile: new SimpleFilePathValidationRule(false),
             ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),
@@ -147,6 +148,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const exportDir = argv['exportDir'];
         const exportName = argv['exportName'];
         const force = argv['force'] === true || argv['force'] === 'true';
+        const inlineProfile = argv['inlineProfile'];
 
         // TODO skipMediaCheck... as option
 
@@ -500,11 +502,16 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     return promise;
                 }
 
+                const targetFileName = outputFile !== undefined
+                    ? outputFile
+                    : srcFile
+
                 promise = viewerManagerModule.inlineDataOnViewerFile(
                     backendConfig.nodejsBinaryPath,
                     backendConfig.inlineJsPath,
                     srcFile,
-                    srcFile);
+                    targetFileName,
+                    inlineProfile);
 
                 break;
             case 'generateTourDocsFromMediaDir':
