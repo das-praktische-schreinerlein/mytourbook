@@ -15,6 +15,7 @@ import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdo
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
 import {PDocAdapterResponseMapper} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-adapter-response.mapper';
+import {ViewerManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/viewer-manager.module';
 
 export class PDocConverterCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
@@ -22,6 +23,7 @@ export class PDocConverterCommand extends CommonAdminCommand {
             backend: new SimpleConfigFilePathValidationRule(true),
             srcFile: new SimpleFilePathValidationRule(true),
             file: new SimpleFilePathValidationRule(true),
+            exportId: new SimpleFilePathValidationRule(false),
             renameFileIfExists: new WhiteListValidationRule(false, [true, false, 'true', 'false'], false),
             profiles: new IdCsvValidationRule(false),
             langkeys: new IdCsvValidationRule(false)
@@ -29,7 +31,7 @@ export class PDocConverterCommand extends CommonAdminCommand {
     }
 
     protected definePossibleActions(): string[] {
-        return ['migrateLegacyPDocFile', 'migratePDocFileToMapperFile'];
+        return ['extractPDocViewerFile', 'createPDocViewerFile', 'migrateLegacyPDocFile', 'migratePDocFileToMapperFile'];
     }
 
     protected processCommandArgs(argv: {}): Promise<any> {
@@ -40,9 +42,13 @@ export class PDocConverterCommand extends CommonAdminCommand {
 
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
         const dataService = PDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);
-        const responseMapper: GenericAdapterResponseMapper = new PDocAdapterResponseMapper(backendConfig);
-        const action = argv['action'];
         dataService.setWritable(false);
+
+        const viewerManagerModule = new ViewerManagerModule();
+        const responseMapper: GenericAdapterResponseMapper = new PDocAdapterResponseMapper(backendConfig);
+
+        const action = argv['action'];
+        const exportId = argv['exportId'];
 
         let promise: Promise<any>;
         const dataFileName = PDocFileUtils.normalizeCygwinPath(argv['file']);
@@ -70,6 +76,44 @@ export class PDocConverterCommand extends CommonAdminCommand {
         }
 
         switch (action) {
+            case 'extractPDocViewerFile':
+                const src = fs.readFileSync(srcFile, { encoding: 'utf8' });
+                const matcher = src.match(/`(\{.*})[\r\n ]*`;/s);
+
+                if (matcher.length !== 2) {
+                    promise = Promise.reject('cant extract json');
+                    return promise;
+                }
+
+                const jsonSrc = matcher[1].replace(/\\\\/g, '\\');
+                promise = fileCheckPromise.then(() => {
+                    fs.writeFileSync(dataFileName, jsonSrc);
+                }).catch(reason => {
+                    return Promise.reject('exportfile already exists and cant be renamed: ' + reason);
+                })
+
+                break;
+            case 'createPDocViewerFile':
+                if (exportId === undefined) {
+                    console.error(action + ' missing parameter - usage: --exportId EXPORTID', argv);
+                    promise = Promise.reject(action + ' missing parameter - usage: --exportId EXPORTID');
+                    return promise;
+                }
+
+                const pdocs: PDocRecord[] = JSON.parse(fs.readFileSync(srcFile, { encoding: 'utf8' })).pdocs;
+                promise = fileCheckPromise.then(() => {
+                    fs.writeFileSync(dataFileName,
+                        viewerManagerModule.fullJsonToJsTargetContentConverter(
+                            JSON.stringify({ pdocs: pdocs}, undefined, ' '),
+                            exportId,
+                            'importStaticDataPDocsJsonP'
+                        )
+                    );
+                }).catch(reason => {
+                    return Promise.reject('exportfile already exists and cant be renamed: ' + reason);
+                })
+
+                break;
             case 'migratePDocFileToMapperFile':
                 const srcRecords: PDocRecord[] = JSON.parse(fs.readFileSync(srcFile, { encoding: 'utf8' })).pdocs;
                 const resultValues = [];

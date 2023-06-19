@@ -50,14 +50,33 @@ node dist/backend/serverAdmin.js\
 PROFILES=profile_viewer
 node dist/backend/serverAdmin.js\
       --command convertPDoc\
-      --action migrateLegacyPDocJsonPFile\
+      --action extractPDocViewerFile\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
       --srcFile src/frontend/assets/staticdata/static.mytbpdocs.js \
+      --file src/frontend/assets/staticdata/static.mytbpdocs.json \
+      --debug 1
+node dist/backend/serverAdmin.js\
+      --command convertPDoc\
+      --action migrateLegacyPDocFile\
+      --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
+      --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
+      --renameFileIfExists true\
+      --srcFile src/frontend/assets/staticdata/static.mytbpdocs.json \
       --langkeys lang_de,lang_en \
       --profiles ${PROFILES} \
+      --file src/frontend/assets/staticdata/static.mytbpdocs.json \
+      --debug 1
+node dist/backend/serverAdmin.js\
+      --command convertPDoc\
+      --action createPDocViewerFile\
+      --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
+      --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
+      --renameFileIfExists true\
+      --srcFile src/frontend/assets/staticdata/static.mytbpdocs.json \
       --file src/frontend/assets/staticdata/static.mytbpdocs.js \
+      --exportId assets/staticdata/static.mytbpdocs.js \
       --debug 1
 ```
 
@@ -68,6 +87,26 @@ CONFIG_BASEDIR=./config/
 CONFIGPROFILE=import
 PDOCS_BASEDIR=./config/
 LANG=de
+PROFILE=dev
+node dist/backend/serverAdmin.js\
+      --command convertPDoc\
+      --action migratePDocFileToMapperFile\
+      --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
+      --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
+      --renameFileIfExists true\
+      --srcFile config/pdocs-${LANG}.json \
+      --file ${PDOCS_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json\
+      --debug 1
+node dist/backend/serverAdmin.js\
+      --command loadPDoc\
+      --action loadDocs\
+      --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
+      --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
+      --renameFileAfterSuccess true\
+      --file ${PDOCS_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json \
+      --debug 1
+
+LANG=en
 PROFILE=dev
 node dist/backend/serverAdmin.js\
       --command convertPDoc\
@@ -107,6 +146,27 @@ node dist/backend/serverAdmin.js\
       --renameFileAfterSuccess true\
       --file ${PDOCS_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json \
       --debug 1
+
+PDOCS_BASEDIR=./config/
+LANG=de
+PROFILE=viewer
+node dist/backend/serverAdmin.js\
+      --command convertPDoc\
+      --action migratePDocFileToMapperFile\
+      --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
+      --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
+      --renameFileIfExists true\
+      --srcFile src/frontend/assets/staticdata/static.mytbpdocs.json \
+      --file ${PDOCS_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json\
+      --debug 1
+node dist/backend/serverAdmin.js\
+      --command loadPDoc\
+      --action loadDocs\
+      --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
+      --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
+      --renameFileAfterSuccess true\
+      --file ${PDOCS_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json \
+      --debug 1
 ```
 - export files from database
 ```
@@ -117,4 +177,21 @@ EXPORTDIR=./config/
 
 EXPORTDIR=./src/frontend/assets/
 ./sbin/exportPDocs.sh ${CONFIGPROFILE} ${EXPORTDIR} pdocs lang_de profile_static
+
+CONFIG_BASEDIR=./config/
+CONFIGPROFILE=import
+EXPORTDIR=./src/frontend/assets/staticdata/
+LANGKEYS=lang_de
+PROFILES=profile_viewer
+node dist/backend/serverAdmin.js\
+     --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
+     --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
+     --command pageManager\
+     --action exportPDocViewerFile\
+     --exportName static.mytbpdocs\
+     --exportDir ${EXPORTDIR}\
+     --exportId assets/staticdata/static.mytbpdocs.js \
+     --profiles ${PROFILES} \
+     --langkeys ${LANGKEYS} \
+     --debug 1
 ```

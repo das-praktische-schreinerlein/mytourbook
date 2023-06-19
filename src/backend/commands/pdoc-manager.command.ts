@@ -18,6 +18,7 @@ import {PDocAdapterResponseMapper} from '@dps/mycms-commons/dist/pdoc-commons/se
 import {PDocDataServiceModule} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/modules/pdoc-dataservice.module';
 import {utils} from 'js-data';
 import {PDocSearchForm} from '@dps/mycms-commons/dist/pdoc-commons/model/forms/pdoc-searchform';
+import {ViewerManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/viewer-manager.module';
 
 export class PageManagerCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
@@ -26,6 +27,7 @@ export class PageManagerCommand extends CommonAdminCommand {
             backend: new SimpleConfigFilePathValidationRule(true),
             exportDir: new SimpleFilePathValidationRule(false),
             exportName: new SimpleFilePathValidationRule(false),
+            exportId: new SimpleFilePathValidationRule(false),
             ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),
             parallel: new NumberValidationRule(false, 1, 99, 10),
             pageNum: new NumberValidationRule(false, 1, 999999999, 1),
@@ -39,7 +41,7 @@ export class PageManagerCommand extends CommonAdminCommand {
 
     protected definePossibleActions(): string[] {
         return [
-            'exportPDocFile', 'exportPageFile'
+            'exportPDocFile', 'exportPDocViewerFile', 'exportPageFile'
         ];
     }
 
@@ -53,6 +55,7 @@ export class PageManagerCommand extends CommonAdminCommand {
         const backendConfig: BackendConfigType = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
 
         const dataService = PDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);
+        const viewerManagerModule = new ViewerManagerModule();
 
         let promise: Promise<any>;
         let searchForm: PDocSearchForm;
@@ -61,17 +64,20 @@ export class PageManagerCommand extends CommonAdminCommand {
         const exportName = argv['exportName'];
         const profiles = argv['profiles'];
         const langkeys = argv['langkeys'];
+        const exportId = argv['exportId'];
 
         let type = 'UNKNOWN';
         switch (action) {
             case 'exportPageFile':
             case 'exportPDocFile':
+            case 'exportPDocViewerFile':
                 type = 'page';
                 break;
         }
 
         switch (action) {
             case 'exportPDocFile':
+            case 'exportPDocViewerFile':
                 if (exportDir === undefined) {
                     console.error(action + ' missing parameter - usage: --exportDir EXPORTDIR', argv);
                     promise = Promise.reject(action + ' missing parameter - usage: --exportDir EXPORTDIR');
@@ -92,12 +98,28 @@ export class PageManagerCommand extends CommonAdminCommand {
                     perPage: 9999
                 });
                 promise = dataService.findCurList(searchForm).then(pdocs => {
-                    fs.writeFileSync(exportDir + '/' + exportName + '.json', JSON.stringify({ pdocs: pdocs}, undefined, ' '));
+                    if (action === 'exportPDocViewerFile') {
+                        if (exportId === undefined) {
+                            console.error(action + ' missing parameter - usage: --exportId EXPORTID', argv);
+                            promise = Promise.reject(action + ' missing parameter - usage: --exportId EXPORTID');
+                            return promise;
+                        }
+
+                        const fileName = exportDir + '/' + exportName + '.js';
+                        fs.writeFileSync(fileName,
+                            viewerManagerModule.fullJsonToJsTargetContentConverter(
+                                JSON.stringify({ pdocs: pdocs}, undefined, ' '),
+                                exportId,
+                                'importStaticDataPDocsJsonP'
+                            )
+                        );
+                    } else {
+                        fs.writeFileSync(exportDir + '/' + exportName + '.json', JSON.stringify({ pdocs: pdocs}, undefined, ' '));
+                    }
                 });
 
                 break;
             case 'exportPageFile':
-
                 const playlistService = new PDocServerPlaylistService();
                 const responseMapper = new PDocAdapterResponseMapper(backendConfig);
                 const pdocExportService: PDocExportService =
