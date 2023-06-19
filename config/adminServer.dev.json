@@ -336,6 +336,198 @@
                     }
                 ]
             },
+            "PUBLISH Pages: exportPagesToServerConfig": {
+                "description": "export pages to server-configs",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-import-de",
+                            "exportDir": "./config/",
+                            "profiles": "profile_import",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-dev-de",
+                            "exportDir": "./config/",
+                            "profiles": "profile_dev",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-beta-de",
+                            "exportDir": "./config/",
+                            "profiles": "profile_beta",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-prod-de",
+                            "exportDir": "./config/",
+                            "profiles": "profile_prod",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-import-en",
+                            "exportDir": "./config/",
+                            "profiles": "profile_import",
+                            "langkeys": "lang_en"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-dev-en",
+                            "exportDir": "./config/",
+                            "profiles": "profile_dev",
+                            "langkeys": "lang_en"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-beta-en",
+                            "exportDir": "./config/",
+                            "profiles": "profile_beta",
+                            "langkeys": "lang_en"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-prod-en",
+                            "exportDir": "./config/",
+                            "profiles": "profile_prod",
+                            "langkeys": "lang_en"
+                        }
+                    }
+                ]
+            },
+            "PUBLISH Pages: exportPagesToDist": {
+                "description": "export pages to dist",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs",
+                            "exportDir": "./dist/static/mytbviewer/de/assets/",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocViewerFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "static.mytbpdocs",
+                            "exportDir": "./dist/static/mytbviewer/de/assets/staticdata/",
+                            "exportId": "assets/staticdata/static.mytbpdocs.js",
+                            "profiles": "profile_viewer",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "inlineDataOnViewerFile",
+                            "backend": "config/backend.dev.json",
+                            "inlineProfile": "all",
+                            "srcFile": "dist/static/mytbviewer/de/index.viewer.html",
+                            "outputFile": "dist/static/mytbviewer/de/index.viewer.full.html"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs",
+                            "exportDir": "./dist/static/mytbdev/de/assets/",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs",
+                            "exportDir": "./dist/static/mytbbeta/de/assets/",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs",
+                            "exportDir": "./dist/static/mytbprod/de/assets/",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    }
+                ]
+            },
+            "PUBLISH Pages: exportPagesToSrc": {
+                "description": "export pages to src",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs",
+                            "exportDir": "./src/frontend/assets/",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocViewerFile",
+                            "backend": "config/backend.dev.json",
+                            "exportId": "assets/staticdata/static.mytbpdocs.js",
+                            "exportName": "static.mytbpdocs",
+                            "exportDir": "./src/frontend/assets/staticdata/",
+                            "profiles": "profile_viewer",
+                            "langkeys": "lang_de"
+                        }
+                    }
+                ]
+            },
             "PUBLISH: dbPublish_beta_mysql": {
                 "description": "publish database mytbexportbetadb mysql",
                 "commands": [
