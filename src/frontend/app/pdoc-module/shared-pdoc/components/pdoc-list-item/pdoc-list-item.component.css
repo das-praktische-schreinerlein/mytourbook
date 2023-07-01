@@ -8,3 +8,7 @@
 .card-img-top {
     padding-top: 5px;
 }
+
+.teaser {
+    line-clamp: 2;
+}

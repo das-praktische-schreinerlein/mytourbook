@@ -1,0 +1,7 @@
+<ng-container *ngIf="record !== undefined">
+    <div class="techvaluetable">
+        <div *ngIf="langkeys !== undefined && langkeys.length > 0" class="entry"><div class="label">Sprachen:</div><div class="value">{{langkeys.join(', ')}}</div></div>
+        <div *ngIf="profiles !== undefined && profiles.length > 0" class="entry"><div class="label">Profile:</div><div class="value">{{profiles.join(', ')}}</div></div>
+        <div *ngIf="flags !== undefined && flags.length > 0" class="entry"><div class="label">Flags:</div><div class="value">{{flags.join(', ')}}</div></div>
+    </div>
+</ng-container>

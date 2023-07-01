@@ -19,10 +19,12 @@ import {PDocListItemComponent} from './components/pdoc-list-item/pdoc-list-item.
 import {PDocListItemFlatComponent} from './components/pdoc-list-item-flat/pdoc-list-item-flat.component';
 import {PDocActionsComponent} from './components/pdoc-actions/pdoc-actions.component';
 import {PDocActionTagsComponent} from './components/pdoc-actiontags/pdoc-actiontags.component';
+import {PdocInfoComponent} from './components/pdoc-info/pdoc-info.component';
 
 @NgModule({
     declarations: [
         PDocSearchformComponent,
+        PdocInfoComponent,
         PDocListComponent,
         PDocListItemComponent,
         PDocListItemFlatComponent,
@@ -50,6 +52,7 @@ import {PDocActionTagsComponent} from './components/pdoc-actiontags/pdoc-actiont
     ],
     exports: [
         PDocSearchformComponent,
+        PdocInfoComponent,
         PDocListComponent,
         PDocListItemComponent,
         PDocListItemFlatComponent,
