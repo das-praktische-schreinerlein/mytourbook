@@ -14,6 +14,7 @@
 - frontend: improved table-layout
 - improved sync-viewer for offline-usage
 - removed legacy pdoc-editor
+- frontend: improved/fixed desc-rendering
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -39,6 +40,7 @@
 - use new config
 - use new pdoc-config -> see [Migration-instructions](MIGRATION.md)
 - TextEditor, TDoc-Module, Page-Module: improve usage of desc_txt, desc_md...
+- frontend: improved/fixed desc-rendering
 
 
 ## 7.5.0 (2023-03-18)
