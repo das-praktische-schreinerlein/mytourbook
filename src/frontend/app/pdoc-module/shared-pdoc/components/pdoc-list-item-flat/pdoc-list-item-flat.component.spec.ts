@@ -17,6 +17,7 @@ import {PDocRoutingService} from '../../services/pdoc-routing.service';
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
 import {ToastrService} from 'ngx-toastr';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {TruncatePipe} from '@dps/mycms-frontend-commons/dist/angular-commons/pipes/truncate.pipe';
 
 describe('PDocListItemFlatComponent', () => {
     let component: PDocListItemFlatComponent;
@@ -24,7 +25,7 @@ describe('PDocListItemFlatComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [PDocListItemFlatComponent],
+            declarations: [PDocListItemFlatComponent, TruncatePipe],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,

@@ -1,17 +1,18 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {TourDocDataInfoComponent} from './pdoc-info.component';
+import {PdocInfoComponent} from './pdoc-info.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
+import {PDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing/pdoc-dataservice-stubs';
+import {TruncatePipe} from '@dps/mycms-frontend-commons/dist/angular-commons/pipes/truncate.pipe';
 
-describe('TourDocDataInfoComponent', () => {
-    let component: TourDocDataInfoComponent;
-    let fixture: ComponentFixture<TourDocDataInfoComponent>;
+describe('PdocInfoComponent', () => {
+    let component: PdocInfoComponent;
+    let fixture: ComponentFixture<PdocInfoComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocDataInfoComponent],
+            declarations: [PdocInfoComponent, TruncatePipe],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [
                 TranslateModule.forRoot()]
@@ -20,9 +21,9 @@ describe('TourDocDataInfoComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TourDocDataInfoComponent);
+        fixture = TestBed.createComponent(PdocInfoComponent);
         component = fixture.componentInstance;
-        component.record = TourDocDataServiceStub.defaultRecord();
+        component.record = PDocDataServiceStub.defaultRecord();
         fixture.detectChanges();
     });
 
