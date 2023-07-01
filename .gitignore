@@ -67,6 +67,10 @@ overrides/after-build/dist/mytb/de/*
 overrides/after-build/dist/mytb/en/*
 !/overrides/after-build/dist/mytb/de/.gitkeep
 !/overrides/after-build/dist/mytb/en/.gitkeep
+overrides/after-build/dist/mytbviewer/de/*
+overrides/after-build/dist/mytbviewer/en/*
+!/overrides/after-build/dist/mytbviewer/de/.gitkeep
+!/overrides/after-build/dist/mytbviewer/en/.gitkeep
 !/overrides/before-build/.gitkeep
 /overrides/before-build/installer/*
 !/overrides/before-build/installer/.gitkeep
