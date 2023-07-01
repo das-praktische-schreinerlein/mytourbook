@@ -39,6 +39,7 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
     maxImageHeight = '0';
     imageWidth = 600;
     imageShowMap = false;
+    descSelector = '#desc';
 
     @ViewChild('mainImage')
     mainImage: ElementRef;
@@ -108,22 +109,49 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
     }
 
     renderDesc(): string {
-        if (this.flgDescRendered || !this.record) {
-            return;
+        if (!this.record) {
+            if (!this.flgDescRendered) {
+                return '';
+            }
+
+            this.setDesc(this.descSelector, '');
+            this.flgDescRendered = false;
+            return '';
+        }
+
+        if (this.flgDescRendered) {
+            return '';
+        }
+
+        if (this.record && (this.record.descMd === undefined || this.record.descMd.toLowerCase() === 'tododesc')) {
+            this.setDesc(this.descSelector, '');
+            this.flgDescRendered = false;
+            return '';
         }
 
         if (!this.platformService.isClient()) {
-            return this.record.descTxt || this.record.descHtml || this.record.descMd  || '';
+            this.setDesc(this.descSelector, this.record.descHtml || this.record.descTxt || this.record.descMd || '');
+            this.flgDescRendered = false;
+            return '';
         }
 
         if (this.record.descHtml) {
-            this.flgDescRendered = this.angularHtmlService.renderHtml('#desc', this.record.descHtml, true);
+            this.flgDescRendered = this.angularHtmlService.renderHtml(this.descSelector, this.record.descHtml, true);
         } else {
             const desc = this.record.descMd ? this.record.descMd : '';
-            this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
+            this.flgDescRendered = this.angularMarkdownService.renderMarkdown(this.descSelector, desc, true);
         }
 
         return '';
+    }
+
+    setDesc(descSelector: string, html: string) {
+        const inputEl = document.querySelector(descSelector);
+        if (!inputEl || inputEl === undefined || inputEl === null) {
+            return false;
+        }
+
+        inputEl.innerHTML = html;
     }
 
     protected updateData(): void {

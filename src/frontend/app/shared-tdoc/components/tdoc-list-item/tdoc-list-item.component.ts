@@ -52,7 +52,7 @@ export class TourDocListItemComponent extends CommonDocListItemComponent {
             return;
         }
 
-        return this.record.descMd;
+        return this.record.descTxt || this.record.descMd || '';
     }
 
     protected updateData() {
