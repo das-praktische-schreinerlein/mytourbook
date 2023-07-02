@@ -78,9 +78,9 @@ export class PDocConverterCommand extends CommonAdminCommand {
         switch (action) {
             case 'extractPDocViewerFile':
                 const src = fs.readFileSync(srcFile, { encoding: 'utf8' });
-                const matcher = src.match(/`(\{.*})[\r\n ]*`;/s);
+                const matcher = src.match(/`\s*(\{.*})\s*`\s*;/s);
 
-                if (matcher.length !== 2) {
+                if (!matcher || matcher.length !== 2) {
                     promise = Promise.reject('cant extract json');
                     return promise;
                 }
