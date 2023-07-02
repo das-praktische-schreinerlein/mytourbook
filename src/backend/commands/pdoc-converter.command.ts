@@ -183,10 +183,17 @@ export class PDocConverterCommand extends CommonAdminCommand {
 
         doc.subtype = doc.type;
         doc.type = 'PAGE';
+
+        if (!doc.key) {
+            doc.key = doc.id;
+        }
     }
 
     protected migratePDocRecordToMapperFile(responseMapper: GenericAdapterResponseMapper, doc: PDocRecord): {} {
-        doc.key = doc.id;
+        if (!doc.key) {
+            doc.key = doc.id;
+        }
+
         return responseMapper.mapToAdapterDocument({}, doc);
     }
 }
