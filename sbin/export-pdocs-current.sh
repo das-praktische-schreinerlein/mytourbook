@@ -11,7 +11,7 @@ echo "start - export pdocs to run current version"
 
 ${SCRIPTPATH}/exportPDocs4BackendConfig.sh dev ./config/ de
 ${SCRIPTPATH}/exportPDocs4BackendConfig.sh dev ./config/ en
-${SCRIPTPATH}/exportPDocs4DistConfig.sh dev ./dist/ de
-${SCRIPTPATH}/exportPDocs4DistConfig.sh dev ./dist/ en
+${SCRIPTPATH}/exportPDocs4DistConfig.sh dev ./dist/static/ de
+${SCRIPTPATH}/exportPDocs4DistConfig.sh dev ./dist/static/ en
 
 echo "start - export pdocs to run current version"

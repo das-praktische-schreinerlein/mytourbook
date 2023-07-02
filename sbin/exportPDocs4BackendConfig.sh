@@ -28,6 +28,7 @@ source ${SCRIPTPATH}/configure-environment.bash
 echo "start - export-pages-backend for ${CONFIGPROFILE} to ${EXPORTDIR}"
 
 # backend pdocs
+${SCRIPTPATH}/exportPDocs.sh ${CONFIGPROFILE} "${EXPORTDIR}" "pdocs-${LANGKEY}" "lang_${LANGKEY}" "profile_import,profile_dev,profile_beta,profile_prod"
 ${SCRIPTPATH}/exportPDocs.sh ${CONFIGPROFILE} "${EXPORTDIR}" "pdocs-import-${LANGKEY}" "lang_${LANGKEY}" "profile_import"
 ${SCRIPTPATH}/exportPDocs.sh ${CONFIGPROFILE} "${EXPORTDIR}" "pdocs-dev-${LANGKEY}" "lang_${LANGKEY}" "profile_dev"
 ${SCRIPTPATH}/exportPDocs.sh ${CONFIGPROFILE} "${EXPORTDIR}" "pdocs-beta-${LANGKEY}" "lang_${LANGKEY}" "profile_beta"

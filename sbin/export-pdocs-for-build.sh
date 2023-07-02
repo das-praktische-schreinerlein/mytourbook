@@ -12,7 +12,7 @@ echo "start - export pdocs to build new version"
 ${SCRIPTPATH}/exportPDocs4SrcConfig.sh dev ./overrides/before-build/
 ${SCRIPTPATH}/exportPDocs4BackendConfig.sh dev ./overrides/after-build/config/ de
 ${SCRIPTPATH}/exportPDocs4BackendConfig.sh dev ./overrides/after-build/config/ en
-${SCRIPTPATH}/exportPDocs4DistConfig.sh dev ./overrides/after-build/dist/ de
-${SCRIPTPATH}/exportPDocs4DistConfig.sh dev ./overrides/after-build/dist/ en
+${SCRIPTPATH}/exportPDocs4DistConfig.sh dev ./overrides/after-build/dist/ de noinline
+${SCRIPTPATH}/exportPDocs4DistConfig.sh dev ./overrides/after-build/dist/ en noinline
 
 echo "done -  export pdocs to build new version"
