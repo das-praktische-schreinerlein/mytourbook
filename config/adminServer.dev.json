@@ -479,10 +479,34 @@
                     {
                         "parameters": {
                             "command": "pageManager",
+                            "action": "exportPDocViewerFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "static.mytbpdocs",
+                            "exportDir": "./dist/static/mytbdev/de/assets/staticdata/",
+                            "exportId": "assets/staticdata/static.mytbpdocs.js",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
                             "action": "exportPDocFile",
                             "backend": "config/backend.dev.json",
                             "exportName": "pdocs",
                             "exportDir": "./dist/static/mytbbeta/de/assets/",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocViewerFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "static.mytbpdocs",
+                            "exportDir": "./dist/static/mytbbeta/de/assets/staticdata/",
+                            "exportId": "assets/staticdata/static.mytbpdocs.js",
                             "profiles": "profile_static",
                             "langkeys": "lang_de"
                         }
@@ -497,32 +521,16 @@
                             "profiles": "profile_static",
                             "langkeys": "lang_de"
                         }
-                    }
-                ]
-            },
-            "PUBLISH Pages: exportPagesToSrc": {
-                "description": "export pages to src",
-                "commands": [
-                    {
-                        "parameters": {
-                            "command": "pageManager",
-                            "action": "exportPDocFile",
-                            "backend": "config/backend.dev.json",
-                            "exportName": "pdocs",
-                            "exportDir": "./src/frontend/assets/",
-                            "profiles": "profile_static",
-                            "langkeys": "lang_de"
-                        }
                     },
                     {
                         "parameters": {
                             "command": "pageManager",
                             "action": "exportPDocViewerFile",
                             "backend": "config/backend.dev.json",
-                            "exportId": "assets/staticdata/static.mytbpdocs.js",
                             "exportName": "static.mytbpdocs",
-                            "exportDir": "./src/frontend/assets/staticdata/",
-                            "profiles": "profile_viewer",
+                            "exportDir": "./dist/static/mytbprod/de/assets/staticdata/",
+                            "exportId": "assets/staticdata/static.mytbpdocs.js",
+                            "profiles": "profile_static",
                             "langkeys": "lang_de"
                         }
                     }
