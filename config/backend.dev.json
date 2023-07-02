@@ -41,8 +41,7 @@
             "user": "testmytbdb",
             "password": "testmytbdb",
             "database": "testmytbdb",
-            "port": "3306",
-            "filename": "F:/playground/mytb-test/mytdatabase/mytbdb.sqlite"
+            "port": "3306"
         },
         "facetCacheUsage": {
             "active": true,
@@ -96,8 +95,7 @@
             "user": "testmytbdb",
             "password": "testmytbdb",
             "database": "testmytbdb",
-            "port": "3306",
-            "filename": "F:/playground/mytb-test/mytdatabase/mytbdb.sqlite"
+            "port": "3306"
         },
         "facetCacheUsage": {
             "active": false,
@@ -112,11 +110,6 @@
             ],
             "checkInterval": 2
         }
-    },
-    "PDocSolrAdapter": {
-        "solrCorePDoc": "http://localhost:9999/solr/coremytbbeta/",
-        "solrCorePDocReadUsername": "mytbread",
-        "solrCorePDocReadPassword": "SolrRocks"
     },
     "objectDetectionConfig": {
         "redisQueue": {
