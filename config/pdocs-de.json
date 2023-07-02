@@ -3,14 +3,15 @@
   {
    "id": "start",
    "descMd": "Willkommen bei MyTB dem Portal für die Tourenplanung in ausgewählten Ländern der Welt. Es ist eine Mischung aus [Tourenführer (Tourentipps)](sections/start/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/route/5/1), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder) angelehnt an [Michas-Ausflugstipps](http://www.michas-ausflugstipps.de/).",
-   "flags": "flg_ShowTopTen, flg_ShowSearch, flg_ShowNews, flg_ShowAdminArea, flg_ShowDashboard",
+   "flags": "flg_ShowTopTen,flg_ShowSearch,flg_ShowNews,flg_ShowAdminArea,flg_ShowDashboard",
    "heading": "Thats MyTB",
    "langkeys": "lang_de",
    "name": "Start",
-   "profiles": "profile_dev,profile_import,profile_viewer,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "schwerpunkt",
    "teaser": "Willkommen bei MyTB",
-   "type": "SectionOverviewPage"
+   "type": "PAGE",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "impress",
@@ -18,10 +19,12 @@
    "heading": "Impressum/Datenschutz",
    "langkeys": "lang_de",
    "name": "Impressum/Datenschutz",
-   "profiles": "profile_dev,profile_viewer,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "",
    "teaser": "Impressum/Datenschutz - der rechtliche Teil",
-   "type": "SimplePage"
+   "type": "PAGE",
+   "flags": "",
+   "subtype": "SimplePage"
   },
   {
    "id": "menu",
@@ -29,10 +32,12 @@
    "heading": "Hauptmenü",
    "langkeys": "lang_de",
    "name": "Hauptmenü",
-   "profiles": "profile_dev,profile_import,profile_viewer,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "sections,locations,statistics",
    "teaser": "Hauptmenü",
-   "type": "SectionOverviewPage"
+   "type": "PAGE",
+   "flags": "",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "sections",
@@ -40,10 +45,12 @@
    "heading": "Thats Themen",
    "langkeys": "lang_de",
    "name": "Themen",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "schwerpunkt,aktiv,landschaft,kultur",
    "teaser": "Die Schwerpunkte",
-   "type": "SectionOverviewPage"
+   "type": "PAGE",
+   "flags": "",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "locations",
@@ -51,10 +58,12 @@
    "heading": "Thats Regionen",
    "langkeys": "lang_de",
    "name": "Regionen",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "deutschland,alpen,usa",
    "teaser": "Die wichtigsten Regionen",
-   "type": "SectionOverviewPage"
+   "type": "PAGE",
+   "flags": "",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "statistics",
@@ -63,9 +72,10 @@
    "heading": "Statistics",
    "langkeys": "lang_de",
    "name": "Statistiken",
-   "profiles": "profile_dev,profile_import",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Statistiken",
-   "type": "SectionOverviewPage"
+   "type": "PAGE",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "schwerpunkt",
@@ -73,10 +83,12 @@
    "heading": "Schwerpunkte",
    "langkeys": "lang_de",
    "name": "Schwerpunkte",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "kultur,aktiv,landschaft,klettern,wandern,deutschland,alpen,usa",
    "teaser": "Schwerpunkte",
-   "type": "SectionOverviewPage"
+   "type": "PAGE",
+   "flags": "",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "kultur",
@@ -84,12 +96,14 @@
    "heading": "Kultur",
    "langkeys": "lang_de",
    "name": "Kultur",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "Museen,Stadtbesichtigung",
    "teaser": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
-   "type": "SectionOverviewPage",
+   "type": "PAGE",
    "image": "assets/images/theme-kultur.jpg",
-   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}"
+   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}",
+   "flags": "",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "aktiv",
@@ -97,11 +111,13 @@
    "heading": "Aktivitäten",
    "langkeys": "lang_de",
    "name": "Aktivitäten",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "Klettern,Wandern",
    "teaser": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
-   "type": "SectionOverviewPage",
-   "image": "assets/images/theme-aktiv.jpg"
+   "type": "PAGE",
+   "image": "assets/images/theme-aktiv.jpg",
+   "flags": "",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "landschaft",
@@ -109,131 +125,142 @@
    "heading": "Landschaften",
    "langkeys": "lang_de",
    "name": "Landschaften",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "subSectionIds": "Berge,Meer",
    "teaser": "Die Landschaften der Welt.",
-   "type": "SectionOverviewPage",
-   "image": "assets/images/theme-landschaft.jpg"
+   "type": "PAGE",
+   "image": "assets/images/theme-landschaft.jpg",
+   "flags": "",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "Klettern",
    "descMd": "Klettern... Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "Klettern",
    "langkeys": "lang_de",
    "name": "Klettern",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln.",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-klettern.jpg",
-   "theme": "Klettern"
+   "theme": "Klettern",
+   "subtype": "SectionPage"
   },
   {
    "id": "Wandern",
    "descMd": "Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "Wandern",
    "langkeys": "lang_de",
    "name": "Wandern",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran.",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-wandern.jpg",
-   "theme": "Wandern"
+   "theme": "Wandern",
+   "subtype": "SectionPage"
   },
   {
    "id": "Berge",
    "descMd": "Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "Berge",
    "langkeys": "lang_de",
    "name": "Berge",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt.",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-berge.jpg",
-   "theme": "Berge"
+   "theme": "Berge",
+   "subtype": "SectionPage"
   },
   {
    "id": "Meer",
    "descMd": "Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "Meer",
    "langkeys": "lang_de",
    "name": "Meer",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer.",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-meer.jpg",
    "theme": "Meer",
-   "css": "body {background: linear-gradient(to right, #8cacd3 0%,#2989d8 50%,#468ec9 51%,#7db9e8 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}"
+   "css": "body {background: linear-gradient(to right, #8cacd3 0%,#2989d8 50%,#468ec9 51%,#7db9e8 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}",
+   "subtype": "SectionPage"
   },
   {
    "id": "Museen",
    "descMd": "Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "Museen",
    "langkeys": "lang_de",
    "name": "Museen",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Ob nun [Geschichte]() oder [Kunst]().",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-museen.jpg",
    "theme": "Museen",
-   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}"
+   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}",
+   "subtype": "SectionPage"
   },
   {
    "id": "Stadtbesichtigung",
    "descMd": "Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "Stadtbesichtigung",
    "langkeys": "lang_de",
    "name": "Stadtbesichtigung",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Stadtbesichtigungen in den Großstädten der Welt...",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-stadtbesichtigung.jpg",
    "theme": "Stadtbesichtigung",
-   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}"
+   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}",
+   "subtype": "SectionPage"
   },
   {
    "id": "deutschland",
    "descMd": "Findet hier Tourentipps, Berichte und Bilder in Deutschland...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "Deutschand",
    "langkeys": "lang_de",
    "name": "Deutschland",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Erlebe Deutschland...",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "",
-   "theme": "deutschland"
+   "theme": "deutschland",
+   "subtype": "SectionPage"
   },
   {
    "id": "alpen",
    "descMd": "Findet hier Tourentipps, Berichte und Bilder in den Alpen...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "Alpen",
    "langkeys": "lang_de",
    "name": "Alpen",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Erlebe die Alpen...",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "",
-   "theme": "alpen"
+   "theme": "alpen",
+   "subtype": "SectionPage"
   },
   {
    "id": "usa",
    "descMd": "Findet hier Tourentipps, Berichte und Bilder in den USA...",
-   "flags": "flg_ShowTopTen, flg_ShowSearch",
+   "flags": "flg_ShowTopTen,flg_ShowSearch",
    "heading": "USA",
    "langkeys": "lang_de",
    "name": "USA",
-   "profiles": "profile_dev,profile_beta,profile_prod",
+   "profiles": "profile_dev,profile_import,profile_beta,profile_prod",
    "teaser": "Erlebe die USA...",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "",
-   "theme": "usa"
+   "theme": "usa",
+   "subtype": "SectionPage"
   }
  ]
 }

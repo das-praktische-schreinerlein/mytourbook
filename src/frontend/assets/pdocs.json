@@ -10,8 +10,12 @@
    "name": "Start",
    "subSectionIds": "sections",
    "teaser": "Willkommen bei MyTB",
-   "type": "SectionOverviewPage",
-   "theme": ""
+   "type": "PAGE",
+   "theme": "",
+   "flags": "flg_ShowSearch,flg_ShowNews,flg_ShowTopTen",
+   "profiles": "profile_static",
+   "langkeys": "lang_de,lang_en",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "impress",
@@ -22,7 +26,11 @@
    "name": "Impressum/Datenschutz",
    "subSectionIds": "",
    "teaser": "Impressum/Datenschutz - der rechtliche Teil",
-   "type": "SimplePage"
+   "type": "PAGE",
+   "flags": "",
+   "profiles": "profile_static",
+   "langkeys": "lang_de,lang_en",
+   "subtype": "SimplePage"
   },
   {
    "id": "sections",
@@ -33,7 +41,11 @@
    "name": "Themen",
    "subSectionIds": "Klettern,Wandern,Berge,Museen",
    "teaser": "Die Schwerpunkte",
-   "type": "SectionOverviewPage"
+   "type": "PAGE",
+   "flags": "",
+   "profiles": "profile_static",
+   "langkeys": "lang_de,lang_en",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "Klettern",
@@ -43,9 +55,13 @@
    "heading": "Klettern",
    "name": "Klettern",
    "teaser": "Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln.",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-klettern.jpg",
-   "theme": "Klettern"
+   "theme": "Klettern",
+   "flags": "flg_ShowSearch,flg_ShowTopTen",
+   "profiles": "profile_static",
+   "langkeys": "lang_de,lang_en",
+   "subtype": "SectionPage"
   },
   {
    "id": "Wandern",
@@ -55,9 +71,13 @@
    "heading": "Wandern",
    "name": "Wandern",
    "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran.",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-wandern.jpg",
-   "theme": "Wandern"
+   "theme": "Wandern",
+   "flags": "flg_ShowSearch,flg_ShowTopTen",
+   "profiles": "profile_static",
+   "langkeys": "lang_de,lang_en",
+   "subtype": "SectionPage"
   },
   {
    "id": "Berge",
@@ -67,9 +87,13 @@
    "heading": "Berge",
    "name": "Berge",
    "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt.",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-berge.jpg",
-   "theme": "Berge"
+   "theme": "Berge",
+   "flags": "flg_ShowSearch,flg_ShowTopTen",
+   "profiles": "profile_static",
+   "langkeys": "lang_de,lang_en",
+   "subtype": "SectionPage"
   },
   {
    "id": "Museen",
@@ -79,9 +103,13 @@
    "heading": "Museen",
    "name": "Museen",
    "teaser": "Ob nun [Geschichte]() oder [Kunst]().",
-   "type": "SectionPage",
+   "type": "PAGE",
    "image": "assets/images/theme-museen.jpg",
-   "theme": "Museen"
+   "theme": "Museen",
+   "flags": "flg_ShowSearch,flg_ShowTopTen",
+   "profiles": "profile_static",
+   "langkeys": "lang_de,lang_en",
+   "subtype": "SectionPage"
   }
  ]
 }

@@ -1,17 +1,19 @@
-window.importStaticDataPDocsJsonP = `{
+window.importStaticDataPDocsJsonP = `
+{
  "pdocs": [
   {
    "id": "start",
    "descMd": "Willkommen beim MyTB-Viewer. Hier kannst du dir eine Auswahl der Daten von Michas-Ausflugstupps auch offline ansehen :-)",
-   "flags": "flg_ShowTopTen, flg_ShowSearch, flgShowNews",
+   "flags": "flg_ShowTopTen,flg_ShowSearch,flgShowNews",
    "heading": "Thats MyTB",
-   "langkeys": "lang_de",
+   "langkeys": "lang_de,lang_en",
    "name": "Start",
    "profiles": "profile_viewer",
    "subSectionIds": "",
    "teaser": "Willkommen bei MyTB",
-   "type": "SectionOverviewPage",
-   "theme": ""
+   "type": "PAGE",
+   "theme": "",
+   "subtype": "SectionOverviewPage"
   },
   {
    "id": "impress",
@@ -20,13 +22,15 @@ window.importStaticDataPDocsJsonP = `{
    "name": "Impressum/Datenschutz",
    "subSectionIds": "",
    "teaser": "Impressum/Datenschutz - der rechtliche Teil",
-   "type": "SimplePage"
+   "type": "PAGE",
+   "flags": "",
+   "profiles": "profile_viewer",
+   "langkeys": "lang_de,lang_en",
+   "subtype": "SimplePage"
   }
  ]
-}
-`;
-
-var script = document.createElement('script');
+}`;
+var script = document.createElement("script");
 script.type='application/json';
 script.id = 'assets/staticdata/static.mytbpdocs.js';
 var text = document.createTextNode(importStaticDataPDocsJsonP);
