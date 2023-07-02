@@ -344,6 +344,17 @@
                             "command": "pageManager",
                             "action": "exportPDocFile",
                             "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-de",
+                            "exportDir": "./config/",
+                            "profiles": "profile_import,profile_dev,profile_beta,profile_prod",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
                             "exportName": "pdocs-import-de",
                             "exportDir": "./config/",
                             "profiles": "profile_import",
@@ -381,6 +392,17 @@
                             "exportDir": "./config/",
                             "profiles": "profile_prod",
                             "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs-en",
+                            "exportDir": "./config/",
+                            "profiles": "profile_import,profile_dev,profile_beta,profile_prod",
+                            "langkeys": "lang_en"
                         }
                     },
                     {
