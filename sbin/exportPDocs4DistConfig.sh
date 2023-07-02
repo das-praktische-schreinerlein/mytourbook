@@ -39,7 +39,7 @@ node dist/backend/serverAdmin.js\
      --exportName "static.mytbpdocs"\
      --exportDir "${DISTSTATICDIR}mytbdev/${LANGKEY}/assets/staticdata/"\
      --exportId "assets/staticdata/static.mytbpdocs.js"\
-     --profiles "profile_viewer" \
+     --profiles "profile_static" \
      --langkeys"lang_${LANGKEY}" \
      --debug 1
 
@@ -53,7 +53,7 @@ node dist/backend/serverAdmin.js\
      --exportName "static.mytbpdocs"\
      --exportDir "${DISTSTATICDIR}mytbbeta/${LANGKEY}/assets/staticdata/"\
      --exportId "assets/staticdata/static.mytbpdocs.js"\
-     --profiles "profile_viewer" \
+     --profiles "profile_static" \
      --langkeys"lang_${LANGKEY}" \
      --debug 1
 
@@ -67,7 +67,7 @@ node dist/backend/serverAdmin.js\
      --exportName "static.mytbpdocs"\
      --exportDir "${DISTSTATICDIR}mytb/${LANGKEY}/assets/staticdata/"\
      --exportId "assets/staticdata/static.mytbpdocs.js"\
-     --profiles "profile_viewer" \
+     --profiles "profile_static" \
      --langkeys"lang_${LANGKEY}" \
      --debug 1
 
