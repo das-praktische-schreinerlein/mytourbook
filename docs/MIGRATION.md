@@ -7,8 +7,8 @@
 #### migrate legacy docs-files to new format
 - migrate legacy docs-files to new format
 ```
-#PDOC_BASEDIR=../overrides/after-build/config/
 PDOC_BASEDIR=./config/
+#PDOC_BASEDIR=../overrides/after-build/config/
 
 CONFIG_BASEDIR=./config/
 CONFIGPROFILE=dev
@@ -38,8 +38,8 @@ node dist/backend/serverAdmin.js\
       --file ${PDOC_BASEDIR}pdocs-en.json\
       --debug 1
 
-PDOC_BASEDIR=../overrides/before-build/src/frontend/assets/
 PDOC_BASEDIR=./src/frontend/assets/
+#PDOC_BASEDIR=../overrides/before-build/src/frontend/assets/
 
 PROFILES=profile_static
 node dist/backend/serverAdmin.js\
@@ -90,8 +90,8 @@ node dist/backend/serverAdmin.js\
 #### if you will use: use database based pdoc-managameent
 - migrate files to import-formt and import into database
 ```
-#PDOC_BASEDIR=../overrides/after-build/config/
 PDOC_BASEDIR=./config/
+#PDOC_BASEDIR=../overrides/after-build/config/
 
 CONFIG_BASEDIR=./config/
 CONFIGPROFILE=dev
@@ -136,8 +136,8 @@ node dist/backend/serverAdmin.js\
       --file ${PDOCS_TMP_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json \
       --debug 1
 
-#PDOC_BASEDIR=../overrides/before-build/src/frontend/assets/
 PDOC_BASEDIR=./src/frontend/assets/
+#PDOC_BASEDIR=../overrides/before-build/src/frontend/assets/
 
 LANG=de
 PROFILE=static
