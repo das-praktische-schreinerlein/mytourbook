@@ -539,7 +539,7 @@
                             "action": "exportPDocFile",
                             "backend": "config/backend.dev.json",
                             "exportName": "pdocs",
-                            "exportDir": "./dist/static/mytbprod/de/assets/",
+                            "exportDir": "./dist/static/mytb/de/assets/",
                             "profiles": "profile_static",
                             "langkeys": "lang_de"
                         }
@@ -550,7 +550,7 @@
                             "action": "exportPDocViewerFile",
                             "backend": "config/backend.dev.json",
                             "exportName": "static.mytbpdocs",
-                            "exportDir": "./dist/static/mytbprod/de/assets/staticdata/",
+                            "exportDir": "./dist/static/mytb/de/assets/staticdata/",
                             "exportId": "assets/staticdata/static.mytbpdocs.js",
                             "profiles": "profile_static",
                             "langkeys": "lang_de"
