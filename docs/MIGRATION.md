@@ -7,6 +7,9 @@
 #### migrate legacy docs-files to new format
 - migrate legacy docs-files to new format
 ```
+#PDOC_BASEDIR=../overrides/after-build/config/
+PDOC_BASEDIR=./config/
+
 CONFIG_BASEDIR=./config/
 CONFIGPROFILE=dev
 PROFILES=profile_dev,profile_import,profile_beta,profile_prod
@@ -18,10 +21,10 @@ node dist/backend/serverAdmin.js\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
-      --srcFile config/pdocs-de.json \
+      --srcFile ${PDOC_BASEDIR}pdocs-de.json \
       --langkeys lang_de \
       --profiles ${PROFILES} \
-      --file config/pdocs-de.json\
+      --file ${PDOC_BASEDIR}pdocs-de.json\
       --debug 1
 node dist/backend/serverAdmin.js\
       --command convertPDoc\
@@ -29,11 +32,14 @@ node dist/backend/serverAdmin.js\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
-      --srcFile config/pdocs-en.json \
+      --srcFile ${PDOC_BASEDIR}pdocs-en.json \
       --langkeys lang_en \
       --profiles ${PROFILES} \
-      --file config/pdocs-en.json\
+      --file ${PDOC_BASEDIR}pdocs-en.json\
       --debug 1
+
+PDOC_BASEDIR=../overrides/before-build/src/frontend/assets/
+PDOC_BASEDIR=./src/frontend/assets/
 
 PROFILES=profile_static
 node dist/backend/serverAdmin.js\
@@ -42,10 +48,10 @@ node dist/backend/serverAdmin.js\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
-      --srcFile src/frontend/assets/pdocs.json \
+      --srcFile ${PDOC_BASEDIR}pdocs.json \
       --langkeys lang_de,lang_en \
       --profiles ${PROFILES} \
-      --file src/frontend/assets/pdocs.json \
+      --file ${PDOC_BASEDIR}pdocs.json \
       --debug 1
 
 PROFILES=profile_viewer
@@ -55,7 +61,7 @@ node dist/backend/serverAdmin.js\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
-      --srcFile src/frontend/assets/staticdata/static.mytbpdocs.js \
+      --srcFile ${PDOC_BASEDIR}staticdata/static.mytbpdocs.js \
       --file ${PDOCS_TMP_BASEDIR}static.mytbpdocs-${PROFILE}-${LANG}.json \
       --debug 1
 node dist/backend/serverAdmin.js\
@@ -76,7 +82,7 @@ node dist/backend/serverAdmin.js\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
       --srcFile ${PDOCS_TMP_BASEDIR}static.mytbpdocs-${PROFILE}-${LANG}.json \
-      --file src/frontend/assets/staticdata/static.mytbpdocs.js \
+      --file ${PDOC_BASEDIR}staticdata/static.mytbpdocs.js \
       --exportId assets/staticdata/static.mytbpdocs.js \
       --debug 1
 ```
@@ -84,6 +90,9 @@ node dist/backend/serverAdmin.js\
 #### if you will use: use database based pdoc-managameent
 - migrate files to import-formt and import into database
 ```
+#PDOC_BASEDIR=../overrides/after-build/config/
+PDOC_BASEDIR=./config/
+
 CONFIG_BASEDIR=./config/
 CONFIGPROFILE=dev
 PDOCS_TMP_BASEDIR=/tmp/
@@ -95,7 +104,7 @@ node dist/backend/serverAdmin.js\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
-      --srcFile config/pdocs-${LANG}.json \
+      --srcFile ${PDOC_BASEDIR}pdocs-${LANG}.json \
       --file ${PDOCS_TMP_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json\
       --debug 1
 node dist/backend/serverAdmin.js\
@@ -115,7 +124,7 @@ node dist/backend/serverAdmin.js\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
-      --srcFile config/pdocs-${LANG}.json \
+      --srcFile ${PDOC_BASEDIR}pdocs-${LANG}.json \
       --file ${PDOCS_TMP_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json\
       --debug 1
 node dist/backend/serverAdmin.js\
@@ -127,6 +136,9 @@ node dist/backend/serverAdmin.js\
       --file ${PDOCS_TMP_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json \
       --debug 1
 
+#PDOC_BASEDIR=../overrides/before-build/src/frontend/assets/
+PDOC_BASEDIR=./src/frontend/assets/
+
 LANG=de
 PROFILE=static
 node dist/backend/serverAdmin.js\
@@ -135,7 +147,7 @@ node dist/backend/serverAdmin.js\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
-      --srcFile src/frontend/assets/pdocs.json \
+      --srcFile ${PDOC_BASEDIR}pdocs.json \
       --file ${PDOCS_TMP_BASEDIR}pdocs-${PROFILE}-${LANG}-import.json\
       --debug 1
 node dist/backend/serverAdmin.js\
@@ -156,7 +168,7 @@ node dist/backend/serverAdmin.js\
       --adminclibackend ${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json\
       --backend ${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json\
       --renameFileIfExists true\
-      --srcFile src/frontend/assets/staticdata/static.mytbpdocs.js \
+      --srcFile ${PDOC_BASEDIR}staticdata/static.mytbpdocs.js \
       --file ${PDOCS_TMP_BASEDIR}static.mytbpdocs-${PROFILE}-${LANG}.json \
       --debug 1
 node dist/backend/serverAdmin.js\
@@ -184,4 +196,12 @@ node dist/backend/serverAdmin.js\
 - export files from database to sources
 ```
 ./sbin/export-pdocs-for-build.sh
+```
+- potentially export to overrides in another dir
+```
+./sbin/exportPDocs4SrcConfig.sh dev ../overrides/before-build/
+./sbin/exportPDocs4BackendConfig.sh dev ../overrides/after-build/config/ de
+./sbin/exportPDocs4BackendConfig.sh dev ../overrides/after-build/config/ en
+./sbin/exportPDocs4DistConfig.sh dev ../overrides/after-build/dist/ de noinline
+./sbin/exportPDocs4DistConfig.sh dev ../overrides/after-build/dist/ en noinline
 ```
