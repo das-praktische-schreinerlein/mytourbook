@@ -20,6 +20,7 @@ import {PDocListItemFlatComponent} from './components/pdoc-list-item-flat/pdoc-l
 import {PDocActionsComponent} from './components/pdoc-actions/pdoc-actions.component';
 import {PDocActionTagsComponent} from './components/pdoc-actiontags/pdoc-actiontags.component';
 import {PdocInfoComponent} from './components/pdoc-info/pdoc-info.component';
+import {PDocSimpleSearchNavigationComponent} from './components/pdoc-simple-search-navigation/pdoc-simple-search-navigation.component';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import {PdocInfoComponent} from './components/pdoc-info/pdoc-info.component';
         PDocListItemComponent,
         PDocListItemFlatComponent,
         PDocActionsComponent,
-        PDocActionTagsComponent
+        PDocActionTagsComponent,
+        PDocSimpleSearchNavigationComponent
     ],
     imports: [
         NgbAccordionModule, NgbRatingModule, NgbTabsetModule,
@@ -57,7 +59,8 @@ import {PdocInfoComponent} from './components/pdoc-info/pdoc-info.component';
         PDocListItemComponent,
         PDocListItemFlatComponent,
         PDocActionsComponent,
-        PDocActionTagsComponent
+        PDocActionTagsComponent,
+        PDocSimpleSearchNavigationComponent
     ]
 })
 export class SharedPDocModule {}

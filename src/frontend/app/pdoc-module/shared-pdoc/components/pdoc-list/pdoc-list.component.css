@@ -4,3 +4,10 @@ div.row {
 .card.pdoc-list-item {
     min-width: 176px;
 }
+.pdoc-list-item-thin, .pdoc-list-item-flat {
+    clear: both;
+    width: 100%;
+    border: 1px solid #bfccd3;
+    border-radius: 5px;
+    padding: 5px;
+}

@@ -6,3 +6,16 @@
 
 .teaser {
 }
+
+.no-image {
+    float: left;
+    margin: 0 15px 15px 0;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 170px;
+    font-family: Georgia, serif;
+    background: lightgray;
+    font-size: large;
+    text-overflow: fade;
+}
