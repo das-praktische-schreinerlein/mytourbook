@@ -14,7 +14,7 @@ import {DbAdminCommand} from './dbadmin.command';
 import {MediaImportManagerCommand} from './media-import-manager.command';
 import {TourDocConverterCommand} from './tdoc-converter.command';
 import {GeoManagerCommand} from './geo-manager.command';
-import {PageManagerCommand} from './pdoc-manager.command';
+import {PageManagerCommand} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/commands/pdoc-manager.command';
 
 export interface ServerAdminCommandConfigType extends CommonServerAdminCommandConfigType, AdminCommandConfigType {
     importDir: string,

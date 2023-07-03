@@ -18,9 +18,9 @@ import {DbAdminCommand} from './dbadmin.command';
 import {MediaImportManagerCommand} from './media-import-manager.command';
 import {TourDocConverterCommand} from './tdoc-converter.command';
 import {GeoManagerCommand} from './geo-manager.command';
-import {PageManagerCommand} from './pdoc-manager.command';
-import {PDocLoaderCommand} from './pdoc-loader.command';
-import {PDocConverterCommand} from './pdoc-converter.command';
+import {PageManagerCommand} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/commands/pdoc-manager.command';
+import {PDocLoaderCommand} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/commands/pdoc-loader.command';
+import {PDocConverterCommand} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/commands/pdoc-converter.command';
 
 // tslint:disable-next-line:no-empty-interface
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
