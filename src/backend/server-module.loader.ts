@@ -25,46 +25,81 @@ export interface ServerConfig extends CommonServerConfigType<BackendConfigType, 
 
 export class ServerModuleLoader {
     public static loadModules(app, serverConfig: ServerConfig) {
-        const tdocWritable = serverConfig.backendConfig.tdocWritable === true || <any>serverConfig.backendConfig.tdocWritable === 'true';
-        const pdocWritable = serverConfig.backendConfig.pdocWritable === true || <any>serverConfig.backendConfig.pdocWritable === 'true';
-        const apiVideoServerEnabled = serverConfig.backendConfig.apiVideoServerEnabled === true
-            || <any>serverConfig.backendConfig.apiVideoServerEnabled === 'true';
+        const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
 
+        ServerModuleLoader.configureDefaultServer(app, serverConfig, cache);
+        ServerModuleLoader.loadModulePages(app, serverConfig, cache);
+        ServerModuleLoader.loadAdditionalModules(app, serverConfig, cache);
+    }
+
+    public static configureDefaultServer(app, serverConfig: ServerConfig, cache: DataCacheModule) {
         ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
-        if (!tdocWritable) {
+
+        if (!ServerModuleLoader.isServerWritable(serverConfig)) {
             ConfigureServerModule.configureServerAddHysteric(app, serverConfig.backendConfig);
         }
+
         FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
         DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 
-        // configure dataservices
-        const tdocDataService: TourDocDataService = TourDocDataServiceModule.getDataService('tdocSolr',
-            serverConfig.backendConfig);
+        ConfigureServerModule.configureDefaultErrorHandler(app);
+    }
+
+    public static loadAdditionalModules(app, serverConfig: ServerConfig, cache: DataCacheModule) {
+        ServerModuleLoader.loadModuleTDoc(app, serverConfig, cache);
+        ServerModuleLoader.loadModulePDoc(app, serverConfig, cache);
+    }
+
+    public static loadModulePages(app, serverConfig: ServerConfig, cache: DataCacheModule) {
         const pagesDataServiceDE: StaticPagesDataService = PagesDataserviceModule.getDataService('pdocSolrDE',
             serverConfig.backendConfig, 'de');
         const pagesDataServiceEN: StaticPagesDataService = PagesDataserviceModule.getDataService('pdocSolrEN',
             serverConfig.backendConfig, 'en');
-        const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
 
+        PagesServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pagesDataServiceDE, 'de', serverConfig.backendConfig.profile);
+        PagesServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pagesDataServiceEN, 'en', serverConfig.backendConfig.profile);
+    }
+
+    public static loadModulePDoc(app, serverConfig: ServerConfig, cache: DataCacheModule) {
         if (serverConfig.backendConfig.startPDocApi) {
             const pdocDataService: PDocDataService = PDocDataServiceModule.getDataService('pdocSolr',
                 serverConfig.backendConfig);
-            const pdocServerModule = PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataService, cache,
-                serverConfig.backendConfig);
+            const pdocServerModule = PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix,
+                pdocDataService, cache, serverConfig.backendConfig);
+
+            const pdocWritable = serverConfig.backendConfig.pdocWritable === true
+                || <any>serverConfig.backendConfig.pdocWritable === 'true';
             if (pdocWritable) {
                 PDocWriterServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocServerModule);
             }
         }
+    }
+
+    public static isServerWritable(serverConfig: ServerConfig) {
+        const pdocWritable = serverConfig.backendConfig.pdocWritable === true
+            || <any>serverConfig.backendConfig.pdocWritable === 'true';
+        const tdocWritable = serverConfig.backendConfig.tdocWritable === true
+            || <any>serverConfig.backendConfig.tdocWritable === 'true';
+
+        return pdocWritable || tdocWritable;
+    }
+
+    public static loadModuleTDoc(app, serverConfig: ServerConfig, cache: DataCacheModule) {
+        const tdocWritable = serverConfig.backendConfig.tdocWritable === true
+            || <any>serverConfig.backendConfig.tdocWritable === 'true';
+        const apiVideoServerEnabled = serverConfig.backendConfig.apiVideoServerEnabled === true
+            || <any>serverConfig.backendConfig.apiVideoServerEnabled === 'true';
+
+        // configure dataservices
+        const tdocDataService: TourDocDataService = TourDocDataServiceModule.getDataService('tdocSolr',
+            serverConfig.backendConfig);
 
         // add routes
-        const tdocServerModule = TourDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, tdocDataService, cache,
-            serverConfig.backendConfig);
+        const tdocServerModule = TourDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix,
+            tdocDataService, cache, serverConfig.backendConfig);
         if (tdocWritable) {
             TourDocWriterServerModule.configureRoutes(app, serverConfig.apiDataPrefix, tdocServerModule);
         }
-
-        PagesServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pagesDataServiceDE, 'de', serverConfig.backendConfig.profile);
-        PagesServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pagesDataServiceEN, 'en', serverConfig.backendConfig.profile);
 
         AssetsServerModule.configureStaticTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);
         AssetsServerModule.configureStaticPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig);
@@ -78,8 +113,8 @@ export class ServerModuleLoader {
             VideoServerModule.configureStoredVideoRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig,
                 serverConfig.firewallConfig.routerErrorsConfigs['digifotos'].file, serverConfig.filePathErrorDocs);
         }
-        TourDocPlaylistServerModule.configureRoutes(app, serverConfig.apiDataPrefix, tdocDataService, serverConfig.backendConfig);
 
-        ConfigureServerModule.configureDefaultErrorHandler(app);
+        TourDocPlaylistServerModule.configureRoutes(app, serverConfig.apiDataPrefix, tdocDataService, serverConfig.backendConfig);
     }
+
 }
