@@ -11,7 +11,7 @@ function dofail {
 
 # check parameters
 if [ "$#" -lt 3 ]; then
-    dofail "USAGE: prepareViewerFileForStaticData.sh EXPORTDIR DATAFILES EXPORTNAME\nFATAL: requires EXPORTDIR DATAFILES EXPORTNAME as parameters 'import-XXXX'" 1
+    dofail "USAGE: generateViewerFileForStaticData.sh EXPORTDIR DATAFILES EXPORTNAME\nFATAL: requires EXPORTDIR DATAFILES EXPORTNAME as parameters 'import-XXXX'" 1
     exit 1
 fi
 EXPORTDIR=$1
@@ -23,12 +23,12 @@ source ${SCRIPTPATH}/configure-environment.bash
 VIEWERSRC=${SCRIPTPATH}/../dist/static/mytbviewer/de/index.viewer.full.html
 
 if [ ! -d "${EXPORTDIR}" ]; then
-    dofail "USAGE: prepareViewerFileForStaticData.sh EXPORTDIR\nFATAL: $EXPORTDIR must exists" 1
+    dofail "USAGE: generateViewerFileForStaticData.sh EXPORTDIR\nFATAL: $EXPORTDIR must exists" 1
     exit 1
 fi
 
 if [ "${DATAFILES}" == "" ]; then
-    dofail "USAGE: prepareViewerFileForStaticData.sh DATAFILES\nFATAL: DATAFILES must defined" 1
+    dofail "USAGE: generateViewerFileForStaticData.sh DATAFILES\nFATAL: DATAFILES must defined" 1
     exit 1
 fi
 

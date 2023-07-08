@@ -3150,7 +3150,7 @@
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
                 ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
-            "listItemTemplate": "- [{{LISTITEM.name}}](ptdoc/show/page/{{LISTITEM.id}})\n",
+            "listItemTemplate": "- [{{LISTITEM.name}}](pdoc/show/page/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
             "footerTemplate": "\nHier könnte Ihre Werbung stehen :-)\n",
             "headingTemplate": "\nInhalt der Seite: {{MAINITEM.name}}\n"
