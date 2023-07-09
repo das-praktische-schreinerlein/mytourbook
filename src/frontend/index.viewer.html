@@ -70,27 +70,12 @@
 
 <app-root>Loading...</app-root>
 
-<img id="dummyBannerLoader" src="assets/images/banner-big.gif" style="display: none" alt="">
-<script type="text/javascript">
-    function inlineBannerUtil() {
-        var dummyBannerImage = document.getElementById('dummyBannerLoader');
-        if (!dummyBannerImage) {
-            console.error('banner not found', dummyBannerImage);
-            return;
-        }
-
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML =
-            '.img-navbar-banner { content: url(\'' + dummyBannerImage.currentSrc + '\'); }' +
-            '.img-sidebar-banner { content: url(\'' + dummyBannerImage.currentSrc + '\'); }';
-
-        document.getElementsByTagName('head')[0].appendChild(style);
-
-        console.log('add banner-style', style);
-    }
-
-    inlineBannerUtil();
+<!-- inline-images -->
+<img src="assets/images/banner-big.gif" style="display: none" alt=""
+     data-replacementsrc="assets/images/banner-big.gif"
+     data-replacementfilter=".img-navbar-banner, .img-sidebar-banner" />
+<script>
+    WebImageLoader.loadInlineImages();
 </script>
 
 </body>

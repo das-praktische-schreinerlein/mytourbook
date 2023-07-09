@@ -183,5 +183,60 @@ var WebLoader = {
     },
 };
 
+var WebImageLoader = {
+    loadInlineImages: function() {
+        var images = document.getElementsByTagName('img');
+        if (!images || images.length === 0) {
+            console.warn('no images to inline found', images);
+            return;
+        }
+
+        var inlineImages = [];
+        for (var image of images) {
+            if (image.currentSrc.startsWith('data:image')
+                && (image.dataset.replacementsrc || image.dataset.replacementfilter)) {
+                inlineImages.push(image);
+            }
+        }
+
+        if (!inlineImages || inlineImages.length === 0) {
+            console.warn('no inlineImages to inline found', images, inlineImages);
+            return;
+        }
+
+        WebImageLoader.addReplaceInlineImageStyle(inlineImages);
+    },
+
+    addReplaceInlineImageStyle: function(imgElements) {
+        var css = '';
+        for (var imgElement of imgElements) {
+            css += WebImageLoader.createReplaceInlineImageStyle(imgElement);
+        }
+
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = css;
+
+        document.getElementsByTagName('head')[0].appendChild(style);
+
+        console.trace('add inlineimage-style', style, css);
+    },
+
+    createReplaceInlineImageStyle: function(imgElement) {
+        var css = '';
+        if (imgElement.dataset.replacementsrc) {
+            css += 'img[src*="' + imgElement.dataset.replacementsrc + '"]' +
+                ' { content: url(' + imgElement.currentSrc + '); padding-left: 0 !important;}\n';
+        }
+
+        if (imgElement.dataset.replacementfilter) {
+            css += imgElement.dataset.replacementfilter +
+                ' { content: url(' + imgElement.currentSrc + '); padding-left: 0 !important;}\n';
+        }
+        return css;
+    }
+};
+
 document.WebCrypt = WebCrypt;
 document.WebLoader = WebLoader;
+document.WebImageLoader = WebImageLoader;

@@ -15,11 +15,13 @@
 - improved sync-viewer for offline-usage
 - removed legacy pdoc-editor
 - frontend: improved/fixed desc-rendering
+- improve imageInlineLoader
 
 ### new features
 - added optional password-encryption of static-viewer-version
 - frontend: open modal view on maps + lists
 - backend/frontend: add page-management
+- improve imageInlineLoader
 
 ### improvements
 - frontend: improved filter-suggestion for poi-search
