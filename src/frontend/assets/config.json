@@ -15,7 +15,7 @@
             "possiblePrefixes": ["KW_", "", "kw_"],
             "structuredKeywords": [
                 {"name": "Todos",
-                    "keywords": ["TODOKEYWORDS", "TODOPOISTART", "TODOPOIMAIN", "TODOPOIEND"]},
+                    "keywords": ["TODOKEYWORDS", "TODOPOISTART", "TODOPOIMAIN", "TODOPOIEND", "TODOPOICHECK"]},
                 {"name": "Tourdauer",
                     "keywords": [
                         "Kurztour",

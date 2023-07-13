@@ -272,6 +272,7 @@
     "poijoin_40": "restpoint",
     "poijoin_50": "milestone",
     "poijoin_60": "waypoint",
+    "poijoin_65": "autom. waypoint",
     "poijoin_70": "start-end",
     "poijoin_99": "end",
     "kw_alm":"alm",

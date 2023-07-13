@@ -56,6 +56,22 @@ select useIt, typ, t_name, poi_name, distance, tour_poi_name, insertMain, insert
 ) matched_pois order by t_name, distance;
 
 -- add todo-keywords for tracks/routes without poi
+INSERT INTO keyword (kw_name)
+    SELECT 'KW_TODOPOISTART' FROM DUAL
+    WHERE NOT EXISTS
+        (SELECT * FROM keyword
+         WHERE kw_name='KW_TODOPOISTART');
+INSERT INTO keyword (kw_name)
+    SELECT 'KW_TODOPOIMAIN' FROM DUAL
+    WHERE NOT EXISTS
+        (SELECT * FROM keyword
+         WHERE kw_name='KW_TODOPOIMAIN');
+INSERT INTO keyword (kw_name)
+    SELECT 'KW_TODOPOIEND' FROM DUAL
+    WHERE NOT EXISTS
+        (SELECT * FROM keyword
+         WHERE kw_name='KW_TODOPOIEND');
+
 insert into tour_keyword (kw_id, t_id)
 select (select kw_id from keyword where kw_name='KW_TODOPOISTART') as kw_id,
        t_id from
