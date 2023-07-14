@@ -11,14 +11,19 @@ set @minT_ID = 1;
 set @maxT_Id = 99999999;
 select *,
        'INSERT INTO ' || tabname || '_poi' ||
-       ' (' || prefix || '_id, poi_id, ' || prefix || 'poi_pos, ' || prefix || 'poi_type)' ||
-       ' VALUES(' || tid || ', ' ||  poi_id || ', 99, 65);' trackpoi_sql,
+       ' (' || prefix || '_id, poi_id, ' || prefix || 'poi_pos, ' || prefix || 'poi_type, ' || prefix || 'poi_date)'  ||
+       ' VALUES(' || tid || ', ' || poi_id || ', ' || poi_pos || ', 65, ' ||
+       CASE WHEN tpdate IS NOT NULL THEN '"' || tpdate || '"'
+            ELSE 'null'
+           END
+           || ');'                                                                                                                                                                                                                        trackpoi_sql,
        'UPDATE poi SET poi.l_id = ' || l_id || ' WHERE poi_id=' ||  poi_id || ' AND poi.l_id IS NULL; insert into poi_keyword (kw_id, poi_id) select (select kw_id from keyword where kw_name="KW_TODOPOICHECK") as kw_id, ' || poi_id || ';' poi_sql
 from
     (
         select 'track' as type,
                'kategorie' as tabname,
                'k' as prefix,
+               110 + rank() over(PARTITION BY track_pois.tid order by track_pois.tid, track_pois.tpdate, track_pois.tpid) poi_pos,
                kpoi.kpoi_type tpoi_type,
                kpoi.kpoi_pos tpoi_pos,
                track_pois.*
@@ -31,7 +36,8 @@ from
                     k.k_name tname,
                     poi.poi_id,
                     poi.poi_name,
-                    min(KTP_DATE) as tp_date,
+                    min(KTP_DATE) as tpdate,
+                    min(KTP_ID) as tpid,
                     min(3959 * ACOS (COS ( RADIANS(KTP_LAT) ) * COS( RADIANS(poi_geo_latdeg) )
                                          * COS( RADIANS(poi_geo_longdeg) - RADIANS(KTP_LON) )
                         + SIN ( RADIANS(KTP_LAT) ) * SIN( RADIANS(poi_geo_latdeg) ))) as distance
@@ -66,13 +72,14 @@ from
                              AND poi_geo_longdeg >= kp.KTP_LON - @maxLonDist
                          )
                 GROUP BY kp.k_id, poi.poi_id, k_name, poi_name, K_DATEVON
-                order by l_lochirarchie, K_DATEVON, k_NAME, tp_date, poi_name
+                order by l_lochirarchie, K_DATEVON, k_NAME, tpdate, tpid, poi_name
             ) track_pois
                 LEFT JOIN kategorie_poi kpoi ON kpoi.k_id=track_pois.tID AND kpoi.poi_id=track_pois.poi_id
         UNION
         select 'route' as type,
                'tour' as tabname,
                't' as prefix,
+               110 + rank() over(PARTITION BY track_pois.tid order by track_pois.tid, track_pois.tpdate, track_pois.tpid) poi_pos,
                tpoi.tpoi_type tpoi_type,
                tpoi.tpoi_pos tpoi_pos,
                track_pois.*
@@ -86,6 +93,7 @@ from
                     poi.poi_id,
                     poi.poi_name,
                     min(TP_DATE) as tpdate,
+                    min(TP_ID) as tpid,
                     min(3959 * ACOS (COS ( RADIANS(TP_LAT) ) * COS( RADIANS(poi_geo_latdeg) )
                                          * COS( RADIANS(poi_geo_longdeg) - RADIANS(TP_LON) )
                         + SIN ( RADIANS(TP_LAT) ) * SIN( RADIANS(poi_geo_latdeg) ))) as distance
@@ -120,12 +128,12 @@ from
                              AND poi_geo_longdeg >= tp.TP_LON - @maxLonDist
                          )
                 GROUP BY tp.t_id, poi.poi_id, t_name, t_datefirst, poi_name
-                order by l_lochirarchie, t_NAME, TPDATE, poi_name
+                order by l_lochirarchie, t_NAME, tpdate, tpid, poi_name
             ) track_pois
                 LEFT JOIN tour_poi tpoi ON tpoi.t_id=track_pois.TID AND tpoi.poi_id=track_pois.poi_id
     ) as trackroute_pois
 --    where l_lochirarchie not like '%Sachsen%'
-order by l_lochirarchie, tp_date, type,tname
+order by l_lochirarchie, type, tname, tpdate, tpid, type, tname
 ;
 
 -- TODO keywords

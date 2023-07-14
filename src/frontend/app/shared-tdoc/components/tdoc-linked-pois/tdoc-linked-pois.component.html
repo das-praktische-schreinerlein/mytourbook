@@ -5,7 +5,7 @@
             <tr>
                 <td class="entry">{{ 'poijoin_' + linkedPoi.poitype | translate}}</td>
                 <td class="entry">
-                    <a [href]="getShowUrl(linkedPoi)" (click)="submitShow($event, linkedPoi)" [title]="linkedPoi.name">{{ linkedPoi.name }}</a>
+                    <a [href]="getShowUrl(linkedPoi)" (click)="submitShow($event, linkedPoi)" [title]="linkedPoi.name">{{ linkedPoi.name}}{{ linkedPoi.geoEle ? ' (' + linkedPoi.geoEle + 'm)' : '' }}</a>
                 </td>
             </tr>
         </ng-container>
