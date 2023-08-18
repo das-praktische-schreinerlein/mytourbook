@@ -20,7 +20,6 @@ import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-com
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {BackendHttpClient} from './services/backend-http-client';
 import {MinimalHttpBackendClient} from '@dps/mycms-commons/dist/commons/services/minimal-http-backend-client';
-import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TourDocDataCacheService} from './shared-tdoc/services/tdoc-datacache.service';
@@ -108,7 +107,6 @@ export function getAngulartics2Providers(): any {
         TourDocDataCacheService,
         SearchFormUtils,
         {provide: GenericTrackingService, useClass: TrackingService},
-        AngularHtmlService,
         {provide: SearchParameterUtils, useClass: SearchParameterUtils},
         PageUtils,
         {provide: PlatformService, useClass: PlatformService},

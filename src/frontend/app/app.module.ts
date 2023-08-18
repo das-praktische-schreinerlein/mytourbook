@@ -53,6 +53,15 @@ import {
 import {PDocAlbumService} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-module/shared-pdoc/services/pdoc-album.service';
 import {environment} from '../environments/environment';
 import {COMMON_APP_ENVIRONMENT} from '@dps/mycms-frontend-commons/dist/frontend-section-commons/common-environment';
+import {
+    HtmlTogglerRenderer,
+    SimpleHtmlTogglerRenderer
+} from '@dps/mycms-frontend-commons/dist/angular-commons/htmlrenderer/html-toggler.renderer';
+import {HtmlLocalLinkRenderer} from '@dps/mycms-frontend-commons/dist/angular-commons/htmlrenderer/html-locallink.renderer';
+import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
+import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
+import {SpecificAngularMarkdownService} from './services/specific-angular-markdown.service';
+import {SpecificAngularHtmlService} from './services/specific-angular-html.service';
 
 registerLocaleData(localeDe);
 
@@ -91,7 +100,12 @@ registerLocaleData(localeDe);
         TourDocNewsDescSuggesterService,
         TourDocRouteDescSuggesterService,
         TourDocTrackDescSuggesterService,
-        TourDocTripDescSuggesterService
+        TourDocTripDescSuggesterService,
+        {provide: AngularMarkdownService, useClass: SpecificAngularMarkdownService},
+        {provide: AngularHtmlService, useClass: SpecificAngularHtmlService},
+        HtmlLocalLinkRenderer,
+        {provide: HtmlTogglerRenderer, useClass: SimpleHtmlTogglerRenderer}
+
     ],
     // Since the bootstrapped component is not inherited from your
     // imported AppModule, it needs to be repeated here.
