@@ -24,7 +24,6 @@ import {TourDocDescSuggesterService} from '../../services/tdoc-desc-suggester.se
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
-import {NgxMdModule} from 'ngx-md';
 import {TourDocTripDescSuggesterService} from '../../services/tdoc-trip-desc-suggester.service';
 import {TourDocLocationDescSuggesterService} from '../../services/tdoc-location-desc-suggester.service';
 import {TourDocNewsDescSuggesterService} from '../../services/tdoc-news-desc-suggester.service';
@@ -38,6 +37,8 @@ import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/servic
 import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geojson.parser';
 import {GeoTxtParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geotxt.parser';
 import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
+import {SimpleAngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-angular-html.service';
+import {SimpleAngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-angular-markdown.service';
 
 describe('TourDocEditformComponent', () => {
     let component: TourDocEditformComponent;
@@ -48,8 +49,7 @@ describe('TourDocEditformComponent', () => {
             declarations: [TourDocEditformComponent],
             imports: [
                 ReactiveFormsModule,
-                TranslateModule.forRoot(),
-                NgxMdModule.forRoot()
+                TranslateModule.forRoot()
             ],
             providers: [
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
@@ -76,8 +76,8 @@ describe('TourDocEditformComponent', () => {
                 TourDocTrackDescSuggesterService,
                 TourDocTripDescSuggesterService,
                 PlatformService,
-                AngularMarkdownService,
-                AngularHtmlService,
+                { provide: AngularMarkdownService, useClass: SimpleAngularMarkdownService },
+                { provide: AngularHtmlService, useClass: SimpleAngularHtmlService },
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 TourDocActionTagService,
                 TourDocPlaylistService,

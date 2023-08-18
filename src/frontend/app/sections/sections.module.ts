@@ -12,9 +12,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SectionsPDocsResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/sections-pdocs.resolver';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
-import {NgxMdModule} from 'ngx-md';
-import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
-import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
@@ -27,7 +24,6 @@ import {FrontendSectionCommonsModule} from '@dps/mycms-frontend-commons/dist/fro
     imports: [
         TranslateModule,
         NgbCollapseModule, NgbTabsetModule,
-        NgxMdModule.forRoot(),
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
@@ -44,8 +40,6 @@ import {FrontendSectionCommonsModule} from '@dps/mycms-frontend-commons/dist/fro
         SectionsPDocRecordResolver,
         SectionsPDocsResolver,
         ErrorResolver,
-        AngularHtmlService,
-        AngularMarkdownService,
         PageUtils
     ]
 })

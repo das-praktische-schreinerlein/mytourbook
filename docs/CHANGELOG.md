@@ -17,6 +17,8 @@
 - frontend: improved/fixed desc-rendering
 - improve imageInlineLoader
 - added support for automatic nearby track pois
+- backend/frontend: use new fully featured markdown-support with extensions
+
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -24,6 +26,7 @@
 - backend/frontend: add page-management
 - improve imageInlineLoader
 - added support for automatic nearby track pois
+- backend/frontend: use new fully featured markdown-support with extensions
 
 ### improvements
 - frontend: improved filter-suggestion for poi-search

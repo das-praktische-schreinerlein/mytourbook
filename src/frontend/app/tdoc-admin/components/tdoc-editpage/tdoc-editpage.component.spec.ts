@@ -12,7 +12,6 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
-import {NgxMdModule, NgxMdService} from 'ngx-md';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
@@ -29,6 +28,8 @@ import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentuti
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {SimpleAngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-angular-html.service';
+import {SimpleAngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-angular-markdown.service';
 
 describe('TourDocEditpageComponent', () => {
     let component: TourDocEditpageComponent;
@@ -39,7 +40,6 @@ describe('TourDocEditpageComponent', () => {
             declarations: [TourDocEditpageComponent, TourDocDateFormatPipe],
             imports: [
                 TranslateModule.forRoot(),
-                NgxMdModule.forRoot(),
                 NoopAnimationsModule
             ],
             providers: [
@@ -54,9 +54,8 @@ describe('TourDocEditpageComponent', () => {
                 TourDocRoutingService,
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
-                NgxMdService,
-                AngularMarkdownService,
-                AngularHtmlService,
+                { provide: AngularMarkdownService, useClass: SimpleAngularMarkdownService },
+                { provide: AngularHtmlService, useClass: SimpleAngularHtmlService },
                 ErrorResolver,
                 PageUtils,
                 GenericTrackingService,

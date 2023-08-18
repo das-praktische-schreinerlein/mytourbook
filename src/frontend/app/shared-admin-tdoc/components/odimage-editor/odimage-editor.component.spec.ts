@@ -10,7 +10,8 @@ import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commo
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
-import {NgxMdModule} from 'ngx-md';
+import {SimpleAngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-angular-html.service';
+import {SimpleAngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-angular-markdown.service';
 
 describe('OdImageEditorComponent', () => {
     let component: OdImageEditorComponent;
@@ -21,13 +22,12 @@ describe('OdImageEditorComponent', () => {
             declarations: [OdImageEditorComponent],
             imports: [
                 ReactiveFormsModule,
-                TranslateModule.forRoot(),
-                NgxMdModule.forRoot()
+                TranslateModule.forRoot()
             ],
             providers: [
                 TranslateService,
-                AngularMarkdownService,
-                AngularHtmlService,
+                { provide: AngularMarkdownService, useClass: SimpleAngularMarkdownService },
+                { provide: AngularHtmlService, useClass: SimpleAngularHtmlService },
                 CommonRoutingService,
                 { provide: Router, useValue: new RouterStub() },
                 PlatformService

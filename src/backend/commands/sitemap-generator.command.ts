@@ -14,6 +14,9 @@ import {
     SimpleConfigFilePathValidationRule,
     ValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {MarkdownDefaultExtensions} from '@dps/mycms-commons/dist/markdown-commons/extensions/markdown.extensions';
+import {DefaultOptions} from '@dps/mycms-commons/dist/markdown-commons/options';
+import {MarkdownService} from '@dps/mycms-commons/dist/markdown-commons/markdown.service';
 
 export class SiteMapGeneratorCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
@@ -52,6 +55,7 @@ export class SiteMapGeneratorCommand extends CommonAdminCommand {
         const dataservice: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
         CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
             TourDocDataServiceModule.getDataService('tdocSolrReadOnly', generatorConfig.backendConfig);
+        const markdownService = new MarkdownService(DefaultOptions.getDefault(), MarkdownDefaultExtensions);
 
         return SitemapGeneratorModule.generateSiteMapFiles(
             dataservice.getSearchService(),
@@ -69,7 +73,7 @@ export class SiteMapGeneratorCommand extends CommonAdminCommand {
             });
             return SitemapGeneratorModule.generateSiteMapFiles(
                 PagesDataserviceModule.getDataService('pdocSolr' + sitemapConfig.locale + 'ReadOnly', generatorConfig.backendConfig,
-                    sitemapConfig.locale).getSearchService(),
+                    sitemapConfig.locale, markdownService).getSearchService(),
                 sitemapConfig,
                 new PDocSearchForm({})
             );

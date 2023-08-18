@@ -15,8 +15,6 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {TourDocLightBoxService} from '../shared-tdoc/services/tdoc-lightbox.service';
-import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
-import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {TourDocEditpageComponent} from './components/tdoc-editpage/tdoc-editpage.component';
 import {TourDocAdminRoutingModule} from './tdoc-admin-routing.module';
@@ -71,8 +69,6 @@ import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/servi
         ErrorResolver,
         PageUtils,
         TourDocLightBoxService,
-        AngularHtmlService,
-        AngularMarkdownService,
         LayoutService,
         GeoParserDeterminer,
         GeoGpxParser,

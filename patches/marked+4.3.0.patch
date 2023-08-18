@@ -1,0 +1,15 @@
+diff --git a/node_modules/marked/package.json b/node_modules/marked/package.json
+index d65e9a2..031f318 100644
+--- a/node_modules/marked/package.json
++++ b/node_modules/marked/package.json
+@@ -70,6 +74,10 @@
+       "import": "./lib/marked.esm.js",
+       "default": "./lib/marked.cjs"
+     },
++    "./marked.min": {
++      "import": "./lib/marked.esm.js",
++      "default": "./lib/marked.cjs"
++    },
+     "./bin/marked": "./bin/marked.js",
+     "./package.json": "./package.json"
+   },

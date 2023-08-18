@@ -19,8 +19,6 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {TourDocLightBoxService} from '../shared-tdoc/services/tdoc-lightbox.service';
-import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
-import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {TourDocAlbumResolver} from '../shared-tdoc/resolver/tdoc-album.resolver';
 import {TourDocAlbumpageComponent} from './components/tdoc-albumpage/tdoc-albumpage.component';
@@ -72,8 +70,6 @@ import {TourDocModalShowpageComponent} from './components/tdoc-showpage/tdoc-mod
         ErrorResolver,
         PageUtils,
         TourDocLightBoxService,
-        AngularHtmlService,
-        AngularMarkdownService,
         TourDocAlbumResolver,
         LayoutService
     ],

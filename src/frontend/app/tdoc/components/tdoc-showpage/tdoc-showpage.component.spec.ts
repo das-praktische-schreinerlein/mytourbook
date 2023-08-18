@@ -12,7 +12,6 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
-import {NgxMdModule, NgxMdService} from 'ngx-md';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
@@ -31,6 +30,8 @@ import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/td
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
+import {SimpleAngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-angular-html.service';
+import {SimpleAngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-angular-markdown.service';
 
 describe('TourDocShowpageComponent', () => {
     let component: TourDocShowpageComponent;
@@ -40,8 +41,8 @@ describe('TourDocShowpageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocShowpageComponent, TourDocDateFormatPipe],
             imports: [
-                TranslateModule.forRoot(),
-                NgxMdModule.forRoot()],
+                TranslateModule.forRoot()
+            ],
             providers: [
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
@@ -55,9 +56,8 @@ describe('TourDocShowpageComponent', () => {
                 { provide: TourDocDataService, useValue: new TourDocDataServiceStub() },
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
-                NgxMdService,
-                AngularMarkdownService,
-                AngularHtmlService,
+                { provide: AngularMarkdownService, useClass: SimpleAngularMarkdownService },
+                { provide: AngularHtmlService, useClass: SimpleAngularHtmlService },
                 ErrorResolver,
                 PageUtils,
                 GenericTrackingService,

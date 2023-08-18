@@ -19,6 +19,9 @@ import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdo
 import {PDocWriterServerModule} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/modules/pdoc-writer-server.module';
 import {PDocServerModule} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/modules/pdoc-server.module';
 import {PDocDataServiceModule} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/modules/pdoc-dataservice.module';
+import {DefaultOptions} from '@dps/mycms-commons/dist/markdown-commons/options';
+import {MarkdownDefaultExtensions} from '@dps/mycms-commons/dist/markdown-commons/extensions/markdown.extensions';
+import {MarkdownService} from '@dps/mycms-commons/dist/markdown-commons/markdown.service';
 
 export interface ServerConfig extends CommonServerConfigType<BackendConfigType, FirewallConfig> {
 }
@@ -51,10 +54,11 @@ export class ServerModuleLoader {
     }
 
     public static loadModulePages(app, serverConfig: ServerConfig, cache: DataCacheModule) {
+        const markdownService = new MarkdownService(DefaultOptions.getDefault(), MarkdownDefaultExtensions);
         const pagesDataServiceDE: StaticPagesDataService = PagesDataserviceModule.getDataService('pdocSolrDE',
-            serverConfig.backendConfig, 'de');
+            serverConfig.backendConfig, 'de', markdownService);
         const pagesDataServiceEN: StaticPagesDataService = PagesDataserviceModule.getDataService('pdocSolrEN',
-            serverConfig.backendConfig, 'en');
+            serverConfig.backendConfig, 'en', markdownService);
 
         PagesServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pagesDataServiceDE, 'de', serverConfig.backendConfig.profile);
         PagesServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pagesDataServiceEN, 'en', serverConfig.backendConfig.profile);
