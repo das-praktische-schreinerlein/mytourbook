@@ -174,7 +174,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     joinIndexes: {[key: string]: any[]} = {};
     editorCommands: CommonDocEditorCommandComponentConfig = {
         singleCommands: [],
-        rangeCommands: []
+        rangeCommands: [],
+        commandBlocks: []
     };
 
     poiSearchBasePosition: LatLng = undefined;
@@ -459,13 +460,17 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
         const editorCommands: CommonDocEditorCommandComponentConfig = {
             rangeCommands: [],
-            singleCommands: []
+            singleCommands: [],
+            commandBlocks: []
         };
         if (BeanUtils.getValue(config, 'components.tdoc-editor-commands.singleCommands')) {
             editorCommands.singleCommands = BeanUtils.getValue(config, 'components.tdoc-editor-commands.singleCommands');
         }
         if (BeanUtils.getValue(config, 'components.tdoc-editor-commands.rangeCommands')) {
             editorCommands.rangeCommands = BeanUtils.getValue(config, 'components.tdoc-editor-commands.rangeCommands');
+        }
+        if (BeanUtils.getValue(config, 'components.tdoc-editor-commands.commandBlocks')) {
+            editorCommands.commandBlocks = BeanUtils.getValue(config, 'components.tdoc-editor-commands.commandBlocks');
         }
 
         this.nameReplacementConfig = [];

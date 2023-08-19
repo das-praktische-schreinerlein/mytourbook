@@ -545,118 +545,228 @@
             "blacklist": []
         },
         "tdoc-editor-commands": {
-            "singleCommands": [
+            "commandBlocks": [
                 {
-                    "label": "😃",
-                    "command": "&#128515;"
+                    "label": "Markdown:",
+                    "commands": [
+                        {
+                            "label": "<h1>",
+                            "type": "rangeCommand",
+                            "commandStart": "# ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<h2>",
+                            "type": "rangeCommand",
+                            "commandStart": "## ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<h3>",
+                            "type": "rangeCommand",
+                            "commandStart": "### ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<bold>",
+                            "type": "rangeCommand",
+                            "commandStart": "**",
+                            "commandEnd": "**"
+                        },
+                        {
+                            "label": "<li>",
+                            "type": "rangeCommand",
+                            "commandStart": "   - ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<ol>",
+                            "type": "rangeCommand",
+                            "commandStart": "   1. ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<table>",
+                            "type": "singleCommand",
+                            "command": "\nHead1 | Head2 | Head3\n----|----|----\nColumn1 | Column2 | Column3\n\n"
+                        }
+                    ]
                 },
                 {
-                    "label": "😉",
-                    "command": "&#128521;"
+                    "label": "Boxes:",
+                    "commands": [
+                        {
+                            "label": "Box",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---BOX styleclass--->\n",
+                            "commandEnd": "<!---/BOX styleclass--->\n\n"
+                        },
+                        {
+                            "label": "Container",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---CONTAINER id--->\n",
+                            "commandEnd": "<!---/CONTAINER id--->\n\n"
+                        },
+                        {
+                            "label": "Style",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---STYLE tag.style--->\n",
+                            "commandEnd": "<!---/STYLE tag.style--->\n\n"
+                        },
+                        {
+                            "label": "Info",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---BOX.INFO header--->\ncontent\n",
+                            "commandEnd": "<!---/BOX.INFO--->\n\n"
+                        },
+                        {
+                            "label": "Warn",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---BOX.WARN header--->\ncontent\n",
+                            "commandEnd": "<!---/BOX.WARN--->\n\n"
+                        },
+                        {
+                            "label": "Alert",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---BOX.ALERT header--->\ncontent\n",
+                            "commandEnd": "<!---/BOX.ALERT--->\n\n"
+                        }
+                    ]
                 },
                 {
-                    "label": "😊",
-                    "command": "&#128522;"
+                    "label": "Extensions:",
+                    "commands": [
+                        {
+                            "label": "Splitter",
+                            "type": "singleCommand",
+                            "command": " :|: "
+                        },
+                        {
+                            "label": "Text-Toggler",
+                            "type": "singleCommand",
+                            "command": "<!---TOGGLER containerIdToToggle,text--->"
+                        },
+                        {
+                            "label": "Icon-Toggler",
+                            "type": "singleCommand",
+                            "command": "<!---TOGGLER containerIdToToggle,icon--->"
+                        },
+                        {
+                            "label": "Toggle-Lists-Text",
+                            "type": "singleCommand",
+                            "command": "<!---TOGGLER.AFTER ul:dps-md-ul,text--->"
+                        },
+                        {
+                            "label": "Toggle-Lists-Icon",
+                            "type": "singleCommand",
+                            "command": "<!---TOGGLER.AFTER ul:dps-md-ul,icon--->"
+                        }
+                    ]
                 },
                 {
-                    "label": "😍",
-                    "command": "&#128525;"
-                },
-                {
-                    "label": "😲",
-                    "command": "&#128562;"
-                },
-                {
-                    "label": "😱",
-                    "command": "&#128561;"
-                },
-                {
-                    "label": "🥳",
-                    "command": "&#129395;"
-                },
-                {
-                    "label": "😰",
-                    "command": "&#128560;"
-                },
-                {
-                    "label": "😳",
-                    "command": "&#128563;"
-                },
-                {
-                    "label": "🤗",
-                    "command": "&#129303;"
-                },
-                {
-                    "label": "🤭",
-                    "command": "&#129325;"
-                },
-                {
-                    "label": "🙄",
-                    "command": "&#128580;"
-                },
-                {
-                    "label": "💪",
-                    "command": "&#128170;"
-                },
-                {
-                    "label": "👆",
-                    "command": "&#128070;"
-                },
-                {
-                    "label": "👍",
-                    "command": "&#128077;"
-                },
-                {
-                    "label": "🤞",
-                    "command": "&#129310;"
-                },
-                {
-                    "label": "🖕",
-                    "command": "&#128405;"
-                },
-                {
-                    "label": "🤥",
-                    "command": "&#129317;"
-                },
-                {
-                    "label": "👨‍🦯",
-                    "command": "&#128104;&#8205;&#129455;"
-                },
-                {
-                    "label": "🧐",
-                    "command": "&#129488;"
-                }
-            ],
-            "rangeCommands": [
-                {
-                    "label": "<h1>",
-                    "commandStart": "# ",
-                    "commandEnd": "\n"
-                },
-                {
-                    "label": "<h2>",
-                    "commandStart": "## ",
-                    "commandEnd": "\n"
-                },
-                {
-                    "label": "<h3>",
-                    "commandStart": "### ",
-                    "commandEnd": "\n"
-                },
-                {
-                    "label": "<bold>",
-                    "commandStart": "**",
-                    "commandEnd": "**"
-                },
-                {
-                    "label": "<li>",
-                    "commandStart": "   - ",
-                    "commandEnd": "\n"
-                },
-                {
-                    "label": "<ol>",
-                    "commandStart": "   1. ",
-                    "commandEnd": "\n"
+                    "label": "Emojis:",
+                    "commands": [
+                        {
+                            "label": "😃",
+                            "type": "singleCommand",
+                            "command": "&#128515;"
+                        },
+                        {
+                            "label": "😉",
+                            "type": "singleCommand",
+                            "command": "&#128521;"
+                        },
+                        {
+                            "label": "😊",
+                            "type": "singleCommand",
+                            "command": "&#128522;"
+                        },
+                        {
+                            "label": "😍",
+                            "type": "singleCommand",
+                            "command": "&#128525;"
+                        },
+                        {
+                            "label": "😲",
+                            "type": "singleCommand",
+                            "command": "&#128562;"
+                        },
+                        {
+                            "label": "😱",
+                            "type": "singleCommand",
+                            "command": "&#128561;"
+                        },
+                        {
+                            "label": "🥳",
+                            "type": "singleCommand",
+                            "command": "&#129395;"
+                        },
+                        {
+                            "label": "😰",
+                            "type": "singleCommand",
+                            "command": "&#128560;"
+                        },
+                        {
+                            "label": "😳",
+                            "type": "singleCommand",
+                            "command": "&#128563;"
+                        },
+                        {
+                            "label": "🤗",
+                            "type": "singleCommand",
+                            "command": "&#129303;"
+                        },
+                        {
+                            "label": "🤭",
+                            "type": "singleCommand",
+                            "command": "&#129325;"
+                        },
+                        {
+                            "label": "🙄",
+                            "type": "singleCommand",
+                            "command": "&#128580;"
+                        },
+                        {
+                            "label": "💪",
+                            "type": "singleCommand",
+                            "command": "&#128170;"
+                        },
+                        {
+                            "label": "👆",
+                            "type": "singleCommand",
+                            "command": "&#128070;"
+                        },
+                        {
+                            "label": "👍",
+                            "type": "singleCommand",
+                            "command": "&#128077;"
+                        },
+                        {
+                            "label": "🤞",
+                            "type": "singleCommand",
+                            "command": "&#129310;"
+                        },
+                        {
+                            "label": "🖕",
+                            "type": "singleCommand",
+                            "command": "&#128405;"
+                        },
+                        {
+                            "label": "🤥",
+                            "type": "singleCommand",
+                            "command": "&#129317;"
+                        },
+                        {
+                            "label": "👨‍🦯",
+                            "type": "singleCommand",
+                            "command": "&#128104;&#8205;&#129455;"
+                        },
+                        {
+                            "label": "🧐",
+                            "type": "singleCommand",
+                            "command": "&#129488;"
+                        }
+                    ]
                 }
             ]
         },
@@ -2993,42 +3103,228 @@
             }
         },
         "pdoc-editor-commands": {
-            "singleCommands": [
+            "commandBlocks": [
                 {
-                    "label": "😃",
-                    "command": "&#128515;"
-                }
-            ],
-            "rangeCommands": [
-                {
-                    "label": "<h1>",
-                    "commandStart": "# ",
-                    "commandEnd": "\n"
+                    "label": "Markdown:",
+                    "commands": [
+                        {
+                            "label": "<h1>",
+                            "type": "rangeCommand",
+                            "commandStart": "# ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<h2>",
+                            "type": "rangeCommand",
+                            "commandStart": "## ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<h3>",
+                            "type": "rangeCommand",
+                            "commandStart": "### ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<bold>",
+                            "type": "rangeCommand",
+                            "commandStart": "**",
+                            "commandEnd": "**"
+                        },
+                        {
+                            "label": "<li>",
+                            "type": "rangeCommand",
+                            "commandStart": "   - ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<ol>",
+                            "type": "rangeCommand",
+                            "commandStart": "   1. ",
+                            "commandEnd": "\n"
+                        },
+                        {
+                            "label": "<table>",
+                            "type": "singleCommand",
+                            "command": "\nHead1 | Head2 | Head3\n----|----|----\nColumn1 | Column2 | Column3\n\n"
+                        }
+                    ]
                 },
                 {
-                    "label": "<h2>",
-                    "commandStart": "## ",
-                    "commandEnd": "\n"
+                    "label": "Boxes:",
+                    "commands": [
+                        {
+                            "label": "Box",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---BOX styleclass--->\n",
+                            "commandEnd": "<!---/BOX styleclass--->\n\n"
+                        },
+                        {
+                            "label": "Container",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---CONTAINER id--->\n",
+                            "commandEnd": "<!---/CONTAINER id--->\n\n"
+                        },
+                        {
+                            "label": "Style",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---STYLE tag.style--->\n",
+                            "commandEnd": "<!---/STYLE tag.style--->\n\n"
+                        },
+                        {
+                            "label": "Info",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---BOX.INFO header--->\ncontent\n",
+                            "commandEnd": "<!---/BOX.INFO--->\n\n"
+                        },
+                        {
+                            "label": "Warn",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---BOX.WARN header--->\ncontent\n",
+                            "commandEnd": "<!---/BOX.WARN--->\n\n"
+                        },
+                        {
+                            "label": "Alert",
+                            "type": "rangeCommand",
+                            "commandStart": "<!---BOX.ALERT header--->\ncontent\n",
+                            "commandEnd": "<!---/BOX.ALERT--->\n\n"
+                        }
+                    ]
                 },
                 {
-                    "label": "<h3>",
-                    "commandStart": "### ",
-                    "commandEnd": "\n"
+                    "label": "Extensions:",
+                    "commands": [
+                        {
+                            "label": "Splitter",
+                            "type": "singleCommand",
+                            "command": " :|: "
+                        },
+                        {
+                            "label": "Text-Toggler",
+                            "type": "singleCommand",
+                            "command": "<!---TOGGLER containerIdToToggle,text--->"
+                        },
+                        {
+                            "label": "Icon-Toggler",
+                            "type": "singleCommand",
+                            "command": "<!---TOGGLER containerIdToToggle,icon--->"
+                        },
+                        {
+                            "label": "Toggle-Lists-Text",
+                            "type": "singleCommand",
+                            "command": "<!---TOGGLER.AFTER ul:dps-md-ul,text--->"
+                        },
+                        {
+                            "label": "Toggle-Lists-Icon",
+                            "type": "singleCommand",
+                            "command": "<!---TOGGLER.AFTER ul:dps-md-ul,icon--->"
+                        }
+                    ]
                 },
                 {
-                    "label": "<bold>",
-                    "commandStart": "**",
-                    "commandEnd": "**"
-                },
-                {
-                    "label": "<li>",
-                    "commandStart": "   - ",
-                    "commandEnd": "\n"
-                },
-                {
-                    "label": "<ol>",
-                    "commandStart": "   1. ",
-                    "commandEnd": "\n"
+                    "label": "Emojis:",
+                    "commands": [
+                        {
+                            "label": "😃",
+                            "type": "singleCommand",
+                            "command": "&#128515;"
+                        },
+                        {
+                            "label": "😉",
+                            "type": "singleCommand",
+                            "command": "&#128521;"
+                        },
+                        {
+                            "label": "😊",
+                            "type": "singleCommand",
+                            "command": "&#128522;"
+                        },
+                        {
+                            "label": "😍",
+                            "type": "singleCommand",
+                            "command": "&#128525;"
+                        },
+                        {
+                            "label": "😲",
+                            "type": "singleCommand",
+                            "command": "&#128562;"
+                        },
+                        {
+                            "label": "😱",
+                            "type": "singleCommand",
+                            "command": "&#128561;"
+                        },
+                        {
+                            "label": "🥳",
+                            "type": "singleCommand",
+                            "command": "&#129395;"
+                        },
+                        {
+                            "label": "😰",
+                            "type": "singleCommand",
+                            "command": "&#128560;"
+                        },
+                        {
+                            "label": "😳",
+                            "type": "singleCommand",
+                            "command": "&#128563;"
+                        },
+                        {
+                            "label": "🤗",
+                            "type": "singleCommand",
+                            "command": "&#129303;"
+                        },
+                        {
+                            "label": "🤭",
+                            "type": "singleCommand",
+                            "command": "&#129325;"
+                        },
+                        {
+                            "label": "🙄",
+                            "type": "singleCommand",
+                            "command": "&#128580;"
+                        },
+                        {
+                            "label": "💪",
+                            "type": "singleCommand",
+                            "command": "&#128170;"
+                        },
+                        {
+                            "label": "👆",
+                            "type": "singleCommand",
+                            "command": "&#128070;"
+                        },
+                        {
+                            "label": "👍",
+                            "type": "singleCommand",
+                            "command": "&#128077;"
+                        },
+                        {
+                            "label": "🤞",
+                            "type": "singleCommand",
+                            "command": "&#129310;"
+                        },
+                        {
+                            "label": "🖕",
+                            "type": "singleCommand",
+                            "command": "&#128405;"
+                        },
+                        {
+                            "label": "🤥",
+                            "type": "singleCommand",
+                            "command": "&#129317;"
+                        },
+                        {
+                            "label": "👨‍🦯",
+                            "type": "singleCommand",
+                            "command": "&#128104;&#8205;&#129455;"
+                        },
+                        {
+                            "label": "🧐",
+                            "type": "singleCommand",
+                            "command": "&#129488;"
+                        }
+                    ]
                 }
             ]
         },
