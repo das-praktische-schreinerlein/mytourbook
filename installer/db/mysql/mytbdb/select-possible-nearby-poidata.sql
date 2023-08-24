@@ -9,6 +9,7 @@ set @minK_ID = 1;
 set @maxK_Id = 99999999;
 set @minT_ID = 1;
 set @maxT_Id = 99999999;
+set @border = 0.001;
 select *,
        'INSERT INTO ' || tabname || '_poi' ||
        ' (' || prefix || '_id, poi_id, ' || prefix || 'poi_pos, ' || prefix || 'poi_type, ' || prefix || 'poi_date)'  ||
@@ -54,10 +55,10 @@ from
                             WHERE kparea.k_id BETWEEN @minK_ID AND @maxK_Id
                             group by kparea.k_id) karea
                                INNER JOIN poi poi_area
-                                          ON (poi_geo_latdeg <= karea.maxKTP_LAT
-                                              AND poi_geo_latdeg >= karea.minKTP_LAT
-                                              AND poi_geo_longdeg <= karea.maxKTP_LON
-                                              AND poi_geo_longdeg >= karea.minKTP_LON
+                                          ON (poi_geo_latdeg <= (karea.maxKTP_LAT + @border)
+                                              AND poi_geo_latdeg >= (karea.minKTP_LAT - @border)
+                                              AND poi_geo_longdeg <= (karea.maxKTP_LON + @border)
+                                              AND poi_geo_longdeg >= (karea.minKTP_LON - @border)
                                               )
                      ) k_poi_area ON k.k_id=k_poi_area.K_ID
                          INNER JOIN
@@ -110,10 +111,10 @@ from
                             WHERE tparea.t_id BETWEEN @minT_ID AND @maxT_Id
                             group by tparea.t_id) karea
                                INNER JOIN poi poi_area
-                                          ON (poi_geo_latdeg <= karea.maxTP_LAT
-                                              AND poi_geo_latdeg >= karea.minTP_LAT
-                                              AND poi_geo_longdeg <= karea.maxTP_LON
-                                              AND poi_geo_longdeg >= karea.minTP_LON
+                                          ON (poi_geo_latdeg <= (karea.maxTP_LAT + @border)
+                                              AND poi_geo_latdeg >= (karea.minTP_LAT - @border)
+                                              AND poi_geo_longdeg <= (karea.maxTP_LON + @border)
+                                              AND poi_geo_longdeg >= (karea.minTP_LON - @border)
                                               )
                      ) t_poi_area ON t.t_id=t_poi_area.T_ID
                          INNER JOIN
