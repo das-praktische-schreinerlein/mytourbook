@@ -1,0 +1,13 @@
+diff --git a/node_modules/geo-coder/dist/geocoder.umd.js b/node_modules/geo-coder/dist/geocoder.umd.js
+index 1868e2a..ebcd73c 100644
+--- a/node_modules/geo-coder/dist/geocoder.umd.js
++++ b/node_modules/geo-coder/dist/geocoder.umd.js
+@@ -2903,7 +2903,7 @@ var OpenStreet = (function () {
+         this.options = options || {};
+     }
+     OpenStreet.prototype.geolookup = function (address) {
+-        var url = 'https://nominatim.openstreetmap.org/search/';
++        var url = 'https://nominatim.openstreetmap.org/search';
+         var params = {
+             q: address,
+             format: 'json',
