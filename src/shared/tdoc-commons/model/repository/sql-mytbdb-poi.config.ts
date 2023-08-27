@@ -6,6 +6,34 @@ import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/a
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 
 export class SqlMytbDbPoiConfig {
+    public static poiKwGroups = [
+        'natural_peak',
+        'mountain_pass_yes',
+        'sport_climbing',
+        'natural_saddle',
+        'tourism_alpine_hut',
+        'natural_water',
+        'natural_glacier',
+        'natural_cliff',
+        'climbing_trad_climbing',
+        'amenity_restaurant',
+        'climbing_sport_climbing',
+        'tourism_viewpoint',
+        'man_made_survey_point',
+        'climbing_route_bottom',
+        'climbing_route',
+        'climbing_crag',
+        'natural_bare_rock',
+        'climbing_yes',
+        'natural_rock',
+        'climbing_boulder',
+        'natural_stone',
+        'climbing_rock',
+        'climbing_route_top',
+        'climbing_area',
+        'natural_cave_entrance',
+        'climbing_sport'];
+
     public static readonly tableConfig: TableConfig = {
         key: 'poi',
         tableName: 'poi',
@@ -27,6 +55,12 @@ export class SqlMytbDbPoiConfig {
                 from: 'LEFT JOIN tour_poi ON poi.poi_id=tour_poi.poi_id',
                 triggerParams: ['route_id_i', 'route_id_is'],
                 groupByFields: ['tour_poi.t_id']
+            },
+            {
+                from: 'LEFT JOIN tour_poi tpac ON poi.poi_id=tpac.poi_id ' +
+                    'LEFT JOIN tour tac ON tpac.t_id=tac.t_id ',
+                triggerParams: ['actiontype_ss'],
+                groupByFields: ['tac.t_calced_actiontype']
             },
             {
                 from: 'LEFT JOIN kategorie_poi ON poi.poi_id=kategorie_poi.poi_id',
@@ -206,7 +240,14 @@ export class SqlMytbDbPoiConfig {
                 action: AdapterFilterActions.NOTIN
             },
             'actiontype_ss': {
-                noFacet: true
+                selectSql: 'SELECT count(tour.t_calced_actiontype) AS count, ' +
+                    '  t_calced_actiontype AS value ' +
+                    'FROM' +
+                    ' poi inner join tour_poi on poi.poi_id=tour_poi.poi_id' +
+                    ' inner join tour on tour.t_id=tour_poi.t_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY count desc',
+                filterField: 'tac.t_calced_actiontype',
             },
             'blocked_is': {
                 noFacet: true
@@ -228,7 +269,8 @@ export class SqlMytbDbPoiConfig {
                 noFacet: true
             },
             'done_ss': {
-                noFacet: true
+                selectField: 'CONCAT("DONE", (poi_datefirst IS NOT NULL))',
+                orderBy: 'value asc'
             },
             'gpstracks_state_is': {
                 noFacet: true
@@ -346,6 +388,99 @@ export class SqlMytbDbPoiConfig {
             'year_is': {
                 selectField: 'YEAR(poi_datefirst)',
                 orderBy: 'value asc'
+            },
+            // statistics
+            'statistics': {
+                // TODO action - add action with keyword as aactiontype (hut, gaciear, lake...)
+
+                selectSql: 'select CONCAT(typ, "-", type, "-", year) as value, count' +
+                    '         from (' +
+                    '              select distinct \'POI_PEAK_NEW\' as typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct poi_name as            name,' +
+                    '                                           t_calced_actiontype  as type,' +
+                    '                                           YEAR(poi_datefirst) year' +
+                    '                           from poi' +
+                    '                                 inner join poi_keyword on poi.poi_id = poi_keyword.poi_id' +
+                    '                                 inner join keyword on poi_keyword.kw_id = keyword.kw_id' +
+                    '                                 inner join tour_poi on tour_poi.poi_id = poi.poi_id' +
+                    '                                 inner join tour on tour_poi.t_id = tour.t_id' +
+                    '                           where keyword.kw_name = "natural_peak" and poi_datefirst is not null' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '' +
+                    '              union all' +
+                    '' +
+                    '              select distinct \'POI_PEAK_NEW\' as typ, type, \'ALLOVER\' as year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct poi_name as            name,' +
+                    '                                           t_calced_actiontype  as type' +
+                    '                           from poi' +
+                    '                                 inner join poi_keyword on poi.poi_id = poi_keyword.poi_id' +
+                    '                                 inner join keyword on poi_keyword.kw_id = keyword.kw_id' +
+                    '                                 inner join tour_poi on tour_poi.poi_id = poi.poi_id' +
+                    '                                 inner join tour on tour_poi.t_id = tour.t_id' +
+                    '                           where keyword.kw_name = "natural_peak" and poi_datefirst is not null' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '' +
+                    '              union all' +
+                    '' +
+                    '              select distinct \'POI_PEAK_NEW\' as typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct poi_name as            name,' +
+                    '                                           CONCAT("ele_", poi_calced_altMaxFacet) as type,' +
+                    '                                           YEAR(poi_datefirst) year' +
+                    '                           from poi' +
+                    '                                 inner join poi_keyword on poi.poi_id = poi_keyword.poi_id' +
+                    '                                 inner join keyword on poi_keyword.kw_id = keyword.kw_id' +
+                    '                           where keyword.kw_name = "natural_peak" and poi_datefirst is not null' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '' +
+                    '              union all' +
+                    '' +
+                    '              select distinct \'POI_PEAK_NEW\' as typ, type, \'ALLOVER\' as year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct poi_name as            name,' +
+                    '                                           CONCAT("ele_", poi_calced_altMaxFacet) as type' +
+                    '                           from poi' +
+                    '                                 inner join poi_keyword on poi.poi_id = poi_keyword.poi_id' +
+                    '                                 inner join keyword on poi_keyword.kw_id = keyword.kw_id' +
+                    '                           where keyword.kw_name = "natural_peak" and poi_datefirst is not null' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '' +
+                    '              union all' +
+                    '' +
+                    '              select distinct \'POI_NEW\' as typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct poi_name as            name,' +
+                    '                                           CONCAT("KW_", kw_name) as type,' +
+                    '                                           YEAR(poi_datefirst) year' +
+                    '                           from poi' +
+                    '                                 inner join poi_keyword on poi.poi_id = poi_keyword.poi_id' +
+                    '                                 inner join keyword on poi_keyword.kw_id = keyword.kw_id' +
+                    '                           where keyword.kw_name in ("' + SqlMytbDbPoiConfig.poiKwGroups.join('", "') + '")' +
+                    '                                  and poi_datefirst is not null' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '' +
+                    '              union all' +
+                    '' +
+                    '              select distinct \'POI_NEW\' as typ, type, \'ALLOVER\' as year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct poi_name as            name,' +
+                    '                                           CONCAT("KW_", kw_name) as type' +
+                    '                           from poi' +
+                    '                                 inner join poi_keyword on poi.poi_id = poi_keyword.poi_id' +
+                    '                                 inner join keyword on poi_keyword.kw_id = keyword.kw_id' +
+                    '                           where keyword.kw_name in ("' + SqlMytbDbPoiConfig.poiKwGroups.join('", "') + '")' +
+                    '                                  and poi_datefirst is not null' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '              ) allover' +
+                    '        order by value, count'
             }
         },
         sortMapping: {

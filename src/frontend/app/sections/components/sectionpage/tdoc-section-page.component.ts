@@ -54,7 +54,6 @@ export interface TourDocSectionPageComponentDashboardRows {
 }
 
 @Component({
-    selector: 'app-tdoc-sectionpage',
     templateUrl: './tdoc-section-page.component.html',
     styleUrls: ['./tdoc-section-page.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -409,14 +408,19 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                     continue;
                 }
 
-                const actionValues = [action, this.translateService.instant(action)]
+                let actionLabel = this.translateService.instant(action);
+                if (actionLabel.startsWith('KW_') || actionLabel.startsWith('kw_')) {
+                    actionLabel = actionLabel.replace('KW_', '').replace('kw_', '');
+                }
+
+                const actionValues = [action, this.translateService.instant(actionLabel)]
                 for (const year of Object.keys(years).sort()) {
                     if (!types[keyType][action][year]) {
                         actionValues.push(undefined);
                         continue;
                     }
 
-                    if (action.startsWith('ac_')) {
+                    if (action.startsWith('ac_') || action.startsWith('kw_') || action.startsWith('KW_')) {
                         yearValues[year] += types[keyType][action][year]
                     }
 
@@ -473,6 +477,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             return false;
         }
 
+        // TODO action - on POI extract keyxword, ele
+
         let when = undefined;
         if (columnIndex) {
           if (statisticBoardData[0][columnIndex] === 'ALLOVER') {
@@ -490,6 +496,9 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 : undefined,
             actiontype: action && action !== 'ac_undefined' && action.startsWith('ac_')
                 ? action.toString()
+                : undefined,
+            what: action && action !== 'kw_undefined' && (action.startsWith('kw_') || action.startsWith('KW_'))
+                ? action.toString().replace('KW_', '').replace('kw_', '')
                 : undefined,
             when: when,
         }));
@@ -569,6 +578,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         if (this.flgShowStatisticBoard) {
             this.doStatisticSearch('ROUTE');
             this.doStatisticSearch('DESTINATION');
+            this.doStatisticSearch('POI');
             this.doStatisticSearch('TRACK');
         }
 

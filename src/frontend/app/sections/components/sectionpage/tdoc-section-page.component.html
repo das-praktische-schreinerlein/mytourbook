@@ -302,6 +302,18 @@
                         statisticBoardData: statistics['DESTINATION']['DESTINATION_NEW']
                         }"></ng-container>
     </ng-container>
+    <ng-container *ngIf="statistics && statistics['POI']">
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Neu begangene Gipfel-Poi',
+                        statisticType: 'POI',
+                        statisticSearchForm: { type: 'POI', what: 'natural_peak'},
+                        statisticBoardData: statistics['POI']['POI_PEAK_NEW']
+                        }"></ng-container>
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Neu begangene Poi',
+                        statisticType: 'POI',
+                        statisticSearchForm: { type: 'POI'},
+                        statisticBoardData: statistics['POI']['POI_NEW']
+                        }"></ng-container>
+    </ng-container>
     <ng-container *ngIf="statistics && statistics['ROUTE']">
         <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Wiederholte Routen',
                         statisticType: 'DESTINATION',

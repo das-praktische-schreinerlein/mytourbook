@@ -18,7 +18,7 @@
 - improve imageInlineLoader
 - added support for automatic nearby track pois
 - backend/frontend: use new fully featured markdown-support with extensions
-
+- backend/frontend: add pois to statistics
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -37,6 +37,7 @@
 - frontend: moved track-colors, TextEditorComponent, FormUtils and GeoParserDeterminer to commons
 - improved sync-viewer for offline-usage
 - removed legacy pdoc-editor
+- backend/frontend: add pois to statistics
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create
