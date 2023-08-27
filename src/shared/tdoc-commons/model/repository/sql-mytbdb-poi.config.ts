@@ -247,6 +247,7 @@ export class SqlMytbDbPoiConfig {
                     ' inner join tour on tour.t_id=tour_poi.t_id' +
                     ' GROUP BY value' +
                     ' ORDER BY count desc',
+                triggerTables: ['tour', 'tour_poi', 'poi'],
                 filterField: 'tac.t_calced_actiontype',
             },
             'blocked_is': {
@@ -270,6 +271,7 @@ export class SqlMytbDbPoiConfig {
             },
             'done_ss': {
                 selectField: 'CONCAT("DONE", (poi_datefirst IS NOT NULL))',
+                triggerTables: ['poi'],
                 orderBy: 'value asc'
             },
             'gpstracks_state_is': {
@@ -391,8 +393,6 @@ export class SqlMytbDbPoiConfig {
             },
             // statistics
             'statistics': {
-                // TODO action - add action with keyword as aactiontype (hut, gaciear, lake...)
-
                 selectSql: 'select CONCAT(typ, "-", type, "-", year) as value, count' +
                     '         from (' +
                     '              select distinct \'POI_PEAK_NEW\' as typ, type, year, count(*) count' +
@@ -480,7 +480,8 @@ export class SqlMytbDbPoiConfig {
                     '                       ) x' +
                     '                  group by type, year' +
                     '              ) allover' +
-                    '        order by value, count'
+                    '        order by value, count',
+                triggerTables: ['poi', 'poi_keyword', 'tour_poi']
             }
         },
         sortMapping: {

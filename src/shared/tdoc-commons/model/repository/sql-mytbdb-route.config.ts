@@ -521,7 +521,8 @@ export class SqlMytbDbRouteConfig {
                     ' ORDER BY label',
                 filterFields: ['REGEXP_REPLACE(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(kategorie_tour.kt_route_attr, "(", " "), ")", " "), ",", " "), ";", " ")), "[[:space:]]+", " ")',
                     'REGEXP_REPLACE(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(kategorie.k_route_attr, "(", " "), ")", " "), ",", " "), ";", " ")), "[[:space:]]+", " ")'],
-                action: AdapterFilterActions.IN
+                action: AdapterFilterActions.IN,
+                triggerTables: ['kategorie', 'kategorie_tour']
             },
             'route_attr_txt': {
                 filterFields: ['kategorie_tour.kt_route_attr', 'kategorie.k_route_attr'],
@@ -733,7 +734,8 @@ export class SqlMytbDbRouteConfig {
                     '                  where year is not null' +
                     '                  group by type, type' +
                     '              ) allover' +
-                    '        order by value, count'
+                    '        order by value, count',
+                triggerTables: ['tour', 'kategorie_tour']
             }
         },
         sortMapping: {

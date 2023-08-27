@@ -498,7 +498,8 @@ export class SqlMytbDbDestinationConfig {
                     '                       ) x' +
                     '                  group by type' +
                     '              ) allover' +
-                    '        order by value, count'
+                    '        order by value, count',
+                triggerTables: ['tour', 'kategorie_tour']
             }
         },
         sortMapping: {

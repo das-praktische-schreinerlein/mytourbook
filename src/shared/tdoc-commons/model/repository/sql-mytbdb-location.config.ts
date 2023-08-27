@@ -210,6 +210,7 @@ export class SqlMytbDbLocationConfig {
                     '              OR (l_typ > 4 AND (l_geo_latdeg IS NULL OR l_geo_longdeg IS NULL))' +
                     '             ) noCoordinates' +
                     '             ON location.l_id=noCoordinates.id',
+                triggerTables: ['location']
             },
             'noFavoriteChildren': {
                 constValues: ['noFavoriteChildren'],
@@ -223,6 +224,7 @@ export class SqlMytbDbLocationConfig {
                     '             ) noLocation' +
                     '             ON location.l_id=noLocation.id',
                 filterField: 'location.l_parent_id',
+                triggerTables: ['location']
             },
             'noMainFavoriteChildren': {
                 constValues: ['noMainFavoriteChildren'],
