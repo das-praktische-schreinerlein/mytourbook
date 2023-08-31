@@ -1,11 +1,11 @@
 <ng-container *ngIf="pdoc !== undefined">
     <ng-container [ngSwitch]="searchFormLayout">
         <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
-            <div class="container content-container sectionpage-stacked-sidebar-container" style="width: 25%; float: right">
+            <div class="container content-container sectionpage-stacked-sidebar-container">
                 <ng-container *ngTemplateOutlet="sidebarContainer"></ng-container>
             </div>
 
-            <div class="sectionpage-stacked-left-content-container" style="width: 73%; display: inline-block;">
+            <div class="sectionpage-stacked-left-content-container">
                 <ng-container *ngFor="let pageContainer of pageContainerOrder">
                     <ng-container [ngSwitch]="pageContainer">
                         <ng-container *ngSwitchCase="'contentContainer'">

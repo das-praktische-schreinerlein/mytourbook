@@ -1,3 +1,13 @@
+.searchpage-stacked-right-content-container {
+    width: 73%;
+    display: inline-block;
+}
+
+.searchpage-stacked-sidebar-container {
+    width: 25%;
+    float: right
+}
+
 .profile-toggler-container {
     text-align: right;
 }

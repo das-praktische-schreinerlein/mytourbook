@@ -19,6 +19,7 @@
 - added support for automatic nearby track pois
 - backend/frontend: use new fully featured markdown-support with extensions
 - backend/frontend: add pois to statistics
+- frontend: added print/pdf-support
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -27,6 +28,7 @@
 - improve imageInlineLoader
 - added support for automatic nearby track pois
 - backend/frontend: use new fully featured markdown-support with extensions
+- frontend: added print/pdf-support
 
 ### improvements
 - frontend: improved filter-suggestion for poi-search

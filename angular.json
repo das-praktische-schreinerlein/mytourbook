@@ -17,7 +17,12 @@
                         "polyfills": "src/frontend/polyfills.ts",
                         "assets": [
                             "src/frontend/assets",
-                            "src/frontend/manifest.json"
+                            "src/frontend/manifest.json",
+                            {
+                                "glob": "**/*",
+                                "input": "dist/tsc-out/static/",
+                                "output": ""
+                            }
                         ],
                         "styles": [
                             "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -43,9 +48,9 @@
                             "src/frontend/global.css",
                             "src/frontend/global-overrides.css",
                             "src/frontend/responsive.css",
-                            "node_modules/@dps/mycms-frontend-commons/dist/frontend-layout-commons/styles/print.css",
-                            "src/frontend/print.css",
-                            "src/frontend/print-overrides.css"
+                            "node_modules/@dps/mycms-frontend-commons/dist/frontend-layout-commons/styles/print.scss",
+                            "src/frontend/print.scss",
+                            "src/frontend/print-overrides.scss"
                         ],
                         "scripts": []
                     },
@@ -299,13 +304,18 @@
                             "src/frontend/global.css",
                             "src/frontend/global-overrides.css",
                             "src/frontend/responsive.css",
-                            "node_modules/@dps/mycms-frontend-commons/dist/frontend-layout-commons/styles/print.css",
-                            "src/frontend/print.css",
-                            "src/frontend/print-overrides.css"
+                            "node_modules/@dps/mycms-frontend-commons/dist/frontend-layout-commons/styles/print.scss",
+                            "src/frontend/print.scss",
+                            "src/frontend/print-overrides.scss"
                         ],
                         "assets": [
                             "src/frontend/assets",
-                            "src/frontend/manifest.json"
+                            "src/frontend/manifest.json",
+                            {
+                                "glob": "**/*",
+                                "input": "dist/tsc-out/static/",
+                                "output": ""
+                            }
                         ]
                     }
                 },

@@ -10,7 +10,15 @@
         <router-outlet name="pdocmodalshow"></router-outlet>
         <router-outlet></router-outlet>
     </div>
-    <div *ngIf="!hideCopyrightFooter" class="container text-center hidden-print"><a href="pages/impress" i18n="link impress footer|Link impress footer@@a.footer.impress">&copy;2018 Impressum/Datenschutz</a></div>
+    <div *ngIf="hideCopyrightFooter" class="container text-center hidden-print">
+        <div (click)="openPrintPreview('TAG', 'app-root', 800, 200, 'print\.css')" class="print-command-container"><span></span></div>
+        <div (click)="printPdf('TAG', 'app-root', 800, 200, 'print\.css')" class="pdf-command-container"><span></span></div>
+    </div>
+    <div *ngIf="!hideCopyrightFooter" class="container text-center hidden-print">
+        <a href="pages/impress" i18n="link impress footer|Link impress footer@@a.footer.impress">&copy;2023 Impressum/Datenschutz</a>
+        <div (click)="openPrintPreview('TAG', 'app-root', 800, 200, 'print\.css')" class="print-command-container"><span></span></div>
+        <div (click)="printPdf('TAG', 'app-root', 800, 200, 'print\.css')" class="pdf-command-container"><span></span></div>
+    </div>
     <div *ngIf="!hideCopyrightFooter" class="container text-center hidden-print">
         <cookie-law [name]="cookieLawSeenName" [expiration]="3000" *ngIf="showLaw" >
             <span i18n="text cookieLaw|Text cookieLaw@@span.cookieLaw.test">Mit der Benutzung dieser Seite stimmst du der Nutzung von Cookies und der Datenschutzerklärung zu.</span>
