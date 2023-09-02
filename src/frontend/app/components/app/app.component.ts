@@ -33,8 +33,8 @@ export class AppComponent extends AbstractAppComponent {
             environment);
     }
 
-    public openPrintPreview(elementFilterType: ElementFilterType, filter: string, width?: number, height?: number,
-                            printCssIdRegExp?: string) {
+    onOpenPrintPreview(elementFilterType: ElementFilterType, filter: string, width?: number, height?: number,
+                              printCssIdRegExp?: string) {
         const options: PrintOptions = {
             printElementFilter: {
                 type: elementFilterType,
@@ -51,8 +51,8 @@ export class AppComponent extends AbstractAppComponent {
         return false;
     }
 
-    public printPdf(elementFilterType: ElementFilterType, filter: string, width?: number, height?: number,
-                    printCssIdRegExp?: string) {
+    onPrintPdf(elementFilterType: ElementFilterType, filter: string, width?: number, height?: number,
+                      printCssIdRegExp?: string) {
         const options: PdfPrintOptions = {
             printElementFilter: {
                 type: elementFilterType,
@@ -74,4 +74,9 @@ export class AppComponent extends AbstractAppComponent {
 
         return false;
     }
+
+    onScrollToTop() {
+        this.pageUtils.scrollToTop();
+    }
+
 }

@@ -64,7 +64,11 @@
                             <ng-container *ngIf="flgShowTopTen">
                                 <div class="container content-container hidden-print">
                                     <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
-                                    <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+                                    <ul class="nav command-container justify-content-end hidden-print">
+                                        <li class="command-link">
+                                            <div (click)="onScrollToTop()" class="command-icon command-icon-scroll-to-top"><span></span></div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </ng-container>
                         </ng-container>
@@ -670,7 +674,11 @@
 
             <ng-container *ngTemplateOutlet="bestMatching"></ng-container>
             <ng-container *ngTemplateOutlet="favorites"></ng-container>
-            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+            <ul class="nav command-container justify-content-end hidden-print">
+                <li class="command-link">
+                    <div (click)="onScrollToTop()" class="command-icon command-icon-scroll-to-top"><span></span></div>
+                </li>
+            </ul>
         </div>
     </ng-container>
 </ng-template>
@@ -681,7 +689,11 @@
         || (availableDoneDashboardRows && objectKeys(availableDoneDashboardRows).length > 0))">
         <div class="container content-container sectionpage-dashBoard-container">
             <ng-container *ngTemplateOutlet="dashBoard"></ng-container>
-            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+            <ul class="nav command-container justify-content-end hidden-print">
+                <li class="command-link">
+                    <div (click)="onScrollToTop()" class="command-icon command-icon-scroll-to-top"><span></span></div>
+                </li>
+            </ul>
         </div>
     </ng-container>
 </ng-template>
@@ -690,7 +702,11 @@
     <ng-container *ngIf="statistics && objectKeys(statistics).length > 0">
         <div class="container content-container sectionpage-statisticBoard-container">
             <ng-container *ngTemplateOutlet="statisticBoard"></ng-container>
-            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+            <ul class="nav command-container justify-content-end hidden-print">
+                <li class="command-link">
+                    <div (click)="onScrollToTop()" class="command-icon command-icon-scroll-to-top"><span></span></div>
+                </li>
+            </ul>
         </div>
     </ng-container>
 </ng-template>
@@ -699,7 +715,11 @@
     <ng-container *ngIf="flgShowAdminArea">
         <div class="container content-container sectionpage-dashBoard-container">
             <ng-container *ngTemplateOutlet="adminArea"></ng-container>
-            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+            <ul class="nav command-container justify-content-end hidden-print">
+                <li class="command-link">
+                    <div (click)="onScrollToTop()" class="command-icon command-icon-scroll-to-top"><span></span></div>
+                </li>
+            </ul>
         </div>
     </ng-container>
 </ng-template>

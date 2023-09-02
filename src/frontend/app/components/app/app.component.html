@@ -10,19 +10,33 @@
         <router-outlet name="pdocmodalshow"></router-outlet>
         <router-outlet></router-outlet>
     </div>
-    <div *ngIf="hideCopyrightFooter" class="container text-center hidden-print">
-        <div (click)="openPrintPreview('TAG', 'app-root', 800, 200, 'print\.css')" class="print-command-container"><span></span></div>
-        <div (click)="printPdf('TAG', 'app-root', 800, 200, 'print\.css')" class="pdf-command-container"><span></span></div>
-    </div>
-    <div *ngIf="!hideCopyrightFooter" class="container text-center hidden-print">
-        <a href="pages/impress" i18n="link impress footer|Link impress footer@@a.footer.impress">&copy;2023 Impressum/Datenschutz</a>
-        <div (click)="openPrintPreview('TAG', 'app-root', 800, 200, 'print\.css')" class="print-command-container"><span></span></div>
-        <div (click)="printPdf('TAG', 'app-root', 800, 200, 'print\.css')" class="pdf-command-container"><span></span></div>
-    </div>
-    <div *ngIf="!hideCopyrightFooter" class="container text-center hidden-print">
-        <cookie-law [name]="cookieLawSeenName" [expiration]="3000" *ngIf="showLaw" >
-            <span i18n="text cookieLaw|Text cookieLaw@@span.cookieLaw.test">Mit der Benutzung dieser Seite stimmst du der Nutzung von Cookies und der Datenschutzerklärung zu.</span>
-            <a href="pages/impress" i18n="link impress cookieLaw|Link impress cookieLaw@@a.cookieLaw.impress">Mehr unter Impressum/Datenschutz</a>
-        </cookie-law>
-    </div>
+
+    <footer class="container container-page-footer text-left hidden-print border-top fx-bg-theme">
+        <div class="row">
+            <p class="col-md-6 justify-content-start left">
+                <a *ngIf="!hideCopyrightFooter" href="pages/impress" i18n="link impress footer|Link impress footer@@a.footer.impress">&copy;2023 Impressum/Datenschutz</a>
+            </p>
+
+            <div class="col-md-6">
+                <ul class="nav command-container justify-content-end">
+                    <li class="command-link">
+                        <div (click)="onOpenPrintPreview('TAG', 'app-root', 800, 200, 'print\.css')" class="command-icon command-icon-print"><span></span></div>
+                    </li>
+                    <li class="command-link">
+                        <div (click)="onPrintPdf('TAG', 'app-root', 800, 200, 'print\.css')" class="command-icon command-icon-pdf"><span></span></div>
+                    </li>
+                    <li class="command-link">
+                        <div (click)="onScrollToTop()" class="command-icon command-icon-scroll-to-top"><span></span></div>
+                    </li>
+                </ul>
+            </div>
+
+            <ng-container *ngIf="!hideCopyrightFooter">
+                <cookie-law [name]="cookieLawSeenName" [expiration]="3000" *ngIf="showLaw" >
+                    <span i18n="text cookieLaw|Text cookieLaw@@span.cookieLaw.test">Mit der Benutzung dieser Seite stimmst du der Nutzung von Cookies und der Datenschutzerklärung zu.</span>
+                    <a href="pages/impress" i18n="link impress cookieLaw|Link impress cookieLaw@@a.cookieLaw.impress">Mehr unter Impressum/Datenschutz</a>
+                </cookie-law>
+            </ng-container>
+        </div>
+    </footer>
 </section>

@@ -1169,7 +1169,11 @@
                 <app-tdoc-simple-search-navigation [record]="record"></app-tdoc-simple-search-navigation>
             </div>
 
-            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+            <ul class="nav command-container justify-content-end hidden-print">
+                <li class="command-link">
+                    <div (click)="onScrollToTop()" class="command-icon command-icon-scroll-to-top"><span></span></div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
