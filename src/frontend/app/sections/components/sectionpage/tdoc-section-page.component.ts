@@ -377,6 +377,9 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 const count = value[1];
                 const data = key.split('-');
                 if (data.length === 3) {
+                    data[0] = data[0].replace(/MINUS/g, '-');
+                    data[1] = data[1].replace(/MINUS/g, '-');
+                    data[2] = data[2].replace(/MINUS/g, '-');
                     if (!types[data[0]]) {
                         types[data[0]] = {};
                     }
@@ -408,9 +411,15 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                     continue;
                 }
 
-                let actionLabel = this.translateService.instant(action);
+                let actionLabel: string = this.translateService.instant(action);
                 if (actionLabel.startsWith('KW_') || actionLabel.startsWith('kw_')) {
                     actionLabel = actionLabel.replace('KW_', '').replace('kw_', '');
+                } else if (actionLabel.startsWith('diff_')) {
+                    if (actionLabel.match(/([1-9]+.*) (Sächs\.|Franz\.|UIAA|USA)/)) {
+                        actionLabel = actionLabel.replace(/([1-9]+.*) (Sächs\.|Franz\.|UIAA|USA)/, '$2 $1');
+                    }
+
+                    actionLabel = this.translateService.instant('diff_') + actionLabel.replace('diff_', '');
                 }
 
                 const actionValues = [action, this.translateService.instant(actionLabel)]
@@ -420,7 +429,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                         continue;
                     }
 
-                    if (action.startsWith('ac_') || action.startsWith('kw_') || action.startsWith('KW_')) {
+                    if (action.startsWith('ac_') || action.startsWith('diff_')
+                        || action.startsWith('kw_') || action.startsWith('KW_')) {
                         yearValues[year] += types[keyType][action][year]
                     }
 
@@ -493,6 +503,9 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             perPage: 10,
             techDataAltitudeMax: action && action.startsWith('ele_')
                 ? '' + Number(action.replace(/[^0-9]/gs, ''))
+                : undefined,
+            techRateOverall: action && action.startsWith('diff_')
+                ? action.toString().replace('diff_', '')
                 : undefined,
             actiontype: action && action !== 'ac_undefined' && action.startsWith('ac_')
                 ? action.toString()

@@ -733,6 +733,97 @@ export class SqlMytbDbRouteConfig {
                     '                       ) x' +
                     '                  where year is not null' +
                     '                  group by type, type' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select distinct \'ROUTE_DIFF_DONE\' as typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct t_name          as name,' +
+                    '                                           CONCAT("diff_", REPLACE(t_rate, "-", "MINUS"))   as type,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
+                    '                                           K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
+                    '                                    inner join tour t on kt.t_ID = t.t_ID' +
+                    '                           where kt.t_id > 1' +
+                    '                             and kt.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
+                    '                             and t_rate is not null' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct t_name          as name,' +
+                    '                                           CONCAT("diff_", REPLACE(t_rate, "-", "MINUS"))  as type,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
+                    '                                           K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join tour t on k.t_ID = t.t_ID' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
+                    '                             and t_rate is not null' +
+                    '                       ) x' +
+                    '                  where year is not null' +
+                    '                  group by type, year' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select distinct \'ROUTE_DIFF_DONE\' as typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct t_name as name, CONCAT("diff_", REPLACE(t_rate, "-", "MINUS")) as type, K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
+                    '                                    inner join tour t on kt.t_ID = t.t_ID' +
+                    '                           where kt.t_id > 1' +
+                    '                             and kt.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
+                    '                             and t_rate is not null' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct t_name as name, CONCAT("diff_", t_rate) as type, K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join tour t on k.t_ID = t.t_ID' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datefirst)' +
+                    '                             and t_rate is not null' +
+                    '                       ) x' +
+                    '                  group by type' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select \'ROUTE_DIFF_NEW\' as typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct t_name as            name,' +
+                    '                                           CONCAT("diff_", REPLACE(t_rate, "-", "MINUS"))  as         type,' +
+                    '                                           min(YEAR(t_datefirst)) year' +
+                    '                           from tour t' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and t_datefirst is not null' +
+                    '                             and t_rate is not null' +
+                    '                           group by name, type' +
+                    '                       ) x' +
+                    '                  where year is not null' +
+                    '                  group by type, year' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select \'ROUTE_DIFF_NEW\' as typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct t_name as            name,' +
+                    '                                           CONCAT("diff_", REPLACE(t_rate, "-", "MINUS")) as type,' +
+                    '                                           min(YEAR(t_datefirst)) year' +
+                    '                           from tour t' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and t_datefirst is not null' +
+                    '                             and t_rate is not null' +
+                    '                           group by name, type' +
+                    '                       ) x' +
+                    '                  where year is not null' +
+                    '                  group by type, type' +
                     '              ) allover' +
                     '        order by value, count',
                 triggerTables: ['tour', 'kategorie_tour']

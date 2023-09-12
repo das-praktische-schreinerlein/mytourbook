@@ -233,6 +233,7 @@ window.importStaticTranslationsJsonP = `
     "ac_134": "Flug",
     "ac_135": "Skilanglauf",
     "ac_136": "Rodeln",
+    "diff_": "",
     "ele_0": "   0m",
     "ele_500": " 500m",
     "ele_1000": "1000m",

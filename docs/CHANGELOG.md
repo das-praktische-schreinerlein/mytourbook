@@ -39,10 +39,11 @@
 - frontend: moved track-colors, TextEditorComponent, FormUtils and GeoParserDeterminer to commons
 - improved sync-viewer for offline-usage
 - removed legacy pdoc-editor
-- backend/frontend: add pois to statistics
+- backend/frontend: add pois, route difficulty to statistics
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create
+- fixed string-replace
 
 ### breaking changes
 - use commons-6.0.0

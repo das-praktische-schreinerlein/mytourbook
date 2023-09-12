@@ -299,6 +299,13 @@
                         statisticBoardData: statistics['ROUTE']['ROUTE_NEW']
                         }"></ng-container>
     </ng-container>
+    <ng-container *ngIf="statistics && statistics['ROUTE']">
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Neu Begangene Routen nach Schwierigkeit',
+                        statisticType: 'ROUTE',
+                        statisticSearchForm: { type: 'ROUTE'},
+                        statisticBoardData: statistics['ROUTE']['ROUTE_DIFF_NEW']
+                        }"></ng-container>
+    </ng-container>
     <ng-container *ngIf="statistics && statistics['DESTINATION']">
         <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Neu Begangene Ziele',
                         statisticType: 'DESTINATION',
@@ -322,6 +329,12 @@
         <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Wiederholte Routen',
                         statisticType: 'DESTINATION',
                         statisticBoardData: statistics['ROUTE']['ROUTE_DONE']
+                        }"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="statistics && statistics['ROUTE']">
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Wiederholte Routen nach Schwierigkeit',
+                        statisticType: 'DESTINATION',
+                        statisticBoardData: statistics['ROUTE']['ROUTE_DIFF_DONE']
                         }"></ng-container>
     </ng-container>
     <ng-container *ngIf="statistics && statistics['DESTINATION']">
