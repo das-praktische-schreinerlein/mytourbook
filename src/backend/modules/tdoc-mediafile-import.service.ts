@@ -430,8 +430,8 @@ export class TourDocMediaFileImportManager  {
         const newMetadata = metadata
             ? this.jsonValidationRule.sanitize(
                 BeanUtils.jsonStringify(metadata, undefined, undefined, 20)
-                    .replace('\\n', ' ')
-                    .replace('\\r', '')
+                    .replace(/\\n/g, ' ')
+                    .replace(/\\r/g, '')
             )
             : undefined;
 

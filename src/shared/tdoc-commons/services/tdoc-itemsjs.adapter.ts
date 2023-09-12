@@ -118,7 +118,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             'keywords_txt': {
                 filterFunction: function(record) {
                     return record['keywords_txt']
-                        ? record['keywords_txt'].replace(',,', ',').split(',')
+                        ? record['keywords_txt'].replace(/,,/g, ',').split(',')
                         : undefined
                 },
                 conjunction: false,
@@ -149,7 +149,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             'objects_txt': {
                 filterFunction: function(record) {
                     return record['objects_txt']
-                        ? record['objects_txt'].replace(',,', ',').split(',')
+                        ? record['objects_txt'].replace(/,,/g, ',').split(',')
                         : undefined
                 },
                 conjunction: false,
@@ -161,7 +161,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             'persons_txt': {
                 filterFunction: function(record) {
                     return record['persons_txt']
-                        ? record['persons_txt'].replace(',,', ',').split(',')
+                        ? record['persons_txt'].replace(/,,/g, ',').split(',')
                         : undefined
                 },
                 conjunction: false,
@@ -173,7 +173,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             'playlists_txt': {
                 filterFunction: function(record) {
                     return record['playlists_txt']
-                        ? record['playlists_txt'].replace(',,', ',').split(',')
+                        ? record['playlists_txt'].replace(/,,/g, ',').split(',')
                         : undefined
                 },
                 conjunction: false,
