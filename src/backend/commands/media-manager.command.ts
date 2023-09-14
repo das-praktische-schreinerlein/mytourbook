@@ -506,6 +506,8 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     ? outputFile
                     : srcFile
 
+                // TODO password for encryption
+
                 promise = viewerManagerModule.inlineDataOnViewerFile(
                     backendConfig.nodejsBinaryPath,
                     backendConfig.inlineJsPath,

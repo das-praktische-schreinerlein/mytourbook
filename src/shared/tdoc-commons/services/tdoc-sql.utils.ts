@@ -9,6 +9,7 @@ export class TourDocSqlUtils {
 
     public static transformToSqliteDialect(sql: string): string {
         // dirty workaround because sqlite has no functions as mysql
+        sql = sql.replace(/CONCAT\("diff_", REPLACE\(t_rate, "-", "MINUS"\)\)/g, '"diff_" || REPLACE(t_rate, "-", "MINUS")');
         sql = sql.replace(/GetTechName\(GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)\)/g,
             'GetTechName(location.l_name)');
         sql = sql.replace(/GetTechName\(GetLocationNameAncestry\(lifl.l_id, lifl.l_name, " -> "\)\)/g,
