@@ -523,7 +523,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             stringBeanFieldConfig: {
                 'poiJoinType': {
                     labelPrefix: 'poijoin_',
-                    values: [0, 10, 20, 30, 40, 50, 60, 70, 99]
+                    values: [0, 10, 20, 30, 40, 50, 60, 65, 70, 99]
                 },
                 'subtype': {},
                 'subTypeActiontype': {
