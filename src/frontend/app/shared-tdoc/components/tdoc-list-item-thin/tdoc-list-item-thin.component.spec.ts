@@ -14,7 +14,6 @@ import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/se
 import {CommonDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing/cdoc-dataservice-stubs';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {TourDocMapCodePipe} from '../../pipes/tdoc-mapcode.pipe';
-import {TourDocDateFormatPipe} from '../../pipes/tdoc-dateformat.pipe';
 
 describe('TourDocListItemThinComponent', () => {
     let component: TourDocListItemThinComponent;
@@ -22,7 +21,7 @@ describe('TourDocListItemThinComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocListItemThinComponent, TourDocMapCodePipe, TourDocDateFormatPipe],
+            declarations: [TourDocListItemThinComponent, TourDocMapCodePipe],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
