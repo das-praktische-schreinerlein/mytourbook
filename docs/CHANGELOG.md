@@ -20,6 +20,7 @@
 - backend/frontend: use new fully featured markdown-support with extensions
 - backend/frontend: add pois to statistics
 - frontend: added print/pdf-support
+- make tdoc-datepipe configurable
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -40,6 +41,7 @@
 - improved sync-viewer for offline-usage
 - removed legacy pdoc-editor
 - backend/frontend: add pois, route difficulty to statistics
+- make tdoc-datepipe configurable
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create

@@ -2,6 +2,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {isDate, isNumber, isString} from 'util';
 import {TourDocRecord} from '../../../shared/tdoc-commons/model/records/tdoc-record';
+import {environment} from '../../../environments/environment';
 
 @Pipe({
     name: 'tdocdate'
@@ -55,6 +56,11 @@ export class TourDocDateFormatPipe implements PipeTransform {
                 case 'ROUTE':
                 case 'DESTINATION':
                 default:
+                    if (environment.tourDocDateFormatPipePattern && environment.tourDocDateFormatPipePattern === 'LONG') {
+                        pattern = 'dd.MM.yyyy';
+                        break;
+                    }
+
                     pattern = 'MMMM yyyy';
             }
         }

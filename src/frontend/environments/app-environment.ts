@@ -24,4 +24,5 @@ export interface AppEnvironment extends CommonEnvironment {
     availableDataModes?: DataMode[];
     staticPDocsFile?: string;
     staticTDocsFiles?: string[];
+    tourDocDateFormatPipePattern?: string;
 }

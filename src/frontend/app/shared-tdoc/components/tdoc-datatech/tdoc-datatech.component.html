@@ -6,6 +6,7 @@
             <div *ngIf="tdocdatatech.altMax > 0" class="entry"><div class="label">max:</div><div class="value">{{tdocdatatech.altMax | number : '1.0'}} m</div></div>
             <div *ngIf="tdocdatatech.altAsc > 0" class="entry"><div class="label">&#x2197;:</div><div class="value">{{tdocdatatech.altAsc | number : '1.0'}} Hm</div></div>
             <div *ngIf="tdocdatatech.sections !== undefined && tdocdatatech.sections.length > 0" class="entry"><div class="label">Etappen:</div><div class="value">{{tdocdatatech.sections}}</div></div>
+            <div *ngIf="record.dateshow !== undefined" class="entry"><div class="label">1. Beg.:</div><div class="value">{{record | tdocdate}}</div></div>
         </div>
     </ng-container>
     <ng-container *ngIf="flat">
@@ -15,6 +16,7 @@
             <div *ngIf="tdocdatatech.altMax > 0" class="entry"><div class="label">max:</div><div class="value">{{tdocdatatech.altMax | number : '1.0'}} m</div></div>
             <div *ngIf="tdocdatatech.altAsc > 0" class="entry"><div class="label">&#x2197;:</div><div class="value">{{tdocdatatech.altAsc | number : '1.0'}} Hm</div></div>
             <div *ngIf="tdocdatatech.sections !== undefined && tdocdatatech.sections.length > 0" class="entry"><div class="label">Etappen:</div><div class="value">{{tdocdatatech.sections}}</div></div>
+            <div *ngIf="record.dateshow !== undefined" class="entry"><div class="label">1. Beg.:</div><div class="value">{{record | tdocdate}}</div></div>
         </div>
     </ng-container>
 </ng-container>

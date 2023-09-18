@@ -38,5 +38,6 @@ export const environment: AppEnvironment = {
     hideInternalDescLinks: false,
     hideInternalImages: false,
     startDataMode: DataMode.BACKEND,
-    availableDataModes: [DataMode.BACKEND, DataMode.STATIC]
+    availableDataModes: [DataMode.BACKEND, DataMode.STATIC],
+    tourDocDateFormatPipePattern: 'LONG'
 };
