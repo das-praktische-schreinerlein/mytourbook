@@ -64,6 +64,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     private personsFound: StructuredKeywordState[] = [];
     private nameReplacementConfig: [RegExp, string][] = [];
     private possibleKeywords = [];
+    private blacklistedWords = [];
 
 
     public Layout = Layout;
@@ -193,7 +194,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 protected tourDocNameSuggesterService: TourDocNameSuggesterService,
                 protected tourDocDescSuggesterService: TourDocDescSuggesterService,
                 protected router: Router, protected geoParserService: GeoParserDeterminer) {
-    super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils, router);
+        super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils, router);
     }
 
     onInputChanged(value: any, field: string): boolean {
@@ -491,6 +492,14 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.possibleKeywords = possibleKeywords;
         }
 
+        this.blacklistedWords = [];
+        if (BeanUtils.getValue(config, 'components.tdoc-poi-select.blacklistedWords')) {
+            const blacklistedWords = [];
+            BeanUtils.getValue(config, 'components.tdoc-poi-select.blacklistedWords')
+                .forEach(keyword => blacklistedWords.push(keyword));
+            this.blacklistedWords = blacklistedWords;
+        }
+
         const defaultConfig: TourDocEditformComponentConfig = {
             editorCommands: editorCommands,
             suggestionConfigs: suggestionConfig,
@@ -775,25 +784,35 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected preparePoiFiltersForType(record: TourDocRecord): void {
-        const name = StringUtils.doReplacements(
-            FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), 'name'),
-            this.nameReplacementConfig);
-
         let poiSearchNames = [];
         ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(fieldName => {
             return FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), fieldName);
-        }).concat(name)
-            .filter(str => str !== undefined && str !== '')
-            .map(str => str.split(/ *-> *|[- ,;:\/]+/))
+        }).filter(str => str !== undefined && str !== '')
+            .map(str => {
+                const hierarchy =  str.split(/ *-> *|[ -,;:\/]+/);
+
+                return hierarchy.slice(Math.max(hierarchy.length - 3, 0));
+            })
             .forEach(strArr => {
                 strArr.forEach(value => poiSearchNames.push(value))
             });
 
-        // TODO remove keywords
+        const name = StringUtils.doReplacements(
+            FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), 'name'),
+            this.nameReplacementConfig);
+        [name]
+            .filter(str => str !== undefined && str !== '')
+            .map(str => {
+                return str.split(/ *-> *|[- ,;:\/]+/);
+            })
+            .forEach(strArr => {
+                strArr.forEach(value => poiSearchNames.push(value))
+            });
+
         poiSearchNames = StringUtils.uniqueKeywords(poiSearchNames.join(','))
             .filter(str => str.length > 2)
+            .filter(str => !this.blacklistedWords.includes(str))
             .filter(str => !this.possibleKeywords.includes(str));
-
 
         this.poiSearchNames = poiSearchNames;
 

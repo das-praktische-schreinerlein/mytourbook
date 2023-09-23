@@ -3444,13 +3444,13 @@
         "pdoc-create-resolver": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ]
         },
         "pdoc-page-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](pdoc/show/page/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -3467,13 +3467,13 @@
             ],
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ]
         },
         "tdoc-location-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -3483,7 +3483,7 @@
         "tdoc-news-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -3495,7 +3495,7 @@
         "tdoc-route-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -3505,7 +3505,7 @@
         "tdoc-track-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/route/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -3515,7 +3515,7 @@
         "tdoc-trip-desc-suggester": {
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", "$1"]
             ],
             "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
             "listItemsFallbackTemplate": "",
@@ -3525,9 +3525,15 @@
         "tdoc-poi-select": {
             "nameReplacements": [
                 ["\\d+", ""],
-                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", ""],
-                ["(mit | ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", ""]
-            ]
+                [" mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", " "],
+                [" (mit | ab |am |an |auf |bei |durch |im |in |nach |von |zur |zum )+", " "]
+            ],
+            "blacklistedWords": [
+                "das", "dem", "den", "der", "des", "dessen", "die", "diese", "dieser", "dieses",
+                "aber", "und",
+                "ab", "am", "an", "auf", "bei", "durch", "im", "in", "mit", "nach", "vom", "von", "zu", "zur", "zum",
+                "OFFEN", "Gebiet", "Gebiete",
+                "Begehung", "Klettern", "Sachsenklettern", "Wanderung"]
         }
     },
     "services": {

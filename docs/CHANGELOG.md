@@ -21,6 +21,7 @@
 - backend/frontend: add pois to statistics
 - frontend: added print/pdf-support
 - make tdoc-datepipe configurable
+- improved poi-search
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -42,6 +43,7 @@
 - removed legacy pdoc-editor
 - backend/frontend: add pois, route difficulty to statistics
 - make tdoc-datepipe configurable
+- improved poi-search
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create
