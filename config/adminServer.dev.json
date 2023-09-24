@@ -558,6 +558,34 @@
                     }
                 ]
             },
+            "PUBLISH Pages: exportPagesToSrc": {
+                "description": "export pages to src",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "pdocs",
+                            "exportDir": "./src/frontend/assets/",
+                            "profiles": "profile_static",
+                            "langkeys": "lang_de"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pageManager",
+                            "action": "exportPDocViewerFile",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "static.mytbpdocs",
+                            "exportDir": "./src/frontend/assets/staticdata/",
+                            "exportId": "assets/staticdata/static.mytbpdocs.js",
+                            "profiles": "profile_viewer",
+                            "langkeys": "lang_de"
+                        }
+                    }
+                ]
+            },
             "PUBLISH: dbPublish_beta_mysql": {
                 "description": "publish database mytbexportbetadb mysql",
                 "commands": [
