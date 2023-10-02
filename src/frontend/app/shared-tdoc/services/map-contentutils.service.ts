@@ -5,7 +5,7 @@ import {LatLng} from 'leaflet';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {ChartElement} from '../components/visjs-profilechart/visjs-profilechart.component';
 import {TrackColors} from '@dps/mycms-commons/dist/geo-commons/model/track-colors';
-import {MapDocRecord} from '../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 @Injectable()
 export class MapContentUtils {

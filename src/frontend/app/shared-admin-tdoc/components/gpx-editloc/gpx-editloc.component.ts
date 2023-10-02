@@ -5,7 +5,7 @@ import {FormBuilder} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {DOCUMENT} from '@angular/common';
-import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 @Component({
     selector: 'app-gpx-editloc',

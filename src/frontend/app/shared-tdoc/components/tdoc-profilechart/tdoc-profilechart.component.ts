@@ -5,7 +5,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {ChartElement} from '../visjs-profilechart/visjs-profilechart.component';
 import {MapContentUtils} from '../../services/map-contentutils.service';
-import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 @Component({
     selector: 'app-tdoc-profilechart',

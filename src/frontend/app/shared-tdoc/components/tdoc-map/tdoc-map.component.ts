@@ -6,7 +6,7 @@ import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {LatLng} from 'leaflet';
 import {MapContentUtils} from '../../services/map-contentutils.service';
 import {TrackColors} from '@dps/mycms-commons/dist/geo-commons/model/track-colors';
-import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 @Component({
     selector: 'app-tdoc-map',

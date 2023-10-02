@@ -28,7 +28,7 @@ import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/fron
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {Location} from '@angular/common';
 import {MapState, TourDocMapStateService} from '../../../shared-tdoc/services/tdoc-mapstate.service';
-import {MapDocRecord} from '../../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 export interface TourDocSearchpageComponentConfig extends CommonDocSearchpageComponentConfig {
 }

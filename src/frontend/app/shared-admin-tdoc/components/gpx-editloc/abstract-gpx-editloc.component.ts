@@ -9,7 +9,7 @@ import {LatLng, LeafletMouseEvent} from 'leaflet';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import {FormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/form.utils';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
-import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 // TODO move to commons
 export abstract class AbstractGpxEditLocComponent extends AbstractInlineComponent {

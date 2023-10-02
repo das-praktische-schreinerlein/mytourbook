@@ -56,7 +56,7 @@ import {
 } from './tdoclinkedplaylist-record';
 import {TourDocLinkedPoiRecord, TourDocLinkedPoiRecordFactory, TourDocLinkedPoiRecordValidator} from './tdoclinkedpoi-record';
 import {TourDocMediaMetaRecord, TourDocMediaMetaRecordFactory, TourDocMediaMetaRecordValidator} from './tdocmediameta-record';
-import {MapDocRecord} from '../../services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 export interface TourDocRecordType extends CommonDocRecordType, MapDocRecord {
     locId: number;

@@ -5,7 +5,7 @@ import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {MapContentUtils} from '../../services/map-contentutils.service';
-import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 @Component({
     selector: 'app-tdoc-profilemap',

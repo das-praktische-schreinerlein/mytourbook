@@ -8,7 +8,7 @@ import {GpsTrackValidationRule} from '@dps/mycms-commons/dist/search-commons/mod
 import {DOCUMENT} from '@angular/common';
 import {GeoParserDeterminer} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo-parser.determiner';
 import {AbstractGpxEditAreaComponent} from './abstract-gpx-editarea.component';
-import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapDocRecord} from '@dps/mycms-commons/dist/geo-commons/model/map-element.types';
 
 @Component({
     selector: 'app-gpx-editarea',
