@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {TourDocRecordFactory} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {AbstractGpxEditLocComponent} from './abstract-gpx-editloc.component';
 import {FormBuilder} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {DOCUMENT} from '@angular/common';
+import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 @Component({
     selector: 'app-gpx-editloc',
@@ -19,7 +19,7 @@ export class GpxEditLocComponent extends AbstractGpxEditLocComponent {
                 @Inject(DOCUMENT) document) {
         super(fb, toastr, cd, appService, document);
     }
-    protected createSanitized(values: {}): CommonDocRecord {
+    protected createSanitized(values: {}): MapDocRecord {
         return TourDocRecordFactory.createSanitized(values);
     }
 }

@@ -14,7 +14,7 @@ import {LatLng} from 'leaflet';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
 import {GeoParserDeterminer} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo-parser.determiner';
 import {DefaultTrackColors, TrackColors} from '@dps/mycms-commons/dist/geo-commons/model/track-colors';
-import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
+import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 // TODO move to commons
 export abstract class AbstractGpxEditAreaComponent extends AbstractInlineComponent {
@@ -27,7 +27,7 @@ export abstract class AbstractGpxEditAreaComponent extends AbstractInlineCompone
     private geoMap: L.Map;
 
     trackColors: TrackColors = new DefaultTrackColors();
-    editTrackRecords: CommonDocRecord[] = [];
+    editTrackRecords: MapDocRecord[] = [];
     renderedMapElements: MapElement[] = [];
     trackSegmentStatistics: TrackStatistic[] = [];
 
@@ -394,6 +394,6 @@ export abstract class AbstractGpxEditAreaComponent extends AbstractInlineCompone
     }
 
 
-    protected abstract createSanitized(values: {}): CommonDocRecord;
+    protected abstract createSanitized(values: {}): MapDocRecord;
 
 }

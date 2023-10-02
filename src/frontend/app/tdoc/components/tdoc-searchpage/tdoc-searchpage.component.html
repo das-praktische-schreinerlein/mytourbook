@@ -187,9 +187,9 @@
         <app-tdoc-map [mapId]="'searchMap' + (searchFormLayout === 0 ? 'small' : 'big')"
                       [height]="'300'"
                       [mapZoom]="mapState.mapZoom"
-                      [tdocs]="searchResult.currentRecords"
-                      [currentTDocId]="mapState.currentMapTDocId"
-                      (tdocClicked)="onMapTourDocClicked($event)"
+                      [docRecords]="searchResult.currentRecords"
+                      [currentDocId]="mapState.currentMapTDocId"
+                      (docClicked)="onMapTourDocClicked($event)"
                       (centerChanged)="onMapCenterChanged($event)"
                       (mapElementsFound)="onMapElementsFound($event)"
                       [mapCenterPos]="mapState.mapCenterPos"></app-tdoc-map>
@@ -210,13 +210,13 @@
         <app-tdoc-profilemap [mapId]="'showProfileMap'"
                              [height]="'300px'"
                              (mapElementsFound)="onProfileMapElementsFound($event)"
-                             [tdocs]="searchResult.currentRecords"></app-tdoc-profilemap>
+                             [docRecords]="searchResult.currentRecords"></app-tdoc-profilemap>
     </div>
     <div class="container map-container" *ngIf="mapState.flgShowProfileMap">
         <app-tdoc-profilechart [chartId]="'showProfileChart'"
                              [height]="'300px'"
                              (chartElementsFound)="onProfileMapElementsFound($event)"
-                             [tdocs]="searchResult.currentRecords"></app-tdoc-profilechart>
+                               [docRecords]="searchResult.currentRecords"></app-tdoc-profilechart>
     </div>
     <div class="container">
         <app-cdoc-typetable [searchResult]="searchResult" (columnClicked)="onTypeTableColumnClicked($event)"></app-cdoc-typetable>

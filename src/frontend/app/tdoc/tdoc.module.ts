@@ -31,6 +31,7 @@ import {CommonDocSearchFormUtils} from '@dps/mycms-frontend-commons/dist/fronten
 import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocRoutingService} from '../../shared/tdoc-commons/services/tdoc-routing.service';
 import {TourDocModalShowpageComponent} from './components/tdoc-showpage/tdoc-modal-showpage.component';
+import {MapContentUtils} from '../shared-tdoc/services/map-contentutils.service';
 
 @NgModule({
     declarations: [
@@ -71,7 +72,8 @@ import {TourDocModalShowpageComponent} from './components/tdoc-showpage/tdoc-mod
         PageUtils,
         TourDocLightBoxService,
         TourDocAlbumResolver,
-        LayoutService
+        LayoutService,
+        MapContentUtils
     ],
     exports: [
         TourDocSearchpageComponent

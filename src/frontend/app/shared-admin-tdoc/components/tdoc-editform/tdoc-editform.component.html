@@ -941,7 +941,7 @@
                           [height]="'400px'"
                           [mapZoom]="'9'"
                           [editable]="false"
-                          [tdocs]="poiGeoRecords.concat(trackRecords)"
+                          [docRecords]="poiGeoRecords.concat(trackRecords)"
                           *ngIf="poiGeoRecords && poiGeoRecords.length > 0"></app-tdoc-map>
             <ng-container *ngFor="let idx of joinIndexes['linkedPois']">
                 <ng-container *ngTemplateOutlet="inputLinkedPoi;context:{idx: idx, joinName: 'linkedPois'}"></ng-container>

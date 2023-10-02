@@ -68,15 +68,13 @@
                         <td [ngClass]="trackSegmentStatistics[idx].altAscVelocity > 800 || trackSegmentStatistics[idx].altDescVelocity > 1500 ? 'trackhint' : ''">&#x2197;{{trackSegmentStatistic.altAscVelocity }}&nbsp;&#x2198;{{trackSegmentStatistic.altDescVelocity }}&nbsp;m/h </td>
                         <td>
                             <button (click)="jumpToTrackSegment(idx)" class="btn btn-sm"
-                                    *ngIf="trackSegmentStatistics[idx].type === 'TRACK'"
                                     [ngClass]="trackSegmentStatistics[idx].duration  === 0 || trackSegmentStatistics[idx].velocity > 10 || trackSegmentStatistics[idx].altAscVelocity > 800 || trackSegmentStatistics[idx].altDescVelocity > 1500 ? 'btn-action' : ''">
                                 <span i18n="jumpToTrackSegment label|Label for button: jumpToTrackSegment@@label.editareaform.tdoc.jumpToTrackSegment">Focus</span>
                             </button>
                             <button (click)="deleteTrackSegment(idx)" class="btn btn-sm"
-                                    *ngIf="trackSegmentStatistics[idx].type === 'TRACK'"
                                     i18n="deleteTrackSegment label|Label for button: deleteTrackSegment@@label.editareaform.tdoc.deleteTrackSegment">Delete</button>
                             <button (click)="mergeTrackSegment(idx)" class="btn btn-sm"
-                                    *ngIf="idx > 0 && trackSegmentStatistics[idx].type === 'TRACK' && trackSegmentStatistics[idx].dateStart && trackSegmentStatistics[idx-1].dateEnd"
+                                    *ngIf="idx > 0 && trackSegmentStatistics[idx].dateStart && trackSegmentStatistics[idx-1].dateEnd"
                                     [ngClass]="(trackSegmentStatistics[idx].dateStart.getTime() - trackSegmentStatistics[idx-1].dateEnd.getTime()) < 10*60*1000 ? 'btn-action' : ''">
                                 <span i18n="mergeTrackSegment label|Label for button: mergeTrackSegment@@label.editareaform.tdoc.mergeTrackSegment">Merge</span>
                             </button>
@@ -96,7 +94,7 @@
                                   [height]="'400px'"
                                   [mapZoom]="'9'"
                                   [editable]="true"
-                                  [tdocs]="editTrackRecords"
+                                  [docRecords]="editTrackRecords"
                                   (mapCreated)="onGeoMapCreated($event)"
                                   (mapElementsFound)="setMapElementsRendered($event)"
                                   [trackColors]="trackColors"
@@ -107,7 +105,7 @@
                     <app-tdoc-profilemap [mapId]="'showProfileMap'"
                                          [height]="'400px'"
                                          [showImageTrackAndGeoPos]="'true'"
-                                         [tdocs]="editTrackRecords"></app-tdoc-profilemap>
+                                         [docRecords]="editTrackRecords"></app-tdoc-profilemap>
                 </div>
             </div>
         </div>

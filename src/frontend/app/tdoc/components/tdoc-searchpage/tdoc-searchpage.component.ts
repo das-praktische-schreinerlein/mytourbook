@@ -28,6 +28,7 @@ import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/fron
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {Location} from '@angular/common';
 import {MapState, TourDocMapStateService} from '../../../shared-tdoc/services/tdoc-mapstate.service';
+import {MapDocRecord} from '../../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 export interface TourDocSearchpageComponentConfig extends CommonDocSearchpageComponentConfig {
 }
@@ -66,7 +67,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
             tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment, location);
     }
 
-    onMapTourDocClicked(tdoc: TourDocRecord) {
+    onMapTourDocClicked(tdoc: MapDocRecord) {
         const me = this;
         me.router.navigate([{ outlets: { 'tdocmodalshow': ['tdocmodalshow', 'show', tdoc.type, tdoc.id] } }]).then(value => {});
 

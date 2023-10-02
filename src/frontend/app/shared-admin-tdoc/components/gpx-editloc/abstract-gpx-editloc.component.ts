@@ -9,7 +9,7 @@ import {LatLng, LeafletMouseEvent} from 'leaflet';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import {FormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/form.utils';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
-import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
+import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 // TODO move to commons
 export abstract class AbstractGpxEditLocComponent extends AbstractInlineComponent {
@@ -20,7 +20,7 @@ export abstract class AbstractGpxEditLocComponent extends AbstractInlineComponen
     private lastGpx = '';
     private lastGeoLoc = '';
     private lastName = '';
-    geoLocRecords: CommonDocRecord[] = [];
+    geoLocRecords: MapDocRecord[] = [];
 
     @Input()
     public name: string;
@@ -304,5 +304,5 @@ export abstract class AbstractGpxEditLocComponent extends AbstractInlineComponen
         return this.editGpxLocFormGroup.getRawValue()['geoLocAddress'];
     }
 
-    protected abstract createSanitized(values: {}): CommonDocRecord;
+    protected abstract createSanitized(values: {}): MapDocRecord;
 }

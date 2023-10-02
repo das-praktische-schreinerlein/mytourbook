@@ -22,6 +22,7 @@
 - frontend: added print/pdf-support
 - make tdoc-datepipe configurable
 - improved poi-search
+- frontend: make map-components generic
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -44,6 +45,7 @@
 - backend/frontend: add pois, route difficulty to statistics
 - make tdoc-datepipe configurable
 - improved poi-search
+- frontend: make map-components generic
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create

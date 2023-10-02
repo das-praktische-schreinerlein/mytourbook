@@ -140,8 +140,8 @@
             <app-tdoc-map [mapId]="'showMap'"
                           [height]="'400px'"
                           [mapZoom]="'9'"
-                          [tdocs]="tracks"
-                          [currentTDocId]="currentMapTDocId"
+                          [docRecords]="tracks"
+                          [currentDocId]="currentMapTDocId"
                           [showImageTrackAndGeoPos]="false"
                           [mapCenterPos]="undefined"></app-tdoc-map>
             <div class="container profile-toggler-container">
@@ -157,7 +157,7 @@
             <app-tdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
-                                 [tdocs]="tracks"></app-tdoc-profilemap>
+                                 [docRecords]="tracks"></app-tdoc-profilemap>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right"
                         (click)="mapState.flgShowProfileMap = false"
@@ -171,7 +171,7 @@
             <app-tdoc-profilechart [chartId]="'showProfileChart'"
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
-                                 [tdocs]="tracks"></app-tdoc-profilechart>
+                                   [docRecords]="tracks"></app-tdoc-profilechart>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right"
                         (click)="mapState.flgShowProfileMap = false"

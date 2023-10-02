@@ -10,7 +10,7 @@ import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
-import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
+import {MapContentUtils} from '../../services/map-contentutils.service';
 
 describe('TourDocProfileChartComponent', () => {
     let component: TourDocProfileChartComponent;
@@ -26,7 +26,7 @@ describe('TourDocProfileChartComponent', () => {
                 PlatformService,
                 CommonRoutingService,
                 CommonDocRoutingService,
-                TourDocContentUtils,
+                MapContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ]
         })

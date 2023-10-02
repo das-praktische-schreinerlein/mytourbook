@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
-import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
-import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {LatLng} from 'leaflet';
-import {TrackColors} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
+import {MapContentUtils} from '../../services/map-contentutils.service';
+import {TrackColors} from '@dps/mycms-commons/dist/geo-commons/model/track-colors';
+import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 @Component({
     selector: 'app-tdoc-map',
@@ -17,7 +17,7 @@ export class TourDocMapComponent extends AbstractInlineComponent {
     showLoadingSpinner = false;
     mapElements: MapElement[] = [];
     centerOnMapElements: MapElement[] = undefined;
-    mapElementsReverseMap = new Map<MapElement, TourDocRecord>();
+    mapElementsReverseMap = new Map<MapElement, MapDocRecord>();
 
     @Input()
     public mapId: string;
@@ -26,10 +26,10 @@ export class TourDocMapComponent extends AbstractInlineComponent {
     public height: string;
 
     @Input()
-    public tdocs: TourDocRecord[];
+    public docRecords: MapDocRecord[];
 
     @Input()
-    public currentTDocId?: string;
+    public currentDocId?: string;
 
     @Input()
     public mapCenterPos: LatLng;
@@ -53,18 +53,18 @@ export class TourDocMapComponent extends AbstractInlineComponent {
     public centerChanged: EventEmitter<LatLng> = new EventEmitter();
 
     @Output()
-    public tdocClicked: EventEmitter<TourDocRecord> = new EventEmitter();
+    public docClicked: EventEmitter<MapDocRecord> = new EventEmitter();
 
     @Output()
     public mapElementsFound: EventEmitter<MapElement[]> = new EventEmitter();
 
-    constructor(private contentUtils: TourDocContentUtils, protected cd: ChangeDetectorRef,
+    constructor(private contentUtils: MapContentUtils, protected cd: ChangeDetectorRef,
                 private platformService: PlatformService) {
         super(cd);
     }
 
     onTrackClicked(mapElement: MapElement) {
-        this.tdocClicked.emit(this.mapElementsReverseMap.get(mapElement));
+        this.docClicked.emit(this.mapElementsReverseMap.get(mapElement));
     }
 
     onMapElementsLoaded(mapElements: MapElement[]) {
@@ -79,19 +79,19 @@ export class TourDocMapComponent extends AbstractInlineComponent {
     renderMap() {
         this.mapElementsReverseMap.clear();
         this.centerOnMapElements = undefined;
-        if (!this.tdocs) {
+        if (!this.docRecords) {
             this.mapElements = [];
             this.showLoadingSpinner = false;
             return;
         }
 
-        this.showLoadingSpinner = (this.tdocs.length > 0);
-        for (let i = 0; i < this.tdocs.length; i++) {
-            const record =  this.tdocs[i];
+        this.showLoadingSpinner = (this.docRecords.length > 0);
+        for (let i = 0; i < this.docRecords.length; i++) {
+            const record =  this.docRecords[i];
 
-            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record,
+            for (const mapElement of this.contentUtils.createMapElementForDocRecord(record,
                     StringUtils.calcCharCodeForListIndex(i + 1), this.showImageTrackAndGeoPos, this.trackColors)) {
-                if (record.id === this.currentTDocId) {
+                if (record.id === this.currentDocId) {
                     mapElement.color = 'red';
                     this.centerOnMapElements = [mapElement];
                 }

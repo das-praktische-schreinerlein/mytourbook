@@ -7,8 +7,8 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
 import {GpsTrackValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {DOCUMENT} from '@angular/common';
 import {GeoParserDeterminer} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo-parser.determiner';
-import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {AbstractGpxEditAreaComponent} from './abstract-gpx-editarea.component';
+import {MapDocRecord} from '../../../../shared/tdoc-commons/services/tdoc-data.utils';
 
 @Component({
     selector: 'app-gpx-editarea',
@@ -24,7 +24,7 @@ export class GpxEditAreaComponent extends AbstractGpxEditAreaComponent {
             (<GpsTrackValidationRule>TourDocRecord.tdocFields.gpsTrackSrc.validator).getMaxLength());
     }
 
-    protected createSanitized(values: {}): CommonDocRecord {
+    protected createSanitized(values: {}): MapDocRecord {
         return TourDocRecordFactory.createSanitized(values);
     }
 }

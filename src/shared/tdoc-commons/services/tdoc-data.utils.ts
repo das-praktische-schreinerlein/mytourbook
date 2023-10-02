@@ -1,18 +1,14 @@
 import {TourDocRecord} from '../model/records/tdoc-record';
-import {Circular, HierarchyConfig, HierarchyUtils} from '@dps/mycms-commons/dist/commons/utils/hierarchy.utils';
+import {HierarchyConfig, HierarchyUtils} from '@dps/mycms-commons/dist/commons/utils/hierarchy.utils';
 
-export class TrackColors extends Circular {
-    constructor(arr: string[], startIndex?: number) {
-        super(arr, startIndex);
-    }
-}
-
-export class DefaultTrackColors extends TrackColors {
-    protected static colors = ['blue', 'green', 'red', 'yellow', 'darkgreen'];
-
-    constructor(startIndex?: number) {
-        super(DefaultTrackColors.colors, startIndex);
-    }
+export interface MapDocRecord {
+    gpsTrackBasefile: string;
+    gpsTrackSrc: string;
+    type: string;
+    geoLat: string;
+    geoLon: string;
+    name: string,
+    id: string;
 }
 
 export class TourDocDataUtils {

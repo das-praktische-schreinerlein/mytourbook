@@ -67,7 +67,7 @@
                     <app-tdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
                                   [height]="'150'"
                                   [mapZoom]="'9'"
-                                  [tdocs]="[listItem.currentRecord]"
+                                  [docRecords]="[listItem.currentRecord]"
                                   [mapCenterPos]="undefined"></app-tdoc-map>
                 </ng-template>
             </ngb-panel>
@@ -191,7 +191,7 @@
                         <app-tdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
                                       [height]="'150'"
                                       [mapZoom]="'9'"
-                                      [tdocs]="[listItem.currentRecord]"
+                                      [docRecords]="[listItem.currentRecord]"
                                       [mapCenterPos]="undefined"></app-tdoc-map>
                     </ng-template>
                 </ngb-panel>
