@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {TourDocEditformComponent} from './components/tdoc-editform/tdoc-editform.component';
 import {AngularMapsModule} from '@dps/mycms-frontend-commons/dist/angular-maps/angular-maps.module';
+import {AngularMapsAdminModule} from '@dps/mycms-frontend-commons/dist/angular-maps-admin/angular-maps-admin.module';
 import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -12,11 +13,9 @@ import {ToastrModule} from 'ngx-toastr';
 import {LightboxModule} from 'ngx-lightbox';
 import {FileDropModule} from 'ngx-file-drop';
 import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
-import {GpxEditAreaComponent} from './components/gpx-editarea/gpx-editarea.component';
 import {TourDocReplaceFormComponent} from './components/tdoc-replaceform/tdoc-replaceform.component';
 import {TourDocAssignFormComponent} from './components/tdoc-assignform/tdoc-assignform.component';
 import {RouterModule} from '@angular/router';
-import {GpxEditLocComponent} from './components/gpx-editloc/gpx-editloc.component';
 import {TourDocSelectSearchComponent} from './components/tdoc-selectsearch/tdoc-selectsearch.component';
 import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor.component';
 import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
@@ -28,12 +27,10 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
     declarations: [
         TourDocEditformComponent,
         TourDocObjectDetectionObjectKeyEditFormComponent,
-        GpxEditAreaComponent,
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
         TourDocAssignJoinFormComponent,
         TourDocAssignPlaylistFormComponent,
-        GpxEditLocComponent,
         TourDocSelectSearchComponent,
         OdImageEditorComponent
     ],
@@ -49,6 +46,7 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
         HttpClientModule,
         AngularCommonsModule,
         AngularMapsModule,
+        AngularMapsAdminModule,
         FrontendCommonDocCommonsModule,
         LightboxModule,
         RouterModule,
@@ -57,12 +55,10 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
     exports: [
         TourDocEditformComponent,
         TourDocObjectDetectionObjectKeyEditFormComponent,
-        GpxEditAreaComponent,
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
         TourDocAssignJoinFormComponent,
         TourDocAssignPlaylistFormComponent,
-        GpxEditLocComponent,
         TourDocSelectSearchComponent,
         OdImageEditorComponent
     ]

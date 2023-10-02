@@ -27,7 +27,7 @@ import {TourDocNameSuggesterService} from '../../services/tdoc-name-suggester.se
 import {TourDocDescSuggesterService} from '../../services/tdoc-desc-suggester.service';
 import {Router} from '@angular/router';
 import {LatLngTime} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
-import {GpxEditAreaComponent} from '../gpx-editarea/gpx-editarea.component';
+import {GpxEditAreaComponent} from '@dps/mycms-frontend-commons/dist/angular-maps-admin/compontents/gpx-editarea/gpx-editarea.component';
 import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocJoinUtils} from '../../../shared-tdoc/services/tdoc-join.utils';
 import {FormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/form.utils';
