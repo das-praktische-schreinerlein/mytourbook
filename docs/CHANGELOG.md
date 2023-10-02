@@ -23,6 +23,7 @@
 - make tdoc-datepipe configurable
 - improved poi-search
 - frontend: make map-components generic
+- frontend: make imageobject-components generic
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -46,6 +47,7 @@
 - make tdoc-datepipe configurable
 - improved poi-search
 - frontend: make map-components generic
+- frontend: make imageobject-components generic
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create

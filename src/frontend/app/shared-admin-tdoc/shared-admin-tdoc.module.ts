@@ -17,7 +17,6 @@ import {TourDocReplaceFormComponent} from './components/tdoc-replaceform/tdoc-re
 import {TourDocAssignFormComponent} from './components/tdoc-assignform/tdoc-assignform.component';
 import {RouterModule} from '@angular/router';
 import {TourDocSelectSearchComponent} from './components/tdoc-selectsearch/tdoc-selectsearch.component';
-import {OdImageEditorComponent} from './components/odimage-editor/odimage-editor.component';
 import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
 import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 import {TourDocObjectDetectionObjectKeyEditFormComponent} from './components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
@@ -31,8 +30,7 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
         TourDocAssignFormComponent,
         TourDocAssignJoinFormComponent,
         TourDocAssignPlaylistFormComponent,
-        TourDocSelectSearchComponent,
-        OdImageEditorComponent
+        TourDocSelectSearchComponent
     ],
     imports: [
         SharedTourDocModule,
@@ -59,8 +57,7 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
         TourDocAssignFormComponent,
         TourDocAssignJoinFormComponent,
         TourDocAssignPlaylistFormComponent,
-        TourDocSelectSearchComponent,
-        OdImageEditorComponent
+        TourDocSelectSearchComponent
     ]
 })
 export class SharedAdminTourDocModule {}

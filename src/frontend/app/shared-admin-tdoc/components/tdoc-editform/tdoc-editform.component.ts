@@ -43,7 +43,7 @@ import {
     CommonDocEditorCommandComponentConfig
 } from '@dps/mycms-frontend-commons/dist/angular-commons/components/text-editor/text-editor.component';
 import {SafeUrl} from '@angular/platform-browser';
-import {OdImageEditorComponent} from '../odimage-editor/odimage-editor.component';
+import {OdImageEditorComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/odimage-editor/odimage-editor.component';
 import {AbstractGeoGpxParser} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.parser';
 import {GeoParserDeterminer} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo-parser.determiner';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
