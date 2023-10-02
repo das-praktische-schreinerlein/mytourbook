@@ -78,7 +78,7 @@
 
 <ng-template #mapContainer let-searchFormLayout=searchFormLayout>
     <div [class]="('container map-container container-fullline')" *ngIf="mapState.flgShowMap">
-        <app-tdoc-map [mapId]="(htmlId ? htmlId : '') + 'searchMap' + (searchFormLayout === 0 ? 'small' : 'big')"
+        <app-mapdoc-map [mapId]="(htmlId ? htmlId : '') + 'searchMap' + (searchFormLayout === 0 ? 'small' : 'big')"
                       [height]="'300'"
                       [mapZoom]="mapState.mapZoom"
                       [docRecords]="searchResult.currentRecords"
@@ -86,7 +86,7 @@
                       (docClicked)="onMapTourDocClicked($event)"
                       (centerChanged)="onMapCenterChanged($event)"
                       (mapElementsFound)="onMapElementsFound($event)"
-                      [mapCenterPos]="mapState.mapCenterPos"></app-tdoc-map>
+                      [mapCenterPos]="mapState.mapCenterPos"></app-mapdoc-map>
     </div>
     <div class="container containter profile-toggler-container" *ngIf="mapState.flgShowMap">
         <button class="btn btn-action btn-sm right" (click)="mapState.flgShowProfileMap = true"
@@ -99,16 +99,16 @@
             <span class="btn-action-icon">&#x21D1;</span></button>
     </div>
     <div class="container map-container" *ngIf="mapState.flgShowProfileMap">
-        <app-tdoc-profilemap [mapId]="'showProfileMap'"
+        <app-mapdoc-profilemap [mapId]="'showProfileMap'"
                              [height]="'300px'"
                              (mapElementsFound)="onProfileMapElementsFound($event)"
-                             [docRecords]="searchResult.currentRecords"></app-tdoc-profilemap>
+                             [docRecords]="searchResult.currentRecords"></app-mapdoc-profilemap>
     </div>
     <div class="container map-container" *ngIf="mapState.flgShowProfileMap">
-        <app-tdoc-profilechart [chartId]="'showProfileChart'"
+        <app-mapdoc-profilechart [chartId]="'showProfileChart'"
                                [height]="'300px'"
                                (chartElementsFound)="onProfileMapElementsFound($event)"
-                               [docRecords]="searchResult.currentRecords"></app-tdoc-profilechart>
+                               [docRecords]="searchResult.currentRecords"></app-mapdoc-profilechart>
     </div>
 </ng-template>
 

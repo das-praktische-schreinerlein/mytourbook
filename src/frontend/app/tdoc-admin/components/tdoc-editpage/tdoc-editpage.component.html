@@ -29,12 +29,12 @@
     </div>
 
     <div class="container content-container" *ngIf="tracks !== undefined && tracks.length > 0">
-        <app-tdoc-map [mapId]="'showMap'"
+        <app-mapdoc-map [mapId]="'showMap'"
                       [height]="'400px'"
                       [mapZoom]="'9'"
                       [docRecords]="tracks"
                       [showImageTrackAndGeoPos]="'true'"
-                      [mapCenterPos]="undefined"></app-tdoc-map>
+                      [mapCenterPos]="undefined"></app-mapdoc-map>
     </div>
 
     <div class="container content-container" *ngIf="flgTopImagesAvailable">
@@ -53,10 +53,10 @@
     </div>
 
     <div class="container content-container" *ngIf="record.gpsTrackBasefile">
-        <app-tdoc-profilemap [mapId]="'showProfileMap'"
+        <app-mapdoc-profilemap [mapId]="'showProfileMap'"
                              [height]="'400px'"
                              [showImageTrackAndGeoPos]="'true'"
-                             [docRecords]="[record]"></app-tdoc-profilemap>
+                             [docRecords]="[record]"></app-mapdoc-profilemap>
     </div>
 
     <div class="container content-container">

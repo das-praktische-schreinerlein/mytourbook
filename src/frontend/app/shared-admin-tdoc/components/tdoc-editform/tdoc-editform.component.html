@@ -937,12 +937,12 @@
 
     <ng-template #inputPoiList>
         <div class="container">
-            <app-tdoc-map [mapId]="'showPoiMap'"
+            <app-mapdoc-map [mapId]="'showPoiMap'"
                           [height]="'400px'"
                           [mapZoom]="'9'"
                           [editable]="false"
                           [docRecords]="poiGeoRecords.concat(trackRecords)"
-                          *ngIf="poiGeoRecords && poiGeoRecords.length > 0"></app-tdoc-map>
+                          *ngIf="poiGeoRecords && poiGeoRecords.length > 0"></app-mapdoc-map>
             <ng-container *ngFor="let idx of joinIndexes['linkedPois']">
                 <ng-container *ngTemplateOutlet="inputLinkedPoi;context:{idx: idx, joinName: 'linkedPois'}"></ng-container>
             </ng-container>

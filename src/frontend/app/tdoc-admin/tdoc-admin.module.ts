@@ -33,6 +33,7 @@ import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/servic
 import {GeoGpxUtils} from '@dps/mycms-commons/dist/geo-commons/services/geogpx.utils';
 import {GeoTxtParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geotxt.parser';
 import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geojson.parser';
+import {AngularMapsModule} from '@dps/mycms-frontend-commons/dist/angular-maps/angular-maps.module';
 
 @NgModule({
     declarations: [
@@ -46,6 +47,7 @@ import {GeoJsonParser} from '@dps/mycms-frontend-commons/dist/angular-maps/servi
         ToastrModule,
         HttpClientModule,
         AngularCommonsModule,
+        AngularMapsModule,
         SharedTourDocModule,
         SharedAdminTourDocModule,
         TourDocAdminRoutingModule,

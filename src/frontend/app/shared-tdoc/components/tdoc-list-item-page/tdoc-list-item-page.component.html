@@ -13,19 +13,19 @@
 
     <div *ngIf="listItem.currentRecord !== undefined">
         <div [class]="('container content-container map-container ' + (!listItem.flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="listItem.flgShowMap">
-            <app-tdoc-map [mapId]="'listItemMapPage' + listItem.currentRecord.id"
+            <app-mapdoc-map [mapId]="'listItemMapPage' + listItem.currentRecord.id"
                           [height]="'400px'"
                           [mapZoom]="'9'"
                           [docRecords]="listItem.tracks"
                           [showImageTrackAndGeoPos]="'true'"
-                          [mapCenterPos]="undefined"></app-tdoc-map>
+                          [mapCenterPos]="undefined"></app-mapdoc-map>
         </div>
 
         <div class="container content-container map-container" *ngIf="listItem.flgShowProfileMap">
-            <app-tdoc-profilemap [mapId]="'showProfileMap'"
+            <app-mapdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'400px'"
                                  [showImageTrackAndGeoPos]="'true'"
-                                 [docRecords]="listItem.tracks"></app-tdoc-profilemap>
+                                 [docRecords]="listItem.tracks"></app-mapdoc-profilemap>
         </div>
     </div>
 </ng-container>

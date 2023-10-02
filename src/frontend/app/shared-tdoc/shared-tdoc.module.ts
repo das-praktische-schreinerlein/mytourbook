@@ -16,8 +16,6 @@ import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {NgbAccordionModule, NgbRatingModule, NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from 'ngx-toastr';
 import {LightboxModule} from 'ngx-lightbox';
-import {TourDocProfileMapComponent} from './components/tdoc-profilemap/tdoc-profilemap.component';
-import {TourDocMapComponent} from './components/tdoc-map/tdoc-map.component';
 import {TourDocLinkedLocHierarchyComponent} from './components/tdoc-linked-loc-hierarchy/tdoc-linked-loc-hierarchy.component';
 import {TourDocRateTechComponent} from './components/tdoc-ratetech/tdoc-ratetech.component';
 import {TourDocDataTechComponent} from './components/tdoc-datatech/tdoc-datatech.component';
@@ -43,8 +41,6 @@ import {TourDocMapCodePipe} from './pipes/tdoc-mapcode.pipe';
 import {TourDocDashboardSearchColumnComponent} from './components/tdoc-dashboard-searchcolumn/tdoc-dashboard-searchcolumn.component';
 import {TourDocKeywordTagFormComponent} from './components/tdoc-keywordtagform/tdoc-keywordtagform.component';
 import {TourDocSimpleSearchNavigationComponent} from './components/tdoc-simple-search-navigation/tdoc-simple-search-navigation.component';
-import {VisJsProfileChartComponent} from './components/visjs-profilechart/visjs-profilechart.component';
-import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-profilechart.component';
 import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
 import {TourDocRouteAttributeComponent} from './components/tdoc-routeattr/tdoc-routeattr.component';
 import {TourDocLinkedRoutesComponent} from './components/tdoc-linked-routes/tdoc-linked-routes.component';
@@ -63,8 +59,6 @@ import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-lin
         TourDocListItemPageComponent,
         TourDocSearchformComponent,
         TourDocInlineSearchpageComponent,
-        TourDocMapComponent,
-        TourDocProfileMapComponent,
         TourDocInlineSearchpageComponent,
         TourDocLinkedLocHierarchyComponent,
         TourDocDataTechComponent,
@@ -87,8 +81,6 @@ import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-lin
         TourDocDashboardSearchColumnComponent,
         TourDocKeywordTagFormComponent,
         TourDocSimpleSearchNavigationComponent,
-        VisJsProfileChartComponent,
-        TourDocProfileChartComponent,
         TourDocInfoComponent,
         TourDocRouteAttributeComponent,
         TourDocLinkedRoutesComponent,
@@ -124,8 +116,6 @@ import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-lin
         TourDocListItemPageComponent,
         TourDocSearchformComponent,
         TourDocInlineSearchpageComponent,
-        TourDocMapComponent,
-        TourDocProfileMapComponent,
         TourDocInlineSearchpageComponent,
         TourDocLinkedLocHierarchyComponent,
         TourDocDataTechComponent,
@@ -148,8 +138,6 @@ import {TourDocLinkedPoisComponent} from './components/tdoc-linked-pois/tdoc-lin
         TourDocDashboardSearchColumnComponent,
         TourDocKeywordTagFormComponent,
         TourDocSimpleSearchNavigationComponent,
-        VisJsProfileChartComponent,
-        TourDocProfileChartComponent,
         TourDocInfoComponent,
         TourDocRouteAttributeComponent,
         TourDocLinkedRoutesComponent,

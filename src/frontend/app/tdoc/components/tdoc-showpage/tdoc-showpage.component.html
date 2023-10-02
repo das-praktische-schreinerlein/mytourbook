@@ -137,13 +137,13 @@
     <div>
         <div [class]="('container content-container map-container container-fullline')"
              *ngIf="mapState.flgShowMap">
-            <app-tdoc-map [mapId]="'showMap'"
+            <app-mapdoc-map [mapId]="'showMap'"
                           [height]="'400px'"
                           [mapZoom]="'9'"
                           [docRecords]="tracks"
                           [currentDocId]="currentMapTDocId"
                           [showImageTrackAndGeoPos]="false"
-                          [mapCenterPos]="undefined"></app-tdoc-map>
+                          [mapCenterPos]="undefined"></app-mapdoc-map>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right"
                         (click)="mapState.flgShowProfileMap = true"
@@ -154,10 +154,10 @@
         </div>
 
         <div class="container content-container map-container" *ngIf="mapState.flgShowProfileMap">
-            <app-tdoc-profilemap [mapId]="'showProfileMap'"
+            <app-mapdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
-                                 [docRecords]="tracks"></app-tdoc-profilemap>
+                                 [docRecords]="tracks"></app-mapdoc-profilemap>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right"
                         (click)="mapState.flgShowProfileMap = false"
@@ -168,10 +168,10 @@
         </div>
         <div class="container content-container map-container"
              *ngIf="mapState.flgShowProfileMap">
-            <app-tdoc-profilechart [chartId]="'showProfileChart'"
+            <app-mapdoc-profilechart [chartId]="'showProfileChart'"
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
-                                   [docRecords]="tracks"></app-tdoc-profilechart>
+                                   [docRecords]="tracks"></app-mapdoc-profilechart>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right"
                         (click)="mapState.flgShowProfileMap = false"

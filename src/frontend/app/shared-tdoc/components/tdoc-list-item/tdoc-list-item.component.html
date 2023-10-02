@@ -64,11 +64,11 @@
         <ngb-accordion #acc="ngbAccordion" activeIds="">
             <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
                 <ng-template ngbPanelContent>
-                    <app-tdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
+                    <app-mapdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
                                   [height]="'150'"
                                   [mapZoom]="'9'"
                                   [docRecords]="[listItem.currentRecord]"
-                                  [mapCenterPos]="undefined"></app-tdoc-map>
+                                  [mapCenterPos]="undefined"></app-mapdoc-map>
                 </ng-template>
             </ngb-panel>
             <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.tdoc.title">
@@ -188,11 +188,11 @@
                 </ngb-panel>
                 <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
                     <ng-template ngbPanelContent>
-                        <app-tdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
+                        <app-mapdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
                                       [height]="'150'"
                                       [mapZoom]="'9'"
                                       [docRecords]="[listItem.currentRecord]"
-                                      [mapCenterPos]="undefined"></app-tdoc-map>
+                                      [mapCenterPos]="undefined"></app-mapdoc-map>
                     </ng-template>
                 </ngb-panel>
             </ngb-accordion>

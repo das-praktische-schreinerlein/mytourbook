@@ -37,12 +37,12 @@
         </div>
         <div class="col-sm-6" *ngIf="geoLocRecords.length > 0">
             <div class="container content-container">
-                <app-tdoc-map [mapId]="'showGeoPosMap'"
+                <app-mapdoc-map [mapId]="'showGeoPosMap'"
                               [height]="'400px'"
                               [mapZoom]="'9'"
                               [editable]="true"
                               (mapCreated)="onGeoLocMapCreated($event)"
-                              [docRecords]="geoLocRecords"></app-tdoc-map>
+                              [docRecords]="geoLocRecords"></app-mapdoc-map>
             </div>
         </div>
     </div>
