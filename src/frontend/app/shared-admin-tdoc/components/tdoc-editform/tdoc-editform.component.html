@@ -50,8 +50,10 @@
         <fieldset>
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputName"></ng-container>
                 <ng-container *ngTemplateOutlet="inputLoctype"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputLocationParent"></ng-container>
@@ -90,15 +92,15 @@
         <fieldset>
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
+                <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+            </div>
+            <div class="row">
                 <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                <ng-container *ngTemplateOutlet="inputDateStart;context:{recommend: formatInputDate(trackStatistic.dateStart)}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputDateEnd;context:{recommend: formatInputDate(trackStatistic.dateEnd)}"></ng-container>
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
             </div>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
                 <ng-container *ngTemplateOutlet="inputTrip"></ng-container>
             </div>
             <div class="row">
@@ -115,31 +117,38 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataTime label|Label for fieldset: dataTech@@label.editform.tdoc.legend.dataTime">&#x231a; Zeiten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDateStart;context:{recommend: formatInputDate(trackStatistic.dateStart)}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateEnd;context:{recommend: formatInputDate(trackStatistic.dateEnd)}"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
             <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.tdoc.legend.dataTech">&#x231a; technische Daten</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist, step: '0.1', min: 0}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMax', formControlName: 'tdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altAsc', formControlName: 'tdocdatatech_altAsc', recommend: trackStatistic.altAsc, min: 0}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist, step: '0.1', min: 0, required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMin', formControlName: 'tdocdatatech_altMin', recommend: trackStatistic.altMin}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMax', formControlName: 'tdocdatatech_altMax', recommend: trackStatistic.altMax, required: true}"></ng-container>
             </div>
             <div class="row">
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altAsc', formControlName: 'tdocdatatech_altAsc', recommend: trackStatistic.altAsc, min: 0, required: true}"></ng-container>
                 <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altDesc', formControlName: 'tdocdatatech_altDesc', recommend: trackStatistic.altDesc, min: 0}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMin', formControlName: 'tdocdatatech_altMin', recommend: trackStatistic.altMin}"></ng-container>
             </div>
         </fieldset>
         <fieldset>
             <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt', formControlName: 'tdocratepers_gesamt'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt', formControlName: 'tdocratepers_gesamt', required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive', required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit', required: true}"></ng-container>
                 <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.bildung', formControlName: 'tdocratepers_bildung'}"></ng-container>
             </div>
         </fieldset>
         <fieldset>
             <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.tdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.schwierigkeit', formControlName: 'tdocratepers_schwierigkeit'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.ausdauer', formControlName: 'tdocratepers_ausdauer'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.schwierigkeit', formControlName: 'tdocratepers_schwierigkeit', required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.ausdauer', formControlName: 'tdocratepers_ausdauer', required: true}"></ng-container>
                 <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.kraft', formControlName: 'tdocratepers_kraft'}"></ng-container>
                 <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.mental', formControlName: 'tdocratepers_mental'}"></ng-container>
             </div>
@@ -185,6 +194,8 @@
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputName"></ng-container>
+            </div>
+            <div class="row">
                 <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
             </div>
             <div class="row">
@@ -218,6 +229,8 @@
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputName"></ng-container>
+            </div>
+            <div class="row">
                 <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
             </div>
             <div class="row">
@@ -250,8 +263,10 @@
         <fieldset>
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputName"></ng-container>
                 <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
@@ -263,26 +278,28 @@
         <fieldset>
             <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.tdoc.legend.dataTech">&#x231a; technische Daten</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist, step: '0.1', min: 0}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMax', formControlName: 'tdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altAsc', formControlName: 'tdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
-                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dur', formControlName: 'tdocdatatech_dur', recommend: trackStatistic.duration, step: '0.1'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist, step: '0.1', min: 0, required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dur', formControlName: 'tdocdatatech_dur', recommend: trackStatistic.duration, step: '0.1', required: true}"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMax', formControlName: 'tdocdatatech_altMax', recommend: trackStatistic.altMax, required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altAsc', formControlName: 'tdocdatatech_altAsc', recommend: trackStatistic.altAsc, required: true}"></ng-container>
             </div>
         </fieldset>
         <fieldset>
             <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt', formControlName: 'tdocratepers_gesamt'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt', formControlName: 'tdocratepers_gesamt', required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive', required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit', required: true}"></ng-container>
                 <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.bildung', formControlName: 'tdocratepers_bildung'}"></ng-container>
             </div>
         </fieldset>
         <fieldset>
             <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.tdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.schwierigkeit', formControlName: 'tdocratepers_schwierigkeit'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.ausdauer', formControlName: 'tdocratepers_ausdauer'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.schwierigkeit', formControlName: 'tdocratepers_schwierigkeit', required: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.ausdauer', formControlName: 'tdocratepers_ausdauer', required: true}"></ng-container>
                 <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.kraft', formControlName: 'tdocratepers_kraft'}"></ng-container>
                 <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.mental', formControlName: 'tdocratepers_mental'}"></ng-container>
             </div>
@@ -362,6 +379,8 @@
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputName"></ng-container>
+            </div>
+            <div class="row">
                 <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
                 <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
             </div>
@@ -380,6 +399,8 @@
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputName"></ng-container>
+            </div>
+            <div class="row">
                 <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
             </div>
             <div class="row">
@@ -397,8 +418,10 @@
         <fieldset>
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputName"></ng-container>
                 <ng-container *ngTemplateOutlet="inputInfotype"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
@@ -445,8 +468,10 @@
         <fieldset>
             <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputName"></ng-container>
                 <ng-container *ngTemplateOutlet="inputPoitype"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
@@ -516,7 +541,7 @@
     </ng-template>
 
     <ng-template #inputName>
-        <div class="col-sm-6 form-inline input-group input-group-sm">
+        <div class="col-sm-12 form-inline input-group input-group-sm dps-form-required">
             <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.tdoc.name">Name:</label>
             <input formControlName="name"
                    required="required"
@@ -525,12 +550,12 @@
                    placeholder="name"
                    i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.tdoc.name"
                    (ngModelChange)="onInputChanged($event, 'name')">
-            <span class="" (click)="recommendName()">&#x27F8; Generate</span>
+            <span class="dps-recommend" (click)="recommendName()">&#x27F8; Generate</span>
         </div>
     </ng-template>
 
     <ng-template #inputDateShow>
-        <div class="col-sm-4 form-inline input-group input-group-sm">
+        <div class="col-sm-6 form-inline input-group input-group-sm dps-form-required">
             <label class="col-xs-3 col-form-label mr-2" i18n="dateshow label|Label for field: dateshow@@label.editform.tdoc.dateshow">Anzeigedatum:</label>
             <input formControlName="dateshow"
                    required="required"
@@ -542,20 +567,20 @@
     </ng-template>
 
     <ng-template #inputDateStart let-recommend=recommend>
-        <div class="col-sm-3 form-inline input-group input-group-sm">
+        <div class="col-sm-6 form-inline input-group input-group-sm dps-form-required">
             <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.tdoc.datestart">Startdatum:</label>
-            <span class="recommend" *ngIf="recommend && editFormGroup.get('datestart').value != recommend" (click)="setValue('datestart', recommend)">&#x27F8; {{ recommend }} GPX</span>
             <input formControlName="datestart"
                    required="required"
                    type="datetime-local"
                    placeholder="datestart"
                    i18n-placeholder="datestart placeholder|Placeholder for datestart@@placeholder.form.tdoc.datestart"
                    (ngModelChange)="onInputChanged($event, 'datestart')">
+            <span class="dps-recommend" *ngIf="recommend && editFormGroup.get('datestart').value != recommend" (click)="setValue('datestart', recommend)">&#x27F8; {{ recommend }} GPX</span>
         </div>
     </ng-template>
 
     <ng-template #inputDateStartTime>
-        <div class="col-sm-3 form-inline input-group input-group-sm">
+        <div class="col-sm-6 form-inline input-group input-group-sm dps-form-required">
             <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.tdoc.datestart">Startdatum:</label>
             <input formControlName="datestart"
                    required="required"
@@ -567,20 +592,21 @@
     </ng-template>
 
     <ng-template #inputDateEnd let-recommend=recommend>
-        <div class="col-sm-3 form-inline input-group input-group-sm">
+        <div class="col-sm-6 form-inline input-group input-group-sm dps-form-required">
             <label class="col-xs-3 col-form-label mr-2" i18n="dateend label|Label for field: dateend@@label.editform.tdoc.dateend">Enddatum:</label>
-            <span class="recommend" *ngIf="recommend && editFormGroup.get('dateend').value != recommend" (click)="setValue('dateend', recommend)">&#x27F8; {{ recommend }} GPX</span>
             <input formControlName="dateend"
                    required="required"
                    type="datetime-local"
                    placeholder="dateend"
                    i18n-placeholder="dateend placeholder|Placeholder for dateend@@placeholder.form.tdoc.dateend"
                    (ngModelChange)="onInputChanged($event, 'dateend')">
+            <span class="dps-recommend" *ngIf="recommend && editFormGroup.get('dateend').value != recommend"
+                  (click)="setValue('dateend', recommend)">&#x27F8; {{ recommend }} GPX</span>
         </div>
     </ng-template>
 
     <ng-template #inputLocation>
-        <div class="col-sm-9 input-group input-group-sm">
+        <div class="col-sm-12 input-group input-group-sm dps-form-required">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.tdoc.where">Where:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['locId']"
                                      [settings]="settingsSelectWhere"
@@ -596,7 +622,7 @@
     </ng-template>
 
     <ng-template #inputLocationParent>
-        <div class="col-sm-9 input-group input-group-sm">
+        <div class="col-sm-12 input-group input-group-sm dps-form-required">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.tdoc.where">Where:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['locIdParent']"
                                      [settings]="settingsSelectWhere"
@@ -612,7 +638,7 @@
     </ng-template>
 
     <ng-template #inputLoctype>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm dps-form-required">
             <label class="col-xs-4 col-form-label mr-2" i18n="loctype label|Label for filter: loctype@@label.searchform.tdoc.loctype">Regiontype:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['subTypeLocType']"
                                      [settings]="settingsSelectActionType"
@@ -626,7 +652,7 @@
     </ng-template>
 
     <ng-template #inputInfotype>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm dps-form-required">
             <label class="col-xs-4 col-form-label mr-2" i18n="infotype label|Label for filter: infotype@@label.searchform.tdoc.infotype">Infotype:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['subTypeInfoType']"
                                      [settings]="settingsSelectActionType"
@@ -640,7 +666,7 @@
     </ng-template>
 
     <ng-template #inputActiontype>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm dps-form-required">
             <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['subTypeActiontype']"
                                      [settings]="settingsSelectActionType"
@@ -654,7 +680,7 @@
     </ng-template>
 
     <ng-template #inputPoitype>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm dps-form-required">
             <label class="col-xs-4 col-form-label mr-2" i18n="poitype label|Label for filter: poitype@@label.searchform.tdoc.poitype">Poitype:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['subTypePoiType']"
                                      [settings]="settingsSelectActionType"
@@ -668,7 +694,7 @@
     </ng-template>
 
     <ng-template #inputRoute>
-        <div class="col-sm-6 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm dps-form-required">
             <label class="col-xs-3 col-form-label mr-2" i18n="route label|Label for filter: route@@label.searchform.tdoc.routeId">Route:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['routeId']"
                                      [settings]="settingsSelectRoute"
@@ -700,10 +726,12 @@
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'ROUTE', id: record.id}"></ng-container>
             <ng-container *ngTemplateOutlet="linkShowSelectEntity;context:{key: 'ROUTE', formElementName: joinName + 'Id' + idx}"></ng-container>
         </div>
-        <ng-container *ngTemplateOutlet="inputTextTech;context:{key: joinName + 'LinkedRouteAttr', formControlName: joinName + 'LinkedRouteAttr'  + idx}"></ng-container>
-        <div class="col-sm-3 input-group input-group-sm">
+        <ng-container *ngTemplateOutlet="inputTextTech;context:{key: joinName + 'LinkedRouteAttr', formControlName: joinName + 'LinkedRouteAttr'  + idx, width: 'col-sm-4'}"></ng-container>
+        <div class="col-sm-2 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2"
-                   i18n="linkedRoutesFull label|Label for filter: linkedRoutesFull@@label.searchform.tdoc.linkedRoutesFull">Umfasst gesamten Track:</label>
+                   title="Umfasst gesdamten Track?"
+                   i18n="linkedRoutesFull label|Label for filter: linkedRoutesFull@@label.searchform.tdoc.linkedRoutesFull"
+                   i18n-title="linkedRoutesFull label title|Label title for filter: linkedRoutesFull@@title.searchform.tdoc.linkedRoutesFull">Gesamter Track:</label>
             <input type="checkbox" formControlName="{{joinName + 'Full'  + idx}}"
                    (ngModelChange)="onInputChanged($event, joinName + 'Full'  + idx)">
         </div>
@@ -730,7 +758,7 @@
     </ng-template>
 
     <ng-template #inputTrack>
-        <div class="col-sm-9 input-group input-group-sm">
+        <div class="col-sm-12 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="track label|Label for filter: track@@label.searchform.tdoc.trackId">Track:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['trackId']"
                                      [settings]="settingsSelectTrack"
@@ -744,7 +772,7 @@
     </ng-template>
 
     <ng-template #inputTrip>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="trip label|Label for filter: trip@@label.searchform.tdoc.tripId">Trip:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['tripId']"
                                      [settings]="settingsSelectTrip"
@@ -769,8 +797,15 @@
             (changeDesc)="setValue('descMd', $event)"></app-text-editor>
     </ng-template>
 
-    <ng-template #inputNumber let-key="key" let-formControlName="formControlName" let-recommend="recommend" let-step="step" let-min="min" let-max="max">
-        <div class="col-sm-3 form-inline input-group input-group-sm">
+    <ng-template #inputNumber let-key="key" let-formControlName="formControlName"
+                 let-recommend="recommend"
+                 let-step="step"
+                 let-min="min"
+                 let-max="max"
+                 let-width="width"
+                 let-required="required">
+        <div class="form-inline input-group input-group-sm"
+             [ngClass]="width ? width : 'col-sm-4' + (required ? ' dps-form-required': '')">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
             <input formControlName="{{formControlName}}"
                    class="form-control"
@@ -780,7 +815,7 @@
                    max="{{max ? max : ''}}"
                    placeholder="{{key}}"
                    (ngModelChange)="onInputChanged($event, formControlName)">
-            <span class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend"
+            <span class="dps-recommend" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend"
                   (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</span>
         </div>
     </ng-template>
@@ -799,8 +834,11 @@
         </div>
     </ng-template>
 
-    <ng-template #inputTextTech let-key="key" let-formControlName="formControlName">
-        <div class="col-sm-3 form-inline input-group input-group-sm">
+    <ng-template #inputTextTech let-key="key" let-formControlName="formControlName"
+                 let-width="width"
+                 let-required="required">
+        <div class="form-inline input-group input-group-sm"
+             [ngClass]="width ? width : 'col-sm-3' + (required ? ' dps-form-required': '')">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
             <input formControlName="{{formControlName}}"
                    class="form-control"
@@ -813,8 +851,11 @@
         </div>
     </ng-template>
 
-    <ng-template #inputText let-key="key" let-formControlName="formControlName">
-        <div class="col-sm-6 form-inline input-group input-group-sm">
+    <ng-template #inputText let-key="key" let-formControlName="formControlName"
+                 let-width="width"
+                 let-required="required">
+        <div class="form-inline input-group input-group-sm"
+             [ngClass]="(width ? width : 'col-sm-6') + (required ? ' dps-form-required': '')">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
             <input formControlName="{{formControlName}}"
                    class="form-control"
@@ -828,8 +869,9 @@
         </div>
     </ng-template>
 
-    <ng-template #showText let-key="key" let-formControlName="formControlName">
-        <div class="col-sm-6 form-inline input-group input-group-sm">
+    <ng-template #showText let-key="key" let-formControlName="formControlName"
+                 let-width="width">
+        <div class="form-inline input-group input-group-sm" [ngClass]="width ? width : 'col-sm-6'">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
             <input class="form-control"
                    type="text"
@@ -838,8 +880,9 @@
         </div>
     </ng-template>
 
-    <ng-template #selectPersRate let-key="key" let-formControlName="formControlName">
-        <div class="col-sm-3 input-group input-group-sm">
+    <ng-template #selectPersRate let-key="key" let-formControlName="formControlName"
+                 let-required="required">
+        <div class="col-sm-3 input-group input-group-sm" [ngClass]="required ? 'dps-form-required': ''">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
             <ss-multiselect-dropdown [options]="optionsSelect[key]"
                                      [settings]="settingsSelectPersRate"
@@ -867,7 +910,9 @@
                                       (tagsFound)="setPersonsFound($event)"></app-tdoc-persontagsstate>
         </div>
         <div class="col-sm-12 form-inline input-group input-group-sm">
-            <app-tdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="keywordSuggestions"
+            <app-tdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']"
+                                    [tagsEnvironment]="record"
+                                    [suggestions]="keywordSuggestions"
                                     (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-tdoc-keywordsstate>
         </div>
     </ng-template>
@@ -928,7 +973,7 @@
                 {{editFormGroup.getRawValue()[ joinName + 'Name' + idx]}}
                 <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'POI', formElementName: joinName + 'Id' + idx}"></ng-container>
             </div>
-            <ng-container *ngTemplateOutlet="inputNumber;context:{key: joinName + 'Position', formControlName: joinName + 'Position'  + idx, min: 1}"></ng-container>
+            <ng-container *ngTemplateOutlet="inputNumber;context:{key: joinName + 'Position', formControlName: joinName + 'Position'  + idx, min: 1, width: 'col-sm-3'}"></ng-container>
             <div class="col-sm-1 input-group input-group-sm form-inline">
                 <a (click)="onRemovePoiFromForm(idx)">🗑</a>
             </div>

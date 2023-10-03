@@ -24,6 +24,7 @@
 - improved poi-search
 - frontend: make map-components generic
 - frontend: make imageobject-components generic
+- frontend: improved form-layout
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -48,6 +49,7 @@
 - improved poi-search
 - frontend: make map-components generic
 - frontend: make imageobject-components generic
+- frontend: improved form-layout
 
 ### bug fixes
 - frontend/backend: added joins to resolver and possibility to add joins on create

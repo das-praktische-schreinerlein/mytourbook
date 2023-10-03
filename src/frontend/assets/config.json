@@ -133,6 +133,7 @@
                         "Schnee", "Sonne", "Sonnenaufgang", "Sonnenuntergang", "sonnig", "Sterne"
                     ]},
                 {"name": "POI",
+                    "filters": [{ "property": "type", "command": "CSVIN", "expectedValues": ["POI"]}],
                     "keywords": [
                         "SOURCE_mytb",
                         "SOURCE_openstreetmap",
@@ -506,7 +507,7 @@
                         "Landschaft",
                         "Natur", "Naturlandschaft"
                     ],
-                    "filters": [{ "property": "tdocdatatech_altMax", "command": "GE", "expectedValues": ["1500"]}]
+                    "filters": [{ "property": "tdocdatatech_altMax", "command": "GE", "expectedValues": [1500]}]
                 },
                 {   "name": "Daten Mittelgebirge",
                     "keywords": [
@@ -515,8 +516,8 @@
                         "Mittelgebirge",
                         "Natur", "Naturlandschaft"
                     ],
-                    "filters": [{ "property": "tdocdatatech_altMax", "command": "GE", "expectedValues": ["500"]},
-                        { "property": "tdocdatatech_altMax", "command": "LE", "expectedValues": ["1500"]}]
+                    "filters": [{ "property": "tdocdatatech_altMax", "command": "GE", "expectedValues": [500]},
+                        { "property": "tdocdatatech_altMax", "command": "LE", "expectedValues": [1500]}]
                 }
             ],
             "blacklist": ["TODOKEYWORDS", "OFFEN", "Mom", "Pa", "Micha"]
