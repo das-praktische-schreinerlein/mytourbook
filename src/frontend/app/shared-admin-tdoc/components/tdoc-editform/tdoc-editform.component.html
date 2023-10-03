@@ -78,13 +78,17 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataKeywords label|Label for fieldset: dataKeywords@@label.editform.tdoc.legend.dataKeywords">&#x231a; Keywords</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
-        <div class="row">
-            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
-        </div>
+        <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
+            </div>
+        </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
     </ng-template>
 
@@ -105,7 +109,7 @@
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputRoute"></ng-container>
-                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'linkedRouteAttr', formControlName: 'linkedRouteAttr'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'linkedRouteAttr', formControlName: 'linkedRouteAttr', width: 'col-sm-4'}"></ng-container>
             </div>
         </fieldset>
         <fieldset>
@@ -155,11 +159,13 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
+            <legend i18n="dataKeywords label|Label for fieldset: dataKeywords@@label.editform.tdoc.legend.dataKeywords">&#x231a; Keywords</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
@@ -212,13 +218,15 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
+            <legend i18n="dataKeywords label|Label for fieldset: dataKeywords@@label.editform.tdoc.legend.dataKeywords">&#x231a; Keywords</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: false}"></ng-container>
             </div>
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
@@ -247,13 +255,15 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
+            <legend i18n="dataKeywords label|Label for fieldset: dataKeywords@@label.editform.tdoc.legend.dataKeywords">&#x231a; Keywords</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: false}"></ng-container>
             </div>
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
@@ -340,11 +350,13 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataKeywords label|Label for fieldset: dataKeywords@@label.editform.tdoc.legend.dataKeywords">&#x231a; Keywords</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
@@ -389,9 +401,12 @@
             </div>
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-        <div class="row">
-            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
-        </div>
+        <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
+            </div>
+        </fieldset>
     </ng-template>
 
     <ng-template #formNews>
@@ -409,9 +424,12 @@
             </div>
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-        <div class="row">
-            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
-        </div>
+        <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
+            </div>
+        </fieldset>
     </ng-template>
 
     <ng-template #formInfo>
@@ -437,13 +455,15 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
+            <legend i18n="dataKeywords label|Label for fieldset: dataKeywords@@label.editform.tdoc.legend.dataKeywords">&#x231a; Keywords</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
@@ -458,8 +478,9 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
+            <legend i18n="dataDesc label|Label for fieldset: dataDesc@@label.editform.tdoc.legend.dataDesc">&#x231a; Beschreibung</legend>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
         </fieldset>
     </ng-template>
@@ -493,6 +514,7 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataKeywords label|Label for fieldset: dataKeywords@@label.editform.tdoc.legend.dataKeywords">&#x231a; Keywords</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
@@ -897,23 +919,24 @@
     <ng-template #inputKeywords>
         <div class="col-sm-12 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="keywords label|Label for field: keywords@@label.editform.tdoc.keywords">Keywords:</label>
+            <div class="form-control" style="height: fit-content">
+                <app-tdoc-persontagsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="personTagSuggestions"
+                                          (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"
+                                          (tagsFound)="setPersonsFound($event)"></app-tdoc-persontagsstate>
+                <app-tdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']"
+                                        [tagsEnvironment]="record"
+                                        [suggestions]="keywordSuggestions"
+                                        (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-tdoc-keywordsstate>
+            </div>
+        </div>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="keywords label|Label for field: keywords@@label.editform.tdoc.keywords">Keywords:</label>
             <textarea formControlName="keywords"
                       class="form-control"
                       type="text"
                       placeholder="keywords"
                       i18n-placeholder="keywords placeholder|Placeholder for keywords@@placeholder.form.tdoc.keywords"
                       (ngModelChange)="onInputChanged($event, 'keywords')"></textarea>
-        </div>
-        <div class="col-sm-12 form-inline input-group input-group-sm">
-            <app-tdoc-persontagsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="personTagSuggestions"
-                                      (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"
-                                      (tagsFound)="setPersonsFound($event)"></app-tdoc-persontagsstate>
-        </div>
-        <div class="col-sm-12 form-inline input-group input-group-sm">
-            <app-tdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']"
-                                    [tagsEnvironment]="record"
-                                    [suggestions]="keywordSuggestions"
-                                    (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-tdoc-keywordsstate>
         </div>
     </ng-template>
 

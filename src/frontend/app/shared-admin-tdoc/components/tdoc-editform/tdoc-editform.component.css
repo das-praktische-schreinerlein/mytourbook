@@ -15,16 +15,3 @@ table.trackSegmentStatistics td, table.trackSegmentStatistics th {
 .trackhint {
     background: lightyellow;
 }
-
-span.dps-recommend {
-    font-size: smaller;
-    font-style: italic;
-}
-
-div.dps-form-required > label {
-    font-weight: bolder;
-}
-
-div.dps-form-required > input {
-    font-weight: bolder;
-}
