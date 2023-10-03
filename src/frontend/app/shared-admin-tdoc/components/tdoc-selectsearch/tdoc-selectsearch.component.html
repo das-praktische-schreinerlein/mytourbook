@@ -5,7 +5,6 @@
                 class="btn btn-action btn-sm"
                 i18n="changePoiFilter label|Label for button: changePoiFilter@@label.editform.tdoc.changePoiFilter">POIs suchen</button>
         <ng-container *ngTemplateOutlet="linkCreateNewPOI;context:{id: baseId}"></ng-container>
-
         <button (click)="onAppendSelectedRecords()"
                 *ngIf="selectMultiActionManager.getSelectedRecords().length > 0"
                 type="button"
@@ -27,6 +26,13 @@
                                 [showItemMapFlag]="true"
                                 (tdocClicked)="onRecordClickedOnMap($event)"
                                 [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+    <div class="col-sm-12 input-group input-group-sm">
+        <button (click)="onAppendSelectedRecords()"
+                *ngIf="selectMultiActionManager.getSelectedRecords().length > 0"
+                type="button"
+                class="btn btn-action btn-sm"
+                i18n="appendPois label|Label for button: appendPois@@label.editform.tdoc.appendPois">POIs hinzufügen</button>
+    </div>
 </div>
 
 <ng-template #linkCreateNewPOI let-key="key" let-id="id">
