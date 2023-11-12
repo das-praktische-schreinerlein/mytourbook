@@ -29,6 +29,7 @@ CREATEHTML=${11:-none}
 TYPES=${12:-image,video}
 ACTIONTYPES=${13}
 PERSONS=${14}
+WHEREFILTER=${15}
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
@@ -89,6 +90,7 @@ do
            --rateMinFilter "${RATEMINFILTER}"\
            --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
            --fulltext "${FULLTEXRFILTER}"\
+           --where "${WHEREFILTER}"\
            --actiontype "${ACTIONTYPES}"\
            --persons "${PERSONS}"
   elif [ "${TYPE}" == "route" ]; then
@@ -109,6 +111,7 @@ do
            --rateMinFilter "${RATEMINFILTER}"\
            --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
            --fulltext "${FULLTEXRFILTER}"\
+           --where "${WHEREFILTER}"\
            --actiontype "${ACTIONTYPES}"\
            --persons "${PERSONS}"
   elif [ "${TYPE}" == "track" ]; then
@@ -129,6 +132,7 @@ do
            --rateMinFilter "${RATEMINFILTER}"\
            --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
            --fulltext "${FULLTEXRFILTER}"\
+           --where "${WHEREFILTER}"\
            --actiontype "${ACTIONTYPES}"\
            --persons "${PERSONS}"
   elif [ "${TYPE}" == "video" ]; then
@@ -149,6 +153,7 @@ do
            --rateMinFilter "${RATEMINFILTER}"\
            --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
            --fulltext "${FULLTEXRFILTER}"\
+           --where "${WHEREFILTER}"\
            --actiontype "${ACTIONTYPES}"\
            --persons "${PERSONS}"
   else

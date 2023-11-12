@@ -53,6 +53,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             actiontype: new IdCsvValidationRule(false),
             fulltext: new SolrValidationRule(false),
             persons: new KeywordValidationRule(false),
+            where: new KeywordValidationRule(false),
             playlists: new KeywordValidationRule(false),
             personalRateOverall: new KeywordValidationRule(false),
             directoryProfile: new KeywordValidationRule(false),
@@ -133,6 +134,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const actiontype = argv['actiontype'];
         const fulltext = argv['fulltext'];
         const persons = argv['persons'];
+        const where = argv['where'];
         const personalRateOverall = argv['personalRateOverall'];
         const playlists = argv['playlists'];
         const skipCheckForExistingFilesInDataBase = argv['skipCheckForExistingFilesInDataBase'] === true
@@ -300,6 +302,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 searchForm = new TourDocSearchForm({
                     type: type,
+                    where: where,
                     actiontype: actiontype,
                     fulltext: fulltext,
                     persons: persons,
