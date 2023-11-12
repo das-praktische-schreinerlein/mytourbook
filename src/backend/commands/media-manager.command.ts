@@ -203,7 +203,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 if (!force) {
                     searchForm.moreFilter = 'noMetaOnly:noMetaOnly'
                 }
-                console.log('START processing: readMp3MetaData', searchForm, processingOptions);
+                console.log('START processing: readImageMetaData', searchForm, processingOptions);
 
                 promise = tdocManagerModule.syncExistingMetaDataFromFiles(searchForm, processingOptions);
                 break;
@@ -214,7 +214,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 if (!force) {
                     searchForm.moreFilter = 'noMetaOnly:noMetaOnly'
                 }
-                console.log('START processing: readMp3MetaData', searchForm, processingOptions);
+                console.log('START processing: readVideoMetaData', searchForm, processingOptions);
 
                 promise = tdocManagerModule.syncExistingMetaDataFromFiles(searchForm, processingOptions);
                 break;

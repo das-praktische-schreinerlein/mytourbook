@@ -35,6 +35,12 @@ cd sbin
 start-app.bat import
 ```
 - [run import-scripts in admin-area](http://localhost:4001/mytbdev/de/#)
+- prepare images (update potenbtially date-misconfiguration)
+```
+The example above changes only the DateTimeOriginal tag, but any writable date or time tag can be shifted, and multiple tags may be written with a single command line. Commonly, in JPEG images, the DateTimeOriginal, CreateDate and ModifyDate values must all be changed. For convenience, a Shortcut tag called AllDates has been defined to represent these three tags. So, for example, if you forgot to set your camera clock back 1 hour at the end of daylight savings time in the fall, you can fix the images with:
+
+for /D %d in (D:\Bilder\mytbbase\import-2023-11-01\pics_full\*) do F:\ProgrammePortable\exiftool\exiftool -ext jpg -overwrite_original_in_place -preserve -AllDates-=1 %d\P*.jpg
+```
 
 ## manage data in import-database
  
