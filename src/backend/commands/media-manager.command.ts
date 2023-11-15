@@ -383,7 +383,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                         }
                     }
 
-                    if (blockedValues && blockedValues.length  > 0) {
+                    if (blockedValues && blockedValues.length > 0) {
                         searchForm.moreFilter = searchForm.moreFilter
                             ? searchForm.moreFilter + '_,_'
                             : '';
@@ -409,13 +409,16 @@ export class MediaManagerCommand extends CommonAdminCommand {
                     return viewerManagerModule.generateViewerHtmlFile(srcFile,  [exportJsonFile],
                         exportDir + '/' + exportName + '.html', 100, 'tdocs',
                         function (html: string) {
-                            return viewerManagerModule.htmlConfigConverter(html, 'staticTDocsFiles'); },
+                            return viewerManagerModule.htmlConfigConverter(html, 'staticTDocsFiles');
+                        },
                         function (html: string, jsonPFileName: string) {
                             return viewerManagerModule.jsonToJsTargetContentConverter(html, jsonPFileName,
-                                'importStaticDataTDocsJsonP'); },
+                                'importStaticDataTDocsJsonP');
+                        },
                         function (html: string, dataFileConfigName: string) {
                             return viewerManagerModule.htmlInlineFileConverter(html, dataFileConfigName,
-                                'staticTDocsFiles'); }
+                                'staticTDocsFiles');
+                        }
                     );
                 });
 

@@ -319,6 +319,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         if (tdocSearchResult !== undefined && tdocSearchResult.searchForm !== undefined) {
             this.tdocSearchResult = tdocSearchResult;
         }
+
         this.cd.markForCheck();
 
         return false;

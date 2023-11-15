@@ -105,7 +105,6 @@ registerLocaleData(localeDe);
         {provide: AngularHtmlService, useClass: SpecificAngularHtmlService},
         HtmlLocalLinkRenderer,
         {provide: HtmlTogglerRenderer, useClass: SimpleHtmlTogglerRenderer}
-
     ],
     // Since the bootstrapped component is not inherited from your
     // imported AppModule, it needs to be repeated here.
