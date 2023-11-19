@@ -64,6 +64,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
     joinMoreFilterParams(tdocSearchForm: TourDocSearchForm): string {
         const searchForm = (tdocSearchForm ? tdocSearchForm : new TourDocSearchForm({}));
         const moreFilterMap = new Map();
+
         moreFilterMap.set('techDataAltitudeMax', searchForm.techDataAltitudeMax);
         moreFilterMap.set('techDataAscent', searchForm.techDataAscent);
         moreFilterMap.set('techDataDistance', searchForm.techDataDistance);
@@ -81,6 +82,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         moreFilterMap.set('routeAttrPart', searchForm.routeAttrPart);
         moreFilterMap.set('gpsTrackState', searchForm.gpsTrackState);
         moreFilterMap.set('dashboardFilter', searchForm.dashboardFilter);
+
         let moreFilter = this.searchParameterUtils.joinParamsToOneRouteParameter(moreFilterMap, this.splitter);
         if (moreFilter !== undefined && moreFilter.length > 0) {
             if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
@@ -95,12 +97,14 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
     joinWhatParams(tdocSearchForm: TourDocSearchForm): string {
         const searchForm = (tdocSearchForm ? tdocSearchForm : new TourDocSearchForm({}));
         const whatMap = new Map();
+        whatMap.set('theme', searchForm.theme);
         whatMap.set('keyword', searchForm.what);
         whatMap.set('action', searchForm.actiontype);
         whatMap.set('persons', searchForm.persons);
         whatMap.set('objects', searchForm.objects);
         whatMap.set('playlists', searchForm.playlists);
         whatMap.set('initial', searchForm.initial);
+
         return this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
     }
 
@@ -244,7 +248,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
                 : ''));
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
-            ['action:', 'keyword:', 'playlists:', 'persons:', 'objects:', 'initial:']);
+            ['theme:', 'action:', 'keyword:', 'playlists:', 'persons:', 'objects:', 'initial:']);
+        const theme: string = (whatFilterValues.has('theme:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('theme:'), 'theme:', ',') : '');
         const what: string = (whatFilterValues.has('keyword:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('keyword:'), 'keyword:', ',') : '');
         const actiontype: string = (whatFilterValues.has('action:') ?
@@ -259,7 +265,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('initial:'), 'initial:', ',') : '');
 
         searchForm.theme = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
-            this.searchParameterUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
+            this.searchParameterUtils.replacePlaceHolder(theme || params['theme'], /^alle$/, ''),
             defaults['theme'], '');
         searchForm.when = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['when'], /^jederzeit$/, ''),
