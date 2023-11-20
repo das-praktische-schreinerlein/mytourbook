@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {TourDocSearchForm, TourDocSearchFormValidator} from '../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {
-    GenericSearchFormSearchFormConverter,
+    GenericSearchFormConverter,
     HumanReadableFilter
 } from '@dps/mycms-commons/dist/search-commons/services/generic-searchform.converter';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
@@ -10,7 +10,7 @@ import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {Layout, LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 
 @Injectable()
-export class TourDocSearchFormConverter implements GenericSearchFormSearchFormConverter<TourDocSearchForm> {
+export class TourDocSearchFormConverter implements GenericSearchFormConverter<TourDocSearchForm> {
     public readonly splitter = '_,_';
     public HRD_IDS = {
         track_id_i: 'TRACK',

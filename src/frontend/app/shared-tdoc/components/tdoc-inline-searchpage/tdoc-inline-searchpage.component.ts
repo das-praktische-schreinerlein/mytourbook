@@ -138,17 +138,4 @@ export class TourDocInlineSearchpageComponent extends
         super.updateData();
     }
 
-    // TODO convert searchform on super too
-    protected doSearch() {
-        this.searchFormConverter.paramsToSearchForm(
-            this.searchFormConverter.searchFormToValueMap(this.searchForm),
-            {},
-            this.searchForm,
-            {});
-        super.doSearch();
-
-        return false;
-    }
-
-
 }

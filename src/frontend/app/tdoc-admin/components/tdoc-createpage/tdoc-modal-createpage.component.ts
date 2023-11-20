@@ -19,7 +19,7 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
 @Component({
     selector: 'app-tdoc-modal-createpage',
     templateUrl: './tdoc-modal-createpage.component.html',
-    styleUrls: ['./tdoc-createpage.component.css', './tdoc-modal-createpage.component.css'],
+    styleUrls: ['./tdoc-createpage.component.css', '../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/styles/cdoc-modal-createpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocModalCreatepageComponent extends TourDocCreatepageComponent {

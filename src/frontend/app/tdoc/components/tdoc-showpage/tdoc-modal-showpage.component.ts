@@ -18,7 +18,7 @@ import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/se
 @Component({
     selector: 'app-tdoc-modal-showpage',
     templateUrl: './tdoc-showpage.component.html',
-    styleUrls: ['./tdoc-showpage.component.css', './tdoc-modal-showpage.component.css'],
+    styleUrls: ['./tdoc-showpage.component.css', '../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/styles/cdoc-modal-showpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocModalShowpageComponent extends TourDocShowpageComponent {
