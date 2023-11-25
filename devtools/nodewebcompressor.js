@@ -134,15 +134,23 @@ var NodeCompressor = {
                 '{"name" : "' + filepath + '",' +
                 ' "crypted": true ,' +
                 ' "src": "' + encryptionResult.cipherText + '"});';
-        } else {
-            console.log('inlining js uncrypted and compressed', filepath);
-            var compressedBase64 = lzString.compressToBase64(fileContent);
-            return 'document.decompressJsSrc.push(' +
-                '{"name" : "' + filepath + '",' +
-                ' "crypted": false,' +
-                ' "src": "' + compressedBase64 + '"});';
         }
 
+        console.log('inlining js uncrypted and compressed', filepath);
+        var compressedBase64 = lzString.compressToBase64(fileContent);
+        var decompressResult = lzString.decompressFromBase64(compressedBase64);
+        if (fileContent !== decompressResult) {
+            console.error("ERROR - fileContent and decompressResult differ:", fileContent.length, decompressResult.length);
+            console.debug("ERROR - fileContent and decompressResult differ:",
+                Buffer.from(compressedBase64, 0, 20),
+                Buffer.from(decompressResult, 0, 20));
+            return;
+        }
+
+        return 'document.decompressJsSrc.push(' +
+            '{"name" : "' + filepath + '",' +
+            ' "crypted": false,' +
+            ' "src": "' + compressedBase64 + '"});';
     }
 };
 

@@ -36,6 +36,7 @@ var WebCrypt = {
             console.error('ERROR - while creating passphrasekey', err);
             return;
         });
+
         if (!passphrasekey) {
             return;
         }
@@ -55,6 +56,7 @@ var WebCrypt = {
             console.error('ERROR - while creating key - passphrasekey, pbkdf2salt:', err, passphrasekey, pbkdf2salt);
             return;
         });
+
         if (!key) {
             return;
         }
@@ -75,6 +77,7 @@ var WebCrypt = {
                 console.debug('encryptedHex, encryptedBytes, encryptedTextRaw', encryptedHex, encryptedBytes, encryptedTextRaw);
                 return;
             });
+
         if (!key) {
             return;
         }
