@@ -388,7 +388,7 @@ export class SqlMytbDbTripConfig {
             'subtype_ss': {
                 noFacet: true
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"trip"',
                 selectLimit: 1

@@ -183,7 +183,7 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
                     data_info_guides_s: {
                         'in': [(<TourDocDataInfoRecord>record['tdocdatainfo']).guides],
                     },
-                    type_txt: {
+                    type_ss: {
                         'in': [record.type.toLowerCase()]
                     }
                 }
@@ -195,7 +195,7 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
                 name_s: {
                     'in': [record.name]
                 },
-                type_txt: {
+                type_ss: {
                     'in': [record.type.toLowerCase()]
                 }
             }

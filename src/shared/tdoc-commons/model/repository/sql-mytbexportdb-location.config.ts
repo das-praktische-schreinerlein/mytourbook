@@ -146,7 +146,7 @@ export class SqlMytbExportDbLocationConfig {
             'subtype_ss': {
                 noFacet: true
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['location', 'track', 'route', 'trip', 'image', 'video', 'news', 'destination'],
                 filterField: '"location"',
                 selectLimit: 1

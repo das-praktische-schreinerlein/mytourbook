@@ -25,6 +25,7 @@
 - frontend: make map-components generic
 - frontend: make imageobject-components generic
 - frontend: improved form-layout
+- backend/frontend: fixed naming of attributes/filter: type_s)
 
 ### new features
 - added optional password-encryption of static-viewer-version
@@ -62,6 +63,7 @@
 - use new pdoc-config -> see [Migration-instructions](MIGRATION.md)
 - TextEditor, TDoc-Module, Page-Module: improve usage of desc_txt, desc_md...
 - frontend: improved/fixed desc-rendering
+- backend/frontend: fixed naming of attributes/filter: type_s)
 
 
 ## 7.5.0 (2023-03-18)

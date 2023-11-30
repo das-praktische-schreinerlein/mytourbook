@@ -379,7 +379,7 @@ export class SqlMytbDbPoiConfig {
                 constValues: ['trip_id_is'],
                 filterField: '"666dummy999"'
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['poi', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info'],
                 filterField: '"poi"',
                 selectLimit: 1

@@ -245,7 +245,7 @@ export class SqlMytbExportDbRouteConfig {
                 filterFields: ['kategorie_full.tr_id'],
                 action: AdapterFilterActions.IN_NUMBER
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['route', 'track', 'image', 'video', 'location', 'trip', 'news', 'destination'],
                 filterField: '"route"',
                 selectLimit: 1

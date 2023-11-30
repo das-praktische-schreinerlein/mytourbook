@@ -130,7 +130,7 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
                 'f.route_attr_txt.facet.limit': '-1',
                 'f.route_attr_txt.facet.sort': 'index'
             },
-            'type_txt': {},
+            'type_ss': {},
             'week_is': {
                 'f.week_is.facet.limit': '-1',
                 'f.week_is.facet.sort': 'index'

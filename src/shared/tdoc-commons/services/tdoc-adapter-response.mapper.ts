@@ -298,10 +298,6 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['newsId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'news_id_i', undefined);
         values['infoId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'info_id_i', undefined);
 
-        const subtypeField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'subtypes_ss')];
-        if (subtypeField !== undefined && Array.isArray(subtypeField)) {
-            values['subtypes'] = subtypeField.join(',');
-        }
         values['blocked'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'blocked_i', undefined);
         values['dateshow'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'dateshow_dt', undefined);
         values['datestart'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'datestart_dt', undefined);

@@ -535,7 +535,7 @@ export class SqlMytbDbImageConfig {
                 selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id',
                 orderBy: 'value asc'
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"image"',
                 selectLimit: 1

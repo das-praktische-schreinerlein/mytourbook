@@ -58,7 +58,7 @@
             <field column="p_meta_desc" name="desc_md_txt" stripHTML="false" />
             <field column="html" name="html_txt" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="countInfos" name="count_infos_i" />
             <field column="countImages" name="count_images_i" />
             <field column="countLocations" name="count_locations_i" />
@@ -139,7 +139,7 @@
             <field column="if_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="dateonly" name="dateonly_s" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="subtype" name="subtype_s" />
             <field column="subtype" name="subtype_ss" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
@@ -375,7 +375,7 @@
             <field column="d_gps_lon" name="geo_lon_s" />
             <field column="d_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="actiontype" name="actiontype_s" />
             <field column="actiontype" name="actiontype_ss" />
             <field column="subtype" name="subtype_s" />
@@ -717,7 +717,7 @@
             <field column="k_gps_lon" name="geo_lon_s" />
             <field column="k_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="actiontype" name="actiontype_s" />
             <field column="actiontype" name="actiontype_ss" />
             <field column="subtype" name="subtype_s" />
@@ -1030,7 +1030,7 @@
             <field column="t_gps_lon" name="geo_lon_s" />
             <field column="t_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="actiontype" name="actiontype_s" />
             <field column="actiontype" name="actiontype_ss" />
             <field column="subtype" name="subtype_s" />
@@ -1320,7 +1320,7 @@
             <field column="l_geo_state" name="gpstracks_state_i" />
             <field column="l_geo_state" name="gpstracks_state_is" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="subtype" name="subtype_s" />
             <field column="subtype" name="subtype_ss" />
             <field column="dateonly" name="dateonly_s" />
@@ -1542,7 +1542,7 @@
             <field column="html" name="html_txt" />
             <field column="poi_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countTracks" name="count_tracks_i" />
             <field column="subtype" name="subtype_s" />
@@ -1800,7 +1800,7 @@
             <field column="i_gps_lon" name="geo_lon_s" />
             <field column="i_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="actiontype" name="actiontype_s" />
             <field column="actiontype" name="actiontype_ss" />
             <field column="subtype" name="subtype_s" />
@@ -1984,7 +1984,7 @@
             <field column="v_gps_lon" name="geo_lon_s" />
             <field column="v_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="actiontype" name="actiontype_s" />
             <field column="actiontype" name="actiontype_ss" />
             <field column="subtype" name="subtype_s" />
@@ -2136,7 +2136,7 @@
             <field column="dateonly" name="dateonly_s" />
             <field column="done" name="done_ss" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="altAsc" name="data_tech_alt_asc_i" />
             <field column="altDesc" name="data_tech_alt_desc_i" />
             <field column="altMin" name="data_tech_alt_min_i" />
@@ -2384,7 +2384,7 @@
             <field column="dateonly" name="dateonly_s" />
             <field column="done" name="done_ss" />
             <field column="type" name="type_s" />
-            <field column="type" name="type_txt" />
+            <field column="type" name="type_ss" />
             <field column="altAsc" name="data_tech_alt_asc_i" />
             <field column="altDesc" name="data_tech_alt_desc_i" />
             <field column="altMin" name="data_tech_alt_min_i" />

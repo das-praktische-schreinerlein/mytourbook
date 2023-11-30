@@ -32,9 +32,9 @@ export class TourDocSqlMytbExportDbAdapter extends GenericSqlAdapter<TourDocReco
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news'].map(value => {return [value, 0]; });
+        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'info', 'poi'].map(value => {return [value, 0]; });
         facet.selectLimit = 1;
-        facets.facets.set('type_txt', facet);
+        facets.facets.set('type_ss', facet);
         facet = new Facet();
         facet.facet = ['relevance'].map(value => {return [value, 0]; });
         facets.facets.set('sorts', facet);
@@ -47,7 +47,7 @@ export class TourDocSqlMytbExportDbAdapter extends GenericSqlAdapter<TourDocReco
             return undefined;
         }
 
-        const types = params.where['type_txt'];
+        const types = params.where['type_ss'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
             const tabKey = types.in[0].toLowerCase();
             if (this.tableConfig.getTableConfigForTableKey(tabKey) !== undefined) {

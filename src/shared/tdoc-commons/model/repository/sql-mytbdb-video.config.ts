@@ -438,7 +438,7 @@ export class SqlMytbDbVideoConfig {
                 selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
                 orderBy: 'value asc'
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image', 'odimgobject', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"video"',
                 selectLimit: 1

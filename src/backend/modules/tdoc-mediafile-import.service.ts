@@ -301,7 +301,7 @@ export class TourDocMediaFileImportManager  {
                         i_fav_url_txt: {
                             'in': [path, path.toLowerCase()]
                         },
-                        type_txt: {
+                        type_ss: {
                             'in': ['image']
                         }
                     }
@@ -313,7 +313,7 @@ export class TourDocMediaFileImportManager  {
                         v_fav_url_txt: {
                             'in': [path, path.toLowerCase()]
                         },
-                        type_txt: {
+                        type_ss: {
                             'in': ['video']
                         }
                     }

@@ -150,7 +150,7 @@ export class SqlMytbExportDbNewsConfig {
             'subtype_ss': {
                 noFacet: true
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['trip', 'location', 'track', 'route', 'image', 'video', 'news', 'destination'],
                 filterField: '"news"',
                 selectLimit: 1

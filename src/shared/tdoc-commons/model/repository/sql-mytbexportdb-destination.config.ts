@@ -217,7 +217,7 @@ export class SqlMytbExportDbDestinationConfig {
                 filterFields: ['destination.d_k_ids'],
                 action: AdapterFilterActions.IN_CSV
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['route', 'track', 'image', 'video', 'location', 'trip', 'news', 'destination'],
                 filterField: '"destination"',
                 selectLimit: 1

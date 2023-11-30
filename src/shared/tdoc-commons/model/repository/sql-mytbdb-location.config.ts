@@ -403,7 +403,7 @@ export class SqlMytbDbLocationConfig {
             'subtype_ss': {
                 noFacet: true
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['location', 'track', 'route', 'trip', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"location"',
                 selectLimit: 1

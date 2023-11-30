@@ -556,7 +556,7 @@ export class SqlMytbDbTrackConfig {
                 filterField: 'tr_id',
                 action: AdapterFilterActions.IN_NUMBER
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['track', 'route', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info', 'playlist', 'poi'],
                 filterField: '"track"',
                 selectLimit: 1

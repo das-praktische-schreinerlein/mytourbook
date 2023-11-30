@@ -150,7 +150,7 @@ export class SqlMytbExportDbTripConfig {
             'subtype_ss': {
                 noFacet: true
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['trip', 'location', 'track', 'route', 'image', 'video', 'news', 'destination'],
                 filterField: '"trip"',
                 selectLimit: 1

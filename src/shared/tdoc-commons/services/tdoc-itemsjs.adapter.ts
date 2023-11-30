@@ -214,7 +214,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 hide_zero_doc_count: true,
                 size: 1000
             },
-            'type_txt': {
+            'type_ss': {
                 mapField: 'type_s',
                 conjunction: false,
                 sort: 'term',
@@ -253,56 +253,60 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
         },
         sortings: {
             'date': {
-                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
-                order: ['desc', 'desc']
+                field: ['dateshow_dt', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['desc', 'desc', 'asc']
             },
             'dateAsc': {
-                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['dateshow_dt', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
             },
             'dataTechDurDesc': {
-                field: ['data_tech_dur_f', 'rate_pers_gesamt_i'],
-                order: ['desc', 'desc']
+                field: ['data_tech_dur_f', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['desc', 'desc', 'asc']
             },
             'dataTechAltDesc': {
-                field: ['data_tech_alt_asc_i', 'rate_pers_gesamt_i'],
-                order: ['desc', 'desc']
+                field: ['data_tech_alt_asc_i', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['desc', 'desc', 'asc']
             },
             'dataTechMaxDesc': {
-                field: ['data_tech_alt_max_i', 'rate_pers_gesamt_i'],
-                order: ['desc', 'desc']
+                field: ['data_tech_alt_max_i', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['desc', 'desc', 'asc']
             },
             'dataTechDistDesc': {
-                field: ['data_tech_dist_f', 'rate_pers_gesamt_i'],
-                order: ['desc', 'desc']
+                field: ['data_tech_dist_f', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['desc', 'desc', 'asc']
             },
             'dataTechDurAsc': {
-                field: ['data_tech_dur_f', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['data_tech_dur_f', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
             },
             'dataTechAltAsc': {
-                field: ['data_tech_alt_asc_i', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['data_tech_alt_asc_i', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
             },
             'dataTechMaxAsc': {
-                field: ['data_tech_alt_max_i', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['data_tech_alt_max_i', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
             },
             'dataTechDistAsc': {
-                field: ['data_tech_dist_f', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['data_tech_dist_f', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
             },
             'ratePers': {
-                field: ['rate_pers_gesamt_i', 'dateshow_dt'],
-                order: ['desc', 'desc']
+                field: ['rate_pers_gesamt_i', 'dateshow_dt', 'name_s'],
+                order: ['desc', 'desc', 'asc']
             },
             'location': {
-                field: ['loc_lochirarchie_s', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['loc_lochirarchie_s', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
             },
             'locationDetails': {
-                field: ['loc_lochirarchie_s', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['loc_lochirarchie_s', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
+            },
+            'name': {
+                field: ['name_s'],
+                order: ['asc']
             },
             'region': {
                 field: ['data_info_region_s', 'name_s', 'rate_pers_gesamt_i'],
@@ -313,20 +317,20 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 order: ['desc', 'desc']
             },
             'trackDate': {
-                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
-                order: ['desc', 'desc']
+                field: ['dateshow_dt', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['desc', 'desc', 'asc']
             },
             'trackDateAsc': {
-                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['dateshow_dt', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
             },
             'tripDate': {
-                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
-                order: ['desc', 'desc']
+                field: ['dateshow_dt', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['desc', 'desc', 'asc']
             },
             'tripDateAsc': {
-                field: ['dateshow_dt', 'rate_pers_gesamt_i'],
-                order: ['asc', 'desc']
+                field: ['dateshow_dt', 'rate_pers_gesamt_i', 'name_s'],
+                order: ['asc', 'desc', 'asc']
             }
         },
         filterMapping: {

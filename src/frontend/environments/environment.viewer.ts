@@ -24,7 +24,7 @@ export const environment: AppEnvironment = {
     tdocWritable: false,
     tdocActionTagWritable: false,
     allowAutoPlay: true,
-    tdocMaxItemsPerAlbum: -1,
+    tdocMaxItemsPerAlbum: 1000,
     m3uAvailable: false,
     cookieLawSeenName: 'cookieLawSeenV20180525',
     trackingProviders: [], // Angulartics2Piwik

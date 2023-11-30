@@ -371,7 +371,7 @@ export class SqlMytbDbInfoConfig {
                 filterFields: ['kt_trip.tr_id'],
                 action: AdapterFilterActions.IN_NUMBER
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['info', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'playlist', 'poi'],
                 filterField: '"info"',
                 selectLimit: 1

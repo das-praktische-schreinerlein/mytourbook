@@ -200,7 +200,7 @@ export class SqlMytbExportDbImageConfig {
                 selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id',
                 orderBy: 'value asc'
             },
-            'type_txt': {
+            'type_ss': {
                 constValues: ['image', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination'],
                 filterField: '"image"',
                 selectLimit: 1
