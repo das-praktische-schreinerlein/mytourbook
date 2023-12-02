@@ -89,7 +89,7 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
                 videoResolutions.push(
                     { pathPrefix: 'video_full'},
                     { pathPrefix: 'video_screenshot', fileNameSuffix: '.jpg'},
-                    { pathPrefix: 'video_thumbnail', fileNameSuffix: '.gif'},
+                    { pathPrefix: 'video_thumbnail', fileNameSuffix: '.gif.mp4'},
                     { pathPrefix: 'video_x600'}
                 )
                 break;
@@ -101,7 +101,7 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
                 );
                 videoResolutions.push(
                     { pathPrefix: 'video_screenshot', fileNameSuffix: '.jpg'},
-                    { pathPrefix: 'video_thumbnail', fileNameSuffix: '.gif'},
+                    { pathPrefix: 'video_thumbnail', fileNameSuffix: '.gif.mp4'},
                     { pathPrefix: 'video_x600'}
                 )
                 break;
