@@ -52,7 +52,7 @@ if [ ! -f "${CLICONFGFILE}" ]; then
     dofail "USAGE: mediaexport.sh CONFIGPROFILE EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER FULLTEXT CREATEHTML TYPES ACTIONTYPES PERSONS]\nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
 fi
 
-echo "start - prepare file expor for types $TYPES: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
+echo "start - prepare file export for types $TYPES: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
 
 if [ "${AUTOSTARTEXPORT}" != "true" ]; then
   echo "OPEN: Do you want to start media export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' m3u='${PLAYLISTFILE}'  directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'?"
