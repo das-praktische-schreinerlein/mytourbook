@@ -56,17 +56,18 @@
   },
   "private": true,
   "optionalDeps // do copy these to deps if needed": {
-    "minimist": "1.2.8",
-    "inline-source": "7.2.0",
-    "lz-string": "1.5.0"
   },
   "dependencies": {
+    "@dps/mycms-commons": "git://github.com/das-praktische-schreinerlein/mycms-commons.git#6.0.0",
     "axios": "0.22.0",
     "db-migrate": "0.11.13",
     "db-migrate-mysql": "2.2.0",
     "db-migrate-sqlite3": "0.4.0",
     "fluent-ffmpeg": "2.1.2",
+    "inline-source": "7.2.0",
     "knex": "0.20.10",
+    "lz-string": "1.5.0",
+    "minimist": "1.2.8",
     "mysql": "2.18.1",
     "redis": "3.1.2",
     "sqlite3": "5.1.6",
