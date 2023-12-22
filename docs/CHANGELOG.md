@@ -2,7 +2,7 @@
  
 # Versions
 
-## 8.0.0
+## 8.0.0 (2023-12-22)
 - use commons 6.0.0
 - bumped up deps
 - added optional password-encryption of static-viewer-version
