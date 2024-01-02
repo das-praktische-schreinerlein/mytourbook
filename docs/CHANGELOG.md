@@ -2,6 +2,24 @@
  
 # Versions
 
+## 8.1.0
+- use new commons
+- frontend: improved text-editor
+
+### new features
+- none
+
+### improvements
+- use new commons
+- frontend: improved text-editor
+
+### bug fixes
+- none
+
+### breaking changes
+- none
+
+
 ## 8.0.0 (2023-12-22)
 - use commons 6.0.0
 - bumped up deps
