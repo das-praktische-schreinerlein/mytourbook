@@ -5,13 +5,16 @@
 ## 8.1.0
 - use new commons
 - frontend: improved text-editor
+- frontend: improved pdf-support and configuration-profiles
+- frontend: introduced profile: viewer-de-with-pdf
 
 ### new features
-- none
+- frontend: introduced profile: viewer-de-with-pdf
 
 ### improvements
 - use new commons
 - frontend: improved text-editor
+- frontend: improved pdf-support and configuration-profiles
 
 ### bug fixes
 - none

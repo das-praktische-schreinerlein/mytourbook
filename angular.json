@@ -227,6 +227,30 @@
                             "serviceWorker": true,
                             "ngswConfigPath": "src/frontend/ngsw-config.json"
                         },
+                        "viewer-de-with-pdf": {
+                            "i18nFile": "src/frontend/locales/messages.de.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "de",
+                            "index": "src/frontend/index.viewer.html",
+                            "main": "src/frontend/main.viewer.ts",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/frontend/environments/environment.ts",
+                                    "with": "src/frontend/environments/environment.viewer-with-pdf.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "serviceWorker": true,
+                            "ngswConfigPath": "src/frontend/ngsw-config.json"
+                        },
                         "viewer-en": {
                             "i18nFile": "src/frontend/locales/messages.en.xlf",
                             "i18nFormat": "xlf",

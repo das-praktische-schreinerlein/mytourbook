@@ -1,0 +1,72 @@
+diff --git a/node_modules/html2canvas/dist/html2canvas.esm.js b/node_modules/html2canvas/dist/html2canvas.esm.js
+index 268e9bc..54f58f9 100644
+--- a/node_modules/html2canvas/dist/html2canvas.esm.js
++++ b/node_modules/html2canvas/dist/html2canvas.esm.js
+@@ -7433,7 +7433,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
+                     dashLength = width;
+                     spaceLength = width;
+                 }
+-                useLineDash = true;
++                useLineDash = false; // FIXME -> set to false to prevent "this.ctx.setLineDash is not a function"
+                 if (length <= dashLength * 2) {
+                     useLineDash = false;
+                 }
+@@ -7468,7 +7468,9 @@ var CanvasRenderer = /** @class */ (function (_super) {
+                 }
+                 this.ctx.strokeStyle = asString(color);
+                 this.ctx.stroke();
+-                this.ctx.setLineDash([]);
++                if (useLineDash) { // FIXME -> to prevent "this.ctx.setLineDash is not a function"
++                    this.ctx.setLineDash([]);
++                }
+                 // dashed round edge gap
+                 if (style === 2 /* DASHED */) {
+                     if (isBezierCurve(boxPaths[0])) {
+diff --git a/node_modules/html2canvas/dist/html2canvas.js b/node_modules/html2canvas/dist/html2canvas.js
+index 3ec00e0..15efec3 100644
+--- a/node_modules/html2canvas/dist/html2canvas.js
++++ b/node_modules/html2canvas/dist/html2canvas.js
+@@ -7439,7 +7439,7 @@
+                         dashLength = width;
+                         spaceLength = width;
+                     }
+-                    useLineDash = true;
++                    useLineDash = false; // FIXME -> set to false to prevent "this.ctx.setLineDash is not a function"
+                     if (length <= dashLength * 2) {
+                         useLineDash = false;
+                     }
+@@ -7474,7 +7474,9 @@
+                     }
+                     this.ctx.strokeStyle = asString(color);
+                     this.ctx.stroke();
+-                    this.ctx.setLineDash([]);
++                    if (useLineDash) { // FIXME -> to prevent "this.ctx.setLineDash is not a function"
++                        this.ctx.setLineDash([]);
++                    }
+                     // dashed round edge gap
+                     if (style === 2 /* DASHED */) {
+                         if (isBezierCurve(boxPaths[0])) {
+diff --git a/node_modules/html2canvas/dist/lib/render/canvas/canvas-renderer.js b/node_modules/html2canvas/dist/lib/render/canvas/canvas-renderer.js
+index 509f0a8..b20f4d6 100644
+--- a/node_modules/html2canvas/dist/lib/render/canvas/canvas-renderer.js
++++ b/node_modules/html2canvas/dist/lib/render/canvas/canvas-renderer.js
+@@ -905,7 +905,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
+                     dashLength = width;
+                     spaceLength = width;
+                 }
+-                useLineDash = true;
++                useLineDash = false; // FIXME -> set to false to prevent "this.ctx.setLineDash is not a function"
+                 if (length <= dashLength * 2) {
+                     useLineDash = false;
+                 }
+@@ -940,7 +940,9 @@ var CanvasRenderer = /** @class */ (function (_super) {
+                 }
+                 this.ctx.strokeStyle = color_1.asString(color);
+                 this.ctx.stroke();
+-                this.ctx.setLineDash([]);
++                if (useLineDash) { // FIXME -> to prevent "this.ctx.setLineDash is not a function"
++                    this.ctx.setLineDash([]);
++                }
+                 // dashed round edge gap
+                 if (style === 2 /* DASHED */) {
+                     if (bezier_curve_1.isBezierCurve(boxPaths[0])) {

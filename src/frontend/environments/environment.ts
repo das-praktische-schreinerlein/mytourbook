@@ -5,6 +5,7 @@
 
 import {AppEnvironment} from './app-environment';
 import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
+import {PrintDialogPdfGenerator} from '@dps/mycms-frontend-commons/dist/angular-commons/services/print-dialog-pdf.generator';
 
 export const environment: AppEnvironment = {
     hideCopyrightFooter: true,
@@ -41,3 +42,6 @@ export const environment: AppEnvironment = {
     availableDataModes: [DataMode.BACKEND, DataMode.STATIC],
     tourDocDateFormatPipePattern: 'LONG'
 };
+
+// TODO if you want pdf replace PrintDialogPdfGenerator by JsPdfGenerator and move jspdf in package.json from optional to dep
+export class EnvironmentPdfGenerator extends PrintDialogPdfGenerator {}

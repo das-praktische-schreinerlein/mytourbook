@@ -51,7 +51,7 @@ import {
     PDocDynamicComponentService
 } from '@dps/mycms-frontend-commons/dist/frontend-pdoc-module/shared-pdoc/services/pdoc-dynamic-components.service';
 import {PDocAlbumService} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-module/shared-pdoc/services/pdoc-album.service';
-import {environment} from '../environments/environment';
+import {environment, EnvironmentPdfGenerator} from '../environments/environment';
 import {COMMON_APP_ENVIRONMENT} from '@dps/mycms-frontend-commons/dist/frontend-section-commons/common-environment';
 import {
     HtmlTogglerRenderer,
@@ -62,6 +62,7 @@ import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commo
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {SpecificAngularMarkdownService} from './services/specific-angular-markdown.service';
 import {SpecificAngularHtmlService} from './services/specific-angular-html.service';
+import {PdfGenerator} from '@dps/mycms-frontend-commons/dist/angular-commons/services/pdf-print.service';
 
 registerLocaleData(localeDe);
 
@@ -101,6 +102,7 @@ registerLocaleData(localeDe);
         TourDocRouteDescSuggesterService,
         TourDocTrackDescSuggesterService,
         TourDocTripDescSuggesterService,
+        {provide: PdfGenerator, useClass: EnvironmentPdfGenerator},
         {provide: AngularMarkdownService, useClass: SpecificAngularMarkdownService},
         {provide: AngularHtmlService, useClass: SpecificAngularHtmlService},
         HtmlLocalLinkRenderer,

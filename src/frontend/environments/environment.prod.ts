@@ -1,5 +1,6 @@
 import {AppEnvironment} from './app-environment';
 import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
+import {PrintDialogPdfGenerator} from '@dps/mycms-frontend-commons/dist/angular-commons/services/print-dialog-pdf.generator';
 
 export const environment: AppEnvironment = {
     production: true,
@@ -38,4 +39,7 @@ console.debug = function() {};
 console.log = function() {};
 console.warn = function() {};
 console.error = function() {};
+
+// TODO if you want pdf replace PrintDialogPdfGenerator by JsPdfGenerator and move jspdf in package.json from optional to dep
+export class EnvironmentPdfGenerator extends PrintDialogPdfGenerator {}
 
