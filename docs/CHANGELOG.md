@@ -7,9 +7,11 @@
 - frontend: improved text-editor
 - frontend: improved pdf-support and configuration-profiles
 - frontend: introduced profile: viewer-de-with-pdf
+- frontend: added support for iframe-print-preview for pdf in android-apps ;-)
 
 ### new features
 - frontend: introduced profile: viewer-de-with-pdf
+- frontend: added support for iframe-print-preview for pdf in android-apps ;-)
 
 ### improvements
 - use new commons
