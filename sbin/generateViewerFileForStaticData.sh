@@ -17,10 +17,9 @@ fi
 EXPORTDIR=$1
 DATAFILES=$2
 EXPORTNAME=$3
+VIEWERSRC={$4:-${SCRIPTPATH}/../dist/static/mytbviewer/de/index.viewer.full.html}
 
 source ${SCRIPTPATH}/configure-environment.bash
-
-VIEWERSRC=${SCRIPTPATH}/../dist/static/mytbviewer/de/index.viewer.full.html
 
 if [ ! -d "${EXPORTDIR}" ]; then
     dofail "USAGE: generateViewerFileForStaticData.sh EXPORTDIR\nFATAL: $EXPORTDIR must exists" 1

@@ -30,6 +30,7 @@ TYPES=${12:-image,video}
 ACTIONTYPES=${13}
 PERSONS=${14}
 WHEREFILTER=${15}
+VIEWERSRC=${16}
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
@@ -167,7 +168,7 @@ if [ "${CREATEHTML}" == "createhtml" ]; then
 
    function join_by { local IFS="$1"; shift; echo "$*"; };
    JOINED_DATAFILES=`join_by , "${DATAFILES[@]}"`
-   ${SCRIPTPATH}/generateViewerFileForStaticData.sh $EXPORTDIR "${JOINED_DATAFILES}" ${PLAYLISTFILE}
+   ${SCRIPTPATH}/generateViewerFileForStaticData.sh $EXPORTDIR "${JOINED_DATAFILES}" ${PLAYLISTFILE} ${VIEWERSRC}
 fi
 
 echo "done - file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"
