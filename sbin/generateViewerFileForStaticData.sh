@@ -17,7 +17,7 @@ fi
 EXPORTDIR=$1
 DATAFILES=$2
 EXPORTNAME=$3
-VIEWERSRC={$4:-${SCRIPTPATH}/../dist/static/mytbviewer/de/index.viewer.full.html}
+VIEWERSRC=${4:-${SCRIPTPATH}/../dist/static/mytbviewer/de/index.viewer.full.html}
 
 source ${SCRIPTPATH}/configure-environment.bash
 
