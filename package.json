@@ -47,7 +47,7 @@
     "backend-start-server-managed-facetcache-import": "node dist/backend/serverAdmin.js --adminclibackend config/adminCli.import.json --backend config/backend.import.json --command facetCacheManager --action prepareAndStartServerManagedFacets ",
     "backend-test": "tsc -p src/backend/tsconfig.spec.json && istanbul cover node_modules/jasmine/bin/jasmine.js -- --config=backend.jasmine.json && remap-istanbul -i ./coverage/backend-js/coverage.json -t html -o ./coverage/backend",
     "build-before-prepare": "npm run build-before-prepare-printversion",
-    "build-before-prepare-printversion": "node-sass print.scss dist/tsc-out/static/print.css",
+    "build-before-prepare-printversion": "node-sass print.scss dist/tsc-out/static/print.css && node-sass print-prepare-pdf.scss dist/tsc-out/static/print-prepare-pdf.css",
     "build-dev": "npm run build-before-prepare && npm run build-dev-de && npm run build-dev-en && npm run build-after-copy-overrides-dist-dev",
     "build-dev-de": "ng build frontend --base-href=/mytbdev/de/ --configuration=dev-de --aot true --output-path dist/static/mytbdev/de",
     "build-dev-de-stats": "ng build frontend --base-href=/mytbdev/de/ --configuration=dev-de --aot true --stats-json true --output-path dist/static/mytbdev/de",

@@ -20,10 +20,10 @@
             <div class="col-md-6">
                 <ul class="nav command-container justify-content-end">
                     <li class="command-link" *ngIf="isPrintAvailable()">
-                        <div (click)="onOpenPrintPreview('TAG', 'app-root', 800, 200, 'print\.css')" class="command-icon command-icon-print"><span></span></div>
+                        <div (click)="onOpenPrintPreview('TAG', 'app-root', 800, 200, 'print.*\.css')" class="command-icon command-icon-print"><span></span></div>
                     </li>
                     <li class="command-link" *ngIf="isPdfPrintAvailable()">
-                        <div (click)="onPrintPdf('TAG', 'app-root', 800, 200, 'print\.css')" class="command-icon command-icon-pdf"><span></span></div>
+                        <div (click)="onPrintPdf('TAG', 'app-root', 800, 200, 'print.*\.css')" class="command-icon command-icon-pdf"><span></span></div>
                     </li>
                     <li class="command-link">
                         <div (click)="onScrollToTop()" class="command-icon command-icon-scroll-to-top"><span></span></div>
