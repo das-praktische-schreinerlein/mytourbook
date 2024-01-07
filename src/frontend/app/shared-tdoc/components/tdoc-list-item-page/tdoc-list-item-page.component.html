@@ -12,7 +12,7 @@
     </ng-container>
 
     <div *ngIf="listItem.currentRecord !== undefined">
-        <div [class]="('container content-container map-container ' + (!listItem.flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="listItem.flgShowMap">
+        <div [class]="('container content-container map-container map-container-osmmap ' + (!listItem.flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="listItem.flgShowMap">
             <app-mapdoc-map [mapId]="'listItemMapPage' + listItem.currentRecord.id"
                           [height]="'400px'"
                           [mapZoom]="'9'"
@@ -21,7 +21,7 @@
                           [mapCenterPos]="undefined"></app-mapdoc-map>
         </div>
 
-        <div class="container content-container map-container" *ngIf="listItem.flgShowProfileMap">
+        <div class="container content-container map-container map-container-profilemap" *ngIf="listItem.flgShowProfileMap">
             <app-mapdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'400px'"
                                  [showImageTrackAndGeoPos]="'true'"

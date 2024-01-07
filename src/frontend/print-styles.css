@@ -3,6 +3,7 @@ app-tdoc-list-item, .app-tdoc-list-item, .tdoc-list-item-flat, .tdoc-list-item-t
     page-break-after: auto;
     page-break-inside: avoid;
 }
+
 img {
     page-break-before: auto;
     page-break-after: auto;
@@ -15,6 +16,10 @@ img {
     page-break-inside: auto;
 }
 
+.map-container-profilemap, .map-container-profilechart {
+    display: none !important;
+}
+
 /*******************
  * value-tables
  *******************/
@@ -23,4 +28,26 @@ td.entry, td.value {
     text-overflow: unset !important;
     overflow-wrap: unset !important;
     white-space: unset !important;
+}
+
+.fx-bg-theme, .fx-bg-theme-print {
+    background: #F3F7FB !important;
+    background-color: #F3F7FB !important;
+}
+.fx-bg-type, .fx-bg-type-print {
+    background: #fcf1b5 !important;
+    background-color: #fcf1b5 !important;
+}
+.fx-bg-name, .fx-bg-name-print {
+    background: #F3F7FB !important;
+    background-color: #F3F7FB !important;
+}
+
+.card-footer, .card-footer-print {
+    background: #F3F7FB !important;
+    background-color: #F3F7FB !important;
+}
+
+.card-action-buttons, .btn-navigation, .btn-action, .btn-action-icon {
+    display: none !important;
 }

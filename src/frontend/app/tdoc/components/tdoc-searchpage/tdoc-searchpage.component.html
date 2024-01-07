@@ -183,7 +183,7 @@
     <div class="container">
         <app-cdoc-timetable [searchResult]="searchResult" (columnClicked)="onTimeTableColumnClicked($event)"></app-cdoc-timetable>
     </div>
-    <div [class]="('container map-container container-fullline')" *ngIf="mapState.flgShowMap">
+    <div [class]="('container map-container map-container-osmmap container-fullline')" *ngIf="mapState.flgShowMap">
         <app-mapdoc-map [mapId]="'searchMap' + (searchFormLayout === 0 ? 'small' : 'big')"
                       [height]="'300'"
                       [mapZoom]="mapState.mapZoom"
@@ -206,13 +206,13 @@
             <span i18n="button hide profilemap|Buttontext to hide profilemap@@button.searchform.hide.profilemap">Profil ausblenden</span>
             <span class="btn-action-icon">&#x21D1;</span></button>
     </div>
-    <div class="container map-container" *ngIf="mapState.flgShowProfileMap">
+    <div class="container map-container map-container-profilemap" *ngIf="mapState.flgShowProfileMap">
         <app-mapdoc-profilemap [mapId]="'showProfileMap'"
                              [height]="'300px'"
                              (mapElementsFound)="onProfileMapElementsFound($event)"
                              [docRecords]="searchResult.currentRecords"></app-mapdoc-profilemap>
     </div>
-    <div class="container map-container" *ngIf="mapState.flgShowProfileMap">
+    <div class="container map-container map-container-profilechart" *ngIf="mapState.flgShowProfileMap">
         <app-mapdoc-profilechart [chartId]="'showProfileChart'"
                              [height]="'300px'"
                              (chartElementsFound)="onProfileMapElementsFound($event)"

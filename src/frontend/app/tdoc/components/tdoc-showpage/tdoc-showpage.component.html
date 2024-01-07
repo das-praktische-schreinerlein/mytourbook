@@ -135,7 +135,7 @@
     </div>
 
     <div>
-        <div [class]="('container content-container map-container container-fullline')"
+        <div [class]="('container content-container map-container map-container-osmmap container-fullline')"
              *ngIf="mapState.flgShowMap">
             <app-mapdoc-map [mapId]="'showMap'"
                           [height]="'400px'"
@@ -153,7 +153,7 @@
             </div>
         </div>
 
-        <div class="container content-container map-container" *ngIf="mapState.flgShowProfileMap">
+        <div class="container content-container map-container map-container-profilemap" *ngIf="mapState.flgShowProfileMap">
             <app-mapdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
@@ -166,7 +166,7 @@
                     <span class="btn-action-icon">&#x21D1;</span></button>
             </div>
         </div>
-        <div class="container content-container map-container"
+        <div class="container content-container map-container map-container-profilechart"
              *ngIf="mapState.flgShowProfileMap">
             <app-mapdoc-profilechart [chartId]="'showProfileChart'"
                                  [height]="'370px'"
