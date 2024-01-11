@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
@@ -27,9 +27,15 @@ export class AppComponent extends AbstractAppComponent {
                 translate: TranslateService, router: Router, @Inject(LOCALE_ID) locale: string,
                 http: HttpClient, commonRoutingService: CommonRoutingService, cd: ChangeDetectorRef,
                 platformService: PlatformService, pageUtils: PageUtils, layoutService: LayoutService,
-                printService: PrintService, pdfPrintService: PdfPrintService) {
+                printService: PrintService, pdfPrintService: PdfPrintService, protected activatedRoute: ActivatedRoute) {
         super(appService, toastr, translate, router, locale, http, commonRoutingService, cd, platformService, pageUtils, layoutService,
             environment, printService, pdfPrintService);
+
+        this.activatedRoute.queryParamMap.subscribe(params => {
+            if (params && params.get('print') !== null) {
+                this.printService.activatePrintStyles(document);
+            }
+        });
     }
 
 }

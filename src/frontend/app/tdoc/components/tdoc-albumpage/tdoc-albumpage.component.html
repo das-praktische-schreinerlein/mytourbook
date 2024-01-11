@@ -2,7 +2,7 @@
     <ng-container *ngSwitchCase="'edit'">
         <div class="relative-container" *ngIf="searchResult !== undefined">
             <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
-            <div class="container content-container">
+            <div class="container content-container hidden-print">
                 <form [formGroup]="editFormGroup" class="form-control-sm" (ngSubmit)="submitSave($event)">
                     <fieldset>
                         <legend i18n="album label|Label for fieldset: album@@label.editform.album.legend.base">Album</legend>
@@ -38,7 +38,7 @@
                 </form>
             </div>
             <div class="container content-container">
-                <div class="container">
+                <div class="container list-header-container hidden-print">
                     <app-cdoc-list-header [searchResult]="listSearchResult"
                                           [perPage]="listSearchForm.perPage"
                                           [layout]="layout"
@@ -50,14 +50,14 @@
                                           (layoutChange)="onLayoutChange($event)"
                                           (pageChange)="onPageChange($event)" ></app-cdoc-list-header>
                 </div>
-                <div class="container">
+                <div class="container list-multiactionheader-container hidden-print">
                     <app-tdoc-multiactionheader [multiActionManager]="multiActionManager"
                                                 [searchResult]="listSearchResult"
                                                 [type]="'albumpage'"
                                                 [selectValueMap]="multiActionSelectValueMap"
                                                 (submitSelectedMultiActions)="onSubmitSelectedMultiActions($event)"></app-tdoc-multiactionheader>
                 </div>
-                <div class="container">
+                <div class="container list-container">
                     <app-tdoc-list [searchResult]="listSearchResult"
                                    [baseSearchUrl]="baseSearchUrl"
                                    [layout]="layout"

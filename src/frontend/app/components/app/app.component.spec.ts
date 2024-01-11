@@ -9,7 +9,7 @@ import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/t
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
@@ -21,6 +21,7 @@ import {SimplePrintService} from '@dps/mycms-frontend-commons/dist/angular-commo
 import {PdfGenerator, PdfPrintService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/pdf-print.service';
 import {PrintDialogPdfGenerator} from '@dps/mycms-frontend-commons/dist/angular-commons/services/print-dialog-pdf.generator';
 import {SimplePdfPrintService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/simple-pdf-print.service';
+import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
 
 describe('AppComponent', () => {
     beforeEach(() => {
@@ -40,6 +41,7 @@ describe('AppComponent', () => {
                 CommonRoutingService,
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
+                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 PlatformService,
                 PageUtils,
                 LayoutService,
