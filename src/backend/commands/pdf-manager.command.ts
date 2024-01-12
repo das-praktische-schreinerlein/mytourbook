@@ -95,6 +95,12 @@ export class PdfManagerCommand extends CommonAdminCommand {
 
                 const nodePath = backendConfig.nodejsBinaryPath;
                 const webshot2pdfCommandPath = backendConfig.webshot2pdfCommandPath;
+                if (!nodePath || !webshot2pdfCommandPath) {
+                    console.error(action + ' missing config - nodejsBinaryPath, webshot2pdfCommandPath', nodePath, webshot2pdfCommandPath);
+                    promise = Promise.reject(action + ' missing config - nodejsBinaryPath, webshot2pdfCommandPath');
+                    return promise;
+                }
+                console.log(action + ' starting with - nodejsBinaryPath, webshot2pdfCommandPath', nodePath, webshot2pdfCommandPath);
 
                 let type = 'UNKNOWN';
                 switch (action) {
