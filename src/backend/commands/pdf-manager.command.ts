@@ -248,10 +248,16 @@ export class PdfManagerCommand extends CommonAdminCommand {
         }
 
         const locHierarchy = HierarchyUtils.getTxtHierarchy(hierarchyConfig, entity, false,  true, 3);
+        const locName = StringUtils.generateTechnicalName(locHierarchy.join('-'));
+        let name = StringUtils.generateTechnicalName(entity.name);
+
+        if ((locName.length + name.length) > 160) {
+            name = name.substring(0, 160 - locName.length);
+        }
 
         return [entity.type,
-            StringUtils.generateTechnicalName(locHierarchy.join('-')),
-            StringUtils.generateTechnicalName(entity.name),
+            locName,
+            name,
             entity.id].join('_') + '.pdf';
     }
 
