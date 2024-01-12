@@ -520,7 +520,8 @@
                         { "property": "tdocdatatech_altMax", "command": "LE", "expectedValues": [1500]}]
                 }
             ],
-            "blacklist": ["TODOKEYWORDS", "OFFEN", "Mom", "Pa", "Micha"]
+            "blacklist": ["KW_TODOKEYWORDS", "KW_TODOPOISTART", "KW_TODOPOIMAIN", "KW_TODOPOIEND", "KW_TODOPOICHECK",
+                "OFFEN", "Mom", "Pa", "Micha"]
         },
         "tdoc-persontags": {
             "editPrefix": "",

@@ -238,7 +238,10 @@ window.importStaticConfigJsonP = `{
                     ]}
                     
             ],
-            "blacklist": ["TODOKEYWORDS", "OFFEN", "Mom", "Pa", "Micha"]
+            "blacklist": ["KW_TODOKEYWORDS",
+                "KW_TODOPOISTART", "KW_TODOPOIEND", "KW_TODOPOIMAIN","KW_TODOPOICHECK",
+                "KW_TODOTRACKCHECK", "KW_TODOATTRCHECK",
+                "OFFEN", "Mom", "Pa", "Micha"]
         },
         "tdoc-persontags": {
             "possiblePrefixes": ["KW_", "", "kw_", "Pers_"],

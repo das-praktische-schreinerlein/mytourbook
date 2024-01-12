@@ -19,7 +19,7 @@
 - use new commons
 - frontend: improved text-editor
 - frontend: improved pdf-support and configuration-profiles
-- frontend:imporved
+- frontend: improved keyword-blacklist
 
 ### bug fixes
 - none
