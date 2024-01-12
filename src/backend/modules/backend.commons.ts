@@ -42,6 +42,7 @@ export interface BackendConfigType extends CommonBackendConfigType<KeywordMapper
     TourDocItemsJsAdapter: {
         dataFile: string
     },
+    webshot2pdfCommandPath: string,
     TourDocSolrAdapter: {
         solrCoreTourDoc: string,
         solrCoreTourDocReadUsername: string,

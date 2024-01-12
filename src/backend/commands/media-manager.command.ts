@@ -17,13 +17,11 @@ import {TourDocMediaFileImportManager} from '../modules/tdoc-mediafile-import.se
 import {MediaExportProcessingOptions} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-mediafile-export.service';
 import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
-    IdCsvValidationRule,
     KeywordValidationRule,
     NumberValidationRule,
     SimpleConfigFilePathValidationRule,
     SimpleFilePathListValidationRule,
     SimpleFilePathValidationRule,
-    SolrValidationRule,
     ValidationRule,
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
@@ -32,6 +30,7 @@ import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import {ViewerManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/viewer-manager.module';
 import {BackendConfigType} from '../modules/backend.commons';
 import path from 'path';
+import {ExportManagerUtils} from './export-manager.utils';
 
 export class MediaManagerCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
@@ -42,44 +41,19 @@ export class MediaManagerCommand extends CommonAdminCommand {
             srcFile: new SimpleFilePathValidationRule(false),
             srcFiles: new SimpleFilePathListValidationRule(false),
             pdocFile: new SimpleFilePathValidationRule(false),
-            exportDir: new SimpleFilePathValidationRule(false),
-            exportName: new SimpleFilePathValidationRule(false),
             inlineProfile: new KeywordValidationRule(false),
             outputDir: new SimpleFilePathValidationRule(false),
             outputFile: new SimpleFilePathValidationRule(false),
-            ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),
-            parallel: new NumberValidationRule(false, 1, 99, 10),
-            pageNum: new NumberValidationRule(false, 1, 999999999, 1),
-            actiontype: new IdCsvValidationRule(false),
-            fulltext: new SolrValidationRule(false),
-            persons: new KeywordValidationRule(false),
-            where: new KeywordValidationRule(false),
-            playlists: new KeywordValidationRule(false),
-            personalRateOverall: new KeywordValidationRule(false),
             directoryProfile: new KeywordValidationRule(false),
             fileNameProfile: new KeywordValidationRule(false),
             resolutionProfile: new KeywordValidationRule(false),
-            rateMinFilter: new NumberValidationRule(false, 0, 15, undefined),
-            showNonBlockedOnly: new WhiteListValidationRule(false, [
-                'showall',
-                'nonblocked_meonly',
-                'nonblocked_innerfamily',
-                'nonblocked_family',
-                'nonblocked_friends',
-                'nonblocked_nonpublic',
-                'blocked_meonly',
-                'blocked_innerfamily',
-                'blocked_family',
-                'blocked_friends',
-                'blocked_nonpublic',
-                'nonblocked_public',
-                'nonblocked'], undefined),
             additionalMappingsFile: new SimpleConfigFilePathValidationRule(false),
             rotate: new NumberValidationRule(false, 1, 360, 0),
-            force: new WhiteListValidationRule(false, [true, false, 'true', 'false'], false),
             createViewer: new WhiteListValidationRule(false, [true, false, 'html', 'htmlWithoutImage'], false),
             skipCheckForExistingFilesInDataBase : new KeywordValidationRule(false),
-            renameFileIfExists:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)
+            renameFileIfExists:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false),
+            ... ExportManagerUtils.createExportValidationRules(),
+            ... ExportManagerUtils.createSearchFormValidationRules()
         };
     }
 
@@ -131,12 +105,6 @@ export class MediaManagerCommand extends CommonAdminCommand {
             parallel: Number.parseInt(argv['parallel'], 10),
         };
         const pageNum = Number.parseInt(argv['pageNum'], 10);
-        const actiontype = argv['actiontype'];
-        const fulltext = argv['fulltext'];
-        const persons = argv['persons'];
-        const where = argv['where'];
-        const personalRateOverall = argv['personalRateOverall'];
-        const playlists = argv['playlists'];
         const skipCheckForExistingFilesInDataBase = argv['skipCheckForExistingFilesInDataBase'] === true
             || argv['skipCheckForExistingFilesInDataBase'] === 'true';
         const renameFileIfExists = !!argv['renameFileIfExists'];
@@ -300,106 +268,18 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 }
 
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
-                searchForm = new TourDocSearchForm({
-                    type: type,
-                    where: where,
-                    actiontype: actiontype,
-                    fulltext: fulltext,
-                    persons: persons,
-                    personalRateOverall: personalRateOverall,
-                    playlists: playlists,
-                    sort: 'm3uExport',
-                    pageNum: Number.isInteger(pageNum) ? pageNum : 1});
-
-                const rateMinFilter = argv['rateMinFilter'];
-                if (rateMinFilter !== undefined && Number.isInteger(rateMinFilter)) {
-                    const rateFilters = [];
-                    for (let i = Number.parseInt(rateMinFilter, 10); i >= 0 && i <= 15; i++) {
-                        rateFilters.push(i + '');
-                    }
-                    if (rateFilters.length > 0) {
-                        searchForm.personalRateOverall = rateFilters.join(',');
-                    }
-                }
-
-                const blockedFilters = argv['showNonBlockedOnly'] + '';
-                if (blockedFilters !== undefined && blockedFilters.toLowerCase() !== 'showall') {
-                    let blockedValues: string[] = undefined;
-                    for (const blockedFilter of blockedFilters.split(',')) {
-                        switch (blockedFilter) {
-                            case 'nonblocked_meonly':
-                                blockedValues = ['null', '0',
-                                    '1', '2', '3', '4', '5',
-                                    '6', '7', '8', '9', '10',
-                                    '11', '12', '13', '14', '15',
-                                    '16', '17', '18', '19', '20',
-                                    '21', '22', '23', '24', '25'];
-                                break;
-                            case 'nonblocked_innerfamily':
-                                blockedValues = ['null', '0',
-                                    '1', '2', '3', '4', '5',
-                                    '6', '7', '8', '9', '10',
-                                    '11', '12', '13', '14', '15',
-                                    '16', '17', '18', '19', '20'];
-                                break;
-                            case 'nonblocked_family':
-                                blockedValues = ['null', '0',
-                                    '1', '2', '3', '4', '5',
-                                    '6', '7', '8', '9', '10',
-                                    '11', '12', '13', '14', '15'];
-                                break;
-                            case 'nonblocked_friends':
-                                blockedValues = ['null', '0',
-                                    '1', '2', '3', '4', '5',
-                                    '6', '7', '8', '9', '10'];
-                                break;
-                            case 'nonblocked_nonpublic':
-                                blockedValues = ['null', '0',
-                                    '1', '2', '3', '4', '5'];
-                                break;
-                            case 'blocked_meonly':
-                                blockedValues.push('21', '22', '23', '24', '25');
-                                break;
-                            case 'blocked_innerfamily':
-                                blockedValues.push('16', '17', '18', '19', '20');
-                                break;
-                            case 'blocked_family':
-                                blockedValues.push('11', '12', '13', '14', '15');
-                                break;
-                            case 'blocked_friends':
-                                blockedValues.push('6', '7', '8', '9', '10');
-                                break;
-                            case 'blocked_nonpublic':
-                                blockedValues.push('1', '2', '3', '4', '5');
-                                break;
-                            case 'nonblocked_public':
-                            case 'nonblocked':
-                                blockedValues = ['null', '0'];
-                                break
-                            default:
-                                console.error(action + ' invalid parameter - usage: --showNonBlockedOnly FILTER', argv);
-                                promise = Promise.reject(action + ' missing parameter - usage: --showNonBlockedOnly srcFileForHtmlViewer');
-                                return promise;
-                        }
-                    }
-
-                    if (blockedValues && blockedValues.length > 0) {
-                        searchForm.moreFilter = searchForm.moreFilter
-                            ? searchForm.moreFilter + '_,_'
-                            : '';
-                        searchForm.moreFilter = searchForm.moreFilter + 'blocked_i:' + blockedValues.join(',');
-                    }
-                }
-                console.log('START processing: ' + action, searchForm, exportDir, processingOptions);
-
-                promise = tdocManagerModule.exportMediaFiles(searchForm, <MediaExportProcessingOptions & ProcessingOptions> {
-                    ...processingOptions,
-                    exportBasePath: exportDir,
-                    exportBaseFileName: exportName,
-                    directoryProfile: directoryProfile,
-                    fileNameProfile: fileNameProfile,
-                    resolutionProfile: resolutionProfile,
-                    jsonBaseElement: 'tdocs'
+                console.log('DO generate searchform for : ' + action, exportDir, processingOptions);
+                promise = ExportManagerUtils.createSearchForm(type, argv).then(exportSearchForm => {
+                    console.log('START processing: ' + action, exportSearchForm, exportDir, processingOptions);
+                    return tdocManagerModule.exportMediaFiles(exportSearchForm, <MediaExportProcessingOptions & ProcessingOptions> {
+                        ...processingOptions,
+                        exportBasePath: exportDir,
+                        exportBaseFileName: exportName,
+                        directoryProfile: directoryProfile,
+                        fileNameProfile: fileNameProfile,
+                        resolutionProfile: resolutionProfile,
+                        jsonBaseElement: 'tdocs'
+                    });
                 }).then((result) => {
                     if (!createHtml || !srcFile) {
                         return Promise.resolve(result);
@@ -492,7 +372,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                                     'staticTDocsFiles');
                             }
                         );
-                });
+                    });
 
                 break;
             case 'inlineDataOnViewerFile':

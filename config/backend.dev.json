@@ -28,6 +28,7 @@
     "imageMagicAppPath": "contrib/imagemagic/",
     "nodejsBinaryPath": "node",
     "inlineJsPath": "devtools/create-allinone-html.js",
+    "webshot2pdfCommandPath": "devtools/webshot/webshot2pdf.js",
     "tdocDataStoreAdapter": "TourDocSqlMytbDbAdapter",
     "tdocWritable": true,
     "mapperConfig": {

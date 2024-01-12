@@ -8,15 +8,18 @@
 - frontend: improved pdf-support and configuration-profiles
 - frontend: introduced profile: viewer-de-with-pdf
 - frontend: added support for iframe-print-preview for pdf in android-apps ;-)
+- backend: added pdf-export
 
 ### new features
 - frontend: introduced profile: viewer-de-with-pdf
 - frontend: added support for iframe-print-preview for pdf in android-apps ;-)
+- backend: added pdf-export
 
 ### improvements
 - use new commons
 - frontend: improved text-editor
 - frontend: improved pdf-support and configuration-profiles
+- frontend:imporved
 
 ### bug fixes
 - none

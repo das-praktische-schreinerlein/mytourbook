@@ -10,7 +10,7 @@ import {BackendGeoService} from '@dps/mycms-commons/dist/geo-commons/backend/bac
 import {BackendConfigType} from './backend.commons';
 
 export class TourDocBackendGeoService extends BackendGeoService {
-    private static readonly hierarchyConfig: HierarchyConfig = {
+    public static readonly hierarchyConfig: HierarchyConfig = {
         typeField: 'type',
         removeRootElementNames: ['OFFEN', 'offen', 'OPEN', 'open'],
         removeOwnElementOfType: 'LOCATION',
