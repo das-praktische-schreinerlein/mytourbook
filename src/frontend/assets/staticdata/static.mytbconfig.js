@@ -263,7 +263,7 @@ window.importStaticConfigJsonP = `{
                     "name": "Download Image Static",
                     "shortName": "\uD83D\uDCE5",
                     "payload": {
-                        "url": "./pics_full/{{id}}",
+                        "url": "./pics_x600/{{id}}",
                         "target": "download",
                         "replacements": {
                             "id": "record.tdocimages[0].fileName"
@@ -292,7 +292,7 @@ window.importStaticConfigJsonP = `{
                     "name": "Download Video Static",
                     "shortName": "\uD83D\uDCE5",
                     "payload": {
-                        "url": "./video_full/{{id}}",
+                        "url": "./video_x600/{{id}}",
                         "target": "download",
                         "replacements": {
                             "id": "record.tdocvideos[0].fileName"
