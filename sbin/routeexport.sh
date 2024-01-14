@@ -18,9 +18,10 @@ FULLTEXRFILTER=${6}
 ACTIONTYPES=${7}
 PERSONS=${8}
 WHEREFILTER=${9}
+VIEWERSRC=${10}
 
 # Routes
-${SCRIPTPATH}/mediaexport.sh "${CONFIGPROFILE}" "${ROUTEDIR}" "" "${ROUTEFILEBASE}" "prod" "${DIPROFILE}" "${FILEPROFILE}" "" "nonblocked_innerfamily" "${FULLTEXRFILTER}" createhtml "route" "${ACTIONTYPES}" "${PERSONS}" "${WHEREFILTER}"
+${SCRIPTPATH}/mediaexport.sh "${CONFIGPROFILE}" "${ROUTEDIR}" "" "${ROUTEFILEBASE}" "prod" "${DIPROFILE}" "${FILEPROFILE}" "" "nonblocked_innerfamily" "${FULLTEXRFILTER}" createhtml "route" "${ACTIONTYPES}" "${PERSONS}" "${WHEREFILTER}" "${VIEWERSRC}"
 ${SCRIPTPATH}/setConfigValueInViewerFile.sh "${ROUTEDIR}\\${ROUTEFILEBASE}.html" "bestMatchingTabsOrder" '"ROUTE","DESTINATION","LOCATION","POI","INFO","PLAYLIST","ALL"'
 ${SCRIPTPATH}/setConfigValueInViewerFile.sh "${ROUTEDIR}\\${ROUTEFILEBASE}.html" "favoritesTabsOrder" '"ROUTE", "DESTINATION", "ALL"'
 cp "${ROUTEDIR}\\${ROUTEFILEBASE}.html" "${ROUTEDIR}\\routes-${ROUTEFILEBASE}-noimg.html"
