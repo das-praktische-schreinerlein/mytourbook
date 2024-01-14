@@ -44,6 +44,10 @@
             "pattern": "/tracks/.*",
             "file": "track.gpx"
         },
+        "pdfs": {
+            "pattern": "/pdfs/.*",
+            "file": "track.pdf"
+        },
         "digifotos": {
             "pattern": "/digifotos/.*",
             "file": "image.png"

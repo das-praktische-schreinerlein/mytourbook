@@ -77,6 +77,36 @@ export class AssetsServerModule {
         }
     }
 
+    public static configureStoredPdfRoutes(app: express.Application, apiPrefix: string, backendConfig: BackendConfigType,
+                                             errorFile: string, filePathErrorDocs: string) {
+        if (backendConfig.apiRouteStoredPdfs && backendConfig.apiRoutePdfsStaticDir) {
+            console.log('configure route pdfstore:',
+                apiPrefix + backendConfig.apiRouteStoredPdfs + ':resolveTdocByTdocId'
+                + ' to ' + backendConfig.apiRoutePdfsStaticDir);
+            // use id: param to read from solr
+            app.route(apiPrefix + backendConfig.apiRouteStoredPdfs + ':resolveTdocByTdocId')
+                .all(function(req, res, next) {
+                    if (req.method !== 'GET') {
+                        return next('not allowed');
+                    }
+                    return next();
+                })
+                .get(function(req, res, next) {
+                    const tdoc: TourDocRecord = req['tdoc'];
+                    if (tdoc === undefined
+                        || tdoc.pdfFile === undefined || tdoc.pdfFile === null) {
+                        res.status(200);
+                        res.sendFile(errorFile, {root: filePathErrorDocs});
+                        return;
+                    }
+                    res.status(200);
+                    res.sendFile(tdoc.type + '/' + tdoc.pdfFile,
+                        {root: backendConfig.apiRoutePdfsStaticDir});
+                    return;
+                });
+        }
+    }
+
     public static configureStaticPictureRoutes(app: express.Application, apiPrefix: string, backendConfig: BackendConfigType) {
         if (backendConfig.apiRoutePictures && backendConfig.apiRoutePicturesStaticDir) {
             if (backendConfig.apiRoutePicturesStaticEnabled !== true) {

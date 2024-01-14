@@ -4,6 +4,7 @@ import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/servi
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
+import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
 
 export class SqlMytbDbPoiConfig {
     public static poiKwGroups = [
@@ -144,6 +145,7 @@ export class SqlMytbDbPoiConfig {
             'poi.poi_geo_ele',
             'poi.poi_calced_altMaxFacet AS altMaxFacet',
             'poi_reference',
+            'poi_pdffile',
             'l_lochirarchietxt AS l_lochirarchietxt',
             'l_lochirarchieids AS l_lochirarchieids',
             'poi_meta_desc'],
@@ -582,6 +584,7 @@ export class SqlMytbDbPoiConfig {
             geo_loc_p: 'poi_calced_gps_loc',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            pdffile_s: 'poi_pdffile',
             name_s: 'poi_name',
             subtype_s: 'subtype',
             type_s: 'type'
@@ -621,6 +624,12 @@ export class SqlMytbDbPoiConfig {
             { table: 'kategorie_poi', fieldReference: 'poi_id' },
             { table: 'tour_poi', fieldReference: 'poi_id' }
         ]
+    };
+
+    public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
+        table: 'pio',
+        fieldId: 'poi_id',
+        fieldFilename: 'poi_pdffile'
     };
 }
 

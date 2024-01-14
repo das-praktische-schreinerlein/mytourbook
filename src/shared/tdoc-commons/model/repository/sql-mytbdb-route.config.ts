@@ -10,6 +10,7 @@ import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {GeoEntityDbMapping} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.types';
+import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
 
 export class SqlMytbDbRouteConfig {
     public static readonly tableConfig: TableConfig = {
@@ -225,6 +226,7 @@ export class SqlMytbDbRouteConfig {
             't_gpstracks_basefile',
             't_gpstracks_state',
             't_meta_shortdesc',
+            't_pdffile',
             'l_calced_gps_lat AS t_gps_lat',
             'l_calced_gps_lon AS t_gps_lon',
             'l_calced_gps_loc AS t_gps_loc',
@@ -1028,6 +1030,7 @@ export class SqlMytbDbRouteConfig {
             playlists_txt: 't_playlists',
             route_attr_s: 't_k_route_attr',
             linked_route_attr_s: 't_kt_route_attr',
+            pdffile_s: 't_pdffile',
             name_s: 't_name',
             type_s: 'type',
             actiontype_s: 'actionType',
@@ -1127,6 +1130,12 @@ export class SqlMytbDbRouteConfig {
             alt: 'tp_ele',
             time: 'tp_date',
         }
+    };
+
+    public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
+        table: 'tour',
+        fieldId: 't_id',
+        fieldFilename: 't_pdffile'
     };
 }
 

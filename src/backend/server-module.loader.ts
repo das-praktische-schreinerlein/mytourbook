@@ -109,6 +109,8 @@ export class ServerModuleLoader {
         AssetsServerModule.configureStaticPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig);
         AssetsServerModule.configureStoredTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig,
             serverConfig.firewallConfig.routerErrorsConfigs['tracks'].file, serverConfig.filePathErrorDocs);
+        AssetsServerModule.configureStoredPdfRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig,
+            serverConfig.firewallConfig.routerErrorsConfigs['pdfs'].file, serverConfig.filePathErrorDocs);
         AssetsServerModule.configureStoredPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig,
             serverConfig.firewallConfig.routerErrorsConfigs['digifotos'].file, serverConfig.filePathErrorDocs);
 

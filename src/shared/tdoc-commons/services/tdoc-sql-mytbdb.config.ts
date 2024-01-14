@@ -23,7 +23,23 @@ import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 import {SqlMytbDbPoiConfig} from '../model/repository/sql-mytbdb-poi.config';
 import {GeoEntityTableDbMapping} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.types';
 
+export interface PdfEntityDbMapping {
+    table: string,
+    fieldFilename: string,
+    fieldId: string
+}
+
+export interface PdfEntityTablesDbMapping {
+    [key: string]: PdfEntityDbMapping;
+}
+
+
+export interface PdfEntityTableDbMapping {
+    tables: PdfEntityTablesDbMapping
+}
+
 export class TourDocSqlMytbDbConfig {
+
     public static readonly tableConfigs: TableConfigs = {
         'track': SqlMytbDbTrackConfig.tableConfig,
         'image': SqlMytbDbImageConfig.tableConfig,
@@ -245,6 +261,19 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
+    public static readonly pdfEntityDbMapping: PdfEntityTableDbMapping = {
+        tables: {
+            'image': SqlMytbDbImageConfig.pdfEntityDbMapping,
+            'track': SqlMytbDbTrackConfig.pdfEntityDbMapping,
+            'route': SqlMytbDbRouteConfig.pdfEntityDbMapping,
+            'location': SqlMytbDbLocationConfig.pdfEntityDbMapping,
+            'news': SqlMytbDbNewsConfig.pdfEntityDbMapping,
+            'info': SqlMytbDbInfoConfig.pdfEntityDbMapping,
+            'trip': SqlMytbDbTripConfig.pdfEntityDbMapping,
+            'poi': SqlMytbDbPoiConfig.pdfEntityDbMapping
+        }
+    };
+
     public getTableConfigForTableKey(table: string): TableConfig {
         return TourDocSqlMytbDbConfig.tableConfigs[table];
     }
@@ -287,6 +316,10 @@ export class TourDocSqlMytbDbConfig {
 
     public getGeoEntityTableDbMapping(): GeoEntityTableDbMapping {
         return TourDocSqlMytbDbConfig.geoEntityDbMapping;
+    }
+
+    public getPdfEntityTableDbMapping(): PdfEntityTableDbMapping {
+        return TourDocSqlMytbDbConfig.pdfEntityDbMapping;
     }
 }
 

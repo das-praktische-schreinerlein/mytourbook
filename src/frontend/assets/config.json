@@ -1534,6 +1534,35 @@
                     ]
                 },
                 {
+                    "key": "link_download_pdf_static",
+                    "type": "link",
+                    "name": "\uD83D\uDDCE Download Pdf Static",
+                    "shortName": "\uD83D\uDDCE Pdf",
+                    "payload": {
+                        "url": "http://localhost:4100/api/assets/pdfstore/{{id}}",
+                        "target": "download",
+                        "replacements": {
+                            "id": "record.id"
+                        }
+                    },
+                    "showFilter": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["show_only_on_popup"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "pdfFile",
+                            "command": "SNEQ",
+                            "expectedValues": [""]
+                        }
+                    ],
+                    "configAvailability": [
+                    ]
+                },
+                {
                     "key": "blocked",
                     "type": "tag",
                     "name": "\uD83D\uDEAB Block from public",

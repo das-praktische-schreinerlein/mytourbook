@@ -8,6 +8,7 @@ export const environment: AppEnvironment = {
     assetsPathVersionSuffix: '',
     backendApiBaseUrl: 'http://localhost:4101/api/v1/',
     tracksBaseUrl: 'http://localhost:4101/api/assets/trackstore/',
+    pdfsBaseUrl: 'http://localhost:4101/api/assets/pdfstore/',
     audioBaseUrl: 'http://localhost:4101/api/static/audiostore/',
     picsBaseUrl: 'http://localhost:4101/api/static/picturestore/',
     picsPreviewPathResolution: 'x300',

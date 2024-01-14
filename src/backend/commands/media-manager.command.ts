@@ -10,11 +10,10 @@ import {CommonMediaManagerCommand} from '@dps/mycms-server-commons/dist/backend-
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {FileSystemDBSyncType} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-media-manager.module';
 import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
-import {TourDocMediaFileExportManager} from '../modules/tdoc-mediafile-export.service';
+import {TourDocMediaExportProcessingOptions, TourDocMediaFileExportManager} from '../modules/tdoc-mediafile-export.service';
 import {MediaExportResolutionProfiles, TourDocExportService} from '../modules/tdoc-export.service';
 import {TourDocServerPlaylistService, TourDocServerPlaylistServiceConfig} from '../modules/tdoc-serverplaylist.service';
 import {TourDocMediaFileImportManager} from '../modules/tdoc-mediafile-import.service';
-import {MediaExportProcessingOptions} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-mediafile-export.service';
 import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
     KeywordValidationRule,
@@ -271,8 +270,9 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 console.log('DO generate searchform for : ' + action, exportDir, processingOptions);
                 promise = ExportManagerUtils.createSearchForm(type, argv).then(exportSearchForm => {
                     console.log('START processing: ' + action, exportSearchForm, exportDir, processingOptions);
-                    return tdocManagerModule.exportMediaFiles(exportSearchForm, <MediaExportProcessingOptions & ProcessingOptions> {
+                    return tdocManagerModule.exportMediaFiles(exportSearchForm, <TourDocMediaExportProcessingOptions & ProcessingOptions> {
                         ...processingOptions,
+                        pdfBase: backendConfig.apiRoutePdfsStaticDir,
                         exportBasePath: exportDir,
                         exportBaseFileName: exportName,
                         directoryProfile: directoryProfile,

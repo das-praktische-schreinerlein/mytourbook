@@ -7,6 +7,7 @@ import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {RateModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {Globals} from './globals';
+import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
 
 export class SqlMytbDbImageConfig {
     public static readonly tableConfig: TableConfig = {
@@ -755,6 +756,12 @@ export class SqlMytbDbImageConfig {
             { table: 'image_playlist', fieldReference: 'i_id' },
             { table: 'image_keyword', fieldReference: 'i_id' }
         ]
+    };
+
+    public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
+        table: 'image',
+        fieldId: 'i_id',
+        fieldFilename: 'i_pdffile'
     };
 }
 

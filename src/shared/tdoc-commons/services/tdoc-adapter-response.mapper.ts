@@ -78,6 +78,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             (props.objects ? props.objects.split(', ').join(',,') : '');
         values['persons_txt'] =
             (props.persons ? props.persons.split(', ').join(',,') : '');
+        values['pdffile_s'] = props.pdfFile;
         values['linked_route_attr_s'] = BeanUtils.getValue(props, 'linkedRouteAttr');
         values['playlists_txt'] =
             (props.playlists ? props.playlists.split(', ').join(',,') : '');
@@ -316,6 +317,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['gpsTrackSrc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstrack_src_s', undefined);
         values['gpsTrackBasefile'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstracks_basefile_s', undefined);
         values['gpsTrackState'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'gpstracks_state_i', undefined);
+        values['pdfFile'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'pdffile_s', undefined);
 
         const origKeywordsArr = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'keywords_txt', '').split(',');
         const replaceKeywordPatterns = BeanUtils.getValue(this.config, 'mapperConfig.replaceKeywordPatterns');

@@ -316,6 +316,41 @@ window.importStaticConfigJsonP = `{
                     ]
                 },
                 {
+                    "key": "link_download_pdf_static",
+                    "type": "link",
+                    "name": "Download Pdf Static",
+                    "shortName": "\uD83D\uDDCE",
+                    "payload": {
+                        "url": "./pdfs/{{type}}/{{pdfFile}}",
+                        "target": "download",
+                        "replacements": {
+                            "pdfFile": "record.pdfFile",
+                            "type": "record.type"
+                        }
+                    },
+                    "showFilter": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["show_only_on_popup"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ROUTE", "route"]
+                        },
+                        {
+                            "property": "pdfFile",
+                            "command": "SNEQ",
+                            "expectedValues": [""]
+                        }
+                    ],
+                    "configAvailability": [
+                    ]
+                },
+                {
                     "key": "local_album_current",
                     "type": "albumtag",
                     "name": "\u2764 local Album",

@@ -15,6 +15,7 @@ import {MediaImportManagerCommand} from './media-import-manager.command';
 import {TourDocConverterCommand} from './tdoc-converter.command';
 import {GeoManagerCommand} from './geo-manager.command';
 import {PageManagerCommand} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/commands/pdoc-manager.command';
+import {PdfManagerCommand} from './pdf-manager.command';
 
 export interface ServerAdminCommandConfigType extends CommonServerAdminCommandConfigType, AdminCommandConfigType {
     importDir: string,
@@ -38,6 +39,7 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
                 'mediaImportManager': new MediaImportManagerCommand(),
                 'objectDetectionManager': new ObjectDetectionManagerCommand(),
                 'geoManagerCommand': new GeoManagerCommand(),
+                'pdfManager': new PdfManagerCommand(),
                 'pageManager': new PageManagerCommand(),
                 'dbAdmin': new DbAdminCommand(),
                 'dbPublish': new DbPublishCommand(),

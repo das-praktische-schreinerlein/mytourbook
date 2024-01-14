@@ -7,6 +7,7 @@ import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {GeoEntityDbMapping} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.types';
+import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
 
 export class SqlMytbDbTrackConfig {
     public static readonly tableConfig: TableConfig = {
@@ -236,6 +237,7 @@ export class SqlMytbDbTrackConfig {
             'k_gpstracks_basefile',
             'k_gpstracks_state',
             'k_meta_shortdesc',
+            'k_pdffile',
             'l_calced_gps_lat AS k_gps_lat',
             'l_calced_gps_lon AS k_gps_lon',
             'l_calced_gps_loc AS k_gps_loc',
@@ -772,6 +774,7 @@ export class SqlMytbDbTrackConfig {
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
             playlists_txt: 'k_playlists',
+            pdffile_s: 'k_pdffile',
             name_s: 'k_name',
             type_s: 'type',
             actiontype_s: 'actionType',
@@ -863,6 +866,12 @@ export class SqlMytbDbTrackConfig {
             alt: 'ktp_ele',
             time: 'ktp_date',
         }
+    };
+
+    public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
+        table: 'kategorie',
+        fieldId: 'k_id',
+        fieldFilename: 'k_pdffile'
     };
 }
 

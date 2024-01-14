@@ -279,6 +279,22 @@
                     }
                 ]
             },
+            "EXPORT: generatePdf": {
+                "description": "generate pdf-files to export-pdf-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "pdfManager",
+                            "action": "generateRoutePdf",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/pdfgenerator-de.json",
+                            "parallel": 1,
+                            "rateMinFilter": 1,
+                            "showNonBlockedOnly": "showall"
+                        }
+                    }
+                ]
+            },
             "EXPORT: exportMediaFavorites": {
                 "description": "export media-favorites to export-media-directory",
                 "commands": [
@@ -320,7 +336,7 @@
                             "action": "generateHtmlViewerFileForExport",
                             "backend": "config/backend.dev.json",
                             "exportName": "favorites-top",
-                            "exportDir": "F:/playground/mytb-test/Bilder/export/favorites/",
+                            "exportDir": "F:/playground/mytb-test/export/Bilder/favorites/",
                             "createViewer": "html",
                             "srcFile": "F:/Projekte/mytourbook_dev/dist/static/mytbviewer/de/index.viewer.full.html",
                             "srcFiles": "F:/playground/mytb-test/export/Bilder/favorites/favorites-top-images.tdocsexport.json,F:/playground/mytb-test/export/Bilder/favorites/favorites-top-videos.tdocsexport.json"
@@ -332,6 +348,47 @@
                             "action": "inlineDataOnViewerFile",
                             "backend": "config/backend.dev.json",
                             "srcFile": "F:/playground/mytb-test/export/Bilder/favorites/favorites-top.html"
+                        }
+                    }
+                ]
+            },
+            "EXPORT: exportRouteFavorites": {
+                "description": "export route-favorites to export-route-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "exportRouteFiles",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "favorites-top",
+                            "exportDir": "F:/playground/mytb-test/export/Routes/top-routes/",
+                            "directoryProfile": "default",
+                            "fileNameProfile": "default",
+                            "playlists": "",
+                            "rateMinFilter": 1,
+                            "parallel": 20,
+                            "resolutionProfile": "default",
+                            "showNonBlockedOnly": "showall"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "generateHtmlViewerFileForExport",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "favorites-top",
+                            "exportDir": "F:/playground/mytb-test/export/Routes/top-routes/",
+                            "createViewer": "html",
+                            "srcFile": "F:/Projekte/mytourbook_dev/dist/static/mytbviewer/de-with-pdf/index.viewer.full.html",
+                            "srcFiles": "F:/playground/mytb-test/export/Routes/top-routes/favorites-top.tdocsexport.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "inlineDataOnViewerFile",
+                            "backend": "config/backend.dev.json",
+                            "srcFile": "F:/playground/mytb-test/export/Routes/top-routes/favorites-top.html"
                         }
                     }
                 ]

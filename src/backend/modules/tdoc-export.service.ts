@@ -5,9 +5,10 @@ import {TourDocSearchForm} from '../shared/tdoc-commons/model/forms/tdoc-searchf
 import {TourDocSearchResult} from '../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocServerPlaylistService} from './tdoc-serverplaylist.service';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
-import {TourDocMediaFileExportManager} from './tdoc-mediafile-export.service';
+import {TourDocMediaExportProcessingOptions, TourDocMediaFileExportManager} from './tdoc-mediafile-export.service';
 import {
     CommonDocDocExportService,
+    ExportProcessingOptions,
     ExportProcessingResult,
     ExportProcessingResultMediaFileMappingsType,
     ExportProcessingResultRecordFieldMappingsType
@@ -20,8 +21,8 @@ import {TourDocLinkedRouteRecord} from '../shared/tdoc-commons/model/records/tdo
 import {TourDocLinkedInfoRecord} from '../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
 import {TourDocLinkedPlaylistRecord} from '../shared/tdoc-commons/model/records/tdoclinkedplaylist-record';
 import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
-import {ExportProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-export.service';
 import {TourDocLinkedPoiRecord} from '../shared/tdoc-commons/model/records/tdoclinkedpoi-record';
+import fs from 'fs';
 
 export enum MediaExportResolutionProfiles {
     'all' = 'all',
@@ -44,13 +45,14 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
     }
 
     public exportMediaFiles(searchForm: TourDocSearchForm,
-                            processingOptions: MediaExportProcessingOptions & ProcessingOptions & ExportProcessingOptions): Promise<{}> {
+                            processingOptions: TourDocMediaExportProcessingOptions & ProcessingOptions & ExportProcessingOptions): Promise<{}> {
         const me = this;
         const exportResults: ExportProcessingResult<TourDocRecord>[]  = [];
         processingOptions.jsonBaseElement = 'tdocs';
         const callback = function(mdoc: TourDocRecord): Promise<{}>[] {
             return [
-                me.exportMediaRecordFiles(mdoc, processingOptions, exportResults)
+                me.exportMediaRecordFiles(mdoc, processingOptions, exportResults),
+                me.mediaFileExportManager.exportMediaRecordPdfFiles(mdoc, processingOptions),
             ];
         };
 
@@ -147,6 +149,41 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
                     });
                 });
         }
+    }
+
+    public generatePdfResultListFile(exportDir: string, exportName: string,
+                                     generateResults: ExportProcessingResult<TourDocRecord>[]): Promise<any> {
+        const exportListFile = exportDir + '/' + exportName + '.lst';
+        if (fs.existsSync(exportListFile) && !fs.statSync(exportListFile).isFile()) {
+            return Promise.reject('exportBaseFileName must be file');
+        }
+
+        const fileList = generateResults.map(value => {
+            return [value.exportFileEntry, value.record.name,  value.record.type, ''].join('\t')
+        }).join('\n')
+
+        fs.writeFileSync(exportListFile, fileList);
+        console.log('wrote fileList', exportListFile);
+
+        const exportHtmlFile = exportDir + '/' + exportName + '.html';
+        if (fs.existsSync(exportHtmlFile) && !fs.statSync(exportHtmlFile).isFile()) {
+            return Promise.reject('exportBaseFileName must be file');
+        }
+
+        const htmlFileList = generateResults.map(value => {
+            const fileName = value.exportFileEntry;
+            const name = value.record.name;
+            const rtype = value.record.type;
+            return `<div class='bookmark_line bookmark_line_$rtype'><div class='bookmark_file'><a href="$fileName" target="_blank">$fileName</a></div><div class='bookmark_name'>$name</div><div class='bookmark_page'></div></div>`
+                .replace(/\$fileName/g, fileName)
+                .replace(/\$name/g, name)
+                .replace(/\$rtype/g, rtype);
+        }).join('\n')
+
+        fs.writeFileSync(exportHtmlFile, htmlFileList);
+        console.log('wrote htmlFile', exportHtmlFile);
+
+        return Promise.resolve();
     }
 
     protected generatePlaylistEntry(tdoc: TourDocRecord, file: string): string {

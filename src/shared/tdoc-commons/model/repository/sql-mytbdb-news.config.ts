@@ -3,6 +3,7 @@ import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-comm
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
+import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
 
 export class SqlMytbDbNewsConfig {
     public static readonly tableConfig: TableConfig = {
@@ -137,6 +138,7 @@ export class SqlMytbDbNewsConfig {
             'WEEK(n_date) AS week',
             'MONTH(n_date) AS month',
             'YEAR(n_date) AS year',
+            'n_pdffile',
             'n_gesperrt',
             'n_message'],
         facetConfigs: {
@@ -422,6 +424,7 @@ export class SqlMytbDbNewsConfig {
             blocked_i: 'n_gesperrt',
             desc_md_txt: 'n_message',
             keywords_txt: 'n_keywords',
+            pdffile_s: 'n_pdffile',
             name_s: 'n_headline',
             type_s: 'type'
         }
@@ -443,6 +446,12 @@ export class SqlMytbDbNewsConfig {
         fieldId: 'n_id',
         referenced: [],
         joins: []
+    };
+
+    public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
+        table: 'news',
+        fieldId: 'n_id',
+        fieldFilename: 'n_pdffile'
     };
 }
 

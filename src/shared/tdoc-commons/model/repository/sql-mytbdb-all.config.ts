@@ -407,6 +407,7 @@ export class SqlMytbDbAllConfig {
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
             name_s: 'meta_name',
             persons_txt: 'persons',
+            pdffile_s: 'pdfFile',
             objects_txt: 'objects',
             playlists_txt: 'playlists',
             subtype_s: 'subtype',

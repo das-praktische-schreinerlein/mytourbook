@@ -4,6 +4,7 @@ import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-co
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
+import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
 
 export class SqlMytbDbTripConfig {
     public static readonly tableConfig: TableConfig = {
@@ -174,6 +175,7 @@ export class SqlMytbDbTripConfig {
             'MIN(k_altitude_min) AS k_altitude_min',
             'MAX(k_altitude_max) AS k_altitude_max',
             'SUM(k_distance) AS k_distance_sum',
+            'tr_pdffile',
             'tr_meta_shortdesc',
             'tr_calced_dur AS dur',
             'tr_calced_durFacet AS durFacet'],
@@ -520,6 +522,7 @@ export class SqlMytbDbTripConfig {
             blocked_i: 'tr_gesperrt',
             desc_md_txt: 'tr_meta_shortdesc',
             keywords_txt: 'tr_keywords',
+            pdffile_s: 'tr_pdffile',
             name_s: 'tr_name',
             type_s: 'type'
         }
@@ -551,6 +554,12 @@ export class SqlMytbDbTripConfig {
             { table: 'kategorie', fieldReference: 'tr_id' }
         ],
         joins: []
+    };
+
+    public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
+        table: 'trip',
+        fieldId: 'tr_id',
+        fieldFilename: 'tr_pdffile'
     };
 }
 

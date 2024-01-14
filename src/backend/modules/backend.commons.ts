@@ -27,8 +27,17 @@ export interface CommonTrackBackendConfigType {
     proxyTrackRouteToUrl: string;
 }
 
+export interface CommonPdfBackendConfigType {
+    apiRoutePdfs: string;
+    apiRoutePdfsStaticDir: string;
+    apiRoutePdfsStaticEnabled: boolean;
+    apiRouteStoredPdfs: string;
+    proxyPdfRouteToUrl: string;
+}
+
 export interface BackendConfigType extends CommonBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonTrackBackendConfigType,
+    CommonPdfBackendConfigType,
     CommonAudioBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonImageBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonVideoBackendConfigType<KeywordMapperConfigType, CacheConfig>,

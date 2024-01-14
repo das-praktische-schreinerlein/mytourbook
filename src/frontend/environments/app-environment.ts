@@ -3,6 +3,7 @@ import {DataMode} from '../shared/tdoc-commons/model/datamode.enum';
 
 export interface AppEnvironment extends CommonEnvironment {
     tracksBaseUrl: string;
+    pdfsBaseUrl?: string;
     audioBaseUrl: string;
     picsBaseUrl: string;
     picsPreviewPathResolution: string;

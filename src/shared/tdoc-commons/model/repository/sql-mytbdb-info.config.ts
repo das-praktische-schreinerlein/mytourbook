@@ -5,6 +5,7 @@ import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-com
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
+import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
 
 export class SqlMytbDbInfoConfig {
     public static readonly tableConfig: TableConfig = {
@@ -153,6 +154,7 @@ export class SqlMytbDbInfoConfig {
             'location.l_calced_gps_loc AS if_gps_loc',
             'location.l_lochirarchietxt AS l_lochirarchietxt',
             'location.l_lochirarchieids AS l_lochirarchieids',
+            'if_pdffile',
             'if_gesperrt',
             'if_meta_desc',
             'if_meta_shortdesc'
@@ -484,6 +486,7 @@ export class SqlMytbDbInfoConfig {
             info_publisher_s: 'if_publisher',
             info_type_s: 'subtype',
             keywords_txt: 'if_keywords',
+            pdffile_s: 'if_pdffile',
             name_s: 'if_name',
             subtype_s: 'subtype',
             type_s: 'type'
@@ -523,6 +526,12 @@ export class SqlMytbDbInfoConfig {
             { table: 'tour_info', fieldReference: 'if_id' },
             { table: 'location_info', fieldReference: 'if_id' }
         ]
+    };
+
+    public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
+        table: 'info',
+        fieldId: 'if_id',
+        fieldFilename: 'if_pdffile'
     };
 }
 

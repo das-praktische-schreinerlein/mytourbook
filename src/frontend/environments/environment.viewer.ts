@@ -9,6 +9,7 @@ export const environment: AppEnvironment = {
     assetsPathVersionSuffix: '',
     backendApiBaseUrl: undefined,
     tracksBaseUrl: undefined,
+    pdfsBaseUrl: undefined,
     audioBaseUrl: undefined,
     picsBaseUrl: undefined,
     picsPreviewPathResolution: 'x300',

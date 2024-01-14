@@ -9,6 +9,7 @@ import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/servi
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
+import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
 
 export class SqlMytbDbLocationConfig {
     public static readonly tableConfig: TableConfig = {
@@ -177,6 +178,7 @@ export class SqlMytbDbLocationConfig {
             'location.l_gesperrt',
             'location.l_geo_state',
             'location.l_meta_shortdesc',
+            'location.l_pdffile',
             'location.l_calced_gps_lat',
             'location.l_calced_gps_lon',
             'location.l_calced_gps_loc',
@@ -524,6 +526,7 @@ export class SqlMytbDbLocationConfig {
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
             playlists_txt: 'l_playlists',
+            pdffile_s: 'l_pdffile',
             name_s: 'l_name',
             type_s: 'type',
             subtype_s: 'subtype'
@@ -593,6 +596,12 @@ export class SqlMytbDbLocationConfig {
             { table: 'location_keyword', fieldReference: 'l_id' },
             { table: 'location_info', fieldReference: 'l_id' },
         ]
+    };
+
+    public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
+        table: 'location',
+        fieldId: 'l_id',
+        fieldFilename: 'l_pdffile'
     };
 }
 

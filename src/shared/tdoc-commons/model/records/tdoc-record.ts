@@ -15,6 +15,7 @@ import {
     IdValidationRule,
     NameValidationRule,
     NumberValidationRule,
+    SimpleConfigFilePathValidationRule,
     StringNumberValidationRule,
     TextValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
@@ -83,6 +84,7 @@ export interface TourDocRecordType extends CommonDocRecordType, MapDocRecord {
     locHirarchieIds: string;
     objects: string;
     persons: string;
+    pdfFile: string
     linkedRouteAttr: string;
     techName: string;
 }
@@ -272,6 +274,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
         locHirarchieIds: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         objects: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         persons: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
+        pdfFile: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.FILENAME, new SimpleConfigFilePathValidationRule(false)),
         linkedRouteAttr: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         techName: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
     };
@@ -300,6 +303,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
     locHirarchieIds: string;
     objects: string;
     persons: string;
+    pdfFile: string;
     linkedRouteAttr: string;
     techName: string;
 
