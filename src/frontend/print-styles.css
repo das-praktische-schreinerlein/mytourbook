@@ -1,3 +1,7 @@
+a {
+    color: black;
+}
+
 app-tdoc-list-item, .app-tdoc-list-item, .tdoc-list-item-flat, .tdoc-list-item-thin {
     page-break-before: auto;
     page-break-after: auto;

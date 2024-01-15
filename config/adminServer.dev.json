@@ -290,7 +290,8 @@
                             "sitemap": "config/pdfgenerator-de.json",
                             "parallel": 1,
                             "rateMinFilter": 1,
-                            "showNonBlockedOnly": "showall"
+                            "showNonBlockedOnly": "showall",
+                            "queryParams": "showROUTE_NEARBY=20&showLOCATION=0&showDESTINATION=0"
                         }
                     }
                 ]

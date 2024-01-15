@@ -36,6 +36,7 @@ export class PdfManagerCommand extends CommonAdminCommand {
             backend: new SimpleConfigFilePathValidationRule(true),
             sitemap: new SimpleConfigFilePathValidationRule(true),
             baseUrl: new HtmlValidationRule(false),
+            queryParams: new HtmlValidationRule(false),
             ... ExportManagerUtils.createExportValidationRules(),
             ... ExportManagerUtils.createSearchFormValidationRules()
         };
@@ -158,11 +159,14 @@ export class PdfManagerCommand extends CommonAdminCommand {
                 }
 
                 const generateName = generateType;
+                const queryParams = argv['queryParams'] !== undefined
+                    ? argv['queryParams']
+                    : '';
 
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 const generateResults: ExportProcessingResult<TourDocRecord>[]  = [];
                 const generateCallback = function(mdoc: TourDocRecord): Promise<{}>[] {
-                    const url = baseUrl + '/' + mdoc.id + '?print';
+                    const url = baseUrl + '/' + mdoc.id + '?print&' + queryParams;
                     const fileName = mdoc.pdfFile !== undefined && mdoc.pdfFile.length > 5
                         ? mdoc.pdfFile
                         : me.generatePdfFileName(mdoc, TourDocBackendGeoService.hierarchyConfig);
@@ -353,8 +357,9 @@ export class PdfManagerCommand extends CommonAdminCommand {
         const locName = StringUtils.generateTechnicalName(locHierarchy.join('-'));
         let name = StringUtils.generateTechnicalName(entity.name);
 
-        if ((locName.length + name.length) > 160) {
-            name = name.substring(0, 160 - locName.length);
+        const baseName = [entity.type, locName, entity.id].join('_') + '.pdf';
+        if ([baseName, name].join('_').length > 140) {
+            name = name.substring(0, 135 - baseName.length);
         }
 
         return [entity.type,

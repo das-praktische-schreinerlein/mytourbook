@@ -242,7 +242,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             filters['sort'] = 'location';
         }
 
-        if (minPerPage && minPerPage > 0 && minPerPage > filters['perPage']) {
+        if (minPerPage && minPerPage > 0 && (minPerPage > filters['perPage'] || filters['perPage'] === undefined)) {
             filters['perPage'] = minPerPage;
         }
 

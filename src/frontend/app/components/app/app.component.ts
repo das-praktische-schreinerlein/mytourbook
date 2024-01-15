@@ -33,6 +33,7 @@ export class AppComponent extends AbstractAppComponent {
 
         this.activatedRoute.queryParamMap.subscribe(params => {
             if (params && params.get('print') !== null) {
+                environment.tourDocDateFormatPipePattern = 'SHORT';
                 this.printService.activatePrintStyles(document);
             }
         });

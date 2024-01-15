@@ -3025,7 +3025,13 @@
         },
         "tdoc-showpage": {
             "showBigImages": false,
-            "allowedQueryParams": [],
+            "allowedQueryParams": [
+                "showDESTINATION",
+                "showLOCATION",
+                "showROUTE",
+                "showROUTE_NEARBY",
+                "showTOPIMAGE"
+            ],
             "availableTabs": {
                 "ALL_ENTRIES": true,
                 "IMAGE": true,

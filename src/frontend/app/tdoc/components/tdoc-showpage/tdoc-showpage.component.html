@@ -215,7 +215,7 @@
                                             [params]="getFiltersForType(record, 'DESTINATION')"
                                             [htmlId]="'DESTINATION'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.DESTINATION"
                                             [layout]="Layout.BIG"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
@@ -311,7 +311,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.DESTINATION"
@@ -321,7 +321,7 @@
                                             [htmlId]="'DESTINATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.DESTINATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
@@ -396,8 +396,8 @@
                                             i18n-label="label inline-searchpage ROUTE_NEARBY|Label inline-searchpage ROUTE_NEARBY@@linline-search.label.tdoc.ROUTE_NEARBY"
                                             [params]="getFiltersForType(record, 'ROUTE_NEARBY')"
                                             [htmlId]="'ROUTE_NEARBY'"
-                                            [showResultList]="false"
-                                            [layout]="Layout.FLAT"
+                                            [showResultList]="showResultListTrigger.ROUTE_NEARBY"
+                                            [layout]="Layout.THIN"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
@@ -410,7 +410,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
@@ -485,8 +485,8 @@
                                             i18n-label="label inline-searchpage ROUTE_NEARBY|Label inline-searchpage ROUTE_NEARBY@@linline-search.label.tdoc.ROUTE_NEARBY"
                                             [params]="getFiltersForType(record, 'ROUTE_NEARBY')"
                                             [htmlId]="'ROUTE_NEARBY'"
-                                            [showResultList]="false"
-                                            [layout]="Layout.FLAT"
+                                            [showResultList]="showResultListTrigger.ROUTE_NEARBY"
+                                            [layout]="Layout.THIN"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
@@ -509,7 +509,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
@@ -527,7 +527,7 @@
                                             [params]="getFiltersForType(record, 'DESTINATION')"
                                             [htmlId]="'DESTINATION'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.DESTINATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
@@ -615,7 +615,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
@@ -668,7 +668,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
@@ -753,7 +753,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
@@ -807,7 +807,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
@@ -832,7 +832,7 @@
                                             [params]="getFiltersForType(record, 'DESTINATION')"
                                             [htmlId]="'DESTINATION'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.DESTINATION"
                                             [layout]="Layout.BIG"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
@@ -968,7 +968,7 @@
                                             [params]="getFiltersForType(record, 'DESTINATION')"
                                             [htmlId]="'DESTINATION'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.DESTINATION"
                                             [layout]="Layout.BIG"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
@@ -981,7 +981,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
@@ -1006,7 +1006,7 @@
                                             [params]="getFiltersForType(record, 'DESTINATION')"
                                             [htmlId]="'DESTINATION'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.DESTINATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.POI"
@@ -1121,7 +1121,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"

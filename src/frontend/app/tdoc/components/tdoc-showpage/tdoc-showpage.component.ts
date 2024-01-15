@@ -105,6 +105,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     defaultSubImageLayout = Layout.SMALL;
     showResultListTrigger: {
         ALL_ENTRIES?: boolean|number;
+        DESTINATION?: boolean|number;
         IMAGE?: boolean|number;
         INFO?: boolean|number;
         ODIMGOBJECT?: boolean|number;
@@ -112,6 +113,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         LOCATION?: boolean|number;
         NEWS?: boolean|number;
         ROUTE?: boolean|number;
+        ROUTE_NEARBY?: boolean|number;
         TOPIMAGE?: boolean|number;
         IMAGE_SIMILAR?: boolean|number;
         TRACK?: boolean|number;
@@ -119,13 +121,15 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         POI?: boolean|number;
     } = {
         ALL_ENTRIES: true,
+        DESTINATION: false,
         IMAGE: false,
         INFO: false,
         ODIMGOBJECT: false,
         VIDEO: false,
-        LOCATION: false,
+        LOCATION: true,
         NEWS: false,
         ROUTE: false,
+        ROUTE_NEARBY: false,
         TOPIMAGE: false,
         IMAGE_SIMILAR: false,
         TRACK: false,
