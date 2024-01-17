@@ -18,7 +18,11 @@ export interface TourDocMediaExportProcessingOptions extends MediaExportProcessi
 export class TourDocMediaFileExportManager extends CommonDocMediaFileExportManager<TourDocRecord> {
     protected readonly dataService: TourDocDataService;
 
-    public exportMediaRecordPdfFiles(mdoc: TourDocRecord, exportProcessingOptions: TourDocMediaExportProcessingOptions)
+    constructor(baseDir: string, playlistService: TourDocServerPlaylistService) {
+        super(baseDir, playlistService);
+    }
+
+    public exportMediaRecordPdfFile(mdoc: TourDocRecord, exportProcessingOptions: TourDocMediaExportProcessingOptions)
         : Promise<ExportProcessingResult<TourDocRecord>> {
         if (mdoc.pdfFile === undefined || mdoc.pdfFile.length < 4) {
             console.log('SKIPPED - exportMediaRecordPdfFiles - no pdffile', mdoc.id, mdoc.name);
@@ -45,10 +49,6 @@ export class TourDocMediaFileExportManager extends CommonDocMediaFileExportManag
 
             return Promise.resolve(result);
         });
-    }
-
-    constructor(baseDir: string, playlistService: TourDocServerPlaylistService) {
-        super(baseDir, playlistService);
     }
 
     protected getDetailImageRecords(tdoc: TourDocRecord): BaseImageRecord[] {

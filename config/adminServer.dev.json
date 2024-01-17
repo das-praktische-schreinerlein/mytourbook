@@ -284,14 +284,27 @@
                 "commands": [
                     {
                         "parameters": {
-                            "command": "pdfManager",
-                            "action": "generateRoutePdf",
+                            "command": "tdocPdfManager",
+                            "action": "generateDefaultRoutePdfs",
                             "backend": "config/backend.dev.json",
-                            "sitemap": "config/pdfgenerator-de.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
                             "parallel": 1,
                             "rateMinFilter": 1,
                             "showNonBlockedOnly": "showall",
                             "queryParams": "showROUTE_NEARBY=20&showLOCATION=0&showDESTINATION=0"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pdocPdfManager",
+                            "action": "generateDefaultPagePdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/pdoc-pdfgenerator-de.json",
+                            "langkeys": "lang_de",
+                            "profiles": "profile_dev",
+                            "subtype": "SectionOverviewPage,SectionPage",
+                            "parallel": 1,
+                            "queryParams": ""
                         }
                     }
                 ]

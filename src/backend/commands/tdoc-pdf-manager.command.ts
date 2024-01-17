@@ -1,0 +1,179 @@
+import * as fs from 'fs';
+import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
+import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
+import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
+import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
+import {
+    HtmlValidationRule,
+    KeywordValidationRule,
+    SimpleConfigFilePathValidationRule,
+    ValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {BackendConfigType} from '../modules/backend.commons';
+import {TourDocExportManagerUtils} from '../modules/tdoc-export-manager.utils';
+import {TourDocServerPlaylistService, TourDocServerPlaylistServiceConfig} from '../modules/tdoc-serverplaylist.service';
+import {TourDocMediaFileExportManager} from '../modules/tdoc-mediafile-export.service';
+import {SitemapConfig} from '@dps/mycms-server-commons/dist/backend-commons/modules/sitemap-generator.module';
+import {TourPdfManagerModule} from '../modules/tdoc-pdf-manager-module';
+
+export class TourDocPdfManagerCommand extends CommonAdminCommand {
+
+    protected createValidationRules(): {[key: string]: ValidationRule} {
+        return {
+            action: new KeywordValidationRule(true),
+            backend: new SimpleConfigFilePathValidationRule(true),
+            sitemap: new SimpleConfigFilePathValidationRule(true),
+            baseUrl: new HtmlValidationRule(false),
+            queryParams: new HtmlValidationRule(false),
+            ... TourDocExportManagerUtils.createExportValidationRules(),
+            ... TourDocExportManagerUtils.createTourDocSearchFormValidationRules()
+        };
+    }
+
+    protected definePossibleActions(): string[] {
+        return [
+            'exportImagePdfs', 'exportLocationPdfs', 'exportRoutePdfs', 'exportTrackPdfs',
+            'generateDefaultImagePdfs', 'generateLocationPdfs', 'generateRoutePdfs', 'generateTrackPdfs',
+            'generateExternalImagePdfs', 'generateExternalLocationPdfs', 'generateExternalRoutePdfs', 'generateExternalTrackPdfs'];
+    }
+
+    protected processCommandArgs(argv: {}): Promise<any> {
+        argv['exportDir'] = TourDocFileUtils.normalizeCygwinPath(argv['exportDir']);
+
+        const filePathConfigJson = argv['backend'];
+        if (filePathConfigJson === undefined) {
+            return Promise.reject('ERROR - parameters required backendConfig: "--backend"');
+        }
+
+        const filePathSitemapConfigJson = argv['sitemap'];
+        if (filePathSitemapConfigJson === undefined) {
+            return Promise.reject('ERROR - parameters required sitemapConfig: "--sitemap"');
+        }
+
+        const action = argv['action'];
+        const backendConfig: BackendConfigType = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
+        const sitemapConfig: SitemapConfig = JSON.parse(fs.readFileSync(filePathSitemapConfigJson, {encoding: 'utf8'}));
+
+        // @ts-ignore
+        const writable = backendConfig.tdocWritable === true || backendConfig.tdocWritable === 'true';
+        const dataService = TourDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);
+        if (writable) {
+            dataService.setWritable(true);
+        }
+
+        const playlistConfig: TourDocServerPlaylistServiceConfig = {
+            audioBaseUrl: backendConfig.playlistExportAudioBaseUrl,
+            imageBaseUrl: backendConfig.playlistExportImageBaseUrl,
+            videoBaseUrl: backendConfig.playlistExportVideoBaseUrl,
+            useAudioAssetStoreUrls: backendConfig.playlistExportUseAudioAssetStoreUrls,
+            useImageAssetStoreUrls: backendConfig.playlistExportUseImageAssetStoreUrls,
+            useVideoAssetStoreUrls: backendConfig.playlistExportUseVideoAssetStoreUrls
+        };
+        const playlistService = new TourDocServerPlaylistService(playlistConfig);
+        const mediaFileExportManager = new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService);
+        const pdfManagerModule = new TourPdfManagerModule(dataService, mediaFileExportManager, backendConfig);
+
+        let promise: Promise<any>;
+        const processingOptions: ProcessingOptions = {
+            ignoreErrors: Number.parseInt(argv['ignoreErrors'], 10) || 0,
+            parallel: Number.parseInt(argv['parallel'], 10),
+        };
+        const force = argv['force'] === true || argv['force'] === 'true';
+
+        const generatePdfsType = this.getGenerateTypeFromAction(action);
+        const generateName = generatePdfsType;
+        const generateQueryParams = argv['queryParams'] !== undefined
+            ? argv['queryParams']
+            : '';
+        const baseUrl = argv['baseUrl'];
+
+        const exportPdfsType = this.getExportTypeFromAction(action);
+        const exportDir = argv['exportDir'];
+        const exportName = argv['exportName'];
+
+        switch (action) {
+            case 'generateDefaultImagePdfs':
+            case 'generateDefaultLocationPdfs':
+            case 'generateDefaultRoutePdfs':
+            case 'generateDefaultTrackPdfs':
+                console.log('DO generate searchform for : ' + action, processingOptions);
+                promise = TourDocExportManagerUtils.createTourDocSearchForm(generatePdfsType, argv).then(searchForm => {
+                    console.log('START processing: ' + action, backendConfig.apiRoutePdfsStaticDir, searchForm, processingOptions);
+                    return pdfManagerModule.generatePdfs(action,
+                        backendConfig.apiRoutePdfsStaticDir, generateName, sitemapConfig.showBaseUrl,
+                        generateQueryParams, processingOptions, searchForm, force);
+                });
+
+                break;
+            case 'generateExternalImagePdfs':
+            case 'generateExternalLocationPdfs':
+            case 'generateExternalRoutePdfs':
+            case 'generateExternalTrackPdfs':
+                console.log('DO generate searchform for : ' + action, processingOptions);
+                promise = TourDocExportManagerUtils.createTourDocSearchForm(generatePdfsType, argv).then(searchForm => {
+                    console.log('START processing: ' + action, exportDir, searchForm, processingOptions);
+                    return pdfManagerModule.generatePdfs(action, exportDir, exportName, baseUrl, generateQueryParams,
+                        processingOptions, searchForm, force);
+                });
+                break;
+            case 'exportImagePdfs':
+            case 'exportLocationPdfs':
+            case 'exportRoutePdfs':
+            case 'exportTrackPdfs':
+                console.log('DO generate searchform for : ' + action, processingOptions);
+                promise = TourDocExportManagerUtils.createTourDocSearchForm(exportPdfsType, argv).then(searchForm => {
+                    console.log('START processing: ' + action, exportDir , searchForm, processingOptions);
+                    return pdfManagerModule.exportPdfs(action, exportDir, exportName, processingOptions, searchForm, force);
+                });
+
+                break;
+        }
+
+        return promise;
+    }
+
+    protected getGenerateTypeFromAction(action: string) {
+        let generateType = 'UNKNOWN';
+        switch (action) {
+            case 'generateDefaultImagePdfs':
+            case 'generateExternalImagePdfs':
+                generateType = 'image';
+                break;
+            case 'generateDefaultLocationPdfs':
+            case 'generateExternalLocationPdfs':
+                generateType = 'location';
+                break;
+            case 'generateDefaultRoutePdfs':
+            case 'generateExternalRoutePdfs':
+                generateType = 'route';
+                break;
+            case 'generateDefaultTrackPdfs':
+            case 'generateExternalTrackPdfs':
+                generateType = 'track';
+                break;
+        }
+
+        return generateType;
+    }
+
+    protected getExportTypeFromAction(action: string) {
+        let type = 'UNKNOWN';
+        switch (action) {
+            case 'exportImagePdf':
+                type = 'image';
+                break;
+            case 'exportLocationPdf':
+                type = 'location';
+                break;
+            case 'exportRoutePdf':
+                type = 'route';
+                break;
+            case 'exportTrackPdf':
+                type = 'track';
+                break;
+        }
+
+        return type;
+    }
+
+}

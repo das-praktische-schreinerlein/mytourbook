@@ -6,11 +6,13 @@ import {
     CommonBackendConfigType,
     CommonImageBackendConfigType,
     CommonKeywordMapperConfigType,
+    CommonPdfBackendConfigType,
     CommonSqlConnectionConfigType,
     CommonVideoBackendConfigType
 } from '@dps/mycms-server-commons/dist/backend-commons/modules/backend.commons';
 import {CommonPDocBackendConfigType} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/modules/pdoc-backend.commons';
 import {ObjectDetectionManagerBackendConfig} from '../shared/tdoc-commons/services/common-queued-object-detection-processing.service';
+import {PdfManagerConfigType} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-pdf-manager-module';
 
 // tslint:disable-next-line:no-empty-interface
 export interface KeywordMapperConfigType extends CommonKeywordMapperConfigType {
@@ -27,17 +29,10 @@ export interface CommonTrackBackendConfigType {
     proxyTrackRouteToUrl: string;
 }
 
-export interface CommonPdfBackendConfigType {
-    apiRoutePdfs: string;
-    apiRoutePdfsStaticDir: string;
-    apiRoutePdfsStaticEnabled: boolean;
-    apiRouteStoredPdfs: string;
-    proxyPdfRouteToUrl: string;
-}
-
 export interface BackendConfigType extends CommonBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonTrackBackendConfigType,
     CommonPdfBackendConfigType,
+    PdfManagerConfigType,
     CommonAudioBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonImageBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonVideoBackendConfigType<KeywordMapperConfigType, CacheConfig>,
@@ -51,7 +46,6 @@ export interface BackendConfigType extends CommonBackendConfigType<KeywordMapper
     TourDocItemsJsAdapter: {
         dataFile: string
     },
-    webshot2pdfCommandPath: string,
     TourDocSolrAdapter: {
         solrCoreTourDoc: string,
         solrCoreTourDocReadUsername: string,

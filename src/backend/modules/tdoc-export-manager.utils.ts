@@ -9,7 +9,7 @@ import {
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class ExportManagerUtils {
+export class TourDocExportManagerUtils {
     public static createExportValidationRules(): {[key: string]: ValidationRule} {
         return {
             exportDir: new SimpleFilePathValidationRule(false),
@@ -20,7 +20,7 @@ export class ExportManagerUtils {
         };
     }
 
-    public static createSearchFormValidationRules(): {[key: string]: ValidationRule} {
+    public static createTourDocSearchFormValidationRules(): {[key: string]: ValidationRule} {
         return {
             pageNum: new NumberValidationRule(false, 1, 999999999, 1),
             actiontype: new IdCsvValidationRule(false),
@@ -47,7 +47,7 @@ export class ExportManagerUtils {
         };
     }
 
-    public static createSearchForm(type: string, argv: {}): Promise<TourDocSearchForm> {
+    public static createTourDocSearchForm(type: string, argv: {}): Promise<TourDocSearchForm> {
         const pageNum = Number.parseInt(argv['pageNum'], 10);
         const actiontype = argv['actiontype'];
         const fulltext = argv['fulltext'];

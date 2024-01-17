@@ -29,7 +29,7 @@ import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 import {ViewerManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/viewer-manager.module';
 import {BackendConfigType} from '../modules/backend.commons';
 import path from 'path';
-import {ExportManagerUtils} from './export-manager.utils';
+import {TourDocExportManagerUtils} from '../modules/tdoc-export-manager.utils';
 
 export class MediaManagerCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
@@ -51,8 +51,8 @@ export class MediaManagerCommand extends CommonAdminCommand {
             createViewer: new WhiteListValidationRule(false, [true, false, 'html', 'htmlWithoutImage'], false),
             skipCheckForExistingFilesInDataBase : new KeywordValidationRule(false),
             renameFileIfExists:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false),
-            ... ExportManagerUtils.createExportValidationRules(),
-            ... ExportManagerUtils.createSearchFormValidationRules()
+            ... TourDocExportManagerUtils.createExportValidationRules(),
+            ... TourDocExportManagerUtils.createTourDocSearchFormValidationRules()
         };
     }
 
@@ -268,7 +268,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
 
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
                 console.log('DO generate searchform for : ' + action, exportDir, processingOptions);
-                promise = ExportManagerUtils.createSearchForm(type, argv).then(exportSearchForm => {
+                promise = TourDocExportManagerUtils.createTourDocSearchForm(type, argv).then(exportSearchForm => {
                     console.log('START processing: ' + action, exportSearchForm, exportDir, processingOptions);
                     return tdocManagerModule.exportMediaFiles(exportSearchForm, <TourDocMediaExportProcessingOptions & ProcessingOptions> {
                         ...processingOptions,
