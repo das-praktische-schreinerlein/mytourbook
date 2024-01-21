@@ -35,7 +35,8 @@ export const environment: AppEnvironment = {
     hideInternalDescLinks: true,
     hideInternalImages: true,
     startDataMode: DataMode.STATIC,
-    availableDataModes: [DataMode.STATIC]
+    availableDataModes: [DataMode.STATIC],
+    tourDocFacetsFiltered: true
 };
 
 // unset logger

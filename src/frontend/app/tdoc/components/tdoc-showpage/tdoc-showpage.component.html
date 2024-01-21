@@ -66,7 +66,7 @@
                 <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
                 <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
 
-                <div class="tagcloud-container" *ngIf="record.type === 'LOCATION'">
+                <div class="tagcloud-container" *ngIf="record.type === 'LOCATION' && environment.tourDocFacetsFiltered">
                     <app-cdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
                                        [label]="'Was kann man hier tun?'"
                                        (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-cdoc-tagcloud>

@@ -41,7 +41,8 @@ export const environment: AppEnvironment = {
     hideInternalImages: false,
     startDataMode: DataMode.BACKEND,
     availableDataModes: [DataMode.BACKEND, DataMode.STATIC],
-    tourDocDateFormatPipePattern: 'LONG'
+    tourDocDateFormatPipePattern: 'LONG',
+    tourDocFacetsFiltered: false // TODO set this to false on sql-environments
 };
 
 // TODO if you want pdf replace PrintDialogPdfGenerator by JsPdfGenerator and move jspdf in package.json from optional to dep

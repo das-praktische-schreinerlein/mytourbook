@@ -60,6 +60,7 @@ export interface TourDocShowpageComponentAvailableTabs {
 })
 export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
     TourDocDataService> {
+    protected readonly environment = environment;
     tracks: TourDocRecord[] = [];
     geoTracks: {
         IMAGE?: TourDocRecord[];

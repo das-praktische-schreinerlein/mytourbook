@@ -31,7 +31,8 @@ export const environment: AppEnvironment = {
     hideInternalDescLinks: false,
     hideInternalImages: false,
     startDataMode: DataMode.BACKEND,
-    availableDataModes: [DataMode.BACKEND]
+    availableDataModes: [DataMode.BACKEND],
+    tourDocFacetsFiltered: true // TODO set this to false on sql-environments
 };
 
 // unset logger

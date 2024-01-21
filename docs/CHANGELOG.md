@@ -10,18 +10,22 @@
 - frontend: added support for iframe-print-preview for pdf in android-apps ;-)
 - backend: added pre-generated pdf-support
 - frontend: added download pre-generated pdf-support
+- backend: playlistservice - add csv-export
+- frontend: hide tagclouds for location if not filtered on backend
 
 ### new features
 - frontend: introduced profile: viewer-de-with-pdf
 - frontend: added support for iframe-print-preview for pdf in android-apps ;-)
 - backend: added pre-generated pdf-support
 - frontend: added download pre-generated pdf-support
+- backend: playlistservice - add csv-export
 
 ### improvements
 - use new commons
 - frontend: improved text-editor
 - frontend: improved pdf-support and configuration-profiles
 - frontend: improved keyword-blacklist
+- frontend: hide tagclouds for location if not filtered on backend
 
 ### bug fixes
 - none

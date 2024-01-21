@@ -3,6 +3,7 @@ import {CommonDocPlaylistService} from '@dps/mycms-commons/dist/search-commons/s
 import {BaseAudioRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseaudio-record';
 import {BaseImageRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 import {BaseVideoRecord} from '@dps/mycms-commons/dist/search-commons/model/records/basevideo-record';
+import {CommonDocPlaylistCsvExportProfiles} from '@dps/mycms-commons/src/search-commons/services/cdoc-playlist.service';
 
 export interface TourDocServerPlaylistServiceConfig {
     useAudioAssetStoreUrls: boolean;
@@ -13,6 +14,14 @@ export interface TourDocServerPlaylistServiceConfig {
     videoBaseUrl: string;
 }
 export class TourDocServerPlaylistService extends CommonDocPlaylistService<TourDocRecord> {
+
+    protected exportProfiles: CommonDocPlaylistCsvExportProfiles = {
+        'default': {
+            profileName: 'default',
+            headerNames: ['id', 'name'],
+            fieldNames: ['id', 'name']
+        }
+    };
 
     constructor(protected config: TourDocServerPlaylistServiceConfig) {
         super();
