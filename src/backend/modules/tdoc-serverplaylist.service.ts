@@ -18,8 +18,8 @@ export class TourDocServerPlaylistService extends CommonDocPlaylistService<TourD
     protected exportProfiles: CommonDocPlaylistCsvExportProfiles = {
         'default': {
             profileName: 'default',
-            headerNames: ['id', 'name'],
-            fieldNames: ['id', 'name']
+            headerNames: ['pdffile', 'name', 'type', '', 'id'],
+            fieldNames: ['pdfFile', 'name', 'type', 'nofield', 'id']
         }
     };
 
