@@ -39,7 +39,8 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
         return [
             'exportImagePdfs', 'exportLocationPdfs', 'exportRoutePdfs', 'exportTrackPdfs',
             'generateDefaultImagePdfs', 'generateLocationPdfs', 'generateRoutePdfs', 'generateTrackPdfs',
-            'generateExternalImagePdfs', 'generateExternalLocationPdfs', 'generateExternalRoutePdfs', 'generateExternalTrackPdfs'];
+            'generateExternalImagePdfs', 'generateExternalLocationPdfs', 'generateExternalRoutePdfs', 'generateExternalTrackPdfs',
+            'generatePlaylistAsPdfs'];
     }
 
     protected processCommandArgs(argv: {}): Promise<any> {
@@ -121,6 +122,22 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             case 'generateExternalTrackPdfs':
                 console.log('DO generate searchform for : ' + action, processingOptions);
                 promise = TourDocExportManagerUtils.createTourDocSearchForm(generatePdfsType, argv).then(searchForm => {
+                    console.log('START processing: ' + action, exportDir, searchForm, processingOptions);
+                    return pdfManagerModule.generatePdfs(action, exportDir, exportName, baseUrl, generateQueryParams,
+                        processingOptions, searchForm, force);
+                });
+                break;
+            case 'generatePlaylistAsPdfs':
+                console.log('DO generate searchform for : ' + action, processingOptions);
+                if (argv['playlists'] === undefined || argv['playlists'].trim === '') {
+                    console.error('ERROR - generatePlaylistAsPdfs requires playlists');
+                    return Promise.reject('generatePlaylistAsPdfs requires playlists');
+                }
+
+                const playlistPdfType = 'image,info,location,route,track,trip';
+                processingOptions.generateMergedPdf = true;
+                promise = TourDocExportManagerUtils.createTourDocSearchForm(playlistPdfType, argv).then(searchForm => {
+                    searchForm.sort = 'playlistPos';
                     console.log('START processing: ' + action, exportDir, searchForm, processingOptions);
                     return pdfManagerModule.generatePdfs(action, exportDir, exportName, baseUrl, generateQueryParams,
                         processingOptions, searchForm, force);

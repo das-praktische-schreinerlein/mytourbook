@@ -3028,9 +3028,11 @@
             "allowedQueryParams": [
                 "showDESTINATION",
                 "showLOCATION",
+                "showODIMGOBJECT",
                 "showROUTE",
                 "showROUTE_NEARBY",
-                "showTOPIMAGE"
+                "showTOPIMAGE",
+                "showTRACK"
             ],
             "availableTabs": {
                 "ALL_ENTRIES": true,

@@ -298,6 +298,23 @@
                     },
                     {
                         "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generatePlaylistAsPdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "AuswahlExtern",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "AuswahlExtern",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "showNonBlockedOnly": "showall",
+                            "generateMergedPdf": true,
+                            "addPageNumsStartingWith": 1,
+                            "queryParams": "showROUTE_NEARBY=20&showLOCATION=0&showDESTINATION=0&showTRACK=0&showODIMGOBJECT=0&"
+                        }
+                    },
+                    {
+                        "parameters": {
                             "command": "pdocPdfManager",
                             "action": "generateDefaultPagePdfs",
                             "backend": "config/backend.dev.json",
