@@ -7,7 +7,9 @@ import {
     KeywordValidationRule,
     NumberValidationRule,
     SimpleConfigFilePathValidationRule,
-    ValidationRule, WhiteListValidationRule
+    SimpleFilePathValidationRule,
+    ValidationRule,
+    WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {BackendConfigType} from '../modules/backend.commons';
 import {TourDocExportManagerUtils} from '../modules/tdoc-export-manager.utils';
@@ -27,9 +29,11 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             backend: new SimpleConfigFilePathValidationRule(true),
             sitemap: new SimpleConfigFilePathValidationRule(true),
             baseUrl: new HtmlValidationRule(false),
+            queryParams: new HtmlValidationRule(false),
             generateMergedPdf:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false),
             addPageNumsStartingWith: new NumberValidationRule(false, -1, 99999, 0),
-            queryParams: new HtmlValidationRule(false),
+            trimEmptyPages: new WhiteListValidationRule(false, [true, false, 'true', 'false'], true),
+            tocTemplate: new SimpleFilePathValidationRule(false),
             ... TourDocExportManagerUtils.createExportValidationRules(),
             ... TourDocExportManagerUtils.createTourDocSearchFormValidationRules()
         };
@@ -45,6 +49,7 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
 
     protected processCommandArgs(argv: {}): Promise<any> {
         argv['exportDir'] = TourDocFileUtils.normalizeCygwinPath(argv['exportDir']);
+        argv['tocTemplate'] = TourDocFileUtils.normalizeCygwinPath(argv['tocTemplate']);
 
         const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
@@ -87,6 +92,10 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             generateMergedPdf: argv['generateMergedPdf'] !== undefined && argv['generateMergedPdf'] !== false,
             addPageNumsStartingWith: argv['addPageNumsStartingWith'] !== undefined && Number(argv['addPageNumsStartingWith'])
                 ? Number(argv['addPageNumsStartingWith'])
+                : undefined,
+            trimEmptyPages: argv['trimEmptyPages'] !== undefined && argv['trimEmptyPages'] !== false,
+            tocTemplate: argv['tocTemplate'] !== undefined && argv['tocTemplate'].length > 1
+                ? argv['tocTemplate'] + ''
                 : undefined
         };
         const force = argv['force'] === true || argv['force'] === 'true';

@@ -289,6 +289,7 @@
                             "backend": "config/backend.dev.json",
                             "sitemap": "config/tdoc-pdfgenerator-de.json",
                             "parallel": 1,
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
                             "rateMinFilter": 1,
                             "showNonBlockedOnly": "showall",
                             "generateMergedPdf": true,
@@ -307,10 +308,32 @@
                             "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
                             "playlists": "AuswahlExtern",
                             "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
                             "showNonBlockedOnly": "showall",
                             "generateMergedPdf": true,
                             "addPageNumsStartingWith": 1,
                             "queryParams": "showROUTE_NEARBY=20&showLOCATION=0&showDESTINATION=0&showTRACK=0&showODIMGOBJECT=0&"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pdocPdfManager",
+                            "action": "webshotToPdf",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/pdoc-pdfgenerator-de.json",
+                            "baseUrl": "file:///F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern-toc.html",
+                            "destFile": "F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern-toc.pdf"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pdocPdfManager",
+                            "action": "mergePdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/pdoc-pdfgenerator-de.json",
+                            "trimEmptyPages": false,
+                            "srcFiles": "F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern-toc.pdf,F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern.pdf",
+                            "destFile": "F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern-a4.pdf"
                         }
                     },
                     {
