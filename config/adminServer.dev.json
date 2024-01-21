@@ -291,6 +291,8 @@
                             "parallel": 1,
                             "rateMinFilter": 1,
                             "showNonBlockedOnly": "showall",
+                            "generateMergedPdf": true,
+                            "addPageNumsStartingWith": 1,
                             "queryParams": "showROUTE_NEARBY=20&showLOCATION=0&showDESTINATION=0"
                         }
                     },

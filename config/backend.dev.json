@@ -33,6 +33,8 @@
     "nodejsBinaryPath": "node",
     "inlineJsPath": "devtools/create-allinone-html.js",
     "webshot2pdfCommandPath": "F:\\Projekte\\MatPublishingTools\\dist-js\\webshot2pdf.js",
+    "pdfMergeCommandPath": "F:\\Projekte\\MatPublishingTools\\dist-js\\pdf-merge.js",
+    "pdfAddPageNumCommandPath": "F:\\Projekte\\MatPublishingTools\\dist-js\\pdf-addpagenum.js",
     "tdocDataStoreAdapter": "TourDocSqlMytbDbAdapter",
     "tdocWritable": true,
     "mapperConfig": {

@@ -12,7 +12,7 @@ import {
 } from '@dps/mycms-server-commons/dist/backend-commons/modules/backend.commons';
 import {CommonPDocBackendConfigType} from '@dps/mycms-server-commons/dist/pdoc-backend-commons/modules/pdoc-backend.commons';
 import {ObjectDetectionManagerBackendConfig} from '../shared/tdoc-commons/services/common-queued-object-detection-processing.service';
-import {PdfManagerConfigType} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-pdf-manager-module';
+import {PdfManagerConfigType} from '@dps/mycms-server-commons/dist/media-commons/modules/pdf-manager';
 
 // tslint:disable-next-line:no-empty-interface
 export interface KeywordMapperConfigType extends CommonKeywordMapperConfigType {

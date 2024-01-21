@@ -12,19 +12,21 @@ import {TourDocSqlMytbDbConfig} from '../shared/tdoc-commons/services/tdoc-sql-m
 import {TourDocMediaExportProcessingOptions, TourDocMediaFileExportManager} from './tdoc-mediafile-export.service';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {CommonDocPdfManagerModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-pdf-manager-module';
+import {PdfManager} from '@dps/mycms-server-commons/dist/media-commons/modules/pdf-manager';
 
 export class TourPdfManagerModule extends CommonDocPdfManagerModule<TourDocDataService> {
 
     protected pdfEntityDbMapping = TourDocSqlMytbDbConfig.pdfEntityDbMapping;
+    protected backendConfig: BackendConfigType;
 
     private mediaFileExportManager: TourDocMediaFileExportManager;
     private knexRef;
-    protected backendConfig: BackendConfigType;
 
     constructor(dataService: TourDocDataService, mediaFileExportManager: TourDocMediaFileExportManager,
-                backendConfig: BackendConfigType) {
-        super(dataService, backendConfig);
+                pdfManager: PdfManager, backendConfig: BackendConfigType) {
+        super(dataService, pdfManager);
         this.mediaFileExportManager = mediaFileExportManager;
+        this.backendConfig = backendConfig;
 
         const sqlConfig: SqlConnectionConfig = this.backendConfig.TourDocSqlMytbDbAdapter;
         if (sqlConfig === undefined) {

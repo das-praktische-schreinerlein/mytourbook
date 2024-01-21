@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
-import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
 import {CommonAdminCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
     HtmlValidationRule,
     KeywordValidationRule,
+    NumberValidationRule,
     SimpleConfigFilePathValidationRule,
-    ValidationRule
+    ValidationRule, WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {BackendConfigType} from '../modules/backend.commons';
 import {TourDocExportManagerUtils} from '../modules/tdoc-export-manager.utils';
@@ -15,6 +15,9 @@ import {TourDocServerPlaylistService, TourDocServerPlaylistServiceConfig} from '
 import {TourDocMediaFileExportManager} from '../modules/tdoc-mediafile-export.service';
 import {SitemapConfig} from '@dps/mycms-server-commons/dist/backend-commons/modules/sitemap-generator.module';
 import {TourPdfManagerModule} from '../modules/tdoc-pdf-manager-module';
+import {PdfExportProcessingOptions} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-pdf-manager-module';
+import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
+import {PdfManager} from '@dps/mycms-server-commons/dist/media-commons/modules/pdf-manager';
 
 export class TourDocPdfManagerCommand extends CommonAdminCommand {
 
@@ -24,6 +27,8 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             backend: new SimpleConfigFilePathValidationRule(true),
             sitemap: new SimpleConfigFilePathValidationRule(true),
             baseUrl: new HtmlValidationRule(false),
+            generateMergedPdf:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false),
+            addPageNumsStartingWith: new NumberValidationRule(false, -1, 99999, 0),
             queryParams: new HtmlValidationRule(false),
             ... TourDocExportManagerUtils.createExportValidationRules(),
             ... TourDocExportManagerUtils.createTourDocSearchFormValidationRules()
@@ -71,12 +76,17 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
         };
         const playlistService = new TourDocServerPlaylistService(playlistConfig);
         const mediaFileExportManager = new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService);
-        const pdfManagerModule = new TourPdfManagerModule(dataService, mediaFileExportManager, backendConfig);
+        const pdfManager = new PdfManager(backendConfig);
+        const pdfManagerModule = new TourPdfManagerModule(dataService, mediaFileExportManager, pdfManager, backendConfig);
 
         let promise: Promise<any>;
-        const processingOptions: ProcessingOptions = {
+        const processingOptions: PdfExportProcessingOptions & ProcessingOptions = {
             ignoreErrors: Number.parseInt(argv['ignoreErrors'], 10) || 0,
             parallel: Number.parseInt(argv['parallel'], 10),
+            generateMergedPdf: argv['generateMergedPdf'] !== undefined && argv['generateMergedPdf'] !== false,
+            addPageNumsStartingWith: argv['addPageNumsStartingWith'] !== undefined && Number(argv['addPageNumsStartingWith'])
+                ? Number(argv['addPageNumsStartingWith'])
+                : undefined
         };
         const force = argv['force'] === true || argv['force'] === 'true';
 
