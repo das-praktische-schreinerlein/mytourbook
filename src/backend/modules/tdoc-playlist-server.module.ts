@@ -26,6 +26,7 @@ export class TourDocPlaylistServerModule extends CommonDocPlaylistServerModule<T
             TourDocDataService>(dataService, playlistService);
         const tdocPlaylistServerModule = new TourDocPlaylistServerModule(dataService, playlistExporter);
         CommonDocPlaylistServerModule.configurePlaylistServerRoutes(app, apiPrefix, tdocPlaylistServerModule, backendConfig);
+        CommonDocPlaylistServerModule.configureCsvPlaylistServerRoutes(app, apiPrefix, tdocPlaylistServerModule, backendConfig);
         return tdocPlaylistServerModule;
     }
 

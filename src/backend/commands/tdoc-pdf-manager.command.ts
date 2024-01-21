@@ -89,6 +89,7 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
         const processingOptions: PdfExportProcessingOptions & ProcessingOptions = {
             ignoreErrors: Number.parseInt(argv['ignoreErrors'], 10) || 0,
             parallel: Number.parseInt(argv['parallel'], 10),
+            updatePdfEntity: false,
             generateMergedPdf: argv['generateMergedPdf'] !== undefined && argv['generateMergedPdf'] !== false,
             addPageNumsStartingWith: argv['addPageNumsStartingWith'] !== undefined && Number(argv['addPageNumsStartingWith'])
                 ? Number(argv['addPageNumsStartingWith'])
@@ -116,6 +117,7 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             case 'generateDefaultLocationPdfs':
             case 'generateDefaultRoutePdfs':
             case 'generateDefaultTrackPdfs':
+                processingOptions.updatePdfEntity = true;
                 console.log('DO generate searchform for : ' + action, processingOptions);
                 promise = TourDocExportManagerUtils.createTourDocSearchForm(generatePdfsType, argv).then(searchForm => {
                     console.log('START processing: ' + action, backendConfig.apiRoutePdfsStaticDir, searchForm, processingOptions);
