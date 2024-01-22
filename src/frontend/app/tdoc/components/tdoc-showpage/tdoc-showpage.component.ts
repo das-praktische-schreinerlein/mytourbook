@@ -89,6 +89,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     currentMapTDocId = undefined;
     flgShowTopImages = true;
     flgTopImagesAvailable = false;
+    detailsConfigured = true;
+    printVersion = false;
 
     mapState: MapState = {
         mapCenterPos: undefined,
@@ -110,12 +112,15 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         IMAGE?: boolean|number;
         IMAGE_SIMILAR?: boolean|number;
         INFO?: boolean|number;
+        INFOBLOCK_DATAMETA: boolean|number;
         INFOBLOCK_ENTITYCOUNT: boolean|number;
+        INFOBLOCK_INFOS: boolean|number;
         INFOBLOCK_KEYWORDS: boolean|number;
         INFOBLOCK_MAPS: boolean|number;
         INFOBLOCK_MEDIAMETA: boolean|number;
         INFOBLOCK_PERSONS: boolean|number;
         INFOBLOCK_PLAYLISTS: boolean|number;
+        INFOBLOCK_RATES: boolean|number;
         INFOBLOCK_ROUTEATTR: boolean|number;
         INFOBLOCK_TAGCLOUD_ACTIONTYPE: boolean|number;
         LOCATION?: boolean|number;
@@ -131,17 +136,20 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRIP?: boolean|number;
         VIDEO?: boolean|number;
     } = {
-        ALL_ENTRIES: true,
+        ALL_ENTRIES: false,
         DESTINATION: false,
         IMAGE: false,
         IMAGE_SIMILAR: false,
         INFO: false,
+        INFOBLOCK_DATAMETA: true,
         INFOBLOCK_ENTITYCOUNT: true,
+        INFOBLOCK_INFOS: true,
         INFOBLOCK_KEYWORDS: true,
         INFOBLOCK_MAPS: true,
         INFOBLOCK_MEDIAMETA: true,
         INFOBLOCK_PERSONS: true,
         INFOBLOCK_PLAYLISTS: true,
+        INFOBLOCK_RATES: true,
         INFOBLOCK_ROUTEATTR: true,
         INFOBLOCK_TAGCLOUD_ACTIONTYPE: true,
         LOCATION: true,
@@ -392,7 +400,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
 
     protected doProcessAfterResolvedData(): void {
         const me = this;
-        me.configureResultListTrigger();
+        me.detailsConfigured = me.configureResultListTrigger();
+        console.error("me.showResultListTrigger",  me.detailsConfigured , me.showResultListTrigger);
 
         me.tagcloudSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
 
@@ -422,12 +431,13 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         me.flgShowTopImages = true;
     }
 
-    private configureResultListTrigger() {
+    private configureResultListTrigger(): boolean {
         const me = this;
 
-        const print = me.queryParamMap !== undefined && me.queryParamMap.get('print') !== null;
-        if (print) {
+        this.printVersion = me.queryParamMap !== undefined && me.queryParamMap.get('print') !== null;
+        if (this.printVersion) {
             me.showResultListTrigger.LOCATION = false;
+            me.showResultListTrigger.INFOBLOCK_DATAMETA = false;
             me.showResultListTrigger.INFOBLOCK_ENTITYCOUNT = false;
             me.showResultListTrigger.INFOBLOCK_MEDIAMETA = false;
             me.showResultListTrigger.INFOBLOCK_PERSONS = false;
@@ -438,12 +448,14 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
 
         const recordType = me.record.type;
         if (recordType === 'DESTINATION') {
-            if (!print) {
+            if (!this.printVersion) {
                 me.showResultListTrigger.ROUTE = true;
             }
         } else if (recordType === 'IMAGE') {
-            if (print) {
+            if (this.printVersion) {
+                me.showResultListTrigger.INFOBLOCK_INFOS = false;
                 me.showResultListTrigger.INFOBLOCK_MAPS = false;
+                me.showResultListTrigger.INFOBLOCK_RATES = false;
             } else {
                 me.showResultListTrigger.NEWS = true;
                 me.showResultListTrigger.ROUTE = true;
@@ -452,7 +464,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             }
         } else if (recordType === 'INFO') {
         } else if (recordType === 'LOCATION') {
-            if (print) {
+            if (this.printVersion) {
                 me.showResultListTrigger.INFOBLOCK_KEYWORDS = false;
             }
         } else if (recordType === 'ODIMGOBJECT') {
@@ -462,7 +474,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             me.showResultListTrigger.TRACK = true;
             me.showResultListTrigger.TRIP = true;
         } else if (recordType === 'NEWS') {
-            if (!print) {
+            if (!this.printVersion) {
                 me.showResultListTrigger.TRIP = true;
             }
         } else if (recordType === 'PLAYLIST') {
@@ -470,18 +482,18 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         } else if (recordType === 'POI') {
         } else if (recordType === 'ROUTE') {
         } else if (recordType === 'TRACK') {
-            if (!print) {
+            if (!this.printVersion) {
                 me.showResultListTrigger.NEWS = true;
                 me.showResultListTrigger.ROUTE = true;
             }
             me.showResultListTrigger.TRIP = true;
         } else if (recordType === 'TRIP') {
             me.showResultListTrigger.TRACK = true;
-            if (!print) {
+            if (!this.printVersion) {
                 me.showResultListTrigger.NEWS = true;
             }
         } else if (recordType === 'VIDEO') {
-            if (print) {
+            if (this.printVersion) {
                 me.showResultListTrigger.INFOBLOCK_MAPS = false;
             } else {
                 me.showResultListTrigger.NEWS = true;
@@ -502,6 +514,23 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
                 }
             }
         }
+
+        return me.showResultListTrigger.ALL_ENTRIES > 0
+        || me.showResultListTrigger.DESTINATION > 0
+        || me.showResultListTrigger.IMAGE > 0
+        || me.showResultListTrigger.IMAGE_SIMILAR > 0
+        || me.showResultListTrigger.INFO > 0
+        || me.showResultListTrigger.LOCATION > 0
+        || me.showResultListTrigger.LOCATION_NEARBY > 0
+        || me.showResultListTrigger.NEWS > 0
+        || me.showResultListTrigger.ODIMGOBJECT > 0
+        || me.showResultListTrigger.POI > 0
+        || me.showResultListTrigger.POI_NEARBY > 0
+        || me.showResultListTrigger.ROUTE > 0
+        || me.showResultListTrigger.ROUTE_NEARBY > 0
+        || me.showResultListTrigger.TRACK > 0
+        || me.showResultListTrigger.TRIP > 0
+        || me.showResultListTrigger.VIDEO > 0;
     }
 
     private calcShowMaps() {

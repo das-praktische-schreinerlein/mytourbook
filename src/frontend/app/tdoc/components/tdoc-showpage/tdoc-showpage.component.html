@@ -61,11 +61,15 @@
                 {{ renderDesc() }}
                 <app-cdoc-mediameta [record]="record.tdocmediameta"
                                     *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"></app-cdoc-mediameta >
-                <app-tdoc-ratepers [record]="record"></app-tdoc-ratepers>
-                <app-tdoc-ratepers-difficulty [record]="record"></app-tdoc-ratepers-difficulty>
-                <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
-                <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
-                <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
+                <ng-container *ngIf="showResultListTrigger.INFOBLOCK_RATES">
+                    <app-tdoc-ratepers [record]="record"></app-tdoc-ratepers>
+                    <app-tdoc-ratepers-difficulty [record]="record"></app-tdoc-ratepers-difficulty>
+                    <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
+                </ng-container>
+                <ng-container *ngIf="showResultListTrigger.INFOBLOCK_INFOS">
+                    <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
+                    <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
+                </ng-container>
 
                 <div class="tagcloud-container"
                      *ngIf="record.type === 'LOCATION' && environment.tourDocFacetsFiltered && showResultListTrigger.INFOBLOCK_TAGCLOUD_ACTIONTYPE">
@@ -88,7 +92,8 @@
                 <app-tdoc-linked-playlists [record]="record"
                                            *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"
                                            (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
-                <app-tdoc-datameta [record]="record"></app-tdoc-datameta>
+                <app-tdoc-datameta [record]="record"
+                                   *ngIf="showResultListTrigger.INFOBLOCK_DATAMETA"></app-tdoc-datameta>
 
                 <app-tdoc-routeattr [record]="record" [small]="false"
                                     *ngIf="showResultListTrigger.INFOBLOCK_ROUTEATTR"></app-tdoc-routeattr>
@@ -113,6 +118,7 @@
                     </button>
                 </div>
             </div>
+            <span class="small-linebreak" style="line-height: 1px;display: block;"><br clear="all"/></span>
         </div>
         <div class="card-footer text-right hidden-print" style="width: 100%">
             <div class="card-action-buttons align-bottom" role="group" aria-label="Actions">
@@ -130,8 +136,9 @@
                                     i18n-label="label inline-searchpage TOPIMAGE|Label inline-searchpage TOPIMAGE@@linline-search.label.tdoc.TOPIMAGE"
                                     [params]="getFiltersForType(record, 'TOPIMAGE')"
                                     [htmlId]="'TOPIMAGE'"
+                                    [noCount]="printVersion"
                                     [showForm]="false"
-                                    [showLayout]="true"
+                                    [showLayout]="!printVersion"
                                     [showResultList]="flgShowTopImages"
                                     [layout]="Layout.BIG"
                                     [short]="true"
@@ -140,7 +147,7 @@
                                     [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
     </div>
 
-    <div *ngIf="mapState.flgMapEnabled">
+    <div id="MAPCONTAINER" *ngIf="mapState.flgMapEnabled">
         <div [class]="('container content-container map-container map-container-osmmap container-fullline')"
              *ngIf="mapState.flgShowMap">
             <app-mapdoc-map [mapId]="'showMap'"
@@ -189,7 +196,7 @@
         </div>
     </div>
 
-    <div class="container content-container">
+    <div id="REFERENCESCONTAINER" class="container content-container" [ngClass]="detailsConfigured ? '' : 'hidden-print'">
         <ng-container [ngSwitch]="record.type">
             <ng-container *ngSwitchCase="'LOCATION'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
