@@ -125,7 +125,7 @@
         </div>
     </div>
 
-    <div class="container content-container" *ngIf="flgTopImagesAvailable">
+    <div class="container content-container topimage-container" *ngIf="flgTopImagesAvailable">
         <app-tdoc-inline-searchpage [label]="'TOP-Bilder'"
                                     i18n-label="label inline-searchpage TOPIMAGE|Label inline-searchpage TOPIMAGE@@linline-search.label.tdoc.TOPIMAGE"
                                     [params]="getFiltersForType(record, 'TOPIMAGE')"

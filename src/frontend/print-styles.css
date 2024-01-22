@@ -20,6 +20,14 @@ img {
     page-break-inside: auto;
 }
 
+.map-container {
+    page-break-inside: avoid!important;
+}
+
+.topimage-container {
+    page-break-inside: avoid!important;
+}
+
 .map-container-profilemap, .map-container-profilechart {
     display: none !important;
 }
