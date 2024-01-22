@@ -425,7 +425,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     private configureResultListTrigger() {
         const me = this;
 
-        const print = me.queryParamMap.get('print') !== null;
+        const print = me.queryParamMap !== undefined && me.queryParamMap.get('print') !== null;
         if (print) {
             me.showResultListTrigger.LOCATION = false;
             me.showResultListTrigger.INFOBLOCK_ENTITYCOUNT = false;
