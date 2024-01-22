@@ -59,14 +59,16 @@
                 <div id="desc">
                 </div>
                 {{ renderDesc() }}
-                <app-cdoc-mediameta [record]="record.tdocmediameta"></app-cdoc-mediameta >
+                <app-cdoc-mediameta [record]="record.tdocmediameta"
+                                    *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"></app-cdoc-mediameta >
                 <app-tdoc-ratepers [record]="record"></app-tdoc-ratepers>
                 <app-tdoc-ratepers-difficulty [record]="record"></app-tdoc-ratepers-difficulty>
                 <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
                 <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
                 <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
 
-                <div class="tagcloud-container" *ngIf="record.type === 'LOCATION' && environment.tourDocFacetsFiltered">
+                <div class="tagcloud-container"
+                     *ngIf="record.type === 'LOCATION' && environment.tourDocFacetsFiltered && showResultListTrigger.INFOBLOCK_TAGCLOUD_ACTIONTYPE">
                     <app-cdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
                                        [label]="'Was kann man hier tun?'"
                                        (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-cdoc-tagcloud>
@@ -79,13 +81,17 @@
                 </div>
                 -->
 
-                <app-tdoc-keywords [record]="record"></app-tdoc-keywords>
-                <app-tdoc-persontags [record]="record"></app-tdoc-persontags>
+                <app-tdoc-keywords [record]="record"
+                                   *ngIf="showResultListTrigger.INFOBLOCK_KEYWORDS"></app-tdoc-keywords>
+                <app-tdoc-persontags [record]="record"
+                                     *ngIf="showResultListTrigger.INFOBLOCK_PERSONS"></app-tdoc-persontags>
                 <app-tdoc-linked-playlists [record]="record"
+                                           *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"
                                            (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                 <app-tdoc-datameta [record]="record"></app-tdoc-datameta>
 
-                <app-tdoc-routeattr [record]="record" [small]="false"></app-tdoc-routeattr>
+                <app-tdoc-routeattr [record]="record" [small]="false"
+                                    *ngIf="showResultListTrigger.INFOBLOCK_ROUTEATTR"></app-tdoc-routeattr>
                 <app-tdoc-linked-routes [record]="record" [small]="false"></app-tdoc-linked-routes>
                 <app-tdoc-linked-pois [record]="record" [small]="false"></app-tdoc-linked-pois>
 
@@ -96,6 +102,7 @@
 
                 <app-cdoc-extended-object-properties [extendedObjectProperties]="record.tdocextendedobjectproperties"
                                                      [categories]="['ENTITYCOUNT']"
+                                                     *ngIf="showResultListTrigger.INFOBLOCK_ENTITYCOUNT"
                                                      [profile]="'show-big'"></app-cdoc-extended-object-properties>
                 <app-cdoc-odobjectdetails [objects]="record.tdocodimageobjects"
                                           *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectdetails>
@@ -134,7 +141,7 @@
                                     [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
     </div>
 
-    <div>
+    <div *ngIf="mapState.flgMapEnabled">
         <div [class]="('container content-container map-container map-container-osmmap container-fullline')"
              *ngIf="mapState.flgShowMap">
             <app-mapdoc-map [mapId]="'showMap'"
@@ -153,7 +160,8 @@
             </div>
         </div>
 
-        <div class="container content-container map-container map-container-profilemap" *ngIf="mapState.flgShowProfileMap">
+        <div class="container content-container map-container map-container-profilemap"
+             *ngIf="mapState.flgShowProfileMap">
             <app-mapdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
@@ -184,7 +192,6 @@
 
     <div class="container content-container">
         <ng-container [ngSwitch]="record.type">
-
             <ng-container *ngSwitchCase="'LOCATION'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
                                             [label]="'Unterregionen'"
@@ -207,7 +214,7 @@
                                             [showForm]="false"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.LOCATION_NEARBY"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.DESTINATION"
                                             [label]="'Ziele'"
@@ -297,7 +304,7 @@
                                             [params]="getFiltersForType(record, 'POI_NEARBY')"
                                             [htmlId]="'POI_NEARBY'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.POI_NEARBY"
                                             [layout]="Layout.THIN"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
@@ -367,7 +374,7 @@
                                             [params]="getFiltersForType(record, 'POI')"
                                             [htmlId]="'POI'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.POI"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
@@ -419,7 +426,7 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
@@ -499,7 +506,7 @@
                                             [htmlId]="'TRIP'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRIP"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
@@ -518,7 +525,7 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.DESTINATION"
@@ -573,7 +580,7 @@
                                             [htmlId]="'NEWS'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.NEWS"
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.INFO"
@@ -592,7 +599,7 @@
                                             [params]="getFiltersForType(record, 'POI')"
                                             [htmlId]="'POI'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.POI"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
@@ -605,7 +612,7 @@
                                             [htmlId]="'TRIP'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRIP"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
@@ -624,7 +631,7 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRACK"
@@ -634,7 +641,7 @@
                                             [htmlId]="'TRACK'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRACK"
                                             [layout]="Layout.FLAT"
                                             (searchResultFound)="onGeoTracksFound($event, 'TRACK')"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
@@ -645,7 +652,7 @@
                                             [htmlId]="'NEWS'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.NEWS"
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
@@ -658,7 +665,7 @@
                                             [htmlId]="'TRIP'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRIP"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
@@ -677,7 +684,7 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRACK"
@@ -687,7 +694,7 @@
                                             [htmlId]="'TRACK'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRACK"
                                             [layout]="Layout.FLAT"
                                             (searchResultFound)="onGeoTracksFound($event, 'TRACK')"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
@@ -698,7 +705,7 @@
                                             [htmlId]="'ODIMGOBJECT'"
                                             [showForm]="false"
                                             [showLayout]="true"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.ODIMGOBJECT"
                                             [layout]="Layout.BIG"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE_SIMILAR"
@@ -720,7 +727,7 @@
                                             [htmlId]="'NEWS'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.NEWS"
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
@@ -733,7 +740,7 @@
                                             [htmlId]="'IMAGE'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.IMAGE"
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
@@ -743,7 +750,7 @@
                                             [htmlId]="'TRIP'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRIP"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
@@ -762,7 +769,7 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRACK"
@@ -772,7 +779,7 @@
                                             [htmlId]="'TRACK'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRACK"
                                             [layout]="Layout.FLAT"
                                             (searchResultFound)="onGeoTracksFound($event, 'TRACK')"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
@@ -783,7 +790,7 @@
                                             [htmlId]="'NEWS'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.NEWS"
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE_NEARBY"
@@ -817,7 +824,7 @@
                                             [params]="getFiltersForType(record, 'TRACK')"
                                             [htmlId]="'TRACK'"
                                             [showForm]="false"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRACK"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.BIG"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -887,7 +894,7 @@
                                             [htmlId]="'NEWS'"
                                             [showForm]="false"
                                             [noCount]=true
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.NEWS"
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
@@ -899,7 +906,7 @@
                                             [params]="getFiltersForType(record, 'TRIP')"
                                             [htmlId]="'TRIP'"
                                             [showForm]="false"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.TRIP"
                                             [layout]="Layout.BIG"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRACK"
@@ -1015,7 +1022,7 @@
                                             [params]="getFiltersForType(record, 'POI')"
                                             [htmlId]="'POI'"
                                             [showForm]="false"
-                                            [showResultList]="false"
+                                            [showResultList]="showResultListTrigger.POI"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
@@ -1030,7 +1037,7 @@
                                             [showLayout]="true"
                                             [layout]="Layout.BIG"
                                             [searchLinkLabel]="'Durchsuchen'"
-                                            [showResultList]="true"
+                                            [showResultList]="showResultListTrigger.ALL_ENTRIES"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
                                             [label]="'Bilder'"

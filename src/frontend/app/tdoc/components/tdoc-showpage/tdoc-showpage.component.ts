@@ -108,34 +108,54 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         ALL_ENTRIES?: boolean|number;
         DESTINATION?: boolean|number;
         IMAGE?: boolean|number;
+        IMAGE_SIMILAR?: boolean|number;
         INFO?: boolean|number;
-        ODIMGOBJECT?: boolean|number;
-        VIDEO?: boolean|number;
+        INFOBLOCK_ENTITYCOUNT: boolean|number;
+        INFOBLOCK_KEYWORDS: boolean|number;
+        INFOBLOCK_MAPS: boolean|number;
+        INFOBLOCK_MEDIAMETA: boolean|number;
+        INFOBLOCK_PERSONS: boolean|number;
+        INFOBLOCK_PLAYLISTS: boolean|number;
+        INFOBLOCK_ROUTEATTR: boolean|number;
+        INFOBLOCK_TAGCLOUD_ACTIONTYPE: boolean|number;
         LOCATION?: boolean|number;
+        LOCATION_NEARBY?: boolean|number;
         NEWS?: boolean|number;
+        ODIMGOBJECT?: boolean|number;
+        POI?: boolean|number;
+        POI_NEARBY?: boolean|number;
         ROUTE?: boolean|number;
         ROUTE_NEARBY?: boolean|number;
         TOPIMAGE?: boolean|number;
-        IMAGE_SIMILAR?: boolean|number;
         TRACK?: boolean|number;
         TRIP?: boolean|number;
-        POI?: boolean|number;
+        VIDEO?: boolean|number;
     } = {
         ALL_ENTRIES: true,
         DESTINATION: false,
         IMAGE: false,
+        IMAGE_SIMILAR: false,
         INFO: false,
-        ODIMGOBJECT: false,
-        VIDEO: false,
+        INFOBLOCK_ENTITYCOUNT: true,
+        INFOBLOCK_KEYWORDS: true,
+        INFOBLOCK_MAPS: true,
+        INFOBLOCK_MEDIAMETA: true,
+        INFOBLOCK_PERSONS: true,
+        INFOBLOCK_PLAYLISTS: true,
+        INFOBLOCK_ROUTEATTR: true,
+        INFOBLOCK_TAGCLOUD_ACTIONTYPE: true,
         LOCATION: true,
+        LOCATION_NEARBY: false,
         NEWS: false,
+        ODIMGOBJECT: false,
+        POI: false,
+        POI_NEARBY: false,
         ROUTE: false,
         ROUTE_NEARBY: false,
         TOPIMAGE: false,
-        IMAGE_SIMILAR: false,
         TRACK: false,
         TRIP: false,
-        POI: false
+        VIDEO: false
     };
     availableTabs: TourDocShowpageComponentAvailableTabs = {
         ALL_ENTRIES: false,
@@ -315,7 +335,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     protected createNearByFilter(record: TourDocRecord, distance: number): string {
         return record.geoLat !== undefined
             ? 'nearby:' + [record.geoLat, record.geoLon, distance].join('_') +
-                '_,_nearbyAddress:' + record.locHirarchie.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
+            '_,_nearbyAddress:' + record.locHirarchie.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
             : 'blimblamblummichgibtesnicht';
     }
 
@@ -345,18 +365,6 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             me.availableTabs = BeanUtils.getValue(config, 'components.tdoc-showpage.availableTabs');
         }
 
-        const allowedParams = BeanUtils.getValue(config, 'components.tdoc-showpage.allowedQueryParams');
-        if (me.queryParamMap && isArray(allowedParams)) {
-            for (const type in me.showResultListTrigger) {
-                const paramName = 'show' + type;
-                const param = me.queryParamMap.get(paramName);
-                if (allowedParams.indexOf(paramName) >= 0 && param) {
-                    me.showResultListTrigger[type] =
-                        TourDocSearchForm.genericFields.perPage.validator.sanitize(param);
-                }
-            }
-        }
-
         if (environment.hideInternalDescLinks === true) {
             this.pageUtils.setGlobalStyle('.show-page #desc [href*="sections/"] { cursor: not-allowed; pointer-events: none; text-decoration: none; opacity: 0.5; color: currentColor; }'
                 + ' .show-page #desc a[href*="sections/"]::before { content: \'\uD83D\uDEAB\'; font-size: smaller}',
@@ -384,6 +392,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
 
     protected doProcessAfterResolvedData(): void {
         const me = this;
+        me.configureResultListTrigger();
+
         me.tagcloudSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
 
         if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined
@@ -402,13 +412,96 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
 
         const dummySearchResult: TourDocSearchResult =
             new TourDocSearchResult(undefined, 0, TourDocJoinUtils.preparePoiMapValuesFromRecord(this.record), undefined
-        );
+            );
         this.onGeoTracksFound(dummySearchResult, 'POI');
 
+        me.mapState.flgMapEnabled = (me.showResultListTrigger.INFOBLOCK_MAPS > 0 || me.showResultListTrigger.INFOBLOCK_MAPS === true);
         me.mapState.flgShowMap = this.mapState.flgMapAvailable;
         me.calcShowMaps();
         me.flgTopImagesAvailable = true;
         me.flgShowTopImages = true;
+    }
+
+    private configureResultListTrigger() {
+        const me = this;
+
+        const print = me.queryParamMap.get('print') !== null;
+        if (print) {
+            me.showResultListTrigger.LOCATION = false;
+            me.showResultListTrigger.INFOBLOCK_ENTITYCOUNT = false;
+            me.showResultListTrigger.INFOBLOCK_MEDIAMETA = false;
+            me.showResultListTrigger.INFOBLOCK_PERSONS = false;
+            me.showResultListTrigger.INFOBLOCK_PLAYLISTS = false;
+            me.showResultListTrigger.INFOBLOCK_ROUTEATTR = false;
+            me.showResultListTrigger.INFOBLOCK_TAGCLOUD_ACTIONTYPE = false;
+        }
+
+        const recordType = me.record.type;
+        if (recordType === 'DESTINATION') {
+            if (!print) {
+                me.showResultListTrigger.ROUTE = true;
+            }
+        } else if (recordType === 'IMAGE') {
+            if (print) {
+                me.showResultListTrigger.INFOBLOCK_MAPS = false;
+            } else {
+                me.showResultListTrigger.NEWS = true;
+                me.showResultListTrigger.ROUTE = true;
+                me.showResultListTrigger.TRACK = true;
+                me.showResultListTrigger.TRIP = true;
+            }
+        } else if (recordType === 'INFO') {
+        } else if (recordType === 'LOCATION') {
+            if (print) {
+                me.showResultListTrigger.INFOBLOCK_KEYWORDS = false;
+            }
+        } else if (recordType === 'ODIMGOBJECT') {
+            me.showResultListTrigger.IMAGE = true;
+            me.showResultListTrigger.NEWS = true;
+            me.showResultListTrigger.ROUTE = true;
+            me.showResultListTrigger.TRACK = true;
+            me.showResultListTrigger.TRIP = true;
+        } else if (recordType === 'NEWS') {
+            if (!print) {
+                me.showResultListTrigger.TRIP = true;
+            }
+        } else if (recordType === 'PLAYLIST') {
+            me.showResultListTrigger.ALL_ENTRIES = true;
+        } else if (recordType === 'POI') {
+        } else if (recordType === 'ROUTE') {
+        } else if (recordType === 'TRACK') {
+            if (!print) {
+                me.showResultListTrigger.NEWS = true;
+                me.showResultListTrigger.ROUTE = true;
+            }
+            me.showResultListTrigger.TRIP = true;
+        } else if (recordType === 'TRIP') {
+            me.showResultListTrigger.TRACK = true;
+            if (!print) {
+                me.showResultListTrigger.NEWS = true;
+            }
+        } else if (recordType === 'VIDEO') {
+            if (print) {
+                me.showResultListTrigger.INFOBLOCK_MAPS = false;
+            } else {
+                me.showResultListTrigger.NEWS = true;
+                me.showResultListTrigger.ROUTE = true;
+                me.showResultListTrigger.TRACK = true;
+                me.showResultListTrigger.TRIP = true;
+            }
+        }
+
+        const allowedParams = BeanUtils.getValue(this.config, 'components.tdoc-showpage.allowedQueryParams');
+        if (me.queryParamMap && isArray(allowedParams)) {
+            for (const triggerType in me.showResultListTrigger) {
+                const paramName = 'show' + triggerType;
+                const param = me.queryParamMap.get(paramName);
+                if (allowedParams.indexOf(paramName) >= 0 && param) {
+                    me.showResultListTrigger[triggerType] =
+                        TourDocSearchForm.genericFields.perPage.validator.sanitize(param);
+                }
+            }
+        }
     }
 
     private calcShowMaps() {

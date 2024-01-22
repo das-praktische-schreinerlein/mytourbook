@@ -3026,13 +3026,31 @@
         "tdoc-showpage": {
             "showBigImages": false,
             "allowedQueryParams": [
+                "showALL_ENTRIES",
                 "showDESTINATION",
+                "showIMAGE",
+                "showIMAGE_SIMILAR",
+                "showINFO",
+                "showINFOBLOCK_ENTITYCOUNT",
+                "showINFOBLOCK_KEYWORDS",
+                "showINFOBLOCK_MAPS",
+                "showINFOBLOCK_MEDIAMETA",
+                "showINFOBLOCK_PERSONS",
+                "showINFOBLOCK_PLAYLISTS",
+                "showINFOBLOCK_ROUTEATTR",
+                "showINFOBLOCK_TAGCLOUD_ACTIONTYPE",
                 "showLOCATION",
+                "showLOCATION_NEARBY",
+                "showNEWS",
                 "showODIMGOBJECT",
+                "showPOI",
+                "showPOI_NEARBY",
                 "showROUTE",
                 "showROUTE_NEARBY",
                 "showTOPIMAGE",
-                "showTRACK"
+                "showTRACK",
+                "showTRIP",
+                "showVIDEO"
             ],
             "availableTabs": {
                 "ALL_ENTRIES": true,
