@@ -192,6 +192,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     @ViewChild('mainImage')
     mainImage: ElementRef;
     imageWidth = 0;
+    maxImageHeight = '0';
 
     constructor(route: ActivatedRoute, cdocRoutingService: TourDocRoutingService,
                 toastr: ToastrService, contentUtils: TourDocContentUtils,
@@ -365,6 +366,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     protected configureProcessingOfResolvedData(): void {
         const me = this;
         const config = me.appService.getAppConfig();
+        this.maxImageHeight = (window.innerHeight - 150) + 'px';
         if (BeanUtils.getValue(config, 'components.tdoc-showpage.showBigImages') === true) {
             this.defaultSubImageLayout = Layout.BIG;
         }
@@ -401,7 +403,6 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     protected doProcessAfterResolvedData(): void {
         const me = this;
         me.detailsConfigured = me.configureResultListTrigger();
-        console.error("me.showResultListTrigger",  me.detailsConfigured , me.showResultListTrigger);
 
         me.tagcloudSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
 

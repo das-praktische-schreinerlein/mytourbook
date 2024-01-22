@@ -14,7 +14,7 @@
                             <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
                                 <div class="picture-with-objects-container"
                                      [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
-                                    <img #mainImage class="picture-big" width="600px"
+                                    <img #mainImage class="picture-big" [style.max-height]="maxImageHeight"
                                          [src]="contentUtils.getFullUrl(record.tdocimages[0])"
                                          alt="{{record.tdocimages[0].name}}"
                                          (resize)="onResizeMainImage()"
