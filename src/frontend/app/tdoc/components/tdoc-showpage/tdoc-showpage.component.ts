@@ -350,7 +350,10 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
 
     protected onResize(layoutSizeData: LayoutSizeData): void {
         super.onResize(layoutSizeData);
+
         this.layoutSize = layoutSizeData;
+        this.maxImageHeight = (window.innerHeight - 150) + 'px';
+
         this.onResizeMainImage();
         this.cd.markForCheck();
     }
@@ -366,7 +369,9 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     protected configureProcessingOfResolvedData(): void {
         const me = this;
         const config = me.appService.getAppConfig();
+
         this.maxImageHeight = (window.innerHeight - 150) + 'px';
+
         if (BeanUtils.getValue(config, 'components.tdoc-showpage.showBigImages') === true) {
             this.defaultSubImageLayout = Layout.BIG;
         }
@@ -455,6 +460,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         } else if (recordType === 'IMAGE') {
             if (this.printVersion) {
                 me.showResultListTrigger.INFOBLOCK_INFOS = false;
+                me.showResultListTrigger.INFOBLOCK_KEYWORDS = false;
                 me.showResultListTrigger.INFOBLOCK_MAPS = false;
                 me.showResultListTrigger.INFOBLOCK_RATES = false;
             } else {
