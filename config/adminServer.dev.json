@@ -279,8 +279,8 @@
                     }
                 ]
             },
-            "EXPORT: generatePdf": {
-                "description": "generate pdf-files to export-pdf-directory",
+            "EXPORT: generateDefaultPdfs": {
+                "description": "generate default pdf-files for download to export-pdf-directory",
                 "commands": [
                     {
                         "parameters": {
@@ -299,45 +299,6 @@
                     },
                     {
                         "parameters": {
-                            "command": "tdocPdfManager",
-                            "action": "generatePlaylistAsPdfs",
-                            "backend": "config/backend.dev.json",
-                            "sitemap": "config/tdoc-pdfgenerator-de.json",
-                            "parallel": 1,
-                            "exportName": "AuswahlExtern",
-                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
-                            "playlists": "AuswahlExtern",
-                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
-                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
-                            "showNonBlockedOnly": "showall",
-                            "generateMergedPdf": true,
-                            "addPageNumsStartingWith": 1,
-                            "queryParams": "showROUTE_NEARBY=20&showLOCATION=0&showDESTINATION=0&showTRACK=0&showODIMGOBJECT=0&"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "pdocPdfManager",
-                            "action": "webshotToPdf",
-                            "backend": "config/backend.dev.json",
-                            "sitemap": "config/pdoc-pdfgenerator-de.json",
-                            "baseUrl": "file:///F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern-toc.html",
-                            "destFile": "F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern-toc.pdf"
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "command": "pdocPdfManager",
-                            "action": "mergePdfs",
-                            "backend": "config/backend.dev.json",
-                            "sitemap": "config/pdoc-pdfgenerator-de.json",
-                            "trimEmptyPages": false,
-                            "srcFiles": "F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern-toc.pdf,F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern.pdf",
-                            "destFile": "F:/playground/mytb-test/export/playlistpdfs/AuswahlExtern-a4.pdf"
-                        }
-                    },
-                    {
-                        "parameters": {
                             "command": "pdocPdfManager",
                             "action": "generateDefaultPagePdfs",
                             "backend": "config/backend.dev.json",
@@ -347,6 +308,206 @@
                             "subtype": "SectionOverviewPage,SectionPage",
                             "parallel": 1,
                             "queryParams": ""
+                        }
+                    }
+                ]
+            },
+            "EXPORT: generateMyTourBookPdf": {
+                "description": "generate pdf-files for MyTourBook",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generateExternalTripPdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourBook",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourBook",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generateExternalTrackPdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourBook",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourBook",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generateExternaImagePdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourBook",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourBook",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generatePlaylistAsPdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourBook",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourBook",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "generateMergedPdf": true,
+                            "addPageNumsStartingWith": 1,
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pdocPdfManager",
+                            "action": "webshotToPdf",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/pdoc-pdfgenerator-de.json",
+                            "baseUrl": "file:///F:/playground/mytb-test/export/playlistpdfs/MyTourBook-toc.html",
+                            "destFile": "F:/playground/mytb-test/export/playlistpdfs/MyTourBook-toc.pdf"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pdocPdfManager",
+                            "action": "mergePdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/pdoc-pdfgenerator-de.json",
+                            "trimEmptyPages": false,
+                            "srcFiles": "F:/playground/mytb-test/export/playlistpdfs/MyTourBook-toc.pdf,F:/playground/mytb-test/export/playlistpdfs/MyTourBook.pdf",
+                            "destFile": "F:/playground/mytb-test/export/playlistpdfs/MyTourBook-a4.pdf"
+                        }
+                    }
+                ]
+            },
+            "EXPORT: generateMyTourGuidePdf": {
+                "description": "generate pdf-files for MyTourGuide",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generateExternalImagePdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourGuide",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourGuide",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generateExternalInfoPdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourGuide",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourGuide",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generateExternalLocationPdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourGuide",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourGuide",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generateExternalRoutePdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourGuide",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourGuide",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "tdocPdfManager",
+                            "action": "generatePlaylistAsPdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/tdoc-pdfgenerator-de.json",
+                            "parallel": 1,
+                            "exportName": "MyTourGuide",
+                            "exportDir": "F:/playground/mytb-test/export/playlistpdfs/",
+                            "playlists": "MyTourGuide",
+                            "baseUrl": "http://localhost:4001/mytbdev/de/tdoc/show/dummy",
+                            "tocTemplate": "F:/Projekte/mytourbook_dev/config/pdf-toc-template.html",
+                            "showNonBlockedOnly": "showall",
+                            "generateMergedPdf": true,
+                            "addPageNumsStartingWith": 1,
+                            "queryParams": ""
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pdocPdfManager",
+                            "action": "webshotToPdf",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/pdoc-pdfgenerator-de.json",
+                            "baseUrl": "file:///F:/playground/mytb-test/export/playlistpdfs/MyTourGuide-toc.html",
+                            "destFile": "F:/playground/mytb-test/export/playlistpdfs/MyTourGuide-toc.pdf"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "pdocPdfManager",
+                            "action": "mergePdfs",
+                            "backend": "config/backend.dev.json",
+                            "sitemap": "config/pdoc-pdfgenerator-de.json",
+                            "trimEmptyPages": false,
+                            "srcFiles": "F:/playground/mytb-test/export/playlistpdfs/MyTourGuide-toc.pdf,F:/playground/mytb-test/export/playlistpdfs/MyTourGuide.pdf",
+                            "destFile": "F:/playground/mytb-test/export/playlistpdfs/MyTourGuide-a4.pdf"
                         }
                     }
                 ]

@@ -128,9 +128,11 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
 
                 break;
             case 'generateExternalImagePdfs':
+            case 'generateExternalInfoPdfs':
             case 'generateExternalLocationPdfs':
             case 'generateExternalRoutePdfs':
             case 'generateExternalTrackPdfs':
+            case 'generateExternalTripPdfs':
                 console.log('DO generate searchform for : ' + action, processingOptions);
                 promise = TourDocExportManagerUtils.createTourDocSearchForm(generatePdfsType, argv).then(searchForm => {
                     console.log('START processing: ' + action, exportDir, searchForm, processingOptions);
@@ -177,6 +179,10 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             case 'generateExternalImagePdfs':
                 generateType = 'image';
                 break;
+            case 'generateDefaultInfoPdfs':
+            case 'generateExternalInfoPdfs':
+                generateType = 'info';
+                break;
             case 'generateDefaultLocationPdfs':
             case 'generateExternalLocationPdfs':
                 generateType = 'location';
@@ -188,6 +194,10 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             case 'generateDefaultTrackPdfs':
             case 'generateExternalTrackPdfs':
                 generateType = 'track';
+                break;
+            case 'generateDefaultTripPdfs':
+            case 'generateExternalTripPdfs':
+                generateType = 'trip';
                 break;
         }
 

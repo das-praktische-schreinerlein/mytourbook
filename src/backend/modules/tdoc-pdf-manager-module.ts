@@ -94,6 +94,11 @@ export class TourPdfManagerModule extends CommonDocPdfManagerModule<TourDocDataS
         });
     }
 
+    protected generateWebShotUrl(action: string, baseUrl: string, mdoc: CommonDocRecord, queryParams: string) {
+        // TODO extract details from mdoc and addd to url
+        return baseUrl + '/' + mdoc.id + '?print&' + queryParams;
+    }
+
     protected generatePdfFileNameForHirarchy(entity: CommonDocRecord, hierarchyConfig: HierarchyConfig): string {
         if (!entity) {
             return undefined;

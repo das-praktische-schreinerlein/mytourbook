@@ -102,6 +102,7 @@ export class SqlMytbDbAllConfig {
             'month',
             'year',
             'gpstracks_basefile',
+            'pdffile',
             'COALESCE(meta_shortdesc, meta_shortdesc_md) as meta_shortdesc',
             'gps_lat',
             'gps_lon',

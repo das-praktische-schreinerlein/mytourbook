@@ -496,6 +496,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             me.showResultListTrigger.TRIP = true;
         } else if (recordType === 'TRIP') {
             me.showResultListTrigger.TRACK = true;
+            me.showResultListTrigger.ROUTE = true;
             if (!this.printVersion) {
                 me.showResultListTrigger.NEWS = true;
             }
