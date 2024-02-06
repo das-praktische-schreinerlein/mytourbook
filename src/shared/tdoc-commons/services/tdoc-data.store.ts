@@ -204,7 +204,6 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
             filter['odprecision_is'] = {
                 'in': searchForm.objectDetectionPrecision.split(/,/)
             };
-        } else {
         }
         if (searchForm.objectDetectionState !== undefined && searchForm.objectDetectionState.length > 0) {
             filter = filter || {};
@@ -245,16 +244,17 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
             for (const index in moreFilters) {
                 const moreFilter = moreFilters[index];
                 const [filterName, values] = moreFilter.split(/:/);
-                if (filterName && values && this.validMoreNumberFilterNames[filterName] === true) {
-                    filter[filterName] = {
-                        'in_number': values.split(/,/)
-                    };
-                } else if (filterName && values && this.validMoreInFilterNames[filterName] === true) {
-                    filter[filterName] = {
-                        'in': values.split(/,/)
-                    };
+                if (filterName && values) {
+                    if (this.validMoreNumberFilterNames[filterName] === true) {
+                        filter[filterName] = {
+                            'in_number': values.split(/,/)
+                        };
+                    } else if (this.validMoreInFilterNames[filterName] === true) {
+                        filter[filterName] = {
+                            'in': values.split(/,/)
+                        };
+                    }
                 }
-
             }
         }
 

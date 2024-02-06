@@ -188,7 +188,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
 
     protected queryTransformToAdapterWriteQuery(method: string, mapper: Mapper, props: any, opts: any): WriteQueryData {
         const query = super.queryTransformToAdapterWriteQuery(method, mapper, props, opts);
-        if (!query && !query.tableConfig && !query.tableConfig.key) {
+        if (!query || !query.tableConfig || !query.tableConfig.key) {
             return query;
         }
 
