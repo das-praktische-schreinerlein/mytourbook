@@ -12,6 +12,7 @@
 - frontend: added download pre-generated pdf-support
 - backend: playlistservice - add csv-export
 - frontend: hide tagclouds for location if not filtered on backend
+- frontend: hide timetable if not filtered on backend
 
 ### new features
 - frontend: introduced profile: viewer-de-with-pdf
@@ -26,6 +27,7 @@
 - frontend: improved pdf-support and configuration-profiles
 - frontend: improved keyword-blacklist
 - frontend: hide tagclouds for location if not filtered on backend
+- frontend: hide timetable if not filtered on backend
 
 ### bug fixes
 - none
