@@ -86,6 +86,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         POI: []
     };
     tagcloudSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
+    trackSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
     currentMapTDocId = undefined;
     flgShowTopImages = true;
     flgTopImagesAvailable = false;
@@ -123,6 +124,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         INFOBLOCK_RATES: boolean|number;
         INFOBLOCK_ROUTEATTR: boolean|number;
         INFOBLOCK_TAGCLOUD_ACTIONTYPE: boolean|number;
+        INFOBLOCK_TIMETABLE: boolean|number;
         LOCATION?: boolean|number;
         LOCATION_NEARBY?: boolean|number;
         NEWS?: boolean|number;
@@ -152,6 +154,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         INFOBLOCK_RATES: true,
         INFOBLOCK_ROUTEATTR: true,
         INFOBLOCK_TAGCLOUD_ACTIONTYPE: true,
+        INFOBLOCK_TIMETABLE: true,
         LOCATION: true,
         LOCATION_NEARBY: false,
         NEWS: false,
@@ -206,13 +209,17 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             environment, router);
     }
 
-    onRouteTracksFound(searchresult: TourDocSearchResult) {
+    onRoutesFound(searchresult: TourDocSearchResult) {
         this.onTagCloudRoutesFound(searchresult);
         this.onGeoTracksFound(searchresult, 'ROUTE');
     }
 
     onTagCloudRoutesFound(searchresult: TourDocSearchResult) {
         this.tagcloudSearchResult = searchresult;
+    }
+
+    onTracksFound(searchresult: TourDocSearchResult) {
+        this.trackSearchResult = searchresult;
     }
 
     onGeoTracksFound(searchresult: TourDocSearchResult, type: string) {
