@@ -206,6 +206,8 @@
     "listSorts_dataTechMaxAsc": "max elevation asc",
     "listSorts_dataTechDistAsc": "distance asc",
     "listSorts_dataTechSectionsAsc": "sections asc",
+    "listSorts_createdAt": "created at",
+    "listSorts_updatedAt": "last changed",
     "listSorts_langkeys": "page-lang",
     "listSorts_sortkey": "page-sort",
     "listSorts_theme": "page-theme",

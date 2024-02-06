@@ -13,6 +13,7 @@
 - backend: playlistservice - add csv-export
 - frontend: hide tagclouds for location if not filtered on backend
 - frontend: hide timetable if not filtered on backend
+- frontend/backend: added changelog to page-model
 
 ### new features
 - frontend: introduced profile: viewer-de-with-pdf
@@ -28,6 +29,7 @@
 - frontend: improved keyword-blacklist
 - frontend: hide tagclouds for location if not filtered on backend
 - frontend: hide timetable if not filtered on backend
+- frontend/backend: added changelog to page-model
 
 ### bug fixes
 - none

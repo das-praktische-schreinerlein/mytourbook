@@ -207,6 +207,8 @@ window.importStaticTranslationsJsonP = `
     "listSorts_dataTechMaxAsc": "max Höhe aufsteigend",
     "listSorts_dataTechDistAsc": "Strecke aufsteigend",
     "listSorts_dataTechSectionsAsc": "Etappen aufsteigend",
+    "listSorts_createdAt": "angelegt",
+    "listSorts_updatedAt": "letzte Änderung",
     "listSorts_langkeys": "Seiten-Sprache",
     "listSorts_sortkey": "Seiten-Gliederung",
     "listSorts_theme": "Seiten-Thema",
