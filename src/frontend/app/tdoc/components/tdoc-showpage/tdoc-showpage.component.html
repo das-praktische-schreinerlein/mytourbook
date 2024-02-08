@@ -113,6 +113,8 @@
                                                      [categories]="['ENTITYCOUNT']"
                                                      *ngIf="showResultListTrigger.INFOBLOCK_ENTITYCOUNT"
                                                      [profile]="'show-big'"></app-cdoc-extended-object-properties>
+                <app-cdoc-changelog [record]="record"
+                                    *ngIf="showResultListTrigger.INFOBLOCK_DATACHANGELOG"></app-cdoc-changelog>
                 <app-cdoc-odobjectdetails [objects]="record.tdocodimageobjects"
                                           *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectdetails>
                 <div style="display: inline-block" *ngIf="!(showItemObjectsFlag || record.type === 'ODIMGOBJECT') && record.tdocodimageobjects && record.tdocodimageobjects.length > 0">

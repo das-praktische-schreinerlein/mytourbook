@@ -113,6 +113,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         IMAGE?: boolean|number;
         IMAGE_SIMILAR?: boolean|number;
         INFO?: boolean|number;
+        INFOBLOCK_DATACHANGELOG: boolean|number;
         INFOBLOCK_DATAMETA: boolean|number;
         INFOBLOCK_ENTITYCOUNT: boolean|number;
         INFOBLOCK_INFOS: boolean|number;
@@ -143,6 +144,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         IMAGE: false,
         IMAGE_SIMILAR: false,
         INFO: false,
+        INFOBLOCK_DATACHANGELOG: true,
         INFOBLOCK_DATAMETA: true,
         INFOBLOCK_ENTITYCOUNT: true,
         INFOBLOCK_INFOS: true,
@@ -450,6 +452,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         this.printVersion = me.queryParamMap !== undefined && me.queryParamMap.get('print') !== null;
         if (this.printVersion) {
             me.showResultListTrigger.LOCATION = false;
+            me.showResultListTrigger.INFOBLOCK_DATACHANGELOG = false;
             me.showResultListTrigger.INFOBLOCK_DATAMETA = false;
             me.showResultListTrigger.INFOBLOCK_ENTITYCOUNT = false;
             me.showResultListTrigger.INFOBLOCK_MEDIAMETA = false;
