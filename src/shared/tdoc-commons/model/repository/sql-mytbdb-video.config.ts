@@ -198,7 +198,11 @@ export class SqlMytbDbVideoConfig {
             'v_calced_altMaxFacet AS altMaxFacet',
             'k_calced_distFacet AS distFacet',
             'k_calced_dur AS dur',
-            'k_calced_durFacet AS durFacet'],
+            'k_calced_durFacet AS durFacet',
+            // changelog
+            'v_createdat',
+            'v_updatedat',
+            'v_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -473,13 +477,22 @@ export class SqlMytbDbVideoConfig {
             'location': 'l_lochirarchietxt ASC, v_date ASC',
             'locationDetails': 'l_lochirarchietxt ASC, v_date ASC',
             'playlistPos': 'video_playlist.vp_pos ASC',
-            'relevance': 'v_date DESC'
+            'relevance': 'v_date DESC',
+            'createdAt': 'v_createdat DESC, video.v_id DESC',
+            'updatedAt': 'v_updatedat DESC, video.v_id DESC'
         },
         spartialConfig: {
             lat: 'v_gps_lat',
             lon: 'v_gps_lon',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
+        },
+        changelogConfig: {
+            createDateField: 'v_createdat',
+            updateDateField: 'v_updatedat',
+            updateVersionField: 'v_updateversion',
+            table: 'video',
+            fieldId: 'v_id'
         },
         filterMapping: {
             // dashboard
@@ -496,6 +509,9 @@ export class SqlMytbDbVideoConfig {
             todoKeywords: 'keyword.kw_name',
             unrated: 'video.v_rate',
             unRatedChildren: '"666dummy999"',
+            // changelog
+            createdafter_dt: 'v_createdat',
+            updatedafter_dt: 'v_updatedat',
             // common
             id: 'video.v_id',
             destination_id_s: 'dt.d_id',
@@ -598,17 +614,23 @@ export class SqlMytbDbVideoConfig {
             objects_txt: 'v_objects',
             playlists_txt: 'v_playlists',
             subtype_s: 'subtype',
-            type_s: 'type'
+            type_s: 'type',
+            // changelog
+            createdat_dt: 'v_createdat',
+            updatedat_dt: 'v_updatedat',
+            updateversion_i: 'v_updateversion'
         }
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
-        table: 'video', joinTable: 'video_keyword', fieldReference: 'v_id'
+        table: 'video', joinTable: 'video_keyword', fieldReference: 'v_id',
+        changelogConfig: SqlMytbDbVideoConfig.tableConfig.changelogConfig
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
         table: 'video', joinTable: 'video_playlist', fieldReference: 'v_id', positionField: 'vp_pos',
-        detailsField: 'vp_details'
+        detailsField: 'vp_details',
+        changelogConfig: SqlMytbDbVideoConfig.tableConfig.changelogConfig
     };
 
     public static readonly rateModelConfigTypeVideo: RateModelConfigTableType = {
@@ -619,7 +641,8 @@ export class SqlMytbDbVideoConfig {
             'motive': 'v_rate_motive',
             'wichtigkeit': 'v_rate_wichtigkeit'
         },
-        fieldSum: 'v_rate'
+        fieldSum: 'v_rate',
+        changelogConfig: SqlMytbDbVideoConfig.tableConfig.changelogConfig
     };
 
     public static readonly rateModelConfigTypeTrackVideo: RateModelConfigTableType = {
@@ -630,7 +653,8 @@ export class SqlMytbDbVideoConfig {
             'motive': 'v_rate_motive',
             'wichtigkeit': 'v_rate_wichtigkeit'
         },
-        fieldSum: 'v_rate'
+        fieldSum: 'v_rate',
+        changelogConfig: SqlMytbDbVideoConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
@@ -643,11 +667,13 @@ export class SqlMytbDbVideoConfig {
             'loc_lochirarchie_txt': {
                 table: 'location', idField: 'l_id', referenceField: 'l_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbVideoConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagBlockConfig: ActionTagBlockTableConfigType = {
-        table: 'video', idField: 'v_id', blockField: 'v_gesperrt'
+        table: 'video', idField: 'v_id', blockField: 'v_gesperrt',
+        changelogConfig: SqlMytbDbVideoConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
@@ -658,7 +684,8 @@ export class SqlMytbDbVideoConfig {
             { table: 'video_object', fieldReference: 'v_id' },
             { table: 'video_playlist', fieldReference: 'v_id' },
             { table: 'video_keyword', fieldReference: 'v_id' }
-        ]
+        ],
+        changelogConfig: SqlMytbDbVideoConfig.tableConfig.changelogConfig
     };
 }
 

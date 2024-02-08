@@ -227,7 +227,11 @@ export class SqlMytbDbImageConfig {
             'i_calced_altMaxFacet AS altMaxFacet',
             'k_calced_distFacet AS distFacet',
             'k_calced_dur AS dur',
-            'k_calced_durFacet AS durFacet'],
+            'k_calced_durFacet AS durFacet',
+            // changelog
+            'i_createdat',
+            'i_updatedat',
+            'i_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -572,13 +576,22 @@ export class SqlMytbDbImageConfig {
             'playlistPos': 'image_playlist.ip_pos ASC',
             'location': 'l_lochirarchietxt ASC, i_date ASC',
             'locationDetails': 'l_lochirarchietxt ASC, i_date ASC',
-            'relevance': 'i_date DESC'
+            'relevance': 'i_date DESC',
+            'createdAt': 'i_createdat DESC, image.i_id DESC',
+            'updatedAt': 'i_updatedat DESC, image.i_id DESC'
         },
         spartialConfig: {
             lat: 'i_gps_lat',
             lon: 'i_gps_lon',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
+        },
+        changelogConfig: {
+            createDateField: 'i_createdat',
+            updateDateField: 'i_updatedat',
+            updateVersionField: 'i_updateversion',
+            table: 'image',
+            fieldId: 'i_id'
         },
         filterMapping: {
             // dashboard
@@ -595,6 +608,9 @@ export class SqlMytbDbImageConfig {
             todoKeywords: 'keyword.kw_name',
             unrated: 'image.i_rate',
             unRatedChildren: '"666dummy999"',
+            // changelog
+            createdafter_dt: 'i_createdat',
+            updatedafter_dt: 'i_updatedat',
             // common
             id: 'image.i_id',
             destination_id_s: 'dt.d_id',
@@ -697,17 +713,23 @@ export class SqlMytbDbImageConfig {
             objects_txt: 'i_objects',
             playlists_txt: 'i_playlists',
             subtype_s: 'subtype',
-            type_s: 'type'
+            type_s: 'type',
+            // changelog
+            createdat_dt: 'i_createdat',
+            updatedat_dt: 'i_updatedat',
+            updateversion_i: 'i_updateversion'
         }
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
-        table: 'image', joinTable: 'image_keyword', fieldReference: 'i_id'
+        table: 'image', joinTable: 'image_keyword', fieldReference: 'i_id',
+        changelogConfig: SqlMytbDbImageConfig.tableConfig.changelogConfig
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
         table: 'image', joinTable: 'image_playlist', fieldReference: 'i_id', positionField: 'ip_pos',
-        detailsField: 'ip_details'
+        detailsField: 'ip_details',
+        changelogConfig: SqlMytbDbImageConfig.tableConfig.changelogConfig
     };
 
     public static readonly rateModelConfigTypeImage: RateModelConfigTableType = {
@@ -718,7 +740,8 @@ export class SqlMytbDbImageConfig {
             'motive': 'i_rate_motive',
             'wichtigkeit': 'i_rate_wichtigkeit'
         },
-        fieldSum: 'i_rate'
+        fieldSum: 'i_rate',
+        changelogConfig: SqlMytbDbImageConfig.tableConfig.changelogConfig
     };
 
     public static readonly rateModelConfigTypeTrackImage: RateModelConfigTableType = {
@@ -729,7 +752,8 @@ export class SqlMytbDbImageConfig {
             'motive': 'i_rate_motive',
             'wichtigkeit': 'i_rate_wichtigkeit'
         },
-        fieldSum: 'i_rate'
+        fieldSum: 'i_rate',
+        changelogConfig: SqlMytbDbImageConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
@@ -742,11 +766,13 @@ export class SqlMytbDbImageConfig {
             'loc_lochirarchie_txt': {
                 table: 'location', idField: 'l_id', referenceField: 'l_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbImageConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagBlockConfig: ActionTagBlockTableConfigType = {
-        table: 'image', idField: 'i_id', blockField: 'i_gesperrt'
+        table: 'image', idField: 'i_id', blockField: 'i_gesperrt',
+        changelogConfig: SqlMytbDbImageConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
@@ -757,7 +783,8 @@ export class SqlMytbDbImageConfig {
             { table: 'image_object', fieldReference: 'i_id' },
             { table: 'image_playlist', fieldReference: 'i_id' },
             { table: 'image_keyword', fieldReference: 'i_id' }
-        ]
+        ],
+        changelogConfig: SqlMytbDbImageConfig.tableConfig.changelogConfig
     };
 
     public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {

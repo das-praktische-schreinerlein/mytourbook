@@ -2,9 +2,7 @@ import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-q
 import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-block.adapter';
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
-import {
-    ActionTagAssignJoinTableConfigType
-} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
+import {ActionTagAssignJoinTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
@@ -261,7 +259,11 @@ export class SqlMytbDbRouteConfig {
             't_calced_altMaxFacet AS altMaxFacet',
             't_calced_distFacet AS distFacet',
             't_route_dauer',
-            't_calced_durFacet AS durFacet'],
+            't_calced_durFacet AS durFacet',
+            // changelog
+            't_createdat',
+            't_updatedat',
+            't_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -886,13 +888,22 @@ export class SqlMytbDbRouteConfig {
             'location': 'l_lochirarchietxt ASC, t_name ASC',
             'locationDetails': 'l_lochirarchietxt ASC, t_name ASC',
             'region': 't_desc_gebiet ASC, t_name ASC',
-            'relevance': 't_datefirst DESC, t_name ASC'
+            'relevance': 't_datefirst DESC, t_name ASC',
+            'createdAt': 't_createdat DESC, tour.t_id DESC',
+            'updatedAt': 't_updatedat DESC, tour.t_id DESC'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',
             lon: 'l_geo_longdeg',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
+        },
+        changelogConfig: {
+            createDateField: 't_createdat',
+            updateDateField: 't_updatedat',
+            updateVersionField: 't_updateversion',
+            table: 'tour',
+            fieldId: 't_id'
         },
         filterMapping: {
             // dashboard
@@ -909,6 +920,9 @@ export class SqlMytbDbRouteConfig {
             todoKeywords: 'keyword.kw_name',
             unrated: 'tour.t_rate_gesamt',
             unRatedChildren: '"unRatedChildren"',
+            // changelog
+            createdafter_dt: 't_createdat',
+            updatedafter_dt: 't_updatedat',
             // common
             id: 'tour.t_id',
             destination_id_s: 'dt.d_id',
@@ -1035,17 +1049,23 @@ export class SqlMytbDbRouteConfig {
             type_s: 'type',
             actiontype_s: 'actionType',
             subtype_s: 'subtype',
-            i_fav_url_txt: 'i_fav_url_txt'
+            i_fav_url_txt: 'i_fav_url_txt',
+            // changelog
+            createdat_dt: 't_createdat',
+            updatedat_dt: 't_updatedat',
+            updateversion_i: 't_updateversion'
         }
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
-        table: 'tour', joinTable: 'tour_keyword', fieldReference: 't_id'
+        table: 'tour', joinTable: 'tour_keyword', fieldReference: 't_id',
+        changelogConfig: SqlMytbDbRouteConfig.tableConfig.changelogConfig
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
         table: 'tour', joinTable: 'tour_playlist', fieldReference: 't_id', positionField: 'tp_pos',
-        detailsField: 'tp_details'
+        detailsField: 'tp_details',
+        changelogConfig: SqlMytbDbRouteConfig.tableConfig.changelogConfig
     };
 
     public static readonly joinModelConfigTypeLinkedInfos: JoinModelConfigTableType = {
@@ -1054,7 +1074,8 @@ export class SqlMytbDbRouteConfig {
         joinFieldMappings: {
             'if_id': 'refId',
             'tif_linked_details': 'linkedDetails'
-        }
+        },
+        changelogConfig: SqlMytbDbRouteConfig.tableConfig.changelogConfig
     };
 
     public static readonly joinModelConfigTypeLinkedPois: JoinModelConfigTableType = {
@@ -1064,7 +1085,8 @@ export class SqlMytbDbRouteConfig {
             'poi_id': 'refId',
             'tpoi_pos': 'position',
             'tpoi_type': 'poitype'
-        }
+        },
+        changelogConfig: SqlMytbDbRouteConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
@@ -1075,9 +1097,11 @@ export class SqlMytbDbRouteConfig {
                 table: 'location', idField: 'l_id', referenceField: 'l_id'
             },
             'track_id_is': {
+                // TODO add changelog for every reference
                 table: 'kategorie', idField: 'k_id', referenceField: 'k_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbRouteConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignJoinConfig: ActionTagAssignJoinTableConfigType = {
@@ -1091,24 +1115,28 @@ export class SqlMytbDbRouteConfig {
                 joinBaseIdField: 't_id',
                 joinReferenceField: 'if_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbRouteConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagBlockConfig: ActionTagBlockTableConfigType = {
-        table: 'tour', idField: 't_id', blockField: 't_gesperrt'
+        table: 'tour', idField: 't_id', blockField: 't_gesperrt',
+        changelogConfig: SqlMytbDbRouteConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
         table: 'tour',
         fieldId: 't_id',
         referenced: [
+            // TODO add changelog for every reference
             { table: 'kategorie', fieldReference: 't_id' },
         ],
         joins: [
             { table: 'kategorie_tour', fieldReference: 't_id' },
             { table: 'tour_keyword', fieldReference: 't_id' },
             { table: 'tour_info', fieldReference: 't_id' }
-        ]
+        ],
+        changelogConfig: SqlMytbDbRouteConfig.tableConfig.changelogConfig
     };
 
     public static readonly geoEntityDbMapping: GeoEntityDbMapping = {

@@ -165,6 +165,11 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['info_lif_linked_details_s'] = BeanUtils.getValue(props, 'tdocinfo.linkedDetails');
         values['info_type_s'] = BeanUtils.getValue(props, 'tdocinfo.type');
 
+        // changelog
+        values['createdat_dt'] = props.createdAt;
+        values['updatedat_dt'] = props.updatedAt;
+        values['updateversion_i'] = props.updateVersion;
+
         return values;
     }
 
@@ -399,6 +404,11 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['linkedRouteAttr'] = values['linkedRouteAttr']
             ? ObjectUtils.uniqueArray(values['linkedRouteAttr'].split(';;')).join(';;')
             : undefined
+
+        // changelog
+        values['createdAt'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'createdat_dt', undefined);
+        values['updatedAt'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'updatedat_dt', undefined);
+        values['updateVersion'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'updateversion_i', undefined);
 
         // console.log('mapResponseDocument values:', values);
         const record: TourDocRecord = <TourDocRecord>mapper.createRecord(

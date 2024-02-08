@@ -2,9 +2,7 @@ import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-q
 import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-block.adapter';
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
-import {
-    ActionTagAssignJoinTableConfigType
-} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
+import {ActionTagAssignJoinTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
@@ -185,7 +183,11 @@ export class SqlMytbDbLocationConfig {
             'location.l_geo_ele',
             'location.l_calced_altMaxFacet AS altMaxFacet',
             'lh.l_lochirarchietxt AS l_lochirarchietxt',
-            'lh.l_lochirarchieids AS l_lochirarchieids'],
+            'lh.l_lochirarchieids AS l_lochirarchieids',
+            // changelog
+            'location.l_createdat',
+            'location.l_updatedat',
+            'location.l_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -442,13 +444,22 @@ export class SqlMytbDbLocationConfig {
             'playlistPos': 'location_playlist.lp_pos ASC',
             'location': 'lh.l_lochirarchietxt ASC, location.l_name ASC',
             'locationDetails': 'lh.l_lochirarchietxt ASC, location.l_name ASC',
-            'relevance': 'location.l_id ASC, location.l_name ASC'
+            'relevance': 'location.l_id ASC, location.l_name ASC',
+            'createdAt': 'location.l_createdat DESC, location.l_id DESC',
+            'updatedAt': 'location.l_updatedat DESC, location.l_id DESC'
         },
         spartialConfig: {
             lat: 'location.l_geo_latdeg',
             lon: 'location.l_geo_longdeg',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
+        },
+        changelogConfig: {
+            createDateField: 'l_createdat',
+            updateDateField: 'l_updatedat',
+            updateVersionField: 'l_updateversion',
+            table: 'location',
+            fieldId: 'l_id'
         },
         filterMapping: {
             // dashboard
@@ -475,6 +486,9 @@ export class SqlMytbDbLocationConfig {
             loc_lochirarchie_s: 'lh.l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'lh.l_lochirarchieids',
             name_s: 'location.l_name',
+            // changelog
+            createdafter_dt: 'location.l_createdat',
+            updatedafter_dt: 'location.l_updatedat',
             // common
             id: 'location.l_id',
             loc_id_i: 'location.l_id',
@@ -529,17 +543,23 @@ export class SqlMytbDbLocationConfig {
             pdffile_s: 'l_pdffile',
             name_s: 'l_name',
             type_s: 'type',
-            subtype_s: 'subtype'
+            subtype_s: 'subtype',
+            // changelog
+            createdat_dt: 'l_createdat',
+            updatedat_dt: 'l_updatedat',
+            updateversion_i: 'l_updateversion'
         }
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
-        table: 'location', joinTable: 'location_keyword', fieldReference: 'l_id'
+        table: 'location', joinTable: 'location_keyword', fieldReference: 'l_id',
+        changelogConfig: SqlMytbDbLocationConfig.tableConfig.changelogConfig
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
         table: 'location', joinTable: 'location_playlist', fieldReference: 'l_id', positionField: 'lp_pos',
-        detailsField: 'lp_details'
+        detailsField: 'lp_details',
+        changelogConfig: SqlMytbDbLocationConfig.tableConfig.changelogConfig
     };
 
     public static readonly joinModelConfigTypeLinkedInfos: JoinModelConfigTableType = {
@@ -548,7 +568,8 @@ export class SqlMytbDbLocationConfig {
         joinFieldMappings: {
             'if_id': 'refId',
             'lif_linked_details': 'linkedDetails'
-        }
+        },
+        changelogConfig: SqlMytbDbLocationConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
@@ -558,7 +579,8 @@ export class SqlMytbDbLocationConfig {
             'loc_lochirarchie_txt': {
                 table: 'location', idField: 'l_id', referenceField: 'l_parent_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbLocationConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignJoinConfig: ActionTagAssignJoinTableConfigType = {
@@ -572,17 +594,20 @@ export class SqlMytbDbLocationConfig {
                 joinBaseIdField: 'l_id',
                 joinReferenceField: 'if_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbLocationConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagBlockConfig: ActionTagBlockTableConfigType = {
-        table: 'location', idField: 'l_id', blockField: 'l_gesperrt'
+        table: 'location', idField: 'l_id', blockField: 'l_gesperrt',
+        changelogConfig: SqlMytbDbLocationConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
         table: 'location',
         fieldId: 'l_id',
         referenced: [
+            // TODO add chnagelog for every reference
             { table: 'image', fieldReference: 'l_id' },
             { table: 'info', fieldReference: 'l_id' },
             { table: 'kategorie', fieldReference: 'l_id' },
@@ -595,7 +620,8 @@ export class SqlMytbDbLocationConfig {
         joins: [
             { table: 'location_keyword', fieldReference: 'l_id' },
             { table: 'location_info', fieldReference: 'l_id' },
-        ]
+        ],
+        changelogConfig: SqlMytbDbLocationConfig.tableConfig.changelogConfig
     };
 
     public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {

@@ -148,7 +148,11 @@ export class SqlMytbDbPoiConfig {
             'poi_pdffile',
             'l_lochirarchietxt AS l_lochirarchietxt',
             'l_lochirarchieids AS l_lochirarchieids',
-            'poi_meta_desc'],
+            'poi_meta_desc',
+            // changelog
+            'poi_createdat',
+            'poi_updatedat',
+            'poi_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -498,13 +502,22 @@ export class SqlMytbDbPoiConfig {
             'location': 'l_lochirarchietxt ASC, poi_name ASC',
             'locationDetails': 'l_lochirarchietxt ASC, poi_name ASC',
             'forExport': 'poi.poi_id ASC, poi_name ASC',
-            'relevance': 'poi.poi_id DESC, poi_name ASC'
+            'relevance': 'poi.poi_id DESC, poi_name ASC',
+            'createdAt': 'poi_createdat DESC, poi.poi_id DESC',
+            'updatedAt': 'poi_updatedat DESC, poi.poi_id DESC'
         },
         spartialConfig: {
             lat: 'poi.poi_geo_latdeg',
             lon: 'poi.poi_geo_longdeg',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
+        },
+        changelogConfig: {
+            createDateField: 'poi_createdat',
+            updateDateField: 'poi_updatedat',
+            updateVersionField: 'poi_updateversion',
+            table: 'poi',
+            fieldId: 'poi_id'
         },
         filterMapping: {
             // dashboard
@@ -528,6 +541,9 @@ export class SqlMytbDbPoiConfig {
             geo_lon_s: 'poi.poi_calced_gps_lon',
             geo_lat_s: 'poi.poi_calced_gps_lat',
             geo_loc_p: 'poi.poi_calced_gps_loc',
+            // changelog
+            createdafter_dt: 'poi_createdat',
+            updatedafter_dt: 'poi_updatedat',
             // common
             id: 'poi.poi_id',
             destination_id_s: '"666dummy999"',
@@ -587,12 +603,17 @@ export class SqlMytbDbPoiConfig {
             pdffile_s: 'poi_pdffile',
             name_s: 'poi_name',
             subtype_s: 'subtype',
-            type_s: 'type'
+            type_s: 'type',
+            // changelog
+            createdat_dt: 'poi_createdat',
+            updatedat_dt: 'poi_updatedat',
+            updateversion_i: 'poi_updateversion'
         }
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
-        table: 'poi', joinTable: 'poi_keyword', fieldReference: 'poi_id'
+        table: 'poi', joinTable: 'poi_keyword', fieldReference: 'poi_id',
+        changelogConfig: SqlMytbDbPoiConfig.tableConfig.changelogConfig
     };
 
     public static readonly joinModelConfigTypeLinkedInfos: JoinModelConfigTableType = {
@@ -601,7 +622,8 @@ export class SqlMytbDbPoiConfig {
         joinFieldMappings: {
             'if_id': 'refId',
             'poiif_linked_details': 'linkedDetails'
-        }
+        },
+        changelogConfig: SqlMytbDbPoiConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
@@ -611,7 +633,8 @@ export class SqlMytbDbPoiConfig {
             'loc_lochirarchie_txt': {
                 table: 'location', idField: 'l_id', referenceField: 'l_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbPoiConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
@@ -623,7 +646,8 @@ export class SqlMytbDbPoiConfig {
             { table: 'poi_info', fieldReference: 'poi_id' },
             { table: 'kategorie_poi', fieldReference: 'poi_id' },
             { table: 'tour_poi', fieldReference: 'poi_id' }
-        ]
+        ],
+        changelogConfig: SqlMytbDbPoiConfig.tableConfig.changelogConfig
     };
 
     public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {

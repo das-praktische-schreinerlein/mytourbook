@@ -88,7 +88,11 @@ export class SqlMytbDbPlaylistConfig {
             'CONCAT("PLAYLIST", "_", playlist.p_id) AS id',
             'playlist.p_id',
             'playlist.p_name',
-            'p_meta_desc'],
+            'p_meta_desc',
+            // changelog
+            'p_createdat',
+            'p_updatedat',
+            'p_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -298,13 +302,22 @@ export class SqlMytbDbPlaylistConfig {
             'countVideosDesc': '(SELECT COUNT(DISTINCT p_sort.v_id) FROM video_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
             'name': 'p_name ASC',
             'forExport': 'playlist.p_id ASC, p_name ASC',
-            'relevance': 'playlist.p_id DESC, p_name ASC'
+            'relevance': 'playlist.p_id DESC, p_name ASC',
+            'createdAt': 'p_createdat DESC, playlist.p_id DESC',
+            'updatedAt': 'p_updatedat DESC, playlist.p_id DESC'
         },
         spartialConfig: {
             lat: undefined,
             lon: undefined,
             spatialField: undefined,
             spatialSortKey: undefined
+        },
+        changelogConfig: {
+            createDateField: 'p_createdat',
+            updateDateField: 'p_updatedat',
+            updateVersionField: 'p_updateversion',
+            table: 'playlist',
+            fieldId: 'p_id'
         },
         filterMapping: {
             // dashboard
@@ -321,6 +334,9 @@ export class SqlMytbDbPlaylistConfig {
             todoKeywords: '"666dummy999"',
             unrated: '"666dummy999"',
             unRatedChildren: '"666dummy999"',
+            // changelog
+            createdafter_dt: 'p_createdat',
+            updatedafter_dt: 'p_updatedat',
             // common
             id: 'playlist.p_id',
             destination_id_s: '"666dummy999"',
@@ -358,7 +374,11 @@ export class SqlMytbDbPlaylistConfig {
             playlist_id_is: 'p_id',
             desc_md_txt: 'p_meta_desc',
             name_s: 'p_name',
-            type_s: 'type'
+            type_s: 'type',
+            // changelog
+            createdat_dt: 'p_createdat',
+            updatedat_dt: 'p_updatedat',
+            updateversion_i: 'p_updateversion'
         }
     };
 
@@ -374,7 +394,8 @@ export class SqlMytbDbPlaylistConfig {
             { table: 'tour_playlist', fieldReference: 'p_id' },
             { table: 'trip_playlist', fieldReference: 'p_id' },
             { table: 'video_playlist', fieldReference: 'p_id' }
-        ]
+        ],
+        changelogConfig: SqlMytbDbPlaylistConfig.tableConfig.changelogConfig
     };
 }
 

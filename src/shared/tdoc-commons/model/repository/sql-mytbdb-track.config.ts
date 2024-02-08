@@ -261,7 +261,11 @@ export class SqlMytbDbTrackConfig {
             'k_calced_altMaxFacet AS altMaxFacet',
             'k_calced_distFacet AS distFacet',
             'k_calced_dur AS dur',
-            'k_calced_durFacet AS durFacet'],
+            'k_calced_durFacet AS durFacet',
+            // changelog
+            'k_createdat',
+            'k_updatedat',
+            'k_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -653,7 +657,9 @@ export class SqlMytbDbTrackConfig {
             'playlistPos': 'kategorie_playlist.kp_pos ASC',
             'location': 'l_lochirarchietxt ASC, k_name ASC',
             'locationDetails': 'l_lochirarchietxt ASC, k_name ASC',
-            'relevance': 'k_datevon DESC, k_name ASC'
+            'relevance': 'k_datevon DESC, k_name ASC',
+            'createdAt': 'k_createdat DESC, kategorie.k_id DESC',
+            'updatedAt': 'k_updatedat DESC, kategorie.k_id DESC'
         },
         filterMapping: {
             // dashboard
@@ -670,6 +676,9 @@ export class SqlMytbDbTrackConfig {
             todoKeywords: 'keyword.kw_name',
             unrated: 'kategorie.k_rate_gesamt',
             unRatedChildren: '"unRatedChildren"',
+            // changelog
+            createdafter_dt: 'kategorie.k_createdat',
+            updatedafter_dt: 'kategorie.k_updatedat',
             // common
             id: 'kategorie.k_id',
             destination_id_s: 'dt.d_id',
@@ -699,6 +708,13 @@ export class SqlMytbDbTrackConfig {
             lon: 'l_geo_longdeg',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
+        },
+        changelogConfig: {
+            createDateField: 'k_createdat',
+            updateDateField: 'k_updatedat',
+            updateVersionField: 'k_updateversion',
+            table: 'kategorie',
+            fieldId: 'k_id'
         },
         writeMapping: {
             'kategorie.t_id': ':route_id_i:',
@@ -779,17 +795,23 @@ export class SqlMytbDbTrackConfig {
             type_s: 'type',
             actiontype_s: 'actionType',
             subtype_s: 'subtype',
-            i_fav_url_txt: 'i_fav_url_txt'
+            i_fav_url_txt: 'i_fav_url_txt',
+            // changelog
+            createdat_dt: 'k_createdat',
+            updatedat_dt: 'k_updatedat',
+            updateversion_i: 'k_updateversion'
         }
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
-        table: 'kategorie', joinTable: 'kategorie_keyword', fieldReference: 'k_id'
+        table: 'kategorie', joinTable: 'kategorie_keyword', fieldReference: 'k_id',
+        changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
         table: 'kategorie', joinTable: 'kategorie_playlist', fieldReference: 'k_id', positionField: 'kp_pos',
-        detailsField: 'kp_details'
+        detailsField: 'kp_details',
+        changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
     };
 
     public static readonly joinModelConfigTypeLinkedRoutes: JoinModelConfigTableType = {
@@ -799,7 +821,8 @@ export class SqlMytbDbTrackConfig {
             't_id': 'refId',
             'kt_full': 'full',
             'kt_route_attr': 'linkedRouteAttr'
-        }
+        },
+        changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
     };
 
     public static readonly joinModelConfigTypeLinkedPois: JoinModelConfigTableType = {
@@ -809,7 +832,8 @@ export class SqlMytbDbTrackConfig {
             'poi_id': 'refId',
             'kpoi_pos': 'position',
             'kpoi_type': 'poitype'
-        }
+        },
+        changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
@@ -825,16 +849,20 @@ export class SqlMytbDbTrackConfig {
             'loc_lochirarchie_txt': {
                 table: 'location', idField: 'l_id', referenceField: 'l_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagBlockConfig: ActionTagBlockTableConfigType = {
-        table: 'kategorie', idField: 'k_id', blockField: 'k_gesperrt'};
+        table: 'kategorie', idField: 'k_id', blockField: 'k_gesperrt',
+        changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
+    };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
         table: 'kategorie',
         fieldId: 'k_id',
         referenced: [
+            // TODO add changelog for every reference
             { table: 'image', fieldReference: 'k_id' },
             { table: 'tour', fieldReference: 'k_id' },
             { table: 'video', fieldReference: 'k_id' },
@@ -843,7 +871,8 @@ export class SqlMytbDbTrackConfig {
             { table: 'kategorie_keyword', fieldReference: 'k_id' },
             { table: 'kategorie_person', fieldReference: 'k_id' },
             { table: 'kategorie_tour', fieldReference: 'k_id' }
-        ]
+        ],
+        changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
     };
 
     public static readonly geoEntityDbMapping: GeoEntityDbMapping = {

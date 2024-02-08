@@ -140,7 +140,11 @@ export class SqlMytbDbNewsConfig {
             'YEAR(n_date) AS year',
             'n_pdffile',
             'n_gesperrt',
-            'n_message'],
+            'n_message',
+            // changelog
+            'n_createdat',
+            'n_updatedat',
+            'n_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -362,7 +366,16 @@ export class SqlMytbDbNewsConfig {
             'dateAsc': 'n_date ASC, n_headline ASC',
             'name': 'n_headline ASC',
             'forExport': 'n_date ASC, n_headline ASC',
-            'relevance': 'n_date DESC, n_headline ASC'
+            'relevance': 'n_date DESC, n_headline ASC',
+            'createdAt': 'n_createdat DESC, news.n_id DESC',
+            'updatedAt': 'n_updatedat DESC, news.n_id DESC'
+        },
+        changelogConfig: {
+            createDateField: 'n_createdat',
+            updateDateField: 'n_updatedat',
+            updateVersionField: 'n_updateversion',
+            table: 'news',
+            fieldId: 'n_id'
         },
         filterMapping: {
             // dashboard
@@ -379,6 +392,9 @@ export class SqlMytbDbNewsConfig {
             todoKeywords: 'keyword.kw_name',
             unrated: '"666dummy999"',
             unRatedChildren: '"unRatedChildren"',
+            // changelog
+            createdafter_dt: 'n_createdat',
+            updatedafter_dt: 'n_updatedat',
             // common
             id: 'news.n_id',
             news_id_i: 'news.n_id',
@@ -426,7 +442,11 @@ export class SqlMytbDbNewsConfig {
             keywords_txt: 'n_keywords',
             pdffile_s: 'n_pdffile',
             name_s: 'n_headline',
-            type_s: 'type'
+            type_s: 'type',
+            // changelog
+            createdat_dt: 'n_createdat',
+            updatedat_dt: 'n_updatedat',
+            updateversion_i: 'n_updateversion'
         }
     };
 
@@ -434,18 +454,21 @@ export class SqlMytbDbNewsConfig {
         table: 'news',
         idField: 'n_id',
         references: {
-        }
+        },
+        changelogConfig: SqlMytbDbNewsConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagBlockConfig: ActionTagBlockTableConfigType = {
-        table: 'news', idField: 'n_id', blockField: 'n_gesperrt'
+        table: 'news', idField: 'n_id', blockField: 'n_gesperrt',
+        changelogConfig: SqlMytbDbNewsConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
         table: 'news',
         fieldId: 'n_id',
         referenced: [],
-        joins: []
+        joins: [],
+        changelogConfig: SqlMytbDbNewsConfig.tableConfig.changelogConfig
     };
 
     public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {

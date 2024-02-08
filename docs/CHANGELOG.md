@@ -14,6 +14,7 @@
 - frontend: hide tagclouds for location if not filtered on backend
 - frontend: hide timetable if not filtered on backend
 - frontend/backend: added changelog to page-model
+- frontend/backend: added changelog to tdoc-model
 
 ### new features
 - frontend: introduced profile: viewer-de-with-pdf
@@ -21,6 +22,7 @@
 - backend: added pre-generated pdf-support
 - frontend: added download pre-generated pdf-support
 - backend: playlistservice - add csv-export
+- frontend/backend: added changelog to tdoc-model
 
 ### improvements
 - use new commons

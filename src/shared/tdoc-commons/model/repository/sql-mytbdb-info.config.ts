@@ -157,7 +157,11 @@ export class SqlMytbDbInfoConfig {
             'if_pdffile',
             'if_gesperrt',
             'if_meta_desc',
-            'if_meta_shortdesc'
+            'if_meta_shortdesc',
+            // changelog
+            'if_createdat',
+            'if_updatedat',
+            'if_updateversion'
         ],
         facetConfigs: {
             // dashboard
@@ -402,13 +406,22 @@ export class SqlMytbDbInfoConfig {
             'forExport': 'info.if_id ASC, if_name ASC',
             'location': 'l_lochirarchietxt ASC, if_name ASC, if_name ASC',
             'locationDetails': 'l_lochirarchietxt ASC, if_name ASC, if_name ASC',
-            'relevance': 'info.if_id DESC, if_name ASC'
+            'relevance': 'info.if_id DESC, if_name ASC',
+            'createdAt': 'if_createdat DESC, info.if_id DESC',
+            'updatedAt': 'if_updatedat DESC, info.if_id DESC'
         },
         spartialConfig: {
             lat: 'location.l_geo_latdeg',
             lon: 'location.l_geo_longdeg',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
+        },
+        changelogConfig: {
+            createDateField: 'if_createdat',
+            updateDateField: 'if_updatedat',
+            updateVersionField: 'if_updateversion',
+            table: 'info',
+            fieldId: 'if_id'
         },
         filterMapping: {
             // dashboard
@@ -425,6 +438,9 @@ export class SqlMytbDbInfoConfig {
             todoKeywords: 'keyword.kw_name',
             unrated: '"666dummy999"',
             unRatedChildren: '"666dummy999"',
+            // changelog
+            createdafter_dt: 'if_createdat',
+            updatedafter_dt: 'if_updatedat',
             // common
             id: 'info.if_id',
             destination_id_s: 'dt.d_id',
@@ -489,17 +505,23 @@ export class SqlMytbDbInfoConfig {
             pdffile_s: 'if_pdffile',
             name_s: 'if_name',
             subtype_s: 'subtype',
-            type_s: 'type'
+            type_s: 'type',
+            // changelog
+            createdat_dt: 'if_createdat',
+            updatedat_dt: 'if_updatedat',
+            updateversion_i: 'if_updateversion'
         }
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
         table: 'info', joinTable: 'info_playlist', fieldReference: 'if_id', positionField: 'ifp_pos',
-        detailsField: 'ifp_details'
+        detailsField: 'ifp_details',
+        changelogConfig: SqlMytbDbInfoConfig.tableConfig.changelogConfig
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
-        table: 'info', joinTable: 'info_keyword', fieldReference: 'if_id'
+        table: 'info', joinTable: 'info_keyword', fieldReference: 'if_id',
+        changelogConfig: SqlMytbDbInfoConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
@@ -509,11 +531,13 @@ export class SqlMytbDbInfoConfig {
             'loc_lochirarchie_txt': {
                 table: 'location', idField: 'l_id', referenceField: 'l_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbInfoConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagBlockConfig: ActionTagBlockTableConfigType = {
-        table: 'info', idField: 'if_id', blockField: 'if_gesperrt'
+        table: 'info', idField: 'if_id', blockField: 'if_gesperrt',
+        changelogConfig: SqlMytbDbInfoConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
@@ -525,7 +549,8 @@ export class SqlMytbDbInfoConfig {
             { table: 'poi_info', fieldReference: 'if_id' },
             { table: 'tour_info', fieldReference: 'if_id' },
             { table: 'location_info', fieldReference: 'if_id' }
-        ]
+        ],
+        changelogConfig: SqlMytbDbInfoConfig.tableConfig.changelogConfig
     };
 
     public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {

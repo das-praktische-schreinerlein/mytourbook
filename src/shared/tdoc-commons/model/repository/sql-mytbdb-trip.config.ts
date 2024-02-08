@@ -178,7 +178,11 @@ export class SqlMytbDbTripConfig {
             'tr_pdffile',
             'tr_meta_shortdesc',
             'tr_calced_dur AS dur',
-            'tr_calced_durFacet AS durFacet'],
+            'tr_calced_durFacet AS durFacet',
+            // changelog
+            'tr_createdat',
+            'tr_updatedat',
+            'tr_updateversion'],
         facetConfigs: {
             // dashboard
             'doublettes': {
@@ -440,13 +444,22 @@ export class SqlMytbDbTripConfig {
             'playlistPos': 'trip_playlist.trp_pos ASC',
             'location': 'l_lochirarchietxt ASC, tr_name ASC',
             'locationDetails': 'l_lochirarchietxt ASC, tr_name ASC',
-            'relevance': 'tr_datevon DESC, tr_name ASC'
+            'relevance': 'tr_datevon DESC, tr_name ASC',
+            'createdAt': 'tr_createdat DESC, trip.tr_id DESC',
+            'updatedAt': 'tr_updatedat DESC, trip.tr_id DESC'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',
             lon: 'l_geo_longdeg',
             spatialField: 'geodist',
             spatialSortKey: 'distance'
+        },
+        changelogConfig: {
+            createDateField: 'tr_createdat',
+            updateDateField: 'tr_updatedat',
+            updateVersionField: 'tr_updateversion',
+            table: 'trip',
+            fieldId: 'tr_id'
         },
         filterMapping: {
             // dashboard
@@ -463,6 +476,9 @@ export class SqlMytbDbTripConfig {
             todoKeywords: 'keyword.kw_name',
             unrated: '"666dummy999"',
             unRatedChildren: '"unRatedChildren"',
+            // changelog
+            createdafter_dt: 'tr_createdat',
+            updatedafter_dt: 'tr_updatedat',
             // common
             id: 'trip.tr_id',
             destination_id_s: 'dt.d_id',
@@ -524,13 +540,18 @@ export class SqlMytbDbTripConfig {
             keywords_txt: 'tr_keywords',
             pdffile_s: 'tr_pdffile',
             name_s: 'tr_name',
-            type_s: 'type'
+            type_s: 'type',
+            // changelog
+            createdat_dt: 'tr_createdat',
+            updatedat_dt: 'tr_updatedat',
+            updateversion_i: 'tr_updateversion'
         }
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
         table: 'trip', joinTable: 'trip_playlist', fieldReference: 'tr_id', positionField: 'trp_pos',
-        detailsField: 'trp_details'
+        detailsField: 'trp_details',
+        changelogConfig: SqlMytbDbTripConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {
@@ -540,20 +561,24 @@ export class SqlMytbDbTripConfig {
             'loc_lochirarchie_txt': {
                 table: 'location', idField: 'l_id', referenceField: 'l_id'
             }
-        }
+        },
+        changelogConfig: SqlMytbDbTripConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagBlockConfig: ActionTagBlockTableConfigType = {
-        table: 'trip', idField: 'tr_id', blockField: 'tr_gesperrt'
+        table: 'trip', idField: 'tr_id', blockField: 'tr_gesperrt',
+        changelogConfig: SqlMytbDbTripConfig.tableConfig.changelogConfig
     };
 
     public static readonly actionTagReplaceConfig: ActionTagReplaceTableConfigType = {
         table: 'trip',
         fieldId: 'tr_id',
         referenced: [
+            // TODO add changelog for every reference
             { table: 'kategorie', fieldReference: 'tr_id' }
         ],
-        joins: []
+        joins: [],
+        changelogConfig: SqlMytbDbTripConfig.tableConfig.changelogConfig
     };
 
     public static readonly pdfEntityDbMapping: PdfEntityDbMapping = {
