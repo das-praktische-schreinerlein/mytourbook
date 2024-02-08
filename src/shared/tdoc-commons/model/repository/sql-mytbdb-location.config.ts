@@ -607,7 +607,7 @@ export class SqlMytbDbLocationConfig {
         table: 'location',
         fieldId: 'l_id',
         referenced: [
-            // TODO add chnagelog for every reference
+            // TODO add changelog for every reference
             { table: 'image', fieldReference: 'l_id' },
             { table: 'info', fieldReference: 'l_id' },
             { table: 'kategorie', fieldReference: 'l_id' },

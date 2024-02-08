@@ -89,7 +89,10 @@
         <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
         <app-cdoc-extended-object-properties [extendedObjectProperties]="listItem.currentRecord.tdocextendedobjectproperties"
                                              [categories]="['ENTITYCOUNT']"
-                                             [profile]="'list-item-flat-big'" class="float-right"></app-cdoc-extended-object-properties>
+                                             [profile]="'list-item-flat-big'" class="float-right hidden-print"></app-cdoc-extended-object-properties>
+        <app-cdoc-changelog [record]="record"
+                            [small]="true"
+                            class="float-right hidden-print"></app-cdoc-changelog>
     </div>
 </ng-template>
 
