@@ -1,5 +1,20 @@
 # Migration-Hints for MyTourBook
 
+## Version 8.0.0 -> 8.1.0
+
+### migrate changelogs
+
+#### pages
+- use changelog of pdocs-de.json to identify create/updatedates
+```sql
+UPDATE page SET pg_createdat='2023-07-02 00:00:00', pg_updatedat='2023-11-30 00:00:00', pg_updateversion=1;
+```
+
+#### tdocs
+- set changelog-values as described
+  - [mysql](../installer/db/mysql/mytbdb/fixture-init-changelog.sql)
+  - [sqlite](../installer/db/sqlite/mytbdb/fixture-init-changelog.sql)
+
 ## Version 7 -> 8.0.0
 
 ### migrate page-documents
