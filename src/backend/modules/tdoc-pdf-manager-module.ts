@@ -55,20 +55,24 @@ export class TourPdfManagerModule extends CommonDocPdfManagerModule<TourDocDataS
                 jsonBaseElement: 'tdocs'
             });
     }
+
     protected generatePdfFileName(entity: CommonDocRecord): string {
         return this.generatePdfFileNameForHirarchy(entity, TourDocBackendGeoService.hierarchyConfig);
     }
+
     protected updatePdfEntity(entity: CommonDocRecord, fileName: string): Promise<CommonDocRecord> {
         const pdfEntityDbMapping = this.pdfEntityDbMapping.tables[entity.type]
             || this.pdfEntityDbMapping.tables[entity.type.toLowerCase()];
         if (!pdfEntityDbMapping) {
             return Promise.reject('no valid entityType:' + entity.type);
         }
+
         const dbFields = [];
         const dbValues = [];
         if (!pdfEntityDbMapping.fieldFilename) {
             return Promise.reject('no valid entityType:' + entity.type + ' missing fieldFilename');
         }
+
         dbFields.push(pdfEntityDbMapping.fieldFilename);
         dbValues.push(fileName !== undefined && fileName !== ''
             ? fileName
@@ -77,6 +81,7 @@ export class TourPdfManagerModule extends CommonDocPdfManagerModule<TourDocDataS
         if (arr.length !== 2) {
             return Promise.reject('invalid id: ' + entity.id);
         }
+
         const id = arr[1];
         const updateSqlQuery: RawSqlQueryData = {
             sql: 'UPDATE ' + pdfEntityDbMapping.table +
@@ -84,6 +89,7 @@ export class TourPdfManagerModule extends CommonDocPdfManagerModule<TourDocDataS
                 ' WHERE ' + pdfEntityDbMapping.fieldId + ' = ?',
             parameters: dbValues.concat([id])
         };
+
         // console.log('call updatePdfEntity sql', updateSqlQuery, entity);
         return SqlUtils.executeRawSqlQueryData(this.knexRef, updateSqlQuery).then(() => {
             console.log('DONE - updatePdfEntity for: ', entity.type, entity.id, entity.name, pdfEntityDbMapping.fieldFilename);
