@@ -1148,7 +1148,10 @@ export class SqlMytbDbRouteConfig {
             name: 't_name',
             locHirarchie: 'location.l_lochirarchietxt',
             gpsTrackSrc: 't_gpstracks_gpx',
-            gpsTrackBasefile: 't_gpstracks_basefile'
+            gpsTrackBasefile: 't_gpstracks_basefile',
+            createdAt: 't_createdAt',
+            updatedAt: 't_updatedAt',
+            updateVersion: 't_updateVersion'
         },
         pointTable: 'tourpoint',
         pointFields: {

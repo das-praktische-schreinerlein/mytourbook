@@ -885,7 +885,10 @@ export class SqlMytbDbTrackConfig {
             locHirarchie: 'location.l_lochirarchietxt',
             gpsTrackTxt: 'k_gpstracks_txt',
             gpsTrackSrc: 'k_gpstracks_gpx_source',
-            gpsTrackBasefile: 'k_gpstracks_basefile'
+            gpsTrackBasefile: 'k_gpstracks_basefile',
+            createdAt: 'k_createdAt',
+            updatedAt: 'k_updatedAt',
+            updateVersion: 'k_updateVersion',
         },
         pointTable: 'kategorie_tourpoint',
         pointFields: {
