@@ -2,7 +2,12 @@
  
 # Versions
 
-## 8.1.0
+## 10.0.0 (2024-02-25)
+
+**Diese Version ist für DICH Fluspselwups. Ein Sprung auf 10.0.0 für 10 Jahre als mein kleiner, treuer Begleiter.**
+
+**Rest in Peace ✝25.02.2024**
+
 - use new commons
 - frontend: improved text-editor
 - frontend: improved pdf-support and configuration-profiles
