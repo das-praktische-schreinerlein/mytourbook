@@ -100,6 +100,13 @@ export class SqlMytbDbTrackConfig {
                 groupByFields: []
             },
             {
+                from: 'INNER JOIN (SELECT k_id AS id FROM kategorie WHERE ' +
+                    '                 k_gpstracks_state is null or k_gpstracks_state in (0)) noCoordinates' +
+                    '             ON kategorie.k_id=noCoordinates.id',
+                triggerParams: ['noCoordinates'],
+                groupByFields: []
+            },
+            {
                 from: ' ',
                 triggerParams: ['id', 'loadTrack'],
                 groupByFields: ['k_gpstracks_gpx_source']
@@ -294,8 +301,12 @@ export class SqlMytbDbTrackConfig {
                 }
             },
             'noCoordinates': {
-                constValues: ['noCoordinates'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noCoordinates" AS value,' +
+                    ' "noCoordinates" AS label, "true" AS id' +
+                    ' FROM kategorie INNER JOIN (SELECT k_id AS id FROM kategorie WHERE ' +
+                    '                 k_gpstracks_state is null or k_gpstracks_state in (0)) noCoordinates' +
+                    '             ON kategorie.k_id=noCoordinates.id',
+                triggerTables: ['kategorie']
             },
             'noFavoriteChildren': {
                 selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noFavoriteChildren" AS value,' +
@@ -668,7 +679,7 @@ export class SqlMytbDbTrackConfig {
             noFavoriteChildren: '"noFavoriteChildren"',
             noMainFavoriteChildren: '"noMainFavoriteChildren"',
             noMetaOnly: '"666dummy999"',
-            noCoordinates: '"666dummy999"',
+            noCoordinates: '"noCoordinates"',
             noLocation: 'kategorie.l_id',
             noRoute: 'kategorie.t_id',
             noSubType: 'kategorie.k_calced_actiontype',

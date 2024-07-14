@@ -88,6 +88,13 @@ export class SqlMytbDbRouteConfig {
                 groupByFields: []
             },
             {
+                from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE ' +
+                    '                 t_gpstracks_state is null or t_gpstracks_state in (0)) noCoordinates' +
+                    '             ON tour.t_id=noCoordinates.id',
+                triggerParams: ['noCoordinates'],
+                groupByFields: []
+            },
+            {
                 from: ' ',
                 triggerParams: ['id', 'loadTrack'],
                 groupByFields: ['t_gpstracks_gpx']
@@ -283,8 +290,12 @@ export class SqlMytbDbRouteConfig {
                 filterField: '"666dummy999"'
             },
             'noCoordinates': {
-                constValues: ['noCoordinates'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(tour.t_id) AS count, "noCoordinates" AS value,' +
+                    ' "noCoordinates" AS label, "true" AS id' +
+                    ' FROM tour INNER JOIN (SELECT t_id AS id FROM tour WHERE ' +
+                    '                 t_gpstracks_state is null or t_gpstracks_state in (0)) noCoordinates' +
+                    '             ON tour.t_id=noCoordinates.id',
+                triggerTables: ['tour']
             },
             'noFavoriteChildren': {
                 constValues: ['noFavoriteChildren'],
@@ -912,7 +923,7 @@ export class SqlMytbDbRouteConfig {
             noFavoriteChildren: '"666dummy999"',
             noMainFavoriteChildren: '"666dummy999"',
             noMetaOnly: '"666dummy999"',
-            noCoordinates: '"666dummy999"',
+            noCoordinates: '"noCoordinates"',
             noLocation: 'tour.l_id',
             noRoute: '"666dummy999"',
             noSubType: 'tour.t_calced_actiontype',
