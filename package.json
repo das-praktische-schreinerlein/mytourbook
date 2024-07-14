@@ -1,6 +1,6 @@
 {
   "name": "mytourbook-frontend",
-  "version": "10.0.0",
+  "version": "10.1.0",
   "license": "Apache-2.0",
   "angular-cli": {},
   "config": {
@@ -228,6 +228,7 @@
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
     "@risingstack/protect": "1.2.0",
+    "@sqlite.org/sqlite-wasm": "3.46.0-build1",
     "@xmldom/xmldom": "0.8.6",
     "angular-2-dropdown-multiselect": "1.9.0",
     "angular2-cookie-law": "7.0.1",
