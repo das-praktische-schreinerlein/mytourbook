@@ -2,6 +2,28 @@
  
 # Versions
 
+## 10.1.0
+- backend: improved dashboard
+- frontend/backend: introduced nearbyId-search
+- frontend: improved poi-selection
+- fixed media-file-db-sync-viewer
+- fixed pdf-build
+
+### new features
+- frontend/backend: introduced nearbyId-search
+
+### improvements
+- backend: improved dashboard
+- frontend: improved poi-selection
+
+### bug fixes
+- fixed media-file-db-sync-viewer
+- fixed pdf-build
+
+### breaking changes
+- none
+
+
 ## 10.0.0 (2024-02-25)
 
 **Diese Version ist für DICH Fluspselwups. Ein Sprung auf 10.0.0 für 10 Jahre als mein kleiner, treuer Begleiter.**
