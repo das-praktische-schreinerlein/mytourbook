@@ -20,8 +20,6 @@ export class TourDocSelectSearchComponent extends AbstractInlineComponent {
     public Layout = Layout;
     public selectMultiActionManager = new CommonDocMultiActionManager(this.appService, this.actionService);
 
-    selectFilter: {} = undefined;
-
     @Input()
     public modal ? = false;
 
@@ -32,13 +30,7 @@ export class TourDocSelectSearchComponent extends AbstractInlineComponent {
     public type: string;
 
     @Input()
-    public nameFilterValues: string[];
-
-    @Input()
-    public basePosition: LatLng;
-
-    @Input()
-    public baseLocHierarchy: string;
+    public selectFilter: {} = {};
 
     @Output()
     public appendSelected: EventEmitter<CommonDocRecord[]> = new EventEmitter();
@@ -85,7 +77,6 @@ export class TourDocSelectSearchComponent extends AbstractInlineComponent {
     }
 
     onChangeSelectFilter(): boolean {
-        this.selectFilter = this.getRecordFilters();
         this.cd.markForCheck();
         return false;
     }
@@ -100,47 +91,6 @@ export class TourDocSelectSearchComponent extends AbstractInlineComponent {
         }
 
         return false;
-    }
-
-    getRecordFilters(): any {
-        const filters = {};
-        filters['type'] = this.type;
-        filters['sort'] = 'distance';
-
-        const where = this.createNearByFilter();
-        if (where) {
-            filters['where'] = where;
-        }
-
-        const fullText: string = [].concat(this.nameFilterValues)
-            .map(value => {
-                return value && value.length > 0
-                    ? value.split(' -> ')
-                        .pop()
-                        .trim()
-                    : undefined
-            })
-            .map(value => {
-                return value && value.length > 0
-                    ? value.split(' - ')
-                        .pop()
-                        .trim()
-                    : undefined
-            })
-            .filter(value => value !== undefined && value !== 'undefined' && value.length > 0)
-            .join(' OR ');
-        if (fullText) {
-            filters['fulltext'] = fullText;
-        }
-
-        return filters;
-    }
-
-    protected createNearByFilter(): string {
-        return this.basePosition !== undefined
-            ? 'nearby:' + [this.basePosition.lat, this.basePosition.lng, 10].join('_') +
-                '_,_nearbyAddress:' + this.baseLocHierarchy.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
-            : undefined;
     }
 
     protected configureComponent(): void {

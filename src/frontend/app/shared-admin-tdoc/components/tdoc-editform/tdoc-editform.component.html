@@ -186,6 +186,12 @@
                 <ng-container *ngTemplateOutlet="inputPoiList"></ng-container>
             </div>
         </fieldset>
+        <fieldset *ngIf="record.gpsTrackBasefile">
+            <legend i18n="dataPoi label|Label for fieldset: dataPoi@@label.editform.tdoc.legend.newPois">&#x26f3; POIs aus Track hinzufügen</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputNewNearbyPois"></ng-container>
+            </div>
+        </fieldset>
         <fieldset>
             <legend i18n="dataPoi label|Label for fieldset: dataPoi@@label.editform.tdoc.legend.newPois">&#x26f3; POIs hinzufügen</legend>
             <div class="row">
@@ -375,6 +381,12 @@
             <legend i18n="dataPoi label|Label for fieldset: dataPoi@@label.editform.tdoc.legend.dataPois">&#x26f3; POIs bearbeiten</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputPoiList"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset *ngIf="record.gpsTrackBasefile">
+            <legend i18n="dataPoi label|Label for fieldset: dataPoi@@label.editform.tdoc.legend.newPois">&#x26f3; POIs aus Track hinzufügen</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputNewNearbyPois"></ng-container>
             </div>
         </fieldset>
         <fieldset>
@@ -1020,9 +1032,16 @@
     <ng-template #inputNewPois>
         <app-tdoc-selectsearch
                 [baseId]="record.id"
-                [baseLocHierarchy]="record.locHirarchie"
-                [basePosition]="poiSearchBasePosition"
-                [nameFilterValues]="poiSearchNames"
+                [selectFilter]="poiFilters"
+                [type]="'POI'"
+                (appendSelected)="onAppendSelectedPois($event)">
+        </app-tdoc-selectsearch>
+    </ng-template>
+
+    <ng-template #inputNewNearbyPois>
+        <app-tdoc-selectsearch
+                [baseId]="record.id"
+                [selectFilter]="poiNearbyFilters"
                 [type]="'POI'"
                 (appendSelected)="onAppendSelectedPois($event)">
         </app-tdoc-selectsearch>

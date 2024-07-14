@@ -179,8 +179,14 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         commandBlocks: []
     };
 
-    poiSearchBasePosition: LatLng = undefined;
-    poiSearchNames: string[] = [];
+    poiFilters = {
+        type: 'none',
+        sort: 'distance'
+    };
+    poiNearbyFilters = {
+        type: 'none',
+        sort: 'distance'
+    }
 
     descMdRecommended  = '';
 
@@ -781,10 +787,16 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.updateMap();
         this.updateImageObject();
         this.preparePoiFiltersForType(this.record);
+        this.preparePoiNearbyFiltersForType(this.record);
     }
 
     protected preparePoiFiltersForType(record: TourDocRecord): void {
-        let poiSearchNames = [];
+        const poiFilters = {
+            type: 'poi',
+            sort: 'distance'
+        };
+
+        let poiSearchNames: string[] = [];
         ['locHirarchie', 'tdocdatainfo_baseloc', 'tdocdatainfo_destloc', 'tdocdatainfo_region'].map(fieldName => {
             return FormUtils.getStringFormValue(this.editFormGroup.getRawValue(), fieldName);
         }).filter(str => str !== undefined && str !== '')
@@ -814,11 +826,54 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             .filter(str => !this.blacklistedWords.includes(str))
             .filter(str => !this.possibleKeywords.includes(str));
 
-        this.poiSearchNames = poiSearchNames;
+        const fullText: string = [].concat(poiSearchNames)
+            .map(value => {
+                return value && value.length > 0
+                    ? value.split(' -> ')
+                        .pop()
+                        .trim()
+                    : undefined
+            })
+            .map(value => {
+                return value && value.length > 0
+                    ? value.split(' - ')
+                        .pop()
+                        .trim()
+                    : undefined
+            })
+            .filter(value => value !== undefined && value !== 'undefined' && value.length > 0)
+            .join(' OR ');
+        if (fullText) {
+            poiFilters['fulltext'] = fullText;
+        }
 
-        this.poiSearchBasePosition = record.geoLat !== undefined
+        const poiSearchBasePosition: LatLng = record.geoLat !== undefined
             ? new LatLng(Number(record.geoLat), Number(record.geoLon))
             : undefined;
+
+        const where = this.createNearByFilter(poiSearchBasePosition, record.locHirarchie);
+        if (where) {
+            poiFilters['where'] = where;
+        }
+
+        this.poiFilters = poiFilters;
+    }
+
+    protected createNearByFilter(basePosition: LatLng, baseLocHierarchy: string): string {
+        return basePosition !== undefined
+            ? 'nearby:' + [basePosition.lat, basePosition.lng, 10].join('_') +
+            '_,_nearbyAddress:' + baseLocHierarchy.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
+            : undefined;
+    }
+
+    protected preparePoiNearbyFiltersForType(record: TourDocRecord): void {
+        const poiFilters = {
+            type: 'poi',
+            sort: 'date',
+            where: 'nearbyId:' + record.id
+        };
+
+        this.poiNearbyFilters = poiFilters;
     }
 
     protected updateOptionValues(tdocSearchResult: TourDocSearchResult): boolean {

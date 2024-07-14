@@ -461,7 +461,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         return super._doActionTag(mapper, record, actionTagForm, opts);
     }
 
-    protected queryTransformToAdapterSelectQuery(method: string, mapper: Mapper, params: any, opts: any): SelectQueryData {
+    protected queryTransformToAdapterSelectQuery(method: string, mapper: Mapper, params: AdapterQuery, opts: AdapterOpts): SelectQueryData {
         const tableConfig = this.getTableConfig(<AdapterQuery>params);
         if (tableConfig === undefined) {
             return undefined;
@@ -471,8 +471,134 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.remapFulltextFilter(adapterQuery, tableConfig, 'html', 'SF_searchNameOnly', 'htmlNameOnly', 'likein');
         this.remapFulltextFilter(adapterQuery, tableConfig, 'html', 'SF_searchTrackKeywordsOnly', 'track_keywords_txt', 'in');
 
-        return this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, adapterQuery, <AdapterOpts>opts);
+        const query = this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, adapterQuery, <AdapterOpts>opts);
+        if ((<TourDocSearchForm>opts.originalSearchForm).nearbyId) {
+            this.queryTransformNearbyId(tableConfig, query, opts);
+        }
+
+        return query;
+    }
+
+    protected queryTransformNearbyId(tableConfig: TableConfig, query: SelectQueryData, opts: AdapterOpts) {
+        if (tableConfig.key === 'poi') {
+            this.queryTransformPoiNearbyId(query, opts);
+        } else {
+            // table not found
+            console.log('queryTransformNearbyId unknown table', tableConfig.key);
+            query.where.push('TRUE == FALSE')
+        }
+    }
+
+    protected queryTransformPoiNearbyId(query: SelectQueryData,  opts: AdapterOpts) {
+        const searchForm = <TourDocSearchForm>opts.originalSearchForm;
+        if (searchForm.nearbyId === undefined || searchForm.nearbyId.length < 0) {
+            console.warn('queryTransformPoiNearbyId no searchForm.nearbyId', searchForm.nearbyId);
+            return;
+        }
+
+        const fullId = this.extractSingleElement(searchForm.nearbyId);
+        const [tabKey, id] = fullId.split('_');
+        const intId = parseInt(id, 10);
+
+        const maxLatDist = 0.001;
+        const maxLonDist = 0.001;
+        const border = 0.001;
+
+        switch (tabKey.toLowerCase()) {
+            case 'track':
+                query.from += `
+                INNER JOIN
+                (
+                     (
+                     SELECT DISTINCT karea.k_id, poi_area.poi_id
+                     FROM (
+                          SELECT kparea.k_id,
+                                       min(ktp_lat) minktp_lat,
+                                       max(ktp_lat) maxktp_lat,
+                                       min(ktp_lon) minktp_lon,
+                                       max(ktp_lon) maxktp_lon
+                                from kategorie_tourpoint kparea
+                                WHERE kparea.k_id IN (${intId})
+                                group by kparea.k_id) karea
+                                   INNER JOIN poi poi_area
+                                              ON (poi_geo_latdeg <= (karea.maxktp_lat + ${border})
+                                                  AND poi_geo_latdeg >= (karea.minktp_lat - ${border})
+                                                  AND poi_geo_longdeg <= (karea.maxktp_lon + ${border})
+                                                  AND poi_geo_longdeg >= (karea.minktp_lon - ${border})
+                                                  )
+                    ) k_poi_area INNER JOIN kategorie_tourpoint kp ON k_poi_area.K_ID = kp.K_ID
+                )
+                ON (
+                     poi.poi_id = k_poi_area.poi_id
+                         AND poi_geo_latdeg <= kp.ktp_lat + ${maxLatDist}
+                         AND poi_geo_latdeg >= kp.ktp_lat - ${maxLatDist}
+                         AND poi_geo_longdeg <= kp.ktp_lon + ${maxLonDist}
+                         AND poi_geo_longdeg >= kp.ktp_lon - ${maxLonDist}
+                     )
+                         `;
+                query.fields.push('min(ktp_DATE) as tpdate');
+                query.fields.push(
+                    'MIN(3959 * ACOS(COS(RADIANS(ktp_lat)) * COS(RADIANS(poi_geo_latdeg))' +
+                    ' * COS(RADIANS(poi_geo_longdeg) - RADIANS(ktp_lon))' +
+                    ' + SIN(RADIANS(ktp_lat)) * SIN(RADIANS(poi_geo_latdeg)))) as geodist');
+                query.groupByFields.push('kp.k_id');
+
+                if (['date', 'dateAsc', 'relevance'].includes(searchForm.sort)) {
+                    query.sort = ['tpdate'];
+                } else {
+                    query.sort.push('tpdate');
+                }
+
+                break;
+            case 'route':
+                query.from += `
+                INNER JOIN
+                (
+                     (
+                     SELECT DISTINCT tarea.t_id, poi_area.poi_id
+                     FROM (
+                          SELECT tparea.t_id,
+                                       min(tp_lat) mintp_lat,
+                                       max(tp_lat) maxtp_lat,
+                                       min(tp_lon) mintp_lon,
+                                       max(tp_lon) maxtp_lon
+                                from tourpoint tparea
+                                WHERE tparea.t_id IN (${intId})
+                                group by tparea.t_id) tarea
+                                   INNER JOIN poi poi_area
+                                              ON (poi_geo_latdeg <= (tarea.maxtp_lat + ${border})
+                                                  AND poi_geo_latdeg >= (tarea.mintp_lat - ${border})
+                                                  AND poi_geo_longdeg <= (tarea.maxtp_lon + ${border})
+                                                  AND poi_geo_longdeg >= (tarea.mintp_lon - ${border})
+                                                  )
+                    ) t_poi_area INNER JOIN tourpoint tp ON t_poi_area.t_ID = tp.t_ID
+                )
+                ON (
+                     poi.poi_id = t_poi_area.poi_id
+                         AND poi_geo_latdeg <= tp.tp_lat + ${maxLatDist}
+                         AND poi_geo_latdeg >= tp.tp_lat - ${maxLatDist}
+                         AND poi_geo_longdeg <= tp.tp_lon + ${maxLonDist}
+                         AND poi_geo_longdeg >= tp.tp_lon - ${maxLonDist}
+                     )
+                         `;
+                query.fields.push('MIN(tp_date) as tpdate');
+                query.fields.push(
+                    'MIN(3959 * ACOS(COS(RADIANS(tp_lat)) * COS(RADIANS(poi_geo_latdeg))' +
+                    ' * COS(RADIANS(poi_geo_longdeg) - RADIANS(tp_lon))' +
+                    ' + SIN(RADIANS(tp_lat)) * SIN(RADIANS(poi_geo_latdeg)))) as geodist');
+                query.groupByFields.push('tp.t_id');
+
+                if (['date', 'dateAsc', 'relevance'].includes(searchForm.sort)) {
+                    query.sort = ['tpdate'];
+                } else {
+                    query.sort.push('tpdate');
+                }
+
+                break;
+            default:
+                query.where.push('TRUE == FALSE')
+                console.log('queryTransformPoiNearbyId unknown tabkey', tabKey, searchForm.nearbyId);
+        }
     }
 
 }
-

@@ -58,6 +58,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormConverter<To
         whereMap.set('loc', searchForm.where);
         whereMap.set('nearby', searchForm.nearby);
         whereMap.set('nearbyAddress', searchForm.nearbyAddress);
+        whereMap.set('nearbyId', searchForm.nearbyId);
         return this.searchParameterUtils.joinParamsToOneRouteParameter(whereMap, this.splitter);
     }
 
@@ -172,7 +173,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormConverter<To
         defaults = defaults || {};
 
         const whereValues = this.searchParameterUtils.splitValuesByPrefixes(params.where, this.splitter,
-            ['locId:', 'loc:', 'nearby:', 'nearbyAddress:']);
+            ['locId:', 'loc:', 'nearby:', 'nearbyAddress:', 'nearbyId:']);
         let where = '';
         if (whereValues.has('loc:')) {
             where = this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('loc:'), 'loc:', ',');
@@ -185,6 +186,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormConverter<To
             this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('nearby:'), 'nearby:', ',') : '');
         const nearbyAddress: string = (whereValues.has('nearbyAddress:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('nearbyAddress:'), 'nearbyAddress:', ',') : '');
+        const nearbyId: string = (whereValues.has('nearbyId:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('nearbyId:'), 'nearbyId:', ',') : '');
         const locId: string = (whereValues.has('locId:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('locId:'), 'locId:', ',') : '');
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
@@ -282,6 +285,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormConverter<To
         searchForm.nearbyAddress = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(nearbyAddress, /^ueberall$/, ''),
             defaults['nearbyAddress'], '');
+        searchForm.nearbyId = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(nearbyId, /^ueberall$/, ''),
+            defaults['nearbyId'], '');
         searchForm.what = this.searchParameterUtils.joinAndUseValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(what, /^alles$/, ''),
             defaults['what'], '');
@@ -386,6 +392,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormConverter<To
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.type, 'hrt_type', 'hrt_alltypes', true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.where, 'hrt_in', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.nearbyAddress, 'hrt_nearby', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.nearbyId, 'hrt_nearbyId', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.actiontype, 'hrt_actiontype', undefined, true));
 
         const when = (tdocSearchForm.when ? tdocSearchForm.when : '')

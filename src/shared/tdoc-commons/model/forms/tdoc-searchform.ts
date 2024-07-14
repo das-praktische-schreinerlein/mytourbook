@@ -1,7 +1,7 @@
 import {GenericSearchFormFieldConfig} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-searchform';
 import {
     GenericValidatorDatatypes,
-    IdCsvValidationRule,
+    IdCsvValidationRule, IdValidationRule,
     KeyParamsValidationRule,
     NameValidationRule,
     NearbyParamValidationRule,
@@ -19,6 +19,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         locId: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         nearby: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.NEARBY, new NearbyParamValidationRule(false)),
         nearbyAddress: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ADDRESS, new TextValidationRule(false)),
+        nearbyId: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false)),
         techDataAscent: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataAltitudeMax: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataDistance: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
@@ -45,6 +46,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
     locId: string;
     nearby: string;
     nearbyAddress: string;
+    nearbyId: string;
     techDataAscent: string;
     techDataAltitudeMax: string;
     techDataDistance: string;
@@ -72,6 +74,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         this.locId = values['locId'] || '';
         this.nearby = values['nearby'] || '';
         this.nearbyAddress = values['nearbyAddress'] || '';
+        this.nearbyId = values['nearbyId'] || '';
         this.techDataAscent = values['techDataAscent'] || '';
         this.techDataAltitudeMax = values['techDataAltitudeMax'] || '';
         this.techDataDistance = values['techDataDistance'] || '';
@@ -101,6 +104,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
             '  locId: ' + this.locId + '\n' +
             '  nearby: ' + this.nearby + '\n' +
             '  nearbyAddress: ' + this.nearbyAddress + '\n' +
+            '  nearbyId: ' + this.nearbyId + '\n' +
             '  what: ' + this.what + '\n' +
             '  fulltext: ' + this.fulltext + '\n' +
             '  actiontype: ' + this.actiontype + '\n' +
@@ -120,6 +124,7 @@ export class TourDocSearchFormFactory {
         sanitizedValues.locId = TourDocSearchForm.tdocFields.locId.validator.sanitize(values['locId']) || '';
         sanitizedValues.nearby = TourDocSearchForm.tdocFields.nearby.validator.sanitize(values['nearby']) || '';
         sanitizedValues.nearbyAddress = TourDocSearchForm.tdocFields.nearbyAddress.validator.sanitize(values['nearbyAddress']) || '';
+        sanitizedValues.nearbyId = TourDocSearchForm.tdocFields.nearbyId.validator.sanitize(values['nearbyId']) || '';
         sanitizedValues.techDataAltitudeMax =
             TourDocSearchForm.tdocFields.techDataAltitudeMax.validator.sanitize(values['techDataAltitudeMax']) || '';
         sanitizedValues.techDataAscent = TourDocSearchForm.tdocFields.techDataAscent.validator.sanitize(values['techDataAscent']) || '';
@@ -179,6 +184,7 @@ export class TourDocSearchFormValidator {
         state = TourDocSearchForm.tdocFields.locId.validator.isValid(values['locId']) && state;
         state = TourDocSearchForm.tdocFields.nearby.validator.isValid(values['nearby']) && state;
         state = TourDocSearchForm.tdocFields.nearbyAddress.validator.isValid(values['nearbyAddress']) && state;
+        state = TourDocSearchForm.tdocFields.nearbyId.validator.isValid(values['nearbyId']) && state;
         state = TourDocSearchForm.tdocFields.techDataAltitudeMax.validator.isValid(values['techDataAltitudeMax']) && state;
         state = TourDocSearchForm.tdocFields.techDataAscent.validator.isValid(values['techDataAscent']) && state;
         state = TourDocSearchForm.tdocFields.techDataDistance.validator.isValid(values['techDataDistance']) && state;

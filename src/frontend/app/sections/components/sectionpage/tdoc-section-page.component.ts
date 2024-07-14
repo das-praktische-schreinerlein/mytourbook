@@ -183,6 +183,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         filters['what'] = this.searchFormConverter.joinWhatParams(this.tdocSearchForm);
         filters['nearBy'] = this.tdocSearchForm.nearby;
         filters['nearbyAddress'] = this.tdocSearchForm.nearbyAddress;
+        filters['nearbyId'] = this.tdocSearchForm.nearbyId;
         filters['fulltext'] = this.tdocSearchForm.fulltext;
 
         return filters;
@@ -283,7 +284,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             case 'noMainFavoriteChildren':
                 return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'NEWS' || recordType === 'TRIP';
             case 'noCoordinates':
-                return recordType === 'LOCATION';
+                return recordType === 'LOCATION' || recordType === 'TRACK' || recordType === 'ROUTE';
             case 'objectDetectionCorrectionNeeded':
                 return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
             case 'objectDetectionDetailNeeded':
@@ -531,7 +532,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             what: this.tdocSearchForm.what.toString(),
             where: this.tdocSearchForm.where.toString(),
             nearBy: this.tdocSearchForm.nearby,
-            nearbyAddress: this.tdocSearchForm.nearbyAddress
+            nearbyAddress: this.tdocSearchForm.nearbyAddress,
+            nearbyId: this.tdocSearchForm.nearbyId
         }));
     }
 
