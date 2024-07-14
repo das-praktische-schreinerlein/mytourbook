@@ -472,7 +472,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.remapFulltextFilter(adapterQuery, tableConfig, 'html', 'SF_searchTrackKeywordsOnly', 'track_keywords_txt', 'in');
 
         const query = this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, adapterQuery, <AdapterOpts>opts);
-        if ((<TourDocSearchForm>opts.originalSearchForm).nearbyId) {
+        if (opts && opts.originalSearchForm && (<TourDocSearchForm>opts.originalSearchForm).nearbyId) {
             this.queryTransformNearbyId(tableConfig, query, opts);
         }
 
