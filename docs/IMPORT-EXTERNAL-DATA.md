@@ -69,7 +69,7 @@ for %f in (%OSMDIR%\*.tdoc.json) do (
         --action loadDocs ^
         --adminclibackend config/adminCli.dev.json ^
         --backend config/backend.dev.json ^
-        --file %OSMDIR%/%~nf.tdoc.json ^
+        --file %OSMDIR%\%~nf.json ^
         --renameFileAfterSuccess true
 )
 ```
@@ -145,4 +145,8 @@ natural=glacier
 water=lake
 water=reservoir
 sport=climbing
+"building"~"cathedral|chapel|church|monastery|mosque|shrine|temple|castle|ruins"
+leisure=park
+tourism=museum
+palace
 ```

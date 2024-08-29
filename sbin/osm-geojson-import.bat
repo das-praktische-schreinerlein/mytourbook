@@ -9,7 +9,7 @@ echo *****************************************************************
 echo import osm geojson
 echo *****************************************************************
 
-for %f in (%OSMDIR%\*.tdoc.json) do (
+for %%f in (%OSMDIR%\*.tdoc.json) do (
     echo %%~nf
     node dist\backend\serverAdmin.js ^
         --debug ^
@@ -17,7 +17,7 @@ for %f in (%OSMDIR%\*.tdoc.json) do (
         --action loadDocs ^
         --adminclibackend config/adminCli.dev.json ^
         --backend config/backend.dev.json ^
-        --file %OSMDIR%/%%~nf.tdoc.json ^
+        --file %OSMDIR%/%%~nf.json ^
         --renameFileAfterSuccess true
 )
 
