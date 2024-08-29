@@ -8,6 +8,8 @@
 - frontend: improved poi-selection
 - fixed media-file-db-sync-viewer
 - fixed pdf-build
+- frontend: improved layout
+- fixed import and documentation
 
 ### new features
 - frontend/backend: introduced nearbyId-search
@@ -15,10 +17,12 @@
 ### improvements
 - backend: improved dashboard
 - frontend: improved poi-selection
+- frontend: improved layout
 
 ### bug fixes
 - fixed media-file-db-sync-viewer
 - fixed pdf-build
+- fixed import and documentation
 
 ### breaking changes
 - none
