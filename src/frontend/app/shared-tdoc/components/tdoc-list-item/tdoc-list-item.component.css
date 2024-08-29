@@ -45,3 +45,18 @@ div.teaser-image-container-inner {
 
 .teaser {
 }
+
+
+.layout-big-ratepers, .layout-big-ratetech {
+    float: left;
+}
+
+.layout-big-datatech {
+    float: right;
+}
+
+@media(max-width: 430px) {
+    .layout-big-datatech {
+        float: left;
+    }
+}

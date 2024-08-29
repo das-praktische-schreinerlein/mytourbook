@@ -1,3 +1,7 @@
+div.techvaluetable .entry .valuedate {
+    font-size: 87%;
+}
+
 div.datatechvaluetable .entry {
     min-width: 81px;
 }
@@ -5,6 +9,15 @@ div.datatechvaluetable .entry .label {
     min-width: 30px;
 }
 div.datatechvaluetable .entry .value {
+    text-align: right;
+    white-space: nowrap;
+}
+
+div.datatechvaluetablebig .entry {
+}
+div.datatechvaluetablebig .entry .label {
+}
+div.datatechvaluetablebig .entry .value {
     text-align: right;
     white-space: nowrap;
 }

@@ -149,9 +149,9 @@
             <div style="display: inline-block">
                 <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
                                     [small]="false"></app-cdoc-mediameta>
-                <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
-                <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-                <app-tdoc-ratetech [record]="listItem.currentRecord"></app-tdoc-ratetech>
+                <app-tdoc-ratepers class="layout-big-ratepers" [record]="listItem.currentRecord"></app-tdoc-ratepers>
+                <app-tdoc-datatech class="layout-big-datatech" [big]="true" [record]="listItem.currentRecord"></app-tdoc-datatech >
+                <app-tdoc-ratetech class="layout-big-ratetech" [record]="listItem.currentRecord"></app-tdoc-ratetech>
             </div>
             <p class="card-text teaser">
                 {{ this.getDesc() | truncate : 300 }}
