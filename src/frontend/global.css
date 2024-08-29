@@ -127,6 +127,11 @@ div.humanReadableSearchFilter span.filterValue {
     background: #bfccd3;
 }
 
+div.techvaluetable {
+    margin-bottom: 1px;
+    margin-right: 1px;
+}
+
 /**
  * hide detailinfos on image-inlinelists layout.small
  **/
