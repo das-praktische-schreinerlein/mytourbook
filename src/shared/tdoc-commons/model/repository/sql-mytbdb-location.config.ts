@@ -43,6 +43,7 @@ export class SqlMytbDbLocationConfig {
                 groupByFields: []
             },
             {
+                // TODO -> l_geo_state isnull or l_geo_state in (0)
                 from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE ' +
                     '                 (l_typ IN (1,2,3,4) AND l_geo_area IS NULL) ' +
                     '              OR (l_typ > 4 AND (l_geo_latdeg IS NULL OR l_geo_longdeg IS NULL))' +
@@ -207,6 +208,7 @@ export class SqlMytbDbLocationConfig {
                 filterField: '"666dummy999"'
             },
             'noCoordinates': {
+                // TODO -> l_geo_state isnull or l_geo_state in (0)
                 selectSql: 'SELECT COUNT(location.l_id) AS count, "noCoordinates" AS value,' +
                     ' "noCoordinates" AS label, "true" AS id' +
                     ' FROM location INNER JOIN (SELECT l_id AS id FROM location WHERE ' +

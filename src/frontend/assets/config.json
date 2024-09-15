@@ -767,6 +767,21 @@
                             "label": "🧐",
                             "type": "singleCommand",
                             "command": "&#129488;"
+                        },
+                        {
+                            "label": "❤",
+                            "type": "singleCommand",
+                            "command": "&#10084;"
+                        },
+                        {
+                            "label": "\uD83D\uDC8B",
+                            "type": "singleCommand",
+                            "command": "&#128139;"
+                        },
+                        {
+                            "label": "\uD83E\uDD2A",
+                            "type": "singleCommand",
+                            "command": "&#129322;"
                         }
                     ]
                 }
@@ -3029,6 +3044,7 @@
                 "showALL_ENTRIES",
                 "showDESTINATION",
                 "showIMAGE",
+                "showIMAGE_FAVORITES",
                 "showIMAGE_SIMILAR",
                 "showINFO",
                 "showINFOBLOCK_DATACHANGELOG",
@@ -3055,7 +3071,8 @@
                 "showTOPIMAGE",
                 "showTRACK",
                 "showTRIP",
-                "showVIDEO"
+                "showVIDEO",
+                "showVIDEO_FAVORITESE"
             ],
             "availableTabs": {
                 "ALL_ENTRIES": true,
@@ -3075,6 +3092,7 @@
                 "NEWS": true,
                 "PLAYLIST": true,
                 "VIDEO": true,
+                "VIDEO_FAVORITES": true,
                 "POI": true,
                 "POI_NEARBY": true
             }
@@ -3391,6 +3409,21 @@
                             "label": "🧐",
                             "type": "singleCommand",
                             "command": "&#129488;"
+                        },
+                        {
+                            "label": "❤",
+                            "type": "singleCommand",
+                            "command": "&#10084;"
+                        },
+                        {
+                            "label": "\uD83D\uDC8B",
+                            "type": "singleCommand",
+                            "command": "&#128139;"
+                        },
+                        {
+                            "label": "\uD83E\uDD2A",
+                            "type": "singleCommand",
+                            "command": "&#129322;"
                         }
                     ]
                 }

@@ -37,6 +37,7 @@ export interface TourDocShowpageComponentAvailableTabs {
     INFO?: boolean;
     ODIMGOBJECT?: boolean;
     VIDEO?: boolean;
+    VIDEO_FAVORITES?: boolean;
     VIDEO_NEARBY?: boolean;
     LOCATION?: boolean;
     LOCATION_NEARBY?: boolean;
@@ -111,6 +112,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         ALL_ENTRIES?: boolean|number;
         DESTINATION?: boolean|number;
         IMAGE?: boolean|number;
+        IMAGE_FAVORITES?: boolean|number;
         IMAGE_SIMILAR?: boolean|number;
         INFO?: boolean|number;
         INFOBLOCK_DATACHANGELOG: boolean|number;
@@ -138,10 +140,12 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRACK?: boolean|number;
         TRIP?: boolean|number;
         VIDEO?: boolean|number;
+        VIDEO_FAVORITES?: boolean|number;
     } = {
         ALL_ENTRIES: false,
         DESTINATION: false,
         IMAGE: false,
+        IMAGE_FAVORITES: false,
         IMAGE_SIMILAR: false,
         INFO: false,
         INFOBLOCK_DATACHANGELOG: true,
@@ -168,12 +172,13 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TOPIMAGE: false,
         TRACK: false,
         TRIP: false,
-        VIDEO: false
+        VIDEO: false,
+        VIDEO_FAVORITES: false
     };
     availableTabs: TourDocShowpageComponentAvailableTabs = {
         ALL_ENTRIES: false,
         IMAGE: true,
-        IMAGE_FAVORITES: false,
+        IMAGE_FAVORITES: true,
         IMAGE_NEARBY: true,
         IMAGE_SIMILAR: true,
         INFO: true,
@@ -185,6 +190,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         LOCATION_NEARBY: true,
         TRIP: true,
         VIDEO: true,
+        VIDEO_FAVORITES: true,
         NEWS: true,
         ODIMGOBJECT: true,
         POI: true,
@@ -536,6 +542,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         return me.showResultListTrigger.ALL_ENTRIES > 0
         || me.showResultListTrigger.DESTINATION > 0
         || me.showResultListTrigger.IMAGE > 0
+        || me.showResultListTrigger.IMAGE_FAVORITES > 0
         || me.showResultListTrigger.IMAGE_SIMILAR > 0
         || me.showResultListTrigger.INFO > 0
         || me.showResultListTrigger.LOCATION > 0
@@ -548,7 +555,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         || me.showResultListTrigger.ROUTE_NEARBY > 0
         || me.showResultListTrigger.TRACK > 0
         || me.showResultListTrigger.TRIP > 0
-        || me.showResultListTrigger.VIDEO > 0;
+        || me.showResultListTrigger.VIDEO > 0
+        || me.showResultListTrigger.VIDEO_FAVORITES > 0;
     }
 
     private calcShowMaps() {

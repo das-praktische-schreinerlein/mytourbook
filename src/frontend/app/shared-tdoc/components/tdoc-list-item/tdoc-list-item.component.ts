@@ -6,6 +6,7 @@ import {
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
+import removeMarkdown from 'markdown-to-text';
 
 @Component({
     selector: 'app-tdoc-list-item',
@@ -52,7 +53,15 @@ export class TourDocListItemComponent extends CommonDocListItemComponent {
             return;
         }
 
-        return this.record.descTxt || this.record.descMd || '';
+        if (this.record.descTxt) {
+            return this.record.descTxt;
+        }
+
+        if (this.record.descMd) {
+            return removeMarkdown(this.record.descMd);
+        }
+
+        return '';
     }
 
     protected updateData() {
