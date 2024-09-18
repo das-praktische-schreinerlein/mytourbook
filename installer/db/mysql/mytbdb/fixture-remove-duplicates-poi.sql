@@ -58,60 +58,56 @@ group by cnt;
 -- -----------------------
 --  pois
 -- -----------------------
-select min(poi.poi_id) as new_poi_id, GROUP_CONCAT(poi.poi_id) as all_poi_id, poi.poi_name, poi.poi_reference, doubletes.double_count
+select min(poi.poi_id) as new_poi_id, GROUP_CONCAT(poi.poi_id) as all_poi_id, poi.poi_calced_identifier, doubletes.double_count
 from poi inner join
     (SELECT
-            poi_name, poi_reference, COUNT(*) as double_count
+            poi_calced_identifier, COUNT(*) as double_count
         FROM
             poi
         GROUP BY
-            poi_name, poi_reference
+            poi_calced_identifier
         HAVING
             COUNT(*) > 1) doubletes
-where doubletes.poi_name = poi.poi_name and doubletes.poi_reference = poi.poi_reference
-group by poi.poi_name, poi.poi_reference, doubletes.double_count
+where doubletes.poi_calced_identifier = poi.poi_calced_identifier
+group by poi.poi_calced_identifier, doubletes.double_count
 LIMIT 10;
 
 
 -- SELECT * FROM POI
-DELETE FROM poi
-WHERE
-    POI_ID IN (
-            select poi.poi_id
-            from poi inner join
-                (SELECT
-                        poi_name, poi_reference, COUNT(*) as double_count
-                    FROM
-                        poi
-                    GROUP BY
-                        poi_name, poi_reference
-                    HAVING
-                        COUNT(*) > 1) doubletes
-            where doubletes.poi_name = poi.poi_name and doubletes.poi_reference = poi.poi_reference
-    )
-    AND POI_ID NOT IN (
-            select min(poi.poi_id) as new_poi_id
-            from poi inner join
-                (SELECT
-                        poi_name, poi_reference, COUNT(*) as double_count
-                    FROM
-                        poi
-                    GROUP BY
-                        poi_name, poi_reference
-                    HAVING
-                        COUNT(*) > 1) doubletes
-            where doubletes.poi_name = poi.poi_name and doubletes.poi_reference = poi.poi_reference
-            group by poi.poi_name, poi.poi_reference, doubletes.double_count
-    )
-    AND POI_ID NOT IN (
-        select distinct poi_id from kategorie_poi
-        UNION
-        select distinct poi_id from tour_poi
-    );
+delete from poi where POI_ID in (select poi_id
+                                 from poi
+                                 WHERE POI_ID IN (select poi.poi_id
+                                                  from poi
+                                                           inner join
+                                                       (SELECT poi_calced_identifier,
+                                                               COUNT(*) as double_count
+                                                        FROM poi
+                                                        GROUP BY poi_calced_identifier
+                                                        HAVING COUNT(*) > 1) doubletes
+                                                  where doubletes.poi_calced_identifier = poi.poi_calced_identifier)
+                                   AND POI_ID NOT IN (select min(poi.poi_id) as new_poi_id
+                                                      from poi
+                                                               inner join
+                                                           (SELECT poi_calced_identifier,
+                                                                   COUNT(*) as double_count
+                                                            FROM poi
+                                                            GROUP BY poi_calced_identifier
+                                                            HAVING COUNT(*) > 1) doubletes
+                                                      where doubletes.poi_calced_identifier = poi.poi_calced_identifier
+                                                      group by poi.poi_calced_identifier, doubletes.double_count)
+                                   AND POI_ID NOT IN (select distinct poi_id
+                                                      from kategorie_poi
+                                                      UNION
+                                                      select distinct poi_id
+                                                      from tour_poi)
+                                 ORDER BY POI_ID ASC)
+ORDER BY POI_ID ASC
+LIMIT 1000
+;
 
 
 select cnt, count(*)
 from (select count(*) as cnt
       from poi as UpdatePois
-      group by poi_name, poi_reference) grouped
+      group by poi_calced_identifier) grouped
 group by cnt;
