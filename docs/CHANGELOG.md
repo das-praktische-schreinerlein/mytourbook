@@ -10,6 +10,7 @@
 - fixed pdf-build
 - frontend: improved layout
 - fixed import and documentation
+- improved remove of duplicates for poi
 
 ### new features
 - frontend/backend: introduced nearbyId-search
@@ -18,6 +19,7 @@
 - backend: improved dashboard
 - frontend: improved poi-selection
 - frontend: improved layout
+- sql: improved remove of duplicates for poi
 
 ### bug fixes
 - fixed media-file-db-sync-viewer

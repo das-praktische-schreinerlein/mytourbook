@@ -54,3 +54,64 @@ from (select count(*) as cnt
       from poi_keyword as UpdateKeywords inner join keyword k on UpdateKeywords.KW_ID = k.KW_ID
       group by poi_id, KW_NAME) grouped
 group by cnt;
+
+-- -----------------------
+--  pois
+-- -----------------------
+select min(poi.poi_id) as new_poi_id, GROUP_CONCAT(poi.poi_id) as all_poi_id, poi.poi_name, poi.poi_reference, doubletes.double_count
+from poi inner join
+    (SELECT
+            poi_name, poi_reference, COUNT(*) as double_count
+        FROM
+            poi
+        GROUP BY
+            poi_name, poi_reference
+        HAVING
+            COUNT(*) > 1) doubletes
+where doubletes.poi_name = poi.poi_name and doubletes.poi_reference = poi.poi_reference
+group by poi.poi_name, poi.poi_reference, doubletes.double_count
+LIMIT 10;
+
+
+-- SELECT * FROM POI
+DELETE FROM poi
+WHERE
+    POI_ID IN (
+            select poi.poi_id
+            from poi inner join
+                (SELECT
+                        poi_name, poi_reference, COUNT(*) as double_count
+                    FROM
+                        poi
+                    GROUP BY
+                        poi_name, poi_reference
+                    HAVING
+                        COUNT(*) > 1) doubletes
+            where doubletes.poi_name = poi.poi_name and doubletes.poi_reference = poi.poi_reference
+    )
+    AND POI_ID NOT IN (
+            select min(poi.poi_id) as new_poi_id
+            from poi inner join
+                (SELECT
+                        poi_name, poi_reference, COUNT(*) as double_count
+                    FROM
+                        poi
+                    GROUP BY
+                        poi_name, poi_reference
+                    HAVING
+                        COUNT(*) > 1) doubletes
+            where doubletes.poi_name = poi.poi_name and doubletes.poi_reference = poi.poi_reference
+            group by poi.poi_name, poi.poi_reference, doubletes.double_count
+    )
+    AND POI_ID NOT IN (
+        select distinct poi_id from kategorie_poi
+        UNION
+        select distinct poi_id from tour_poi
+    );
+
+
+select cnt, count(*)
+from (select count(*) as cnt
+      from poi as UpdatePois
+      group by poi_name, poi_reference) grouped
+group by cnt;
