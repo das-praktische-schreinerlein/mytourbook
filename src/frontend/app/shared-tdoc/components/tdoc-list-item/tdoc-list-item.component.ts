@@ -58,7 +58,7 @@ export class TourDocListItemComponent extends CommonDocListItemComponent {
         }
 
         if (this.record.descMd) {
-            return removeMarkdown(this.record.descMd);
+            return this.markdownToTxt(this.record.descMd);
         }
 
         return '';
@@ -74,6 +74,15 @@ export class TourDocListItemComponent extends CommonDocListItemComponent {
 
         super.updateData();
         this.cd.markForCheck();
+    }
+
+    // TODO move to frontend-commons
+    private markdownToTxt(src: string): string {
+        if (src === undefined || src === null) {
+            return '';
+        }
+
+        return removeMarkdown(src).replace(/&#?[a-z0-9]+;/ig, ' ');
     }
 
 }
