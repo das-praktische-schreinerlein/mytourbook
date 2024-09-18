@@ -11,6 +11,42 @@
     - Sample: https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Sets
     - Sample: https://observablehq.com/@easz/overpass-api-for-openstreetmap
 - save exported data to F:/playground/mytb-test/mytbbase/poi-import/poi_import.geojson 
+- select available tags [available osm-tags](https://taginfo.openstreetmap.org/tags/natural=peak#overview)
+- get data export as geojson  [git via overpass-turbo](http://overpass-turbo.eu/#)
+```
+/*
+This query looks for nodes, ways and relations 
+with the given key/value combination.
+Choose your region and hit the Run button above!
+*/
+[out:json][timeout:1200];
+// gather results
+(
+  // query part for: “natural=peak”
+  nwr["place"~"city|town|suburb|village"]({{bbox}});
+  nwr["water"~"reservoir|lake"]({{bbox}});
+
+  nwr["natural"~"peak|saddle|glacier"]({{bbox}});
+  nwr["water"~"reservoir|lake"]({{bbox}});
+  nwr["mountain_pass"="yes"]({{bbox}});
+  nwr["tourism"="alpine_hut"]({{bbox}});
+  nwr["aerialway"]({{bbox}});
+  nwr["sport"~"climbing|via_ferrata"]({{bbox}});
+  nwr["via_ferrata"]({{bbox}});
+  nwr["climbing"]({{bbox}});
+  
+  nwr["building"~"cathedral|chapel|church|monastery"]({{bbox}});
+  nwr["building"~"castle"]({{bbox}}); // sometimes this gets timing problems
+  nwr["building"~"mosque|shrine|temple|ruins"]({{bbox}});
+  nwr["leisure"="park"]({{bbox}});
+  nwr["tourism"="museum"]({{bbox}});
+  nwr["historic"~"castle"]({{bbox}});
+);
+// print results
+out body;
+>;
+out skel qt;
+```
 
 ### Import poi-data into mytb-database via admin-ui
 - save exported data to F:/playground/mytb-test/mytbbase/poi-import/poi_import.geojson
@@ -141,12 +177,22 @@ out skel qt;
 ```
 - more filter
 ```
-natural=glacier
-water=lake
-water=reservoir
-sport=climbing
-"building"~"cathedral|chapel|church|monastery|mosque|shrine|temple|castle|ruins"
-leisure=park
-tourism=museum
-palace
+  nwr["place"~"city|town|suburb|village"]({{bbox}});
+  nwr["water"~"reservoir|lake"]({{bbox}});
+
+  nwr["natural"~"peak|saddle|glacier"]({{bbox}});
+  nwr["water"~"reservoir|lake"]({{bbox}});
+  nwr["mountain_pass"="yes"]({{bbox}});
+  nwr["tourism"="alpine_hut"]({{bbox}});
+  nwr["aerialway"]({{bbox}});
+  nwr["sport"~"climbing|via_ferrata"]({{bbox}});
+  nwr["via_ferrata"]({{bbox}});
+  nwr["climbing"]({{bbox}});
+  
+  nwr["building"~"cathedral|chapel|church|monastery"]({{bbox}});
+  nwr["building"~"castle"]({{bbox}}); // sometimes this gets timing problems
+  nwr["building"~"mosque|shrine|temple|ruins"]({{bbox}});
+  nwr["leisure"="park"]({{bbox}});
+  nwr["tourism"="museum"]({{bbox}});
+  nwr["historic"~"castle"]({{bbox}});
 ```
