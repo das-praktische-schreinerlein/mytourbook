@@ -62,8 +62,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         }
 
         if (record.type === 'TRACK') {
-            if ((type === 'IMAGE' || type === 'TOPIMAGE') && record.trackId
-                || (type === 'VIDEO' || type === 'TOPVIDEO') && record.trackId) {
+            if (((type === 'IMAGE' || type === 'IMAGE_FAVORITES' || type === 'TOPIMAGE')
+                || (type === 'VIDEO' || type === 'VIDEO_FAVORITES' || type === 'TOPVIDEO')) && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
@@ -83,7 +83,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         } else if (record.type === 'ROUTE') {
             if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
-            } else if (type === 'IMAGE' || type === 'TOPIMAGE' || type === 'VIDEO' || type === 'TOPVIDEO') {
+            } else if ((type === 'IMAGE' || type === 'IMAGE_FAVORITES' || type === 'TOPIMAGE')
+                || (type === 'VIDEO' || type === 'VIDEO_FAVORITES' || type === 'TOPVIDEO')) {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 12;
             } else if (type === 'POI') {
@@ -105,7 +106,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             const id = record.id.replace(/.*?_/, '');
             if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
-            } else if (type === 'IMAGE' || type === 'TOPIMAGE' || type === 'VIDEO' || type === 'TOPVIDEO') {
+            } else if ((type === 'IMAGE' || type === 'IMAGE_FAVORITES' || type === 'TOPIMAGE')
+                || (type === 'VIDEO' || type === 'VIDEO_FAVORITES' || type === 'TOPVIDEO')) {
                 filters['moreFilter'] = 'destination_id_s:' + id;
                 filters['perPage'] = 12;
             } else if (type === 'POI') {
@@ -170,7 +172,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         } else if (record.type === 'TRIP') {
             if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
-            } else if (type === 'IMAGE' || type === 'TOPIMAGE' || type === 'VIDEO' || type === 'TOPVIDEO') {
+            } else if ((type === 'IMAGE' || type === 'IMAGE_FAVORITES' || type === 'TOPIMAGE')
+                || (type === 'VIDEO' || type === 'VIDEO_FAVORITES' || type === 'TOPVIDEO')) {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
@@ -184,9 +187,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             }
         } else if (record.type === 'NEWS') {
             filters['moreFilter'] = 'news_id_is:' + record.newsId;
-            if (type === 'IMAGE' || type === 'TOPIMAGE') {
-                filters['perPage'] = 12;
-            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
+            if ((type === 'IMAGE' || type === 'IMAGE_FAVORITES' || type === 'TOPIMAGE')
+                || (type === 'VIDEO' || type === 'VIDEO_FAVORITES' || type === 'TOPVIDEO')) {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK' || type === 'TRIP') {
                 filters['perPage'] = 20;
@@ -194,9 +196,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             }
         } else if (record.type === 'INFO') {
             filters['moreFilter'] = 'info_id_is:' + record.infoId;
-            if (type === 'IMAGE' || type === 'TOPIMAGE') {
-                filters['perPage'] = 12;
-            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
+            if ((type === 'IMAGE' || type === 'IMAGE_FAVORITES' || type === 'TOPIMAGE')
+                || (type === 'VIDEO' || type === 'VIDEO_FAVORITES' || type === 'TOPVIDEO')) {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK' || type === 'TRIP') {
                 filters['perPage'] = 20;
@@ -205,9 +206,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         } else if (record.type === 'PLAYLIST') {
             filters['moreFilter'] = 'playlists_txt:' + record.name;
             filters['sort'] = 'playlistPos';
-            if (type === 'IMAGE' || type === 'TOPIMAGE') {
-                filters['perPage'] = 12;
-            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
+            if ((type === 'IMAGE' || type === 'IMAGE_FAVORITES' || type === 'TOPIMAGE')
+                || (type === 'VIDEO' || type === 'VIDEO_FAVORITES' || type === 'TOPVIDEO')) {
                 filters['perPage'] = 12;
             }
         } else if (record.type === 'POI') {

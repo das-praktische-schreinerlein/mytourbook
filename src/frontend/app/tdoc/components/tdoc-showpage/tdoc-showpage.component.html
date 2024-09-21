@@ -560,7 +560,10 @@
                                             [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE_FAVORITES"
-                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                                            [showOnlyIfRecordsFound]="true"
+                                            (searchResultFound)="onGeoTracksFound($event, 'IMAGE')"
+                                            [showItemMapFlag]="true"
+                                            (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.VIDEO_FAVORITES"
                                             [label]="'Video-Favoriten'"
                                             i18n-label="label inline-searchpage VIDEO_FAVORITES|Label inline-searchpage VIDEO_FAVORITES@@linline-search.label.tdoc.VIDEO_FAVORITES"
@@ -571,7 +574,9 @@
                                             [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.VIDEO_FAVORITES"
-                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                                            [showOnlyIfRecordsFound]="true"
+                                            (searchResultFound)="onGeoTracksFound($event, 'IMAGE')"
+                                            [showItemMapFlag]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.NEWS"
                                             [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.tdoc.NEWS"
@@ -611,10 +616,7 @@
                                             [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
-                                            [showOnlyIfRecordsFound]="true"
-                                            (searchResultFound)="onGeoTracksFound($event, 'IMAGE')"
-                                            [showItemMapFlag]="true"
-                                            (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-inline-searchpage>
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
                                             [label]="'Videos'"
                                             i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.tdoc.VIDEO"

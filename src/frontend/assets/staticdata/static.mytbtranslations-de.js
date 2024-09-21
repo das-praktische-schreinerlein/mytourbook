@@ -287,7 +287,7 @@ window.importStaticTranslationsJsonP = `
     "poijoin_40": "Rastpunkt",
     "poijoin_50": "Etappenziel",
     "poijoin_60": "Wegpunkt",
-    "poijoin_65": "autom. Wegpunkt",
+    "poijoin_65": "Gpx",
     "poijoin_70": "StartEndpunkt",
     "poijoin_99": "Endpunkt",
     "id_notin_is": "außer",
