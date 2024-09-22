@@ -472,7 +472,9 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.remapFulltextFilter(adapterQuery, tableConfig, 'html', 'SF_searchTrackKeywordsOnly', 'track_keywords_txt', 'in');
 
         const query = this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, adapterQuery, <AdapterOpts>opts);
-        if (opts && opts.originalSearchForm && (<TourDocSearchForm>opts.originalSearchForm).nearbyId) {
+        if (opts !== undefined && opts.originalSearchForm !== undefined
+            && this.extractSingleElement((<TourDocSearchForm>opts.originalSearchForm).nearbyId) !== undefined
+            && this.extractSingleElement((<TourDocSearchForm>opts.originalSearchForm).nearbyId) !== '') {
             this.queryTransformNearbyId(tableConfig, query, opts);
         }
 
@@ -485,7 +487,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         } else {
             // table not found
             console.log('queryTransformNearbyId unknown table', tableConfig.key);
-            query.where.push('TRUE == FALSE')
+            query.where.push('TRUE = FALSE')
         }
     }
 
@@ -596,7 +598,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
 
                 break;
             default:
-                query.where.push('TRUE == FALSE')
+                query.where.push('TRUE = FALSE')
                 console.log('queryTransformPoiNearbyId unknown tabkey', tabKey, searchForm.nearbyId);
         }
     }

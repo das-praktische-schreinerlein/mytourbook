@@ -149,6 +149,13 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                 }
                 values['tdocdatainfo.region'] = regions.join(' - ');
             }
+
+            // reassign doc-lists with a real copy -> to prevent loss of some elements
+            for (const relationName of ['tdoclinkedinfos', 'tdoclinkedpois', 'tdoclinkedroutes']) {
+                if (values[relationName]) {
+                    values[relationName] = [].concat(tdoc.get(relationName));
+                }
+            }
         }
 
         switch (type.toLowerCase()) {
