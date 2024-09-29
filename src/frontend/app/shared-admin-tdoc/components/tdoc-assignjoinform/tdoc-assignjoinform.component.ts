@@ -31,6 +31,8 @@ export class TourDocAssignJoinFormComponent
             case 'ROUTE':
             case 'LOCATION':
                 return ['info_id_is'];
+            case 'TRACK':
+                return ['route_id_is'];
             default:
                 return undefined;
         }

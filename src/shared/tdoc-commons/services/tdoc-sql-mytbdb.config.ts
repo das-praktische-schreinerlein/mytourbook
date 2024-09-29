@@ -222,7 +222,8 @@ export class TourDocSqlMytbDbConfig {
     public static readonly actionTagAssignJoinConfig: ActionTagAssignJoinConfigType = {
         tables: {
             'location': SqlMytbDbLocationConfig.actionTagAssignJoinConfig,
-            'route': SqlMytbDbRouteConfig.actionTagAssignJoinConfig
+            'route': SqlMytbDbRouteConfig.actionTagAssignJoinConfig,
+            'track': SqlMytbDbTrackConfig.actionTagAssignJoinConfig
         }
     };
 

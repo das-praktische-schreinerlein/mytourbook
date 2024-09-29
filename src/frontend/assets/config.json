@@ -1420,7 +1420,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["LOCATION", "location", "ROUTE", "route"]
+                            "expectedValues": ["LOCATION", "location", "ROUTE", "route", "TRACK", "track"]
                         }
                     ],
                     "configAvailability": [
@@ -2097,7 +2097,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["LOCATION", "location", "ROUTE", "route"]
+                            "expectedValues": ["LOCATION", "location", "ROUTE", "route", "TRACK", "track"]
                         }
                     ],
                     "configAvailability": [

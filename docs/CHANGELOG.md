@@ -11,6 +11,7 @@
 - frontend: improved layout
 - fixed import and documentation
 - improved remove of duplicates for poi
+- improved additional route-assignment for tracks
 
 ### new features
 - frontend/backend: introduced nearbyId-search
@@ -20,6 +21,7 @@
 - frontend: improved poi-selection
 - frontend: improved layout
 - sql: improved remove of duplicates for poi
+- frontend: improved additional route-assignment for tracks
 
 ### bug fixes
 - fixed media-file-db-sync-viewer

@@ -8,6 +8,9 @@ import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/a
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {GeoEntityDbMapping} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.types';
 import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
+import {
+    ActionTagAssignJoinTableConfigType
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 
 export class SqlMytbDbTrackConfig {
     public static readonly tableConfig: TableConfig = {
@@ -859,6 +862,21 @@ export class SqlMytbDbTrackConfig {
             },
             'loc_lochirarchie_txt': {
                 table: 'location', idField: 'l_id', referenceField: 'l_id'
+            }
+        },
+        changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
+    };
+
+    public static readonly actionTagAssignJoinConfig: ActionTagAssignJoinTableConfigType = {
+        table: 'kategorie',
+        idField: 'k_id',
+        references: {
+            'route_id_is': {
+                joinedTable: 'tour',
+                joinedIdField: 't_id',
+                joinTable: 'kategorie_tour',
+                joinBaseIdField: 'k_id',
+                joinReferenceField: 't_id'
             }
         },
         changelogConfig: SqlMytbDbTrackConfig.tableConfig.changelogConfig
