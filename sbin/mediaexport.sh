@@ -31,6 +31,7 @@ ACTIONTYPES=${13}
 PERSONS=${14}
 WHEREFILTER=${15}
 VIEWERSRC=${16}
+WHENFILTER=${17}
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
@@ -92,6 +93,7 @@ do
            --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
            --fulltext "${FULLTEXRFILTER}"\
            --where "${WHEREFILTER}"\
+           --when "${WHENFILTER}"\
            --actiontype "${ACTIONTYPES}"\
            --persons "${PERSONS}"
   elif [ "${TYPE}" == "route" ]; then
@@ -134,6 +136,7 @@ do
            --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
            --fulltext "${FULLTEXRFILTER}"\
            --where "${WHEREFILTER}"\
+           --when "${WHENFILTER}"\
            --actiontype "${ACTIONTYPES}"\
            --persons "${PERSONS}"
   elif [ "${TYPE}" == "video" ]; then
@@ -155,6 +158,7 @@ do
            --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}\
            --fulltext "${FULLTEXRFILTER}"\
            --where "${WHEREFILTER}"\
+           --when "${WHENFILTER}"\
            --actiontype "${ACTIONTYPES}"\
            --persons "${PERSONS}"
   else

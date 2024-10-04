@@ -12,6 +12,7 @@
 - fixed import and documentation
 - improved remove of duplicates for poi
 - improved additional route-assignment for tracks
+- backend: improved export
 
 ### new features
 - frontend/backend: introduced nearbyId-search
@@ -22,6 +23,7 @@
 - frontend: improved layout
 - sql: improved remove of duplicates for poi
 - frontend: improved additional route-assignment for tracks
+- backend: improved export
 
 ### bug fixes
 - fixed media-file-db-sync-viewer
@@ -469,7 +471,7 @@
 - frontend: configure preview-resolution in environment
 - common: used x300 instead of x600 for image-preview -> run scaleImages to create non-existing images
 ```
-run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages -c config/backend.dev.json --debug --parallel 10
+run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages -c config/backend.dev.json --debug --parallel 10 --pageNum 30000
 ```
 - backend: dont map text to html-fields because markdown-fields should be rendered
 

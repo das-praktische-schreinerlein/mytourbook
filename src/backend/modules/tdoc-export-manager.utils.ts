@@ -27,6 +27,7 @@ export class TourDocExportManagerUtils {
             fulltext: new SolrValidationRule(false),
             persons: new KeywordValidationRule(false),
             where: new KeywordValidationRule(false),
+            when: new KeywordValidationRule(false),
             playlists: new KeywordValidationRule(false),
             personalRateOverall: new KeywordValidationRule(false),
             rateMinFilter: new NumberValidationRule(false, 0, 15, undefined),
@@ -53,12 +54,14 @@ export class TourDocExportManagerUtils {
         const fulltext = argv['fulltext'];
         const persons = argv['persons'];
         const where = argv['where'];
+        const when = argv['when'];
         const personalRateOverall = argv['personalRateOverall'];
         const playlists = argv['playlists'];
 
         const searchForm = new TourDocSearchForm({
             type: type,
             where: where,
+            when: when,
             actiontype: actiontype,
             fulltext: fulltext,
             persons: persons,

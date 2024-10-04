@@ -46,7 +46,7 @@ node dist/backend/serverAdmin.js\
      --debug 1
 
 echo "inline all ${EXPORTDIR}/${EXPORTNAME}.html"
-node dist/backend/serverAdmin.js\
+node --max-old-space-size=12284 dist/backend/serverAdmin.js\
      --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json\
      --backend ${CONFIG_BASEDIR}backend.dev.json\
      --command mediaManager\

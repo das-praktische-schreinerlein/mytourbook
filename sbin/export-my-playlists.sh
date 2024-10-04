@@ -3,10 +3,22 @@
 set -e
 CWD=$(pwd)
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+function dofail {
+    cd $CWD
+    printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
+}
+
+function join_by { local IFS="$1"; shift; echo "$*"; };
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
 
+EXPORTSUBDIR=${1:-Bilder-flat}
+DIPROFILE=${2:-flat}
+FILEPROFILE=${3:-flat}
+PERSONEXPORTPROFILE=${4:-all}
+VIEWERSRC=${5:-${SCRIPTPATH}/../dist/static/mytbviewer/de/index.viewer.full.html}
 PDFVIEWERSRC=${SCRIPTPATH}/../dist/static/mytbviewer/de-with-pdf/index.viewer.full.html
 
 ${SCRIPTPATH}/mediaexport.sh "import" "${W_EXPORT_BASEDIR}Bilder-flat\\top-favorites" "" "top-favorites" "all" "flat" "flat" "2" "showall" "" createhtml
