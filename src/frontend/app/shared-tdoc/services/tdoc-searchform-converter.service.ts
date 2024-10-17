@@ -84,14 +84,18 @@ export class TourDocSearchFormConverter implements GenericSearchFormConverter<To
         moreFilterMap.set('gpsTrackState', searchForm.gpsTrackState);
         moreFilterMap.set('dashboardFilter', searchForm.dashboardFilter);
 
+        const searchFormMoreFilter = searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0
+            ? searchForm.moreFilter.split(';').join(this.splitter)
+            : undefined;
         let moreFilter = this.searchParameterUtils.joinParamsToOneRouteParameter(moreFilterMap, this.splitter);
         if (moreFilter !== undefined && moreFilter.length > 0) {
-            if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
-                moreFilter = [moreFilter, searchForm.moreFilter].join(this.splitter);
+            if (searchFormMoreFilter !== undefined && searchFormMoreFilter.length > 0) {
+                moreFilter = [moreFilter, searchFormMoreFilter].join(this.splitter);
             }
         } else {
-            moreFilter = searchForm.moreFilter;
+            moreFilter = searchFormMoreFilter;
         }
+
         return moreFilter;
     }
 
@@ -197,8 +201,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormConverter<To
                 'objectDetectionState:', 'routeAttr:', 'routeAttrPart:', 'dashboardFilter:', 'gpsTrackState:']);
         let moreFilter = '';
         if (moreFilterValues.has('unknown')) {
-            moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');
+            moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ';');
         }
+
         moreFilter = moreFilter.replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
         const techDataAltitudeMax: string = (moreFilterValues.has('techDataAltitudeMax:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(
@@ -404,8 +409,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormConverter<To
         const what = (tdocSearchForm.what ? tdocSearchForm.what : '').replace(new RegExp('kw_', 'gi'), '');
         res.push(this.searchFormUtils.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
 
-        const moreFilterNames = Object.getOwnPropertyNames(this.getHrdIds()).concat(['noRoute']);
-        const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(tdocSearchForm.moreFilter, this.splitter, moreFilterNames);
+        const moreFilterNames = Object.getOwnPropertyNames(this.getHrdIds()).concat(['noRoute', 'blocked_is']);
+        const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(tdocSearchForm.moreFilter, ';', moreFilterNames);
         moreFilterValues.forEach((value, key) => {
             const moreValue = this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get(key), key + ':', ',');
             res.push(this.searchFormUtils.valueToHumanReadableText(moreValue, key === 'unknown' ? 'hrt_moreFilter' : 'hrt_' + key,

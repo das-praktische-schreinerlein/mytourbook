@@ -443,6 +443,7 @@
     "hrt_personalRateOverall": "personal rate:",
     "hrt_personalRateDifficulty": "personal difficulty:",
     "hrt_blocked_i": "visibility",
+    "hrt_blocked_is": "visibility",
     "label.assign.reference.image_id_is":  "image",
     "label.assign.reference.video_id_is":  "video",
     "label.assign.reference.track_id_is":  "track",

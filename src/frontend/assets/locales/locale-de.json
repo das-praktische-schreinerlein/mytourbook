@@ -337,6 +337,7 @@
     "hrt_personalRateOverall": "persönliche Bewertung:",
     "hrt_personalRateDifficulty": "persönliche Schwierigkeit:",
     "hrt_blocked_i": "Sichtbarkeit",
+    "hrt_blocked_is": "Sichtbarkeit",
     "label.assign.reference.image_id_is": "Bild",
     "label.assign.reference.video_id_is": "Video",
     "label.assign.reference.track_id_is": "Begehung",

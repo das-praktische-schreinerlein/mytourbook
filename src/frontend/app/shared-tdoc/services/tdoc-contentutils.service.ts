@@ -218,6 +218,12 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             if (!filters['moreFilter']) {
                 filters['moreFilter'] = '';
             }
+
+            if (record.type === 'ROUTE' || record.type === 'DESTINATION' || record.type === 'LOCATION'
+                || record.type === 'POI' || record.type === 'INFO') {
+                filters['moreFilter'] += '_,_blocked_is:0,null,1,2,3,4,5';
+            }
+
             filters['moreFilter'] += '_,_personalRateOverall:6,7,8,9,10,11,12,13,14,15';
             filters['type'] = 'IMAGE';
             filters['sort'] = 'ratePers';
@@ -233,6 +239,12 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             if (!filters['moreFilter']) {
                 filters['moreFilter'] = '';
             }
+
+            if (record.type === 'ROUTE' || record.type === 'DESTINATION' || record.type === 'LOCATION'
+                || record.type === 'POI' || record.type === 'INFO') {
+                filters['moreFilter'] += '_,_blocked_is:0,null,1,2,3,4,5';
+            }
+
             filters['moreFilter'] += '_,_personalRateOverall:8,9,10,11,12,13,14,15';
             filters['type'] = 'VIDEO';
             filters['sort'] = 'ratePers';

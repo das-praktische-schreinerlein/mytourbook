@@ -13,6 +13,7 @@
 - improved remove of duplicates for poi
 - improved additional route-assignment for tracks
 - backend: improved export
+- frontend: improved topimges with blocked-filter
 
 ### new features
 - frontend/backend: introduced nearbyId-search
@@ -24,6 +25,7 @@
 - sql: improved remove of duplicates for poi
 - frontend: improved additional route-assignment for tracks
 - backend: improved export
+- frontend: improved topimges with blocked-filter
 
 ### bug fixes
 - fixed media-file-db-sync-viewer
