@@ -3,6 +3,7 @@
 # Versions
 
 ## 10.1.0
+- use new commons
 - backend: improved dashboard
 - frontend/backend: introduced nearbyId-search
 - frontend: improved poi-selection
@@ -19,6 +20,7 @@
 - frontend/backend: introduced nearbyId-search
 
 ### improvements
+- use new commons
 - backend: improved dashboard
 - frontend: improved poi-selection
 - frontend: improved layout
@@ -38,7 +40,7 @@
 
 ## 10.0.0 (2024-02-25)
 
-**Diese Version ist für DICH Fluspselwups. Ein Sprung auf 10.0.0 für 10 Jahre als mein kleiner, treuer Begleiter.**
+**Diese Version ist für DICH Flupselwups. Ein Sprung auf 10.0.0 für 10 Jahre als mein kleiner, treuer Begleiter.**
 
 **Rest in Peace ✝25.02.2024**
 

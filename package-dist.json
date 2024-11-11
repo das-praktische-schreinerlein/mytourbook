@@ -58,7 +58,7 @@
   "optionalDeps // do copy these to deps if needed": {
   },
   "dependencies": {
-    "@dps/mycms-commons": "git://github.com/das-praktische-schreinerlein/mycms-commons.git#6.1.0",
+    "@dps/mycms-commons": "git://github.com/das-praktische-schreinerlein/mycms-commons.git#6.2.0",
     "axios": "0.22.0",
     "db-migrate": "0.11.13",
     "db-migrate-mysql": "2.2.0",
