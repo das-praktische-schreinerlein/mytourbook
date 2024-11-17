@@ -175,9 +175,9 @@
         <div class="container content-container map-container map-container-profilemap"
              *ngIf="mapState.flgShowProfileMap">
             <app-mapdoc-profilemap [mapId]="'showProfileMap'"
-                                 [height]="'370px'"
-                                 [showImageTrackAndGeoPos]="false"
-                                 [docRecords]="tracks"></app-mapdoc-profilemap>
+                                   [height]="'370px'"
+                                   [showImageTrackAndGeoPos]="false"
+                                   [docRecords]="profileTracks"></app-mapdoc-profilemap>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right"
                         (click)="mapState.flgShowProfileMap = false"
@@ -189,9 +189,9 @@
         <div class="container content-container map-container map-container-profilechart"
              *ngIf="mapState.flgShowProfileMap">
             <app-mapdoc-profilechart [chartId]="'showProfileChart'"
-                                 [height]="'370px'"
-                                 [showImageTrackAndGeoPos]="false"
-                                   [docRecords]="tracks"></app-mapdoc-profilechart>
+                                     [height]="'370px'"
+                                     [showImageTrackAndGeoPos]="false"
+                                     [docRecords]="profileTracks"></app-mapdoc-profilechart>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right"
                         (click)="mapState.flgShowProfileMap = false"

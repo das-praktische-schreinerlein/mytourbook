@@ -63,6 +63,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     TourDocDataService> {
     protected readonly environment = environment;
     tracks: TourDocRecord[] = [];
+    profileTracks: TourDocRecord[] = [];
     geoTracks: {
         IMAGE?: TourDocRecord[];
         ODIMGOBJECT?: TourDocRecord[];
@@ -248,16 +249,31 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         this.geoTracks[type] = typeTracks;
 
         let allTracks = [];
-        for (const key of ['ROUTE', 'TRACK', 'IMAGE', 'VIDEO', 'LOCATION', 'POI']) {
+        let allProfileTracks = [];
+        const availableTracksKeys = this.printVersion
+            ?  ['ROUTE', 'TRACK']
+            :  ['ROUTE', 'TRACK', 'IMAGE', 'VIDEO', 'LOCATION', 'POI'];
+
+        for (const key of availableTracksKeys) {
             if (this.geoTracks[key] !== undefined) {
                 allTracks = allTracks.concat(this.geoTracks[key]);
             }
         }
+
+        for (const key of ['ROUTE', 'TRACK']) {
+            if (this.geoTracks[key] !== undefined) {
+                allProfileTracks = allProfileTracks.concat(this.geoTracks[key]);
+            }
+        }
+
         if (this.record.gpsTrackBasefile || this.record.geoLoc !== undefined
             || (this.record.gpsTrackSrc !== undefined && this.record.gpsTrackSrc.length > 20)) {
             allTracks.push(this.record);
+            allProfileTracks = allProfileTracks.concat(this.record);
         }
+
         this.tracks = allTracks;
+        this.profileTracks = allProfileTracks;
 
         this.cd.markForCheck();
     }
