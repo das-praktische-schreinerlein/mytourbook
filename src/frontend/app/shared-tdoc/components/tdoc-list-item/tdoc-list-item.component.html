@@ -46,6 +46,7 @@
                      (load)="onResizeMainImage()">
                 <app-cdoc-odobjectrectangles [objects]="listItem.objectdetections"
                                              [width]="imageWidth"
+                                             [rotateFlag]="getRotateFlag(listItem.currentRecord.tdocmediameta)"
                                              *ngIf="imageWidth > 0 && (showItemObjectsFlag || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-cdoc-odobjectrectangles>
             </div>
             <app-tdoc-videoplayer *ngIf="listItem.video"

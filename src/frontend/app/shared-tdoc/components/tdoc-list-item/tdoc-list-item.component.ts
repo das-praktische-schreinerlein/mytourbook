@@ -7,6 +7,7 @@ import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import removeMarkdown from 'markdown-to-text';
+import {TourDocMediaMetaRecord} from '../../../../shared/tdoc-commons/model/records/tdocmediameta-record';
 
 @Component({
     selector: 'app-tdoc-list-item',
@@ -46,6 +47,10 @@ export class TourDocListItemComponent extends CommonDocListItemComponent {
             this.imageWidth = this.mainImage.nativeElement['width'];
             this.cd.markForCheck();
         }
+    }
+
+    getRotateFlag(tdocmediameta: TourDocMediaMetaRecord) {
+        return tdocmediameta.metadata.indexOf('Orientation":6') > 0 || tdocmediameta.metadata.indexOf('Orientation":8') > 0;
     }
 
     getDesc(): string {

@@ -22,6 +22,7 @@
                                          (load)="onResizeMainImage()">
                                     <app-cdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
                                          [width]="imageWidth"
+                                         [rotateFlag]="getRotateFlag(record.tdocmediameta)"
                                          *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectrectangles>
                                 </div>
                             </ng-container>

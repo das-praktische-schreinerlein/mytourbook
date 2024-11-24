@@ -27,6 +27,7 @@ import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/td
 import {environment} from '../../../../environments/environment';
 import {MapState} from '../../../shared-tdoc/services/tdoc-mapstate.service';
 import {TourDocJoinUtils} from '../../../shared-tdoc/services/tdoc-join.utils';
+import {TourDocMediaMetaRecord} from '../../../../shared/tdoc-commons/model/records/tdocmediameta-record';
 
 export interface TourDocShowpageComponentAvailableTabs {
     ALL_ENTRIES?: boolean;
@@ -434,6 +435,10 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         }
 
         return indexableTypes;
+    }
+
+    getRotateFlag(tdocmediameta: TourDocMediaMetaRecord) {
+        return tdocmediameta.metadata.indexOf('Orientation":6') > 0 || tdocmediameta.metadata.indexOf('Orientation":8') > 0;
     }
 
     protected doProcessAfterResolvedData(): void {

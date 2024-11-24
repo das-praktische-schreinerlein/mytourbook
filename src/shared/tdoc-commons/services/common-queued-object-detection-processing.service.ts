@@ -352,6 +352,7 @@ export abstract class CommonQueuedObjectDetectionProcessingService {
             fileName: basePath + '/' + imageData.filePath,
             imgHeight: undefined,
             imgWidth: undefined,
+            imgOrientation: undefined,
             keySuggestions: undefined,
             objHeight: undefined,
             objWidth: undefined,

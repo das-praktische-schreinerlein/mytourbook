@@ -15,6 +15,7 @@
 - improved additional route-assignment for tracks
 - backend: improved export
 - frontend: improved topimges with blocked-filter
+- frontend: fixed rendering of object-rectangles for portrait-format-pictures
 
 ### new features
 - frontend/backend: introduced nearbyId-search
@@ -33,6 +34,7 @@
 - fixed media-file-db-sync-viewer
 - fixed pdf-build
 - fixed import and documentation
+- frontend: fixed rendering of object-rectangles for portrait-format-pictures
 
 ### breaking changes
 - none

@@ -11,6 +11,7 @@ import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-convert
 import {TourDocContentUtils, TourDocItemData} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {ActionTagEvent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
+import {TourDocMediaMetaRecord} from '../../../../shared/tdoc-commons/model/records/tdocmediameta-record';
 
 @Component({
     selector: 'app-tdoc-list-item-page',
@@ -152,6 +153,10 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
         }
 
         inputEl.innerHTML = html;
+    }
+
+    getRotateFlag(tdocmediameta: TourDocMediaMetaRecord) {
+        return tdocmediameta.metadata.indexOf('Orientation":6') > 0 || tdocmediameta.metadata.indexOf('Orientation":8') > 0;
     }
 
     protected updateData(): void {
