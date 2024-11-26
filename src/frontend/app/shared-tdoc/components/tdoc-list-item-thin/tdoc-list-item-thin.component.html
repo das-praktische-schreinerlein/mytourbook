@@ -40,7 +40,7 @@
         </div>
         <div class="col-6 layout-big">
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a><br />
-            <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false" [truncateMaxWordLength]="3"></app-tdoc-linked-loc-hierarchy></h5>
+            <h5 *ngIf="listItem.currentRecord.locHirarchieIds"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false" [truncateMaxWordLength]="3"></app-tdoc-linked-loc-hierarchy></h5>
         </div>
         <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
             <div class="col-4 layout-big">

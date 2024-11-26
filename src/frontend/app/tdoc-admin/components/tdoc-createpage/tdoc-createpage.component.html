@@ -1,7 +1,7 @@
 <ng-container *ngIf="record != undefined">
     <div class="container content-container">
         <div class="card-block">
-            <h6><app-tdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h6>
+            <h6 *ngIf="record.locHirarchieIds"><app-tdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h6>
             <div class="picture-small" style="float: left; margin-right: 10px">
                 <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
             </div>

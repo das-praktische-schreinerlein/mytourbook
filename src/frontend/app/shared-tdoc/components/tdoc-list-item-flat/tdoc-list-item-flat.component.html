@@ -86,7 +86,7 @@
                             [small]="true"></app-cdoc-mediameta>
     </div>
     <div class="col-3 location layout-big">
-        <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+        <h5 *ngIf="listItem.currentRecord.locHirarchieIds"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
         <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
         <app-cdoc-extended-object-properties [extendedObjectProperties]="listItem.currentRecord.tdocextendedobjectproperties"
                                              [categories]="['ENTITYCOUNT']"
@@ -172,7 +172,7 @@
                         <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
                                             [small]="true"></app-cdoc-mediameta>
 
-                        <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
+                        <h5 *ngIf="listItem.currentRecord.locHirarchieIds"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
                         <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
                     </div>
                 </div>
@@ -238,7 +238,7 @@
                 </ng-container>
                 <app-cdoc-mediameta [record]="listItem.currentRecord.tdocmediameta"
                                     [small]="true"></app-cdoc-mediameta>
-                <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
+                <h5 *ngIf="listItem.currentRecord.locHirarchieIds"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
                 <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
             </div>
         </ng-container>

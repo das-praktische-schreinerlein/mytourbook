@@ -79,7 +79,7 @@
             <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
         </h5>
-        <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
+        <h5 *ngIf="listItem.currentRecord.locHirarchieIds"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
         <div>
             <div style="width: 100px; float: left">
                 <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'" class="listItem.currentRecord-type">{{listItem.currentRecord.type | translate }}</h5>

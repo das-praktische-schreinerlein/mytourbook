@@ -119,7 +119,7 @@
 <ng-template #typeDefault>
     <div class="card-block" [ngClass]="listItem.styleClassFor">
         <a [name]="listItem.currentRecord.id"></a>
-        <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+        <h5 *ngIf="listItem.currentRecord.locHirarchieIds"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
         <div>
             <div class="teaser-image-container-outer">
                 <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
