@@ -10,12 +10,13 @@
                     <ng-container *ngSwitchCase="record.type === 'IMAGE' || record.type === 'ODIMGOBJECT'">
                         <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span>
                             <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
-                        <div class="image-container">
+                        <div #mainImageContainer class="image-container">
                             <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
                                 <div class="picture-with-objects-container"
                                      [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
-                                    <img #mainImage class="picture-big" [style.max-height]="maxImageHeight"
-                                         [src]="contentUtils.getFullUrl(record.tdocimages[0])"
+                                    <img #mainImage class="picture-big"
+                                         [style.max-height]="maxImageHeight > 0 ? maxImageHeight + 'px' : undefined"
+                                         [style.max-width]="maxImageWidth > 0 ? maxImageWidth + 'px' : undefined"                                         [src]="contentUtils.getFullUrl(record.tdocimages[0])"
                                          alt="{{record.tdocimages[0].name}}"
                                          (resize)="onResizeMainImage()"
                                          (loaded)="onResizeMainImage()"

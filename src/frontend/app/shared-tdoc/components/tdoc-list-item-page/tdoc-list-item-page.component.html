@@ -33,11 +33,13 @@
 <ng-template #typeImage>
     <div class="container content-container image-content-container" *ngIf="listItem.currentRecord !== undefined">
         <div style="color: #ccc"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></div>
-        <div class="image-container">
+        <div #mainImageContainer class="image-container">
             <ng-container *ngIf="listItem.image !== undefined">
                 <div class="picture-with-objects-container"
-                     [style.width]="'100%'">
-                    <img #mainImage class="picture-big" [style.max-height]="maxImageHeight"
+                     [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
+                    <img #mainImage class="picture-big"
+                         [style.max-height]="maxImageHeight > 0 ? maxImageHeight + 'px' : undefined"
+                         [style.max-width]="maxImageWidth > 0 ? maxImageWidth + 'px' : undefined"                                         [src]="contentUtils.getFullUrl(record.tdocimages[0])"
                          [src]="listItem.fullUrl"
                          alt="{{listItem.image.name}}"
                          (resize)="onResizeMainImage()"

@@ -29,6 +29,9 @@ import {MapState} from '../../../shared-tdoc/services/tdoc-mapstate.service';
 import {TourDocJoinUtils} from '../../../shared-tdoc/services/tdoc-join.utils';
 import {TourDocMediaMetaRecord} from '../../../../shared/tdoc-commons/model/records/tdocmediameta-record';
 
+const CONST_WITH_PUFFER = 72;
+const CONST_HEIGHT_PUFFER = 60;
+
 export interface TourDocShowpageComponentAvailableTabs {
     ALL_ENTRIES?: boolean;
     IMAGE?: boolean;
@@ -202,10 +205,14 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
 
     private layoutSize: LayoutSizeData;
 
+    @ViewChild('mainImageContainer')
+    mainImageContainer: ElementRef;
+
     @ViewChild('mainImage')
     mainImage: ElementRef;
     imageWidth = 0;
-    maxImageHeight = '0';
+    maxImageWidth = 0;
+    maxImageHeight = 0;
 
     constructor(route: ActivatedRoute, cdocRoutingService: TourDocRoutingService,
                 toastr: ToastrService, contentUtils: TourDocContentUtils,
@@ -317,8 +324,20 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     }
 
     onResizeMainImage() {
+        this.setMaxImageHeight();
+
+        let flgChanged = false
         if (this.mainImage !== undefined && this.mainImage.nativeElement['width'] !== this.imageWidth) {
             this.imageWidth = this.mainImage.nativeElement['width'];
+            flgChanged = true;
+        }
+
+        if (this.mainImageContainer !== undefined && this.mainImageContainer.nativeElement['clientWidth'] > this.maxImageWidth) {
+            this.maxImageWidth = this.mainImageContainer.nativeElement['clientWidth'] - CONST_WITH_PUFFER;
+            flgChanged = true;
+        }
+
+        if (flgChanged) {
             this.cd.markForCheck();
         }
 
@@ -384,7 +403,6 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         super.onResize(layoutSizeData);
 
         this.layoutSize = layoutSizeData;
-        this.maxImageHeight = (window.innerHeight - 150) + 'px';
 
         this.onResizeMainImage();
         this.cd.markForCheck();
@@ -398,11 +416,24 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         };
     }
 
+    protected setMaxImageHeight(): void {
+        let newMaxImageHeight = this.maxImageHeight;
+        if (this.mainImageContainer !== undefined && this.mainImageContainer.nativeElement['offsetTop']) {
+            newMaxImageHeight = (window.innerHeight - this.mainImageContainer.nativeElement['offsetTop'] - CONST_HEIGHT_PUFFER);
+        } else {
+            newMaxImageHeight = (window.innerHeight - 150);
+        }
+
+        if (this.maxImageHeight !== newMaxImageHeight) {
+            this.maxImageHeight = newMaxImageHeight;
+        }
+    }
+
     protected configureProcessingOfResolvedData(): void {
         const me = this;
         const config = me.appService.getAppConfig();
 
-        this.maxImageHeight = (window.innerHeight - 150) + 'px';
+        this.setMaxImageHeight();
 
         if (BeanUtils.getValue(config, 'components.tdoc-showpage.showBigImages') === true) {
             this.defaultSubImageLayout = Layout.BIG;

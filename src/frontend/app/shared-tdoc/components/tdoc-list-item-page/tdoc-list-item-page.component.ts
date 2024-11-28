@@ -13,6 +13,9 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 import {ActionTagEvent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
 import {TourDocMediaMetaRecord} from '../../../../shared/tdoc-commons/model/records/tdocmediameta-record';
 
+const CONST_WITH_PUFFER = 72;
+const CONST_HEIGHT_PUFFER = 60;
+
 @Component({
     selector: 'app-tdoc-list-item-page',
     templateUrl: './tdoc-list-item-page.component.html',
@@ -37,13 +40,17 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
         flgMapAvailable: false,
         flgProfileMapAvailable: false
     };
-    maxImageHeight = '0';
-    imageWidth = 600;
-    imageShowMap = false;
-    descSelector = '#desc';
+
+    @ViewChild('mainImageContainer')
+    mainImageContainer: ElementRef;
 
     @ViewChild('mainImage')
     mainImage: ElementRef;
+    imageWidth = 600;
+    maxImageWidth = 0;
+    maxImageHeight = 0;
+    imageShowMap = false;
+    descSelector = '#desc';
 
     @Input()
     public record: TourDocRecord;
@@ -95,8 +102,20 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
     }
 
     onResizeMainImage() {
-        if (this.mainImage && this.mainImage.nativeElement && this.mainImage.nativeElement['width']) {
+        this.setMaxImageHeight();
+
+        let flgChanged = false
+        if (this.mainImage !== undefined && this.mainImage.nativeElement['width'] !== this.imageWidth) {
             this.imageWidth = this.mainImage.nativeElement['width'];
+            flgChanged = true;
+        }
+
+        if (this.mainImageContainer !== undefined && this.mainImageContainer.nativeElement['clientWidth'] > this.maxImageWidth) {
+            this.maxImageWidth = this.mainImageContainer.nativeElement['clientWidth'] - CONST_WITH_PUFFER;
+            flgChanged = true;
+        }
+
+        if (flgChanged) {
             this.cd.markForCheck();
         }
     }
@@ -159,11 +178,24 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
         return tdocmediameta.metadata.indexOf('Orientation":6') > 0 || tdocmediameta.metadata.indexOf('Orientation":8') > 0;
     }
 
+    protected setMaxImageHeight(): void {
+        let newMaxImageHeight = this.maxImageHeight;
+        if (this.mainImageContainer !== undefined && this.mainImageContainer.nativeElement['offsetTop']) {
+            newMaxImageHeight = (window.innerHeight - this.mainImageContainer.nativeElement['offsetTop'] - CONST_HEIGHT_PUFFER);
+        } else {
+            newMaxImageHeight = (window.innerHeight - 150);
+        }
+
+        if (this.maxImageHeight !== newMaxImageHeight) {
+            this.maxImageHeight = newMaxImageHeight;
+        }
+    }
+
     protected updateData(): void {
         const me = this;
 
         this.contentUtils.updateItemData(this.listItem, this.record, 'page');
-        this.maxImageHeight = (window.innerHeight - 150) + 'px';
+        this.setMaxImageHeight();
         if (this.record.type === 'IMAGE' || this.record.type === 'VIDEO') {
             this.listItem.flgShowMap = this.listItem.flgShowMap &&  this.imageShowMap;
             this.listItem.flgShowProfileMap = this.listItem.flgShowProfileMap &&  this.imageShowMap;
