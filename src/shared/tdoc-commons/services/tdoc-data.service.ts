@@ -47,9 +47,15 @@ import {TourDocMediaMetaRecordSchema} from '../model/schemas/tdocmediameta-recor
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
+    protected searchService: TourDocSearchService;
 
-    constructor(dataStore: TourDocDataStore) {
+    constructor(protected dataStore: TourDocDataStore) {
         super(dataStore, new TourDocSearchService(dataStore), new TourDocAdapterResponseMapper({}));
+    }
+
+    public doMultiPlaylistSearch(searchForm: TourDocSearchForm, playlist: string, playlistEntryCountPerType: {})
+        : Promise<TourDocSearchResult> {
+        return this.searchService.doMultiPlaylistSearch(searchForm, playlist, playlistEntryCountPerType);
     }
 
     public createRecord(props, opts): TourDocRecord {

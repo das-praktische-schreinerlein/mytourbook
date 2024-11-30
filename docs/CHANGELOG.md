@@ -16,9 +16,11 @@
 - backend: improved export
 - frontend: improved topimges with blocked-filter
 - frontend: fixed rendering of object-rectangles for portrait-format-pictures
+- frontend: improved management of playlists
 
 ### new features
 - frontend/backend: introduced nearbyId-search
+- frontend: improved management of playlists
 
 ### improvements
 - use new commons

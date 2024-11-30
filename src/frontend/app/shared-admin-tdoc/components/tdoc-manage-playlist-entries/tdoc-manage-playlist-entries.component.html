@@ -1,0 +1,31 @@
+<div class="container">
+    <app-cdoc-list-header [searchResult]="listSearchResult"
+                          [perPage]="searchForm.perPage"
+                          [availableLayouts]="[]"
+                          [availableSorts]="[]"
+                          [availablePerPage]="[10, 20, 50, 99]"
+                          (perPageChange)="onPerPageChange($event)"
+                          (pageChange)="onPageChange($event)" ></app-cdoc-list-header>
+</div>
+<div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+<ng-container *ngIf="playlistEntries !== undefined &&playlistEntries.length > 0">
+    <table class="techvaluetable">
+        <ng-container *ngFor="let playlistEntry of playlistEntries; let i = index">
+            <tr>
+                <td class="position">
+                    (
+                    <span>{{ playlistEntry.position }}</span>
+                    <a (click)="submitChangePosition($event, playlistEntry)"
+                       i18n="link change Playlist|Linktext to change Playlist@@link.tourdoc.playlists.change.Playlist"
+                       i18n-title="link-title change Playlist|Linktitle to change Playlist@@linktitle.tourdoc.playlists.change.Playlist"
+                       title="Change position on Playlist">🖉</a>
+                    )
+                </td>
+                <td class="type">{{playlistEntry.record.type | translate}}</td>
+                <td class="name"><a [href]="getShowUrl(playlistEntry.record)" (click)="submitShow($event, playlistEntry.record)"
+                                      [title]="playlistEntry.record.name">{{ playlistEntry.record.name }}</a></td>
+                <td class="details"><span>{{ playlistEntry.details ? playlistEntry.details : '' }}</span></td>
+            </tr>
+        </ng-container>
+    </table>
+</ng-container>

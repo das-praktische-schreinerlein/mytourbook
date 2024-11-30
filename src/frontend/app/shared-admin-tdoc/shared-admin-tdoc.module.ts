@@ -21,6 +21,7 @@ import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplayli
 import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 import {TourDocObjectDetectionObjectKeyEditFormComponent} from './components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
 import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
+import {TourDocManagePlaylistEntriesComponent} from './components/tdoc-manage-playlist-entries/tdoc-manage-playlist-entries.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
         TourDocAssignFormComponent,
         TourDocAssignJoinFormComponent,
         TourDocAssignPlaylistFormComponent,
+        TourDocManagePlaylistEntriesComponent,
         TourDocSelectSearchComponent
     ],
     imports: [
@@ -57,6 +59,7 @@ import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
         TourDocAssignFormComponent,
         TourDocAssignJoinFormComponent,
         TourDocAssignPlaylistFormComponent,
+        TourDocManagePlaylistEntriesComponent,
         TourDocSelectSearchComponent
     ]
 })

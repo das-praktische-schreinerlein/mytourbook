@@ -495,6 +495,13 @@
                 <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
         </fieldset>
+        <fieldset>
+            <legend i18n="inputPlaylist label|Label for fieldset: inputPlaylist@@label.editform.tdoc.legend.inputPlaylist">&#x231a; Playlist-Elemente</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputPlaylistEntries;context:{}"></ng-container>
+            </div>
+        </fieldset>
+
     </ng-template>
 
     <ng-template #formPoi>
@@ -989,6 +996,14 @@
                     [defaultPosition]="defaultPosition"
                     (save)="updateGpsTrackSrc($event)"
                     (focusin)="updateGpxArea()"></app-gpx-editarea>
+        </div>
+    </ng-template>
+
+    <ng-template #inputPlaylistEntries>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <app-tdoc-manage-playlist-entries
+                    [record]="record"
+                    [availableTypes]="['IMAGE', 'INFO', 'LOCATION', 'ROUTE', 'TRACK', 'TRIP', 'VIDEO']"></app-tdoc-manage-playlist-entries>
         </div>
     </ng-template>
 

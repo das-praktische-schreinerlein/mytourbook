@@ -1,0 +1,22 @@
+table.techvaluetable {
+    display: inline-table;
+    border: 1px solid #bfccd3;
+    vertical-align: top;
+    width: 100%;
+    table-layout: fixed;
+}
+td.label {
+    font-weight: bold;
+}
+td.position {
+    width: 10%;
+}
+td.type {
+    width: 10%;
+}
+td.name {
+    width: 60%;
+}
+td.details {
+    width: 20%;
+}
