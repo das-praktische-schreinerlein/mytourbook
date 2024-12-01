@@ -17,6 +17,8 @@
 - frontend: improved topimges with blocked-filter
 - frontend: fixed rendering of object-rectangles for portrait-format-pictures
 - frontend: improved management of playlists
+- frontend/backend: set parameter loadDetailsMode of GenericSearchOptions on server-requests
+- model: optimize search-time by deactivate some details by loadDetailsMode
 
 ### new features
 - frontend/backend: introduced nearbyId-search
@@ -39,7 +41,8 @@
 - frontend: fixed rendering of object-rectangles for portrait-format-pictures
 
 ### breaking changes
-- none
+- frontend/backend: set parameter loadDetailsMode of GenericSearchOptions on server-requests
+- model: optimize search-time by deactivate some details by loadDetailsMode 
 
 
 ## 10.0.0 (2024-02-25)
