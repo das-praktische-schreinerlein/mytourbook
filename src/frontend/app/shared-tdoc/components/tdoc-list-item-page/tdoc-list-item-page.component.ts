@@ -207,6 +207,7 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
             this.searchFormConverter.paramsToSearchForm(this.contentUtils.getTourDocSubItemFiltersForType(this.record, 'TRACK', undefined),
                 {}, searchForm);
             this.tdocDataService.search(searchForm, {
+                loadDetailsMode: 'details',
                 showFacets: false,
                 loadTrack: true,
                 showForm: false

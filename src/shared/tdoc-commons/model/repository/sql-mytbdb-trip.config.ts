@@ -86,7 +86,8 @@ export class SqlMytbDbTripConfig {
                     'FROM trip_playlist' +
                     ' INNER JOIN playlist ON trip_playlist.p_id=playlist.p_id ' +
                     'WHERE trip_playlist.tr_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'image',
@@ -96,7 +97,8 @@ export class SqlMytbDbTripConfig {
                     'WHERE kategorie.tr_id IN (:id) ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
                     'LIMIT 1',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'extended_object_properties',
@@ -125,7 +127,8 @@ export class SqlMytbDbTripConfig {
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM video INNER JOIN kategorie ON video.k_id = kategorie.k_id' +
                     '      WHERE kategorie.tr_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',
@@ -148,7 +151,8 @@ export class SqlMytbDbTripConfig {
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN trip_playlist ON playlist.p_id = trip_playlist.p_id WHERE trip_playlist.tr_id IN (:id)' +
                     '  ORDER BY p_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'playlist_view']
             }
         ],
         selectFieldList: [

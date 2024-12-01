@@ -339,7 +339,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         const me = this;
         const searchForm = this.cdocDataService.newSearchForm({ type: type});
         return this.cdocDataService.search(searchForm, {
-            loadDetailsMode: '',
+            loadDetailsMode: 'none',
             showFacets: [ 'statistics' ],
             loadTrack: false,
             showForm: false

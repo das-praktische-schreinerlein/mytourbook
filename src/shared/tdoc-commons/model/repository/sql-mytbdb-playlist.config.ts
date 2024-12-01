@@ -66,7 +66,8 @@ export class SqlMytbDbPlaylistConfig {
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video_playlist.v_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM video_playlist' +
                     '      WHERE video_playlist.p_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',

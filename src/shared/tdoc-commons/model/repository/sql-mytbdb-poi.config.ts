@@ -97,7 +97,8 @@ export class SqlMytbDbPoiConfig {
                     '  AS linkedinfos' +
                     '  FROM info INNER JOIN poi_info ON poi_info.if_id = info.if_id WHERE poi_info.poi_id IN (:id)' +
                     '  ORDER BY if_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'extended_object_properties',
@@ -108,7 +109,8 @@ export class SqlMytbDbPoiConfig {
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour_poi.t_id) AS CHAR)) AS extended_object_properties' +
                     '       FROM tour_poi ' +
                     '       WHERE tour_poi.poi_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',

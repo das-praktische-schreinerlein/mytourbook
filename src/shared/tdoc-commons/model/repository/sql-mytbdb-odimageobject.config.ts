@@ -63,7 +63,8 @@ export class SqlMytbDbOdImageObjectConfig {
                     ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id' +
                     ' INNER JOIN playlist ON image_playlist.p_id=playlist.p_id ' +
                     'WHERE image_object.io_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'image_objectdetections',

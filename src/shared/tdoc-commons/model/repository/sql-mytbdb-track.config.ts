@@ -123,14 +123,16 @@ export class SqlMytbDbTrackConfig {
                     'FROM kategorie_playlist' +
                     ' INNER JOIN playlist ON kategorie_playlist.p_id=playlist.p_id ' +
                     'WHERE kategorie_playlist.k_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'image',
                 sql: 'SELECT i_calced_path AS i_fav_url_txt ' +
                     'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     'WHERE image.k_id IN (:id) and p_id in (18)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'linkedroutes',
@@ -145,7 +147,8 @@ export class SqlMytbDbTrackConfig {
                     '  AS linkedroutes' +
                     '  FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (:id)' +
                     '  ORDER BY t_name) ',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'linkedpois',
@@ -157,7 +160,8 @@ export class SqlMytbDbTrackConfig {
                     '  AS linkedpois' +
                     '  FROM poi INNER JOIN kategorie_poi ON kategorie_poi.poi_id = poi.poi_id WHERE kategorie_poi.k_id IN (:id)' +
                     '  ORDER BY kategorie_poi.kpoi_pos',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full']
             },
             {
                 profile: 'keywords',
@@ -196,7 +200,8 @@ export class SqlMytbDbTrackConfig {
                     '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS extended_object_properties' +
                     '       FROM video WHERE video.k_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',
@@ -219,7 +224,8 @@ export class SqlMytbDbTrackConfig {
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN kategorie_playlist ON playlist.p_id = kategorie_playlist.p_id WHERE kategorie_playlist.k_id IN (:id)' +
                     '  ORDER BY p_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'playlist_view']
             }
         ],
         selectFieldList: [

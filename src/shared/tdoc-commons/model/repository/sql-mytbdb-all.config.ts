@@ -50,7 +50,8 @@ export class SqlMytbDbAllConfig {
                     ') allimage ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, k_rate_gesamt DESC, I_ID DESC ' +
                     'LIMIT 1',
-                parameterNames: ['id', 'type']
+                parameterNames: ['id', 'type'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'keywords',
@@ -67,7 +68,8 @@ export class SqlMytbDbAllConfig {
                     'FROM all_entries_playlist' +
                     ' INNER JOIN playlist ON all_entries_playlist.p_id=playlist.p_id ' +
                     'WHERE all_entries_playlist.origId IN (:id) AND all_entries_playlist.type IN (":type")',
-                parameterNames: ['id', 'type']
+                parameterNames: ['id', 'type'],
+                modes: ['details', 'full']
             },
             {
                 profile: 'linkedplaylists',
@@ -77,7 +79,8 @@ export class SqlMytbDbAllConfig {
                     '  FROM playlist INNER JOIN all_entries_playlist ON playlist.p_id = all_entries_playlist.p_id' +
                     '   WHERE all_entries_playlist.origId IN (:id) AND all_entries_playlist.type IN (":type")' +
                     '  ORDER BY p_name',
-                parameterNames: ['id', 'type']
+                parameterNames: ['id', 'type'],
+                modes: ['details', 'full', 'playlist_view']
             }
         ],
         groupbBySelectFieldListIgnore: ['keywords', 'playlists', 'persons', 'objects', 'objectdetections'],

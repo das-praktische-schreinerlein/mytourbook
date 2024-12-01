@@ -91,7 +91,8 @@ export class SqlMytbDbImageConfig {
                     'FROM image_playlist' +
                     ' INNER JOIN playlist ON image_playlist.p_id=playlist.p_id ' +
                     'WHERE image_playlist.i_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'image_persons',
@@ -104,7 +105,8 @@ export class SqlMytbDbImageConfig {
                     ' AND (image_object.io_precision = 1' +
                     '      OR image_object.io_state in ("' + Globals.detectionOkStates.join('", "') + '"))' +
                     'WHERE image_object.i_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'image_objects',
@@ -117,7 +119,8 @@ export class SqlMytbDbImageConfig {
                     ' AND (image_object.io_precision = 1' +
                     '      OR image_object.io_state in ("' + Globals.detectionOkStates.join('", "') + '"))' +
                     'WHERE image_object.i_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'image_objectdetections',
@@ -140,7 +143,8 @@ export class SqlMytbDbImageConfig {
                     '            AND image_object.io_detector=objects_key.ok_detector ' +
                     ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
                     'WHERE image_object.i_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'keywords',
@@ -163,7 +167,7 @@ export class SqlMytbDbImageConfig {
                     '  FROM image WHERE i_date > (SELECT i_date FROM image WHERE i_id IN (:id))' +
                     '   ORDER BY i_date, i_id LIMIT 1)',
                 parameterNames: ['id'],
-                modes: ['details']
+                modes: ['details', 'full']
             },
             {
                 profile: 'linkedplaylists',
@@ -172,7 +176,8 @@ export class SqlMytbDbImageConfig {
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN image_playlist ON playlist.p_id = image_playlist.p_id WHERE image_playlist.i_id IN (:id)' +
                     '  ORDER BY p_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'playlist_view']
             }
         ],
         groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons', 'i_objects', 'i_objectdetections'],

@@ -141,7 +141,7 @@ export class TourDocManagePlaylistEntriesComponent extends AbstractInlineCompone
             showFacets: false,
             loadTrack: false,
             showForm: false,
-            loadDetailsMode: undefined
+            loadDetailsMode: 'playlist_view'
         }).then(
             (cdocSearchResult: TourDocSearchResult) => {
                 me.loadListResult(me.searchForm, cdocSearchResult);

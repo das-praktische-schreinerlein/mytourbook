@@ -96,7 +96,8 @@ export class SqlMytbDbInfoConfig {
                     'FROM info_playlist' +
                     ' INNER JOIN playlist ON info_playlist.p_id=playlist.p_id ' +
                     'WHERE info_playlist.if_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'extended_object_properties',
@@ -113,7 +114,8 @@ export class SqlMytbDbInfoConfig {
                     '      LEFT JOIN location_info ON info.if_id = location_info.if_id' +
                     '      INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id' +
                     '      WHERE info.if_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',
@@ -136,7 +138,8 @@ export class SqlMytbDbInfoConfig {
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN info_playlist ON playlist.p_id = info_playlist.p_id WHERE info_playlist.if_id IN (:id)' +
                     '  ORDER BY p_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'playlist_view']
             }
         ],
         selectFieldList: [

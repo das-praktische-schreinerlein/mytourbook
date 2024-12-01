@@ -18,7 +18,8 @@ export class SqlMytbExportDbDestinationConfig {
                     ' INNER JOIN kategorie_full on tour.k_id=kategorie_full.k_id ' +
                     ' INNER JOIN image on kategorie_full.k_id=image.k_id ' +
                     'WHERE destination.d_id IN (":id")',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             }
         ],
         selectFieldList: [

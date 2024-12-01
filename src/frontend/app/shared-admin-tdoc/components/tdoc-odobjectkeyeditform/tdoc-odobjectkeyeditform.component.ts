@@ -181,6 +181,8 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
 
         this.tdocDataService.search(searchForm,
             {
+                // FIXME is this needed as details -> or could be none
+                loadDetailsMode: 'details',
                 showFacets: ['odkeys_all_txt', 'odcategory_all_txt'],
                 loadTrack: false,
                 showForm: false

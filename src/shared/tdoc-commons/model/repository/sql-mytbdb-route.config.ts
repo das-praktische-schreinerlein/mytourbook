@@ -108,7 +108,8 @@ export class SqlMytbDbRouteConfig {
                     'FROM tour_playlist' +
                     ' INNER JOIN playlist ON tour_playlist.p_id=playlist.p_id ' +
                     'WHERE tour_playlist.t_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'image',
@@ -119,7 +120,8 @@ export class SqlMytbDbRouteConfig {
                     'WHERE tour.t_id IN (:id) and p_id in (18) ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
                     'LIMIT 1',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'linkedinfos',
@@ -128,7 +130,8 @@ export class SqlMytbDbRouteConfig {
                     '  AS linkedinfos' +
                     '  FROM info INNER JOIN tour_info ON tour_info.if_id = info.if_id WHERE tour_info.t_id IN (:id)' +
                     '  ORDER BY if_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full']
             },
             {
                 profile: 'linkedpois',
@@ -140,7 +143,8 @@ export class SqlMytbDbRouteConfig {
                     '  AS linkedpois' +
                     '  FROM poi INNER JOIN tour_poi ON tour_poi.poi_id = poi.poi_id WHERE tour_poi.t_id IN (:id)' +
                     '  ORDER BY tour_poi.tpoi_pos',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full']
             },
             {
                 profile: 'keywords',
@@ -179,7 +183,8 @@ export class SqlMytbDbRouteConfig {
                     '       FROM video INNER JOIN kategorie ON video.k_id = kategorie.k_id' +
                     '       LEFT JOIN kategorie_tour ON kategorie.k_id = kategorie_tour.k_id' +
                     '       WHERE kategorie_tour.t_id IN (:id) OR kategorie.t_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',
@@ -199,7 +204,7 @@ export class SqlMytbDbRouteConfig {
                     '       LEFT JOIN location_hirarchical as location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
                     '   ORDER BY CONCAT(l_lochirarchietxt, t_name), t_id LIMIT 1)',
                 parameterNames: ['id'],
-                modes: ['details']
+                modes: ['details', 'full']
             },
             {
                 profile: 'linkedplaylists',
@@ -208,7 +213,8 @@ export class SqlMytbDbRouteConfig {
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN tour_playlist ON playlist.p_id = tour_playlist.p_id WHERE tour_playlist.t_id IN (:id)' +
                     '  ORDER BY p_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'playlist_view']
             }
         ],
         selectFieldList: [

@@ -18,6 +18,7 @@ import {TourDocMediaMetaRecord} from '../../../../shared/tdoc-commons/model/reco
 export class TourDocListItemComponent extends CommonDocListItemComponent {
     protected mapFlagSymbol = '&#128681';
     protected mapFlagAvailable = false;
+    protected featureToggleMapFlagAvailable = false;
 
     @Input()
     public showItemMapFlag ? = false;

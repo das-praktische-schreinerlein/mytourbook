@@ -74,7 +74,8 @@ export class SqlMytbDbLocationConfig {
                     'FROM location_playlist' +
                     ' INNER JOIN playlist ON location_playlist.p_id=playlist.p_id ' +
                     'WHERE location_playlist.l_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'image',
@@ -84,7 +85,8 @@ export class SqlMytbDbLocationConfig {
                     'WHERE kategorie.l_id IN (:id) ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
                     'LIMIT 1',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'keywords',
@@ -103,7 +105,8 @@ export class SqlMytbDbLocationConfig {
                     '  AS linkedinfos' +
                     '  FROM info INNER JOIN location_info ON location_info.if_id = info.if_id WHERE location_info.l_id IN (:id)' +
                     '  ORDER BY if_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full']
             },
             {
                 profile: 'extended_object_properties',
@@ -132,7 +135,8 @@ export class SqlMytbDbLocationConfig {
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM video INNER JOIN kategorie ON video.k_id = kategorie.k_id' +
                     '      WHERE kategorie.l_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',
@@ -157,7 +161,8 @@ export class SqlMytbDbLocationConfig {
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN location_playlist ON playlist.p_id = location_playlist.p_id WHERE location_playlist.l_id IN (:id)' +
                     '  ORDER BY p_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'playlist_view']
             }
         ],
         selectFieldList: [

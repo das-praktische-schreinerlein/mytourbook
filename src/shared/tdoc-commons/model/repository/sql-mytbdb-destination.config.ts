@@ -56,7 +56,8 @@ export class SqlMytbDbDestinationConfig {
                     'WHERE destination.d_id IN (":id") and p_id in (18) ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
                     'LIMIT 1',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'keywords',

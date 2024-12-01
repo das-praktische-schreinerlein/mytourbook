@@ -89,6 +89,7 @@ export class TourDocInlineSearchpageComponent extends
         super(appService, commonRoutingService, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, cd, elRef, pageUtils, searchFormUtils, tdocSearchFormUtils,
             new CommonDocMultiActionManager(appService, actionService));
+        this.defaultLoadDetailsMode = 'commoninlinesearch';
     }
 
     onShowItemOnMap(tdoc: TourDocRecord) {

@@ -34,13 +34,23 @@ export class TourDocNewsDescSuggesterService extends CommonDocListSuggesterServi
             this.appendFiltersToListItemSearchForm(searchForm, form, environment);
             searchForm.type = 'TRACK';
 
-            return this.tourDocDataService.search(searchForm).then(searchResult => {
+            return this.tourDocDataService.search(searchForm, {
+                loadDetailsMode: 'none',
+                showFacets: false,
+                loadTrack: false,
+                showForm: false
+            }).then(searchResult => {
                 if (searchResult && searchResult.recordCount > 0) {
                     tracks = searchResult.currentRecords;
                 }
 
                 searchForm.type = 'TRIP';
-                return this.tourDocDataService.search(searchForm);
+                return this.tourDocDataService.search(searchForm, {
+                    loadDetailsMode: 'none',
+                    showFacets: false,
+                    loadTrack: false,
+                    showForm: false
+                });
             }).then(searchResult => {
                 if (searchResult && searchResult.recordCount > 0) {
                     trips = searchResult.currentRecords;

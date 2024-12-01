@@ -14,7 +14,8 @@ export class SqlMytbExportDbRouteConfig {
                     'FROM image INNER JOIN kategorie_full ON kategorie_full.i_id=image.i_id ' +
                     ' INNER JOIN tour ON kategorie_full.k_id=tour.k_id ' +
                     'WHERE tour.t_id in (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',

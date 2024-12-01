@@ -65,6 +65,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         super(route, commonRoutingService, errorResolver, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
             tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment, location);
+        this.searchOptions.loadDetailsMode = 'commonsearch';
     }
 
     onMapTourDocClicked(tdoc: MapDocRecord) {

@@ -63,7 +63,8 @@
     <br clear="all" />
     <div class="card-text">
         <ngb-accordion #acc="ngbAccordion" activeIds="">
-            <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
+            <ngb-panel *ngIf="featureToggleMapFlagAvailable && (listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined))"
+                       title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
                 <ng-template ngbPanelContent>
                     <app-mapdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
                                   [height]="'150'"
@@ -187,7 +188,8 @@
                                                              [profile]="'list-item-flat-big'"></app-cdoc-extended-object-properties>
                     </ng-template>
                 </ngb-panel>
-                <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
+                <ngb-panel *ngIf="featureToggleMapFlagAvailable && (listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined))"
+                           title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
                     <ng-template ngbPanelContent>
                         <app-mapdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
                                       [height]="'150'"

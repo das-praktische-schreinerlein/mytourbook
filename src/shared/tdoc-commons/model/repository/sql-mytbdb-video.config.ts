@@ -85,7 +85,8 @@ export class SqlMytbDbVideoConfig {
                     'FROM video_playlist' +
                     ' INNER JOIN playlist ON video_playlist.p_id=playlist.p_id ' +
                     'WHERE video_playlist.v_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'video_persons',
@@ -98,7 +99,8 @@ export class SqlMytbDbVideoConfig {
                     ' AND (video_object.vo_precision = 1' +
                     '      OR video_object.vo_state in ("' + Globals.detectionOkStates.join('", "') + '"))' +
                     'WHERE video_object.v_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'video_objects',
@@ -111,7 +113,8 @@ export class SqlMytbDbVideoConfig {
                     ' AND (video_object.vo_precision = 1' +
                     '      OR video_object.vo_state in ("' + Globals.detectionOkStates.join('", "') + '"))' +
                     'WHERE video_object.v_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'keywords',
@@ -143,7 +146,8 @@ export class SqlMytbDbVideoConfig {
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN video_playlist ON playlist.p_id = video_playlist.p_id WHERE video_playlist.v_id IN (:id)' +
                     '  ORDER BY p_name',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'playlist_view']
             }
         ],
         groupbBySelectFieldListIgnore: ['v_keywords', 'v_playlists', 'v_persons', 'v_objects'],

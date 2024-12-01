@@ -18,7 +18,8 @@ export class SqlMytbExportDbNewsConfig {
                     ' INNER JOIN kategorie_full on kategorie_full.n_id=news.n_id' +
                     ' INNER JOIN image on kategorie_full.i_id=image.i_id ' +
                     'WHERE news.n_id in (:id) order by i_rate desc limit 0, 1',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',

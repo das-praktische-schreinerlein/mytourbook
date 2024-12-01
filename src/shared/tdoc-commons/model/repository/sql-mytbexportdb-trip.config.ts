@@ -17,7 +17,8 @@ export class SqlMytbExportDbTripConfig {
                     'FROM kategorie_full' +
                     ' INNER JOIN image on kategorie_full.i_id=image.i_id ' +
                     'WHERE kategorie_full.tr_id in (:id) order by i_rate desc limit 0, 1',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',

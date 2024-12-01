@@ -13,7 +13,8 @@ export class SqlMytbExportDbTrackConfig {
                 sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
                     'FROM image' +
                     'WHERE image.k_id in (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',

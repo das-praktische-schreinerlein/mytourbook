@@ -64,7 +64,8 @@ export class SqlMytbDbNewsConfig {
                     'WHERE news.n_id IN (:id) ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
                     'LIMIT 1',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'extended_object_properties',
@@ -109,7 +110,8 @@ export class SqlMytbDbNewsConfig {
                     '      INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
                     '      INNER JOIN video ON video.k_id = kategorie.k_id' +
                     '      WHERE news.n_id IN (:id)',
-                parameterNames: ['id']
+                parameterNames: ['id'],
+                modes: ['details', 'full', 'commonsearch', 'commoninlinesearch']
             },
             {
                 profile: 'navigation_objects',
