@@ -137,7 +137,12 @@ export class TourDocManagePlaylistEntriesComponent extends AbstractInlineCompone
 
         me.searchForm.type = Object.keys(typesCount).map(key => key.toUpperCase()).join(',') || 'PLAYLIST';
 
-        me.cdocDataService.doMultiPlaylistSearch(me.searchForm, this.record.name, typesCount).then(
+        me.cdocDataService.doMultiPlaylistSearch(me.searchForm, this.record.name, typesCount, {
+            showFacets: false,
+            loadTrack: false,
+            showForm: false,
+            loadDetailsMode: undefined
+        }).then(
             (cdocSearchResult: TourDocSearchResult) => {
                 me.loadListResult(me.searchForm, cdocSearchResult);
                 me.showLoadingSpinner = false;
@@ -172,12 +177,10 @@ export class TourDocManagePlaylistEntriesComponent extends AbstractInlineCompone
         allRecords = allRecords.sort((a, b) => {
             return a.position - b.position;
         });
-        console.error("listRecords", allRecords);
 
         const listRecords = allRecords.slice(
             (searchForm.pageNum - 1) * searchForm.perPage,
             Math.min(searchForm.pageNum * searchForm.perPage, searchResult.recordCount));
-        console.error("allRecords", listRecords);
         const listSearchResult: TourDocSearchResult = this.cdocDataService.newSearchResult(searchForm, searchResult.recordCount,
             listRecords.map(listRecord => listRecord.record), undefined);
 

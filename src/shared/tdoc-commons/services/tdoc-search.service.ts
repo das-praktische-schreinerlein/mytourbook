@@ -5,6 +5,7 @@ import {TourDocDataStore} from './tdoc-data.store';
 import {CommonDocSearchService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
 import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import * as Promise_serial from 'promise-serial';
+import {GenericSearchOptions} from '@dps/mycms-commons/src/search-commons/services/generic-search.service';
 
 export class TourDocSearchService extends CommonDocSearchService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     constructor(dataStore: TourDocDataStore) {
@@ -48,7 +49,7 @@ export class TourDocSearchService extends CommonDocSearchService<TourDocRecord, 
         return TourDocSearchFormFactory.createSanitized(values);
     }
 
-    public doMultiPlaylistSearch(searchForm: TourDocSearchForm, playlist: string, playlistEntryCountPerType: {})
+    public doMultiPlaylistSearch(searchForm: TourDocSearchForm, playlist: string, playlistEntryCountPerType: {}, opts: GenericSearchOptions)
         : Promise<TourDocSearchResult> {
         if (searchForm.type === undefined) {
             return Promise.reject('types-filter required');
@@ -80,7 +81,7 @@ export class TourDocSearchService extends CommonDocSearchService<TourDocRecord, 
             for (let page = 1; page <= pages; page ++) {
                 const typeSearchForm = this.newSearchForm({});
                 typeSearchForm.type = type;
-                typeSearchForm.perPage = this.maxPerRun;
+                typeSearchForm.perPage = Math.min(this.maxPerRun, maxNumber);
                 typeSearchForm.pageNum = page;
                 typeSearchForm.sort = searchForm.sort;
                 typeSearchForm.playlists = playlist;
@@ -89,11 +90,7 @@ export class TourDocSearchService extends CommonDocSearchService<TourDocRecord, 
                     type, typeSearchForm.pageNum, maxNumber, playlistEntryCountPerType[type], typeSearchForm);
 
                 promises.push(function () {
-                    return me.search(typeSearchForm, {
-                        showFacets: false,
-                        loadTrack: false,
-                        showForm: false
-                    });
+                    return me.search(typeSearchForm, opts);
                 });
 
             }

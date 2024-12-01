@@ -44,6 +44,7 @@ import {TourDocLinkedPoiRecord, TourDocLinkedPoiRecordRelation} from '../model/r
 import {TourDocLinkedPoiRecordSchema} from '../model/schemas/tdoclinkedpoi-record-schema';
 import {TourDocMediaMetaRecord, TourDocMediaMetaRecordRelation} from '../model/records/tdocmediameta-record';
 import {TourDocMediaMetaRecordSchema} from '../model/schemas/tdocmediameta-record-schema';
+import {GenericSearchOptions} from '@dps/mycms-commons/src/search-commons/services/generic-search.service';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -53,9 +54,9 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
         super(dataStore, new TourDocSearchService(dataStore), new TourDocAdapterResponseMapper({}));
     }
 
-    public doMultiPlaylistSearch(searchForm: TourDocSearchForm, playlist: string, playlistEntryCountPerType: {})
+    public doMultiPlaylistSearch(searchForm: TourDocSearchForm, playlist: string, playlistEntryCountPerType: {}, opts: GenericSearchOptions)
         : Promise<TourDocSearchResult> {
-        return this.searchService.doMultiPlaylistSearch(searchForm, playlist, playlistEntryCountPerType);
+        return this.searchService.doMultiPlaylistSearch(searchForm, playlist, playlistEntryCountPerType, opts);
     }
 
     public createRecord(props, opts): TourDocRecord {
