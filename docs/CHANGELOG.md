@@ -20,10 +20,12 @@
 - frontend/backend: set parameter loadDetailsMode of GenericSearchOptions on server-requests
 - model: optimize search-time by deactivate some details by loadDetailsMode
 - backend: improved pdf-generation
+- backend: added TourDocPdfResultListDecorator for generating pdf-resultlist
 
 ### new features
 - frontend/backend: introduced nearbyId-search
 - frontend: improved management of playlists
+- backend: added TourDocPdfResultListDecorator for generating pdf-resultlist
 
 ### improvements
 - use new commons

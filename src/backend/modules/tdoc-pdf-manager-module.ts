@@ -13,6 +13,7 @@ import {TourDocMediaExportProcessingOptions, TourDocMediaFileExportManager} from
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {CommonDocPdfManagerModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-pdf-manager-module';
 import {PdfManager} from '@dps/mycms-server-commons/dist/media-commons/modules/pdf-manager';
+import {TourDocPdfResultListDecorator} from './tdoc-pdf-resultlist-decorator';
 
 export class TourPdfManagerModule extends CommonDocPdfManagerModule<TourDocDataService> {
 
@@ -24,7 +25,7 @@ export class TourPdfManagerModule extends CommonDocPdfManagerModule<TourDocDataS
 
     constructor(dataService: TourDocDataService, mediaFileExportManager: TourDocMediaFileExportManager,
                 pdfManager: PdfManager, backendConfig: BackendConfigType) {
-        super(dataService, pdfManager);
+        super(dataService, pdfManager, new TourDocPdfResultListDecorator());
         this.mediaFileExportManager = mediaFileExportManager;
         this.backendConfig = backendConfig;
 
