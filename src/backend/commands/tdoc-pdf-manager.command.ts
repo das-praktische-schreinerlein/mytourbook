@@ -43,7 +43,8 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
         return [
             'exportImagePdfs', 'exportLocationPdfs', 'exportRoutePdfs', 'exportTrackPdfs',
             'generateDefaultImagePdfs', 'generateLocationPdfs', 'generateRoutePdfs', 'generateTrackPdfs',
-            'generateExternalImagePdfs', 'generateExternalLocationPdfs', 'generateExternalRoutePdfs', 'generateExternalTrackPdfs',
+            'generateExternalImagePdfs', 'generateInfoImagePdfs', 'generateExternalLocationPdfs', 'generateExternalRoutePdfs',
+            'generateExternalTrackPdfs', 'generateExternalTripPdfs',
             'generatePlaylistAsPdfs'];
     }
 
@@ -94,7 +95,8 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             addPageNumsStartingWith: argv['addPageNumsStartingWith'] !== undefined && Number(argv['addPageNumsStartingWith'])
                 ? Number(argv['addPageNumsStartingWith'])
                 : undefined,
-            trimEmptyPages: argv['trimEmptyPages'] !== undefined && argv['trimEmptyPages'] !== false,
+            trimEmptyPages: argv['trimEmptyPages'] !== undefined
+                && argv['trimEmptyPages'] !== false && argv['trimEmptyPages'] !== 'false',
             tocTemplate: argv['tocTemplate'] !== undefined && argv['tocTemplate'].length > 1
                 ? argv['tocTemplate'] + ''
                 : undefined
@@ -114,9 +116,11 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
 
         switch (action) {
             case 'generateDefaultImagePdfs':
+            case 'generateDefaultInfoPdfs':
             case 'generateDefaultLocationPdfs':
             case 'generateDefaultRoutePdfs':
             case 'generateDefaultTrackPdfs':
+            case 'generateDefaultTripPdfs':
                 processingOptions.updatePdfEntity = true;
                 console.log('DO generate searchform for : ' + action, processingOptions);
                 promise = TourDocExportManagerUtils.createTourDocSearchForm(generatePdfsType, argv).then(searchForm => {
