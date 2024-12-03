@@ -9,6 +9,7 @@ import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/a
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {GeoEntityDbMapping} from '@dps/mycms-commons/dist/geo-commons/backend/backend-geo.types';
 import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
+import {Globals} from './globals';
 
 export class SqlMytbDbRouteConfig {
     public static readonly tableConfig: TableConfig = {
@@ -118,6 +119,7 @@ export class SqlMytbDbRouteConfig {
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     'WHERE tour.t_id IN (:id) and p_id in (18) ' +
+                    '    AND (i_gesperrt IS NULL OR i_gesperrt IN  (' + Globals.publicNonBlockedSqlStates.join(',') + ')) ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
                     'LIMIT 1',
                 parameterNames: ['id'],

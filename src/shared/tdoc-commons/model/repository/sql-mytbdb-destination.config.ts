@@ -1,5 +1,6 @@
 import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
+import {Globals} from './globals';
 
 export class SqlMytbDbDestinationConfig {
     public static readonly tableConfig: TableConfig = {
@@ -54,6 +55,7 @@ export class SqlMytbDbDestinationConfig {
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     'WHERE destination.d_id IN (":id") and p_id in (18) ' +
+                    '    AND (i_gesperrt IS NULL OR i_gesperrt IN  (' + Globals.publicNonBlockedSqlStates.join(',') + ')) ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
                     'LIMIT 1',
                 parameterNames: ['id'],

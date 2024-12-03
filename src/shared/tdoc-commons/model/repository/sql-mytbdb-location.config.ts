@@ -8,6 +8,7 @@ import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {PdfEntityDbMapping} from '../../services/tdoc-sql-mytbdb.config';
+import {Globals} from './globals';
 
 export class SqlMytbDbLocationConfig {
     public static readonly tableConfig: TableConfig = {
@@ -83,6 +84,7 @@ export class SqlMytbDbLocationConfig {
                     'FROM kategorie' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     'WHERE kategorie.l_id IN (:id) ' +
+                    '    AND (i_gesperrt IS NULL OR i_gesperrt IN  (' + Globals.publicNonBlockedSqlStates.join(',') + ')) ' +
                     'ORDER BY I_RATE_MOTIVE DESC, I_RATE_WICHTIGKEIT DESC, I_RATE DESC, kategorie.k_rate_gesamt DESC, image.I_ID DESC ' +
                     'LIMIT 1',
                 parameterNames: ['id'],

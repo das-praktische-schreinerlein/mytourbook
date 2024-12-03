@@ -19,8 +19,7 @@
 - frontend: improved management of playlists
 - frontend/backend: set parameter loadDetailsMode of GenericSearchOptions on server-requests
 - model: optimize search-time by deactivate some details by loadDetailsMode
-- improved pdf-generation
-
+- backend: improved pdf-generation
 
 ### new features
 - frontend/backend: introduced nearbyId-search
@@ -35,13 +34,14 @@
 - frontend: improved additional route-assignment for tracks
 - backend: improved export
 - frontend: improved topimges with blocked-filter
-- improved pdf-generation
+- backend: improved pdf-generation
 
 ### bug fixes
 - fixed media-file-db-sync-viewer
 - fixed pdf-build
 - fixed import and documentation
 - frontend: fixed rendering of object-rectangles for portrait-format-pictures
+- backend: use only nonblocked-images as main-image for routes, location and destination
 
 ### breaking changes
 - frontend/backend: set parameter loadDetailsMode of GenericSearchOptions on server-requests
