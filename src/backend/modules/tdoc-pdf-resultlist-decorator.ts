@@ -24,7 +24,7 @@ export class TourDocPdfResultListDecorator extends CommonDocPdfResultListDecorat
             if (tdocdatatech !== undefined) {
                 let details = '';
                 if (tdocdatatech.dur > 0) {
-                    details += `<div class="entry"><div class="label">&#x231A;:</div><div class="value">$tdocdatatech.dur h</div></div>`
+                    details += `<div class="entry"><div class="label">&#x23F1;:</div><div class="value">$tdocdatatech.dur h</div></div>`
                         .replace('$tdocdatatech.dur',
                             tdocdatatech.dur.toLocaleString('de-de', {minimumFractionDigits: 1, maximumFractionDigits: 1}));
                 }
