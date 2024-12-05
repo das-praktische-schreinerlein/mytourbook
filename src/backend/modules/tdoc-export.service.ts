@@ -56,7 +56,7 @@ export class TourDocExportService extends CommonDocDocExportService<TourDocRecor
         };
 
         return this.dataService.batchProcessSearchResult(searchForm, callback, {
-            loadDetailsMode: undefined,
+            loadDetailsMode: 'full',
             loadTrack: true,
             showFacets: false,
             showForm: false

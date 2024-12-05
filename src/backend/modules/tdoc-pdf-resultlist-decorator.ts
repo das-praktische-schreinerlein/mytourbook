@@ -88,7 +88,7 @@ export class TourDocPdfResultListDecorator extends CommonDocPdfResultListDecorat
                 }
 
                 if (details !== '') {
-                    detailsRes += `<div class='bookmark_line bookmark_line_details bookmark_line_ratetech'><div class='bookmark_details'><div class="techvaluetable techvaluetableflat datatechvaluetableflat">`;
+                    detailsRes += `<div class='bookmark_line bookmark_line_details bookmark_line_ratetech'><div class='bookmark_details'><div class="techvaluetable techvaluetableflat ratetechvaluetableflat">`;
                     detailsRes += details;
                     detailsRes += `</div></div></div>`;
                 }
