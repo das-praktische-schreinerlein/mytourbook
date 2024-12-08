@@ -1,9 +1,9 @@
 <ng-container *ngIf="tdocdatatech !== undefined">
     <div [ngClass]="!flat && !big ? 'techvaluetable datatechvaluetable' : (flat ? ' techvaluetable techvaluetableflat datatechvaluetableflat' : 'techvaluetable techvaluetablebig datatechvaluetablebig')">
-        <div *ngIf="tdocdatatech.dur > 0" class="entry"><div class="label">&#x23F1;:</div><div class="value">{{tdocdatatech.dur | number : '1.0-1'}} h</div></div>
-        <div *ngIf="tdocdatatech.dist > 0" class="entry"><div class="label">&#x2194;:</div><div class="value">{{tdocdatatech.dist | number : '1.0-1'}} km</div></div>
+        <div *ngIf="tdocdatatech.dur > 0" class="entry"><div class="label"><span class="htmlentity">&#x23F1;</span>:</div><div class="value">{{tdocdatatech.dur | number : '1.0-1'}} h</div></div>
+        <div *ngIf="tdocdatatech.dist > 0" class="entry"><div class="label"><span class="htmlentity">&#x2194;</span>:</div><div class="value">{{tdocdatatech.dist | number : '1.0-1'}} km</div></div>
         <div *ngIf="tdocdatatech.altMax > 0" class="entry"><div class="label">max:</div><div class="value">{{tdocdatatech.altMax | number : '1.0'}} m</div></div>
-        <div *ngIf="tdocdatatech.altAsc > 0" class="entry"><div class="label">&#x2197;:</div><div class="value">{{tdocdatatech.altAsc | number : '1.0'}} Hm</div></div>
+        <div *ngIf="tdocdatatech.altAsc > 0" class="entry"><div class="label"><span class="htmlentity">&#x2197;</span>:</div><div class="value">{{tdocdatatech.altAsc | number : '1.0'}} Hm</div></div>
         <div *ngIf="tdocdatatech.sections !== undefined && tdocdatatech.sections.length > 0" class="entry"><div class="label">Etappen:</div><div class="value">{{tdocdatatech.sections}}</div></div>
         <div *ngIf="record.dateshow !== undefined" class="entry"><div class="label">1. Beg.:</div><div class="value valuedate">{{record | tdocdate}}</div></div>
     </div>

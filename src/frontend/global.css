@@ -241,3 +241,7 @@ app-cdoc-extended-object-properties div.value {
 td.entry, td.value {
     vertical-align: top;
 }
+
+.htmlentity {
+    font-weight: normal;
+}
