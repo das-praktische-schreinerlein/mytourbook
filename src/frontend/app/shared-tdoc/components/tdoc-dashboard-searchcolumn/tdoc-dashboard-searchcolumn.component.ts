@@ -33,5 +33,6 @@ export class TourDocDashboardSearchColumnComponent extends
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService) {
         super(appService, commonRoutingService, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, cd, elRef, pageUtils, searchFormUtils, tdocSearchFormUtils, actionService);
+        this.defaultLoadDetailsMode = 'none';
     }
 }
