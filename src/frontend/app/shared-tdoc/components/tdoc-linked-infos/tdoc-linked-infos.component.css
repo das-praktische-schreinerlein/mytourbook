@@ -3,9 +3,8 @@ table.techvaluetable {
     display: inline-table;
     border: 1px solid #bfccd3;
     vertical-align: top;
-    width: 100%;
     table-layout: fixed;
-    max-width: 500px;
+    max-width: 600px;
 }
 td.label {
     font-weight: bold;

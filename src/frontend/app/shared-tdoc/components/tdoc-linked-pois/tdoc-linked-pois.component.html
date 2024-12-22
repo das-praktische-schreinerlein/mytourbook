@@ -4,7 +4,7 @@
         <ng-container *ngFor="let linkedPoi of linkedPois; let i = index">
             <tr>
                 <td class="entry">{{ 'poijoin_' + linkedPoi.poitype | translate}}</td>
-                <td class="entry">
+                <td class="value">
                     <a [href]="getShowUrl(linkedPoi)" (click)="submitShow($event, linkedPoi)" [title]="linkedPoi.name">{{ linkedPoi.name}}{{ linkedPoi.geoEle ? ' (' + linkedPoi.geoEle + 'm)' : '' }}</a>
                 </td>
             </tr>

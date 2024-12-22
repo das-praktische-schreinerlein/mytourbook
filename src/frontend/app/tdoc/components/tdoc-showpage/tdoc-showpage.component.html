@@ -58,6 +58,15 @@
                 <ng-container *ngIf="record.type === 'INFO'">
                     <app-tdoc-info [record]="record"></app-tdoc-info>
                 </ng-container>
+                <div *ngIf="showResultListTrigger.INFOBLOCK_INFOS" style="float: left; display: inline-block">
+                    <ng-container *ngIf="showResultListTrigger.INFOBLOCK_INFOS">
+                        <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
+                        <br />
+                    </ng-container>
+                    <ng-container *ngIf="showResultListTrigger.INFOBLOCK_RATES">
+                        <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
+                    </ng-container>
+                </div>
                 <div id="desc">
                 </div>
                 {{ renderDesc() }}
@@ -66,10 +75,8 @@
                 <ng-container *ngIf="showResultListTrigger.INFOBLOCK_RATES">
                     <app-tdoc-ratepers [record]="record"></app-tdoc-ratepers>
                     <app-tdoc-ratepers-difficulty [record]="record"></app-tdoc-ratepers-difficulty>
-                    <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
                 </ng-container>
                 <ng-container *ngIf="showResultListTrigger.INFOBLOCK_INFOS">
-                    <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
                     <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
                 </ng-container>
 
@@ -95,9 +102,6 @@
                                    *ngIf="showResultListTrigger.INFOBLOCK_KEYWORDS"></app-tdoc-keywords>
                 <app-tdoc-persontags [record]="record"
                                      *ngIf="showResultListTrigger.INFOBLOCK_PERSONS"></app-tdoc-persontags>
-                <app-tdoc-linked-playlists [record]="record"
-                                           *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"
-                                           (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                 <app-tdoc-datameta [record]="record"
                                    *ngIf="showResultListTrigger.INFOBLOCK_DATAMETA"></app-tdoc-datameta>
 
@@ -110,7 +114,6 @@
                     <app-tdoc-info [record]="record"></app-tdoc-info>
                 </ng-container>
                 <app-tdoc-linked-infos [record]="record" [small]="false"></app-tdoc-linked-infos>
-
                 <app-cdoc-extended-object-properties [extendedObjectProperties]="record.tdocextendedobjectproperties"
                                                      [categories]="['ENTITYCOUNT']"
                                                      *ngIf="showResultListTrigger.INFOBLOCK_ENTITYCOUNT"
@@ -125,6 +128,11 @@
                         <span class="btn-action-icon">&#x21D3;</span>
                     </button>
                 </div>
+
+                <app-tdoc-linked-playlists [record]="record"
+                                           *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"
+                                           (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
+
             </div>
             <span class="small-linebreak" style="line-height: 1px;display: block;"><br clear="all"/></span>
         </div>
