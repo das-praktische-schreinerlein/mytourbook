@@ -55,16 +55,22 @@
                     </ng-container>
                 </ng-container>
 
+                <ng-container *ngIf="record['tdocratepers'] !== undefined">
+                    <app-tdoc-ratepers [record]="record" [flat]="true"></app-tdoc-ratepers>
+                    <br />
+                </ng-container>
+
                 <ng-container *ngIf="record.type === 'INFO'">
                     <app-tdoc-info [record]="record"></app-tdoc-info>
                 </ng-container>
-                <div *ngIf="showResultListTrigger.INFOBLOCK_INFOS" style="float: left; display: inline-block">
-                    <ng-container *ngIf="showResultListTrigger.INFOBLOCK_INFOS">
-                        <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
+
+                <div *ngIf="showResultListTrigger.INFOBLOCK_INFOS || showResultListTrigger.INFOBLOCK_RATES" style="float: left; display: inline-block">
+                    <ng-container *ngIf="showResultListTrigger.INFOBLOCK_RATES && record['tdocratetech'] !== undefined">
+                        <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
                         <br />
                     </ng-container>
-                    <ng-container *ngIf="showResultListTrigger.INFOBLOCK_RATES">
-                        <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
+                    <ng-container *ngIf="showResultListTrigger.INFOBLOCK_INFOS">
+                        <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
                     </ng-container>
                 </div>
                 <div id="desc">
@@ -72,13 +78,6 @@
                 {{ renderDesc() }}
                 <app-cdoc-mediameta [record]="record.tdocmediameta"
                                     *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"></app-cdoc-mediameta >
-                <ng-container *ngIf="showResultListTrigger.INFOBLOCK_RATES">
-                    <app-tdoc-ratepers [record]="record"></app-tdoc-ratepers>
-                    <app-tdoc-ratepers-difficulty [record]="record"></app-tdoc-ratepers-difficulty>
-                </ng-container>
-                <ng-container *ngIf="showResultListTrigger.INFOBLOCK_INFOS">
-                    <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
-                </ng-container>
 
                 <div class="tagcloud-container"
                      *ngIf="record.type === 'LOCATION' && environment.tourDocFacetsFiltered && showResultListTrigger.INFOBLOCK_TAGCLOUD_ACTIONTYPE">
@@ -98,28 +97,31 @@
                 </div>
                 -->
 
+                <ng-container *ngIf="showResultListTrigger.INFOBLOCK_RATES">
+                    <app-tdoc-ratepers-difficulty [record]="record"></app-tdoc-ratepers-difficulty>
+                </ng-container>
+                <ng-container *ngIf="showResultListTrigger.INFOBLOCK_INFOS && record['tdocdatainfo'] !== undefined">
+                    <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
+                </ng-container>
                 <app-tdoc-keywords [record]="record"
                                    *ngIf="showResultListTrigger.INFOBLOCK_KEYWORDS"></app-tdoc-keywords>
-                <app-tdoc-persontags [record]="record"
-                                     *ngIf="showResultListTrigger.INFOBLOCK_PERSONS"></app-tdoc-persontags>
-                <app-tdoc-datameta [record]="record"
-                                   *ngIf="showResultListTrigger.INFOBLOCK_DATAMETA"></app-tdoc-datameta>
-
-                <app-tdoc-routeattr [record]="record" [small]="false"
-                                    *ngIf="showResultListTrigger.INFOBLOCK_ROUTEATTR"></app-tdoc-routeattr>
-                <app-tdoc-linked-routes [record]="record" [small]="false"></app-tdoc-linked-routes>
                 <app-tdoc-linked-pois [record]="record" [small]="false"></app-tdoc-linked-pois>
+                <app-tdoc-linked-routes [record]="record" [small]="false"></app-tdoc-linked-routes>
 
                 <ng-container *ngIf="record.type !== 'INFO'">
                     <app-tdoc-info [record]="record"></app-tdoc-info>
                 </ng-container>
+
                 <app-tdoc-linked-infos [record]="record" [small]="false"></app-tdoc-linked-infos>
-                <app-cdoc-extended-object-properties [extendedObjectProperties]="record.tdocextendedobjectproperties"
-                                                     [categories]="['ENTITYCOUNT']"
-                                                     *ngIf="showResultListTrigger.INFOBLOCK_ENTITYCOUNT"
-                                                     [profile]="'show-big'"></app-cdoc-extended-object-properties>
-                <app-cdoc-changelog [record]="record"
-                                    *ngIf="showResultListTrigger.INFOBLOCK_DATACHANGELOG"></app-cdoc-changelog>
+                <app-tdoc-routeattr [record]="record" [small]="false"
+                                    *ngIf="showResultListTrigger.INFOBLOCK_ROUTEATTR"></app-tdoc-routeattr>
+                <app-tdoc-linked-playlists [record]="record"
+                                           *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"
+                                           (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
+                <app-tdoc-persontags [record]="record"
+                                     *ngIf="showResultListTrigger.INFOBLOCK_PERSONS"></app-tdoc-persontags>
+                <app-tdoc-datameta [record]="record"
+                                   *ngIf="showResultListTrigger.INFOBLOCK_DATAMETA"></app-tdoc-datameta>
                 <app-cdoc-odobjectdetails [objects]="record.tdocodimageobjects"
                                           *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectdetails>
                 <div style="display: inline-block" *ngIf="!(showItemObjectsFlag || record.type === 'ODIMGOBJECT') && record.tdocodimageobjects && record.tdocodimageobjects.length > 0">
@@ -129,10 +131,13 @@
                     </button>
                 </div>
 
-                <app-tdoc-linked-playlists [record]="record"
-                                           *ngIf="showResultListTrigger.INFOBLOCK_MEDIAMETA"
-                                           (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
 
+                <app-cdoc-extended-object-properties [extendedObjectProperties]="record.tdocextendedobjectproperties"
+                                                     [categories]="['ENTITYCOUNT']"
+                                                     *ngIf="showResultListTrigger.INFOBLOCK_ENTITYCOUNT"
+                                                     [profile]="'show-big'"></app-cdoc-extended-object-properties>
+                <app-cdoc-changelog [record]="record"
+                                    *ngIf="showResultListTrigger.INFOBLOCK_DATACHANGELOG"></app-cdoc-changelog>
             </div>
             <span class="small-linebreak" style="line-height: 1px;display: block;"><br clear="all"/></span>
         </div>

@@ -1,5 +1,5 @@
 <ng-container *ngIf="record !== undefined && (record.blocked > 0 || tdocratepers !== undefined) && (!small || record.blocked > 0 || tdocratepers && tdocratepers.gesamt > 0)">
-    <div class="techvaluetable">
+    <div [ngClass]="flat ? ' techvaluetable techvaluetableflat ratepersvaluetableflat' : 'techvaluetable'">
         <ng-container *ngIf="tdocratepers">
             <div *ngIf="tdocratepers.gesamt > 0" class="entry"><div class="label">Gesamt:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.gesamt)" [readonly]="true"></ngb-rating></div></div>
             <div *ngIf="!small && tdocratepers.bildung > 0" class="entry"><div class="label">Bildung:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.bildung)" [readonly]="true"></ngb-rating></div></div>

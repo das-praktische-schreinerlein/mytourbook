@@ -1,0 +1,11 @@
+div.ratepersvaluetableflat .entry {
+    display: inline;
+}
+div.ratepersvaluetableflat .entry .label {
+    display: inline;
+}
+div.ratepersvaluetableflat .entry .value {
+    display: inline;
+    text-align: right;
+    white-space: nowrap;
+}

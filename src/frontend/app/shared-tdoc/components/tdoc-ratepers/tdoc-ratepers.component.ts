@@ -19,6 +19,9 @@ export class TourDocRatePersonalComponent extends AbstractInlineComponent {
     @Input()
     public small? = false;
 
+    @Input()
+    public flat? = false;
+
     constructor(protected cd: ChangeDetectorRef) {
         super(cd);
     }
