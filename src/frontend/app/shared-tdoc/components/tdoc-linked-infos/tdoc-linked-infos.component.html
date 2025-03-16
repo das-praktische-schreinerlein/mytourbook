@@ -5,7 +5,7 @@
             <div class='column'>
                 <ng-container *ngFor="let linkedInfo of infoColumn; let i = index">
                     <div class='entry'>
-                        <div [ngClass]="linkedInfo.linkedDetails && linkedInfo.linkedDetails !== 'null' ? 'label' : 'fulllabel'"><a [href]="getShowUrl(linkedInfo)" (click)="submitShow($event, linkedInfo)" [title]="linkedInfo.name">{{ linkedInfo.name }}</a></div>
+                        <div class="label infoname" [ngClass]="linkedInfo.linkedDetails && linkedInfo.linkedDetails !== 'null' ? '' : 'fulllabel'"><a [href]="getShowUrl(linkedInfo)" (click)="submitShow($event, linkedInfo)" [title]="linkedInfo.name">{{ linkedInfo.name }}</a></div>
                         <ng-container *ngIf="linkedInfo.linkedDetails && linkedInfo.linkedDetails !== 'null'">
                             <ng-container [ngSwitch]="linkedInfo.type">
                                 <ng-container *ngSwitchCase="'1'">

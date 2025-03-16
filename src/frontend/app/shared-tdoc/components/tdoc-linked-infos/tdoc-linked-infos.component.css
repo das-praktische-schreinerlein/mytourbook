@@ -3,6 +3,9 @@ div.techvaluetable {
     border: 1px solid #bfccd3;
     vertical-align: top;
 }
+div.infoname {
+    font-weight: normal !important;
+}
 div.label, div.value {
     overflow: hidden;
     text-overflow: ellipsis;
