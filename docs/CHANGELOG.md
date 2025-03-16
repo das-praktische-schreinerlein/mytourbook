@@ -2,6 +2,24 @@
  
 # Versions
 
+## 10.2.0
+- use new commons
+- frontend: improved keywords, poi-layouts
+
+### new features
+- none
+
+### improvements
+- use new commons
+- frontend: improved keywords, poi-layouts
+
+### bug fixes
+- none
+
+### breaking changes
+- none
+
+
 ## 10.1.0 (2025-03-16)
 - use new commons
 - backend: improved dashboard

@@ -1,6 +1,6 @@
 {
   "name": "mytourbook-frontend",
-  "version": "10.1.0",
+  "version": "10.2.0",
   "license": "Apache-2.0",
   "angular-cli": {},
   "config": {
@@ -219,9 +219,9 @@
     "@angular/service-worker": "7.2.16",
     "@babel/runtime": "7.15.4",
     "@babel/runtime-corejs3": "7.15.4",
-    "@dps/mycms-commons": "git://github.com/das-praktische-schreinerlein/mycms-commons.git#6.2.0",
-    "@dps/mycms-frontend-commons": "git://github.com/das-praktische-schreinerlein/mycms-frontend-commons.git#6.2.0",
-    "@dps/mycms-server-commons": "git://github.com/das-praktische-schreinerlein/mycms-server-commons.git#6.2.0",
+    "@dps/mycms-commons": "git://github.com/das-praktische-schreinerlein/mycms-commons.git#6.3.0",
+    "@dps/mycms-frontend-commons": "git://github.com/das-praktische-schreinerlein/mycms-frontend-commons.git#6.3.0",
+    "@dps/mycms-server-commons": "git://github.com/das-praktische-schreinerlein/mycms-server-commons.git#6.3.0",
     "@ng-bootstrap/ng-bootstrap": "4.2.2",
     "@nguniversal/express-engine": "7.1.1",
     "@nguniversal/module-map-ngfactory-loader": "7.1.1",
