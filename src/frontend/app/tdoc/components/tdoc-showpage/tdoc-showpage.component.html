@@ -116,7 +116,7 @@
                     <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
                 </ng-container>
 
-                <ng-container *ngIf="!showResultListTrigger.INFOBLOCK_KEYWORDS">
+                <ng-container *ngIf="showResultListTrigger.INFOBLOCK_KEYWORDS">
                     <ng-container *ngIf="(showResultListTrigger.INFOBLOCK_RATES && record['tdocratepers'] !== undefined)
                                         || (showResultListTrigger.INFOBLOCK_INFOS && record['tdocdatainfo'] !== undefined)">
                         <app-tdoc-keywords [record]="record"
