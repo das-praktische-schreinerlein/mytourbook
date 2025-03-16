@@ -9,7 +9,7 @@
                 <ng-container [ngSwitch]="true">
                     <ng-container *ngSwitchCase="record.type === 'IMAGE' || record.type === 'ODIMGOBJECT'">
                         <h5><span class="fx-bg-type">{{record.type | translate }}
-                                <ng-container *ngIf="record.subtype">
+                            <ng-container *ngIf="record.subtype">
                                     - {{record.subtype | translate }}
                                 </ng-container>
                             </span>
@@ -26,9 +26,9 @@
                                          (loaded)="onResizeMainImage()"
                                          (load)="onResizeMainImage()">
                                     <app-cdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
-                                         [width]="imageWidth"
-                                         [rotateFlag]="getRotateFlag(record.tdocmediameta)"
-                                         *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectrectangles>
+                                                                 [width]="imageWidth"
+                                                                 [rotateFlag]="getRotateFlag(record.tdocmediameta)"
+                                                                 *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectrectangles>
                                 </div>
                             </ng-container>
                         </div>
@@ -36,7 +36,7 @@
 
                     <ng-container *ngSwitchCase="record.type === 'VIDEO'">
                         <h5><span class="fx-bg-type">{{record.type | translate }}
-                                <ng-container *ngIf="record.subtype">
+                            <ng-container *ngIf="record.subtype">
                                     - {{record.subtype | translate }}
                                 </ng-container>
                             </span>
@@ -54,7 +54,7 @@
                         <div class="picture-small" style="float: left; margin-right: 10px; padding-right: 20px">
                             <h6 class="fx-bg-type">{{record.type | translate }}
                                 <ng-container *ngIf="record.subtype">
-                                   - {{record.subtype | translate }}
+                                    - {{record.subtype | translate }}
                                 </ng-container>
                             </h6>
                             <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
@@ -115,10 +115,23 @@
                 <ng-container *ngIf="showResultListTrigger.INFOBLOCK_INFOS && record['tdocdatainfo'] !== undefined">
                     <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
                 </ng-container>
-                <app-tdoc-keywords [record]="record"
-                                   [splitByRowCount]="5"
-                                   [maxColumnsToSplit]="2"
-                                   *ngIf="showResultListTrigger.INFOBLOCK_KEYWORDS"></app-tdoc-keywords>
+
+                <ng-container *ngIf="!showResultListTrigger.INFOBLOCK_KEYWORDS">
+                    <ng-container *ngIf="(showResultListTrigger.INFOBLOCK_RATES && record['tdocratepers'] !== undefined)
+                                        || (showResultListTrigger.INFOBLOCK_INFOS && record['tdocdatainfo'] !== undefined)">
+                        <app-tdoc-keywords [record]="record"
+                                           [splitByRowCount]="5"
+                                           [maxColumnsToSplit]="2"
+                                           *ngIf="showResultListTrigger.INFOBLOCK_KEYWORDS"></app-tdoc-keywords>
+                    </ng-container>
+                    <ng-container *ngIf="!(showResultListTrigger.INFOBLOCK_RATES && record['tdocratepers'] !== undefined)
+                                        && ! (showResultListTrigger.INFOBLOCK_INFOS && record['tdocdatainfo'] !== undefined)">
+                        <app-tdoc-keywords [record]="record"
+                                           *ngIf="showResultListTrigger.INFOBLOCK_KEYWORDS"></app-tdoc-keywords>
+                    </ng-container>
+                </ng-container>
+
+
                 <app-tdoc-linked-pois [record]="record"
                                       [small]="false"
                                       [splitByRowCount]="5"
@@ -190,12 +203,12 @@
         <div [class]="('container content-container map-container map-container-osmmap container-fullline')"
              *ngIf="mapState.flgShowMap">
             <app-mapdoc-map [mapId]="'showMap'"
-                          [height]="'400px'"
-                          [mapZoom]="'9'"
-                          [docRecords]="tracks"
-                          [currentDocId]="currentMapTDocId"
-                          [showImageTrackAndGeoPos]="false"
-                          [mapCenterPos]="undefined"></app-mapdoc-map>
+                            [height]="'400px'"
+                            [mapZoom]="'9'"
+                            [docRecords]="tracks"
+                            [currentDocId]="currentMapTDocId"
+                            [showImageTrackAndGeoPos]="false"
+                            [mapCenterPos]="undefined"></app-mapdoc-map>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right"
                         (click)="mapState.flgShowProfileMap = true"
