@@ -4,17 +4,18 @@
 
 ## 10.2.0
 - use new commons
-- frontend: improved keywords, poi-layouts
+- database: fix duplicated pois
+- frontend: improved keywords-, poi-, info-layouts
 
 ### new features
 - none
 
 ### improvements
 - use new commons
-- frontend: improved keywords, poi-layouts
+- frontend: improved keywords-, poi-, info-layouts
 
 ### bug fixes
-- none
+- database: fix duplicated pois
 
 ### breaking changes
 - none
