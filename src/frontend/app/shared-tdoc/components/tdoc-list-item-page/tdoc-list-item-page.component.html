@@ -52,7 +52,10 @@
             </ng-container>
         </div>
         <div style="color: #ccc">
-            <span>{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</span>
+            <span>{{listItem.currentRecord.type | translate }}</span>
+            <ng-container *ngIf="listItem.currentRecord.subtype">
+                - <span>{{listItem.currentRecord.subtype | translate }}</span>
+            </ng-container>
             <span>{{listItem.currentRecord | tdocdate}} {{listItem.currentRecord.name}}</span>
             <ng-container *ngIf="showItemObjectsFlag || listItem.currentRecord.type === 'ODIMGOBJECT'">
                 <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
@@ -85,7 +88,10 @@
             </ng-container>
         </div>
         <div style="color: #ccc">
-            <span>{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</span>
+            <span>{{listItem.currentRecord.type | translate }}</span>
+            <ng-container *ngIf="listItem.currentRecord.subtype">
+                - <span>{{listItem.currentRecord.subtype | translate }}</span>
+            </ng-container>
             <span>{{listItem.currentRecord | tdocdate}} {{listItem.currentRecord.name}}</span>
             <button class="btn btn-configure btn-sm right"
                     (click)="imageShowMap = true; listItem.flgShowMap = listItem.flgMapAvailable && imageShowMap; listItem.flgShowProfileMap = listItem.flgProfileMapAvailable && true;"
@@ -105,7 +111,11 @@
     <div class="container content-container other-content-container" *ngIf="listItem.currentRecord !== undefined">
         <h6 *ngIf="listItem.currentRecord.locHirarchieIds"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h6>
         <div class="picture-small" style="float: left; margin-right: 10px; padding-right: 20px">
-            <h6 class="fx-bg-type">{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</h6>
+            <h6 class="fx-bg-type">{{listItem.currentRecord.type | translate }}
+                <ng-container *ngIf="listItem.currentRecord.subtype">
+                   - {{listItem.currentRecord.subtype | translate }}
+                </ng-container>
+            </h6>
             <ng-container *ngIf="listItem.image !== undefined">
                 <img class="picture-small" width="300px" [src]="listItem.previewUrl" alt="{{listItem.image.name}}">
             </ng-container>

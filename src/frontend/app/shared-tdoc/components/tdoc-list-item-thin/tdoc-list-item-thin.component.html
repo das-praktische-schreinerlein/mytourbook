@@ -34,7 +34,10 @@
                 </ng-container>
 
                 <ng-container *ngSwitchDefault="">
-                    {{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}
+                    {{listItem.currentRecord.type | translate }}
+                    <ng-container *ngIf="listItem.currentRecord.subtype">
+                        <br />{{listItem.currentRecord.subtype | translate }}
+                    </ng-container>
                 </ng-container>
             </ng-container>
         </div>
@@ -89,8 +92,10 @@
                     </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchDefault="">
-                    {{listItem.currentRecord.type | translate }}<br />
-                    {{listItem.currentRecord.subtype | translate }}
+                    {{listItem.currentRecord.type | translate }}
+                    <ng-container *ngIf="listItem.currentRecord.subtype">
+                        <br />{{listItem.currentRecord.subtype | translate }}
+                    </ng-container>
                 </ng-container>
             </ng-container>
             <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="record.type === 'INFO'"></app-tdoc-info>
@@ -144,8 +149,10 @@
                     </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchDefault="">
-                    {{listItem.currentRecord.type | translate }}<br />
-                    {{listItem.currentRecord.subtype | translate }}
+                    {{listItem.currentRecord.type | translate }}
+                    <ng-container *ngIf="listItem.currentRecord.subtype">
+                        <br />{{listItem.currentRecord.subtype | translate }}
+                    </ng-container>
                 </ng-container>
             </ng-container>
             <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="record.type === 'INFO'"></app-tdoc-info>

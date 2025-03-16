@@ -8,7 +8,11 @@
             <div>
                 <ng-container [ngSwitch]="true">
                     <ng-container *ngSwitchCase="record.type === 'IMAGE' || record.type === 'ODIMGOBJECT'">
-                        <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span>
+                        <h5><span class="fx-bg-type">{{record.type | translate }}
+                                <ng-container *ngIf="record.subtype">
+                                    - {{record.subtype | translate }}
+                                </ng-container>
+                            </span>
                             <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
                         <div #mainImageContainer class="image-container">
                             <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
@@ -31,7 +35,11 @@
                     </ng-container>
 
                     <ng-container *ngSwitchCase="record.type === 'VIDEO'">
-                        <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span>
+                        <h5><span class="fx-bg-type">{{record.type | translate }}
+                                <ng-container *ngIf="record.subtype">
+                                    - {{record.subtype | translate }}
+                                </ng-container>
+                            </span>
                             <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
                         <div class="image-container">
                             <ng-container *ngIf="record.tdocvideos !== undefined && record.tdocvideos.length > 0">
@@ -44,7 +52,11 @@
 
                     <ng-container *ngSwitchDefault="">
                         <div class="picture-small" style="float: left; margin-right: 10px; padding-right: 20px">
-                            <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
+                            <h6 class="fx-bg-type">{{record.type | translate }}
+                                <ng-container *ngIf="record.subtype">
+                                   - {{record.subtype | translate }}
+                                </ng-container>
+                            </h6>
                             <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
                                 <img class="picture-small" width="300px"
                                      [src]="contentUtils.getPreviewUrl(record.tdocimages[0])"

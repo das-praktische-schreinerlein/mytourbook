@@ -3,7 +3,11 @@
         <div class="container content-container">
             <div class="card-block">
                 <div class="picture-small" style="float: left; margin-right: 10px">
-                    <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
+                    <h6 class="fx-bg-type">{{record.type | translate }}
+                        <ng-container *ngIf="record.subtype">
+                            - {{record.subtype | translate }}
+                        </ng-container>
+                    </h6>
                 </div>
                 <h5><span class="fx-bg-name">NEW {{record.name}}</span></h5>
             </div>

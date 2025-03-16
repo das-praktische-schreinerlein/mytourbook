@@ -1,5 +1,9 @@
 <div class="modal-header">
-    <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
+    <h5><span class="fx-bg-type">{{record.type | translate }}
+        <ng-container *ngIf="record.subtype">
+            - {{record.subtype | translate }}
+        </ng-container>
+        </span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
     <button type="button" class="close" aria-label="Close" (click)="cancel()">
         <span aria-hidden="true">&times;</span>
     </button>

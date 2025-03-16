@@ -53,7 +53,10 @@
             <span *ngIf="listItem.currentRecord.gpsTrackState > 0">&#x26f3;</span>
             <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
         </h5>
-        <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+        <ng-container *ngIf="listItem.currentRecord.subtype">
+            <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+        </ng-container>
+
         <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
             <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
@@ -110,7 +113,7 @@
             <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
             <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
         </h5>
-        <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+        <h5 *ngIf="listItem.currentRecord.subtype">{{listItem.currentRecord.subtype | translate }}</h5>
         <ng-container *ngIf="listItem.image">
             <img class="picture-thumbnail" width="50px"
                  [src]="listItem.thumbnailUrl"
@@ -194,7 +197,7 @@
             <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
             <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
         </h5>
-        <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+        <h5 *ngIf="listItem.currentRecord.subtype">{{listItem.currentRecord.subtype | translate }}</h5>
         <ng-container *ngIf="listItem.image">
             <img class="picture-thumbnail" width="50px"
                  [src]="listItem.thumbnailUrl"

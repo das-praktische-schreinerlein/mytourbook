@@ -35,8 +35,10 @@
                 <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
                 <span *ngIf="listItem.currentRecord.gpsTrackState > 0">&#x26f3;</span>
                 <span>{{listItem.currentRecord.type | translate }}</span>
+                <ng-container *ngIf="listItem.currentRecord.subtype">
+                    - {{listItem.currentRecord.subtype | translate }}
+                </ng-container>
             </h5>
-            <h5>{{listItem.currentRecord.subtype | translate }}</h5>
             <div class="picture-small picture-with-objects-container" *ngIf="listItem.image">
                 <img #mainImage class="picture-small" width="300px"
                      [src]="listItem.previewUrl"
@@ -127,6 +129,9 @@
                     <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
                     <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
                     <span>{{listItem.currentRecord.type | translate }}</span>
+                    <ng-container *ngIf="listItem.currentRecord.subtype">
+                        - {{listItem.currentRecord.subtype | translate }}
+                    </ng-container>
                 </h5>
                 <div class="teaser-image-container-inner">
                     <div class="picture-teaser">
