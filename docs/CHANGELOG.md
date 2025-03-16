@@ -2,7 +2,7 @@
  
 # Versions
 
-## 10.1.0
+## 10.1.0 (2025-03-16)
 - use new commons
 - backend: improved dashboard
 - frontend/backend: introduced nearbyId-search
