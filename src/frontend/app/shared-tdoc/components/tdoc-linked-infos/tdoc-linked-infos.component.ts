@@ -5,6 +5,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
+import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 
 @Component({
     selector: 'app-tdoc-linked-infos',
@@ -13,13 +14,19 @@ import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/td
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocLinkedInfosComponent extends AbstractInlineComponent {
-    linkedInfos: TourDocLinkedInfoRecord[];
+    linkedInfos: TourDocLinkedInfoRecord[][];
 
     @Input()
     public record: TourDocRecord;
 
     @Input()
     public small ? = false;
+
+    @Input()
+    public splitByRowCount ? = 0;
+
+    @Input()
+    public maxColumnsToSplit ? = 1;
 
     constructor(private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
                 private cdocRoutingService: TourDocRoutingService,
@@ -32,7 +39,7 @@ export class TourDocLinkedInfosComponent extends AbstractInlineComponent {
             return;
         }
 
-        this.linkedInfos = this.record['tdoclinkedinfos'];
+        this.linkedInfos = ObjectUtils.splitArrayIntoTable(this.record['tdoclinkedinfos'], this.splitByRowCount, this.maxColumnsToSplit);;
     }
 
     public submitShow(event, info: TourDocLinkedInfoRecord): boolean {

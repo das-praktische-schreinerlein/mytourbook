@@ -1,13 +1,17 @@
 <ng-container *ngIf="linkedPois !== undefined && linkedPois.length > 0">
-    <table class="techvaluetable">
-        <tr *ngIf="!small"><th class="label" colspan="2">Pois:</th></tr>
-        <ng-container *ngFor="let linkedPoi of linkedPois; let i = index">
-            <tr>
-                <td class="entry">{{ 'poijoin_' + linkedPoi.poitype | translate}}</td>
-                <td class="value">
-                    <a [href]="getShowUrl(linkedPoi)" (click)="submitShow($event, linkedPoi)" [title]="linkedPoi.name">{{ linkedPoi.name}}{{ linkedPoi.geoEle ? ' (' + linkedPoi.geoEle + 'm)' : '' }}</a>
-                </td>
-            </tr>
+    <div class="techvaluetable">
+        <div class="entry" *ngIf="!small"><div class="label headerlabel">Pois:</div></div>
+        <ng-container *ngFor="let poiColumn of linkedPois; let column = index">
+            <div class='column'>
+                <ng-container *ngFor="let linkedPoi of poiColumn; let i = index">
+                    <div class='entry'>
+                        <div class='label poitype'>{{ 'poijoin_' + linkedPoi.poitype | translate}}</div>
+                        <div class='value'>
+                            <a [href]="getShowUrl(linkedPoi)" (click)="submitShow($event, linkedPoi)" [title]="linkedPoi.name">{{ linkedPoi.name}}{{ linkedPoi.geoEle ? ' (' + linkedPoi.geoEle + 'm)' : '' }}</a>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
         </ng-container>
-    </table>
+    </div>
 </ng-container>

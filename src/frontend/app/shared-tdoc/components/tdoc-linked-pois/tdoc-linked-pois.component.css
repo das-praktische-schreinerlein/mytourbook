@@ -1,22 +1,15 @@
-table.techvaluetable {
+div.techvaluetable {
     font-size: 0.75rem;
-    display: inline-table;
     border: 1px solid #bfccd3;
     vertical-align: top;
-    table-layout: fixed;
-    max-width: 600px;
 }
-td.label {
-    font-weight: bold;
+div.headerlabel {
 }
-td.entry, td.value {
+div.poitype {
+    font-weight: normal !important;
+}
+div.label, div.value {
     overflow: hidden;
     text-overflow: ellipsis;
     overflow-wrap: normal;
-}
-td.entry {
-    width: 40%;
-}
-td.value {
-    width: 60%;
 }

@@ -116,8 +116,13 @@
                     <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
                 </ng-container>
                 <app-tdoc-keywords [record]="record"
+                                   [splitByRowCount]="5"
+                                   [maxColumnsToSplit]="2"
                                    *ngIf="showResultListTrigger.INFOBLOCK_KEYWORDS"></app-tdoc-keywords>
-                <app-tdoc-linked-pois [record]="record" [small]="false"></app-tdoc-linked-pois>
+                <app-tdoc-linked-pois [record]="record"
+                                      [small]="false"
+                                      [splitByRowCount]="5"
+                                      [maxColumnsToSplit]="2"></app-tdoc-linked-pois>
                 <app-tdoc-linked-routes [record]="record" [small]="false"></app-tdoc-linked-routes>
 
                 <ng-container *ngIf="record.type !== 'INFO'">
