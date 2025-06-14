@@ -131,7 +131,8 @@ export class MediaManagerCommand extends CommonAdminCommand {
             useVideoAssetStoreUrls: backendConfig.playlistExportUseVideoAssetStoreUrls
         };
         const playlistService = new TourDocServerPlaylistService(playlistConfig);
-        const tourDocMediaFileExportManager = new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService);
+        const tourDocMediaFileExportManager =
+            new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService, dataService);
         const tourDocMediaFileImportManager = new TourDocMediaFileImportManager(backendConfig, dataService, mediaManagerModule,
             skipCheckForExistingFilesInDataBase);
         const tourDocExportManager = new TourDocExportService(backendConfig, dataService, playlistService, tourDocMediaFileExportManager,

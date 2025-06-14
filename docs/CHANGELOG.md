@@ -6,6 +6,7 @@
 - use new commons
 - database: fix duplicated pois
 - frontend: improved keywords-, poi-, info-layouts
+- backend: added new dirProfile trip/location to group exportdirs
 
 ### new features
 - none
@@ -13,6 +14,7 @@
 ### improvements
 - use new commons
 - frontend: improved keywords-, poi-, info-layouts
+- backend: added new dirProfile trip/location to group exportdirs
 
 ### bug fixes
 - database: fix duplicated pois

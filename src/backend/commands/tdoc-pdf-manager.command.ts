@@ -82,7 +82,8 @@ export class TourDocPdfManagerCommand extends CommonAdminCommand {
             useVideoAssetStoreUrls: backendConfig.playlistExportUseVideoAssetStoreUrls
         };
         const playlistService = new TourDocServerPlaylistService(playlistConfig);
-        const mediaFileExportManager = new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService);
+        const mediaFileExportManager
+            = new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService, dataService);
         const pdfManager = new PdfManager(backendConfig);
         const pdfManagerModule = new TourPdfManagerModule(dataService, mediaFileExportManager, pdfManager, backendConfig);
 
