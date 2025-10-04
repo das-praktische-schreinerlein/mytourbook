@@ -302,8 +302,8 @@ export class SqlMytbDbAllConfig {
             }
         },
         sortMapping: {
-            'date': 'date DESC, id DESC',
-            'dateAsc': 'date ASC, id ASC',
+            'date': 'date DESC, all_entries.id DESC',
+            'dateAsc': 'date ASC, all_entries.id ASC',
             'distance': 'geodist ASC',
             'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(datebis, datevon))/3600 DESC',
             'dataTechAltDesc': 'altitude_asc DESC',
@@ -313,7 +313,7 @@ export class SqlMytbDbAllConfig {
             'dataTechAltAsc': 'altitude_asc ASC',
             'dataTechMaxAsc': 'gps_ele ASC',
             'dataTechDistAsc': 'distance ASC',
-            'forExport': 'date ASC, id ASC',
+            'forExport': 'date ASC, all_entries.id ASC',
             'ratePers': 'rate_gesamt DESC, date DESC',
             'playlistPos': 'pos ASC',
             'location': 'l_lochirarchietxt ASC, date ASC',
