@@ -195,4 +195,6 @@ out skel qt;
   nwr["leisure"="park"]({{bbox}});
   nwr["tourism"="museum"]({{bbox}});
   nwr["historic"~"castle"]({{bbox}});
+
+  nwr["boundary"~"national_park|protected_area"]({{bbox}});
 ```
