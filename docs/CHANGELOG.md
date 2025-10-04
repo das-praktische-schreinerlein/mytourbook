@@ -2,7 +2,7 @@
  
 # Versions
 
-## 10.2.0
+## 10.2.0 (2025-10-04)
 - use new commons
 - database: fix duplicated pois
 - frontend: improved keywords-, poi-, info-layouts
