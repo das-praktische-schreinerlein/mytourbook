@@ -90,7 +90,7 @@ node dist/backend/serverAdmin.js\
      --backend ${CONFIG_BASEDIR}backend.dev.json\
      --command objectDetectionManager\
      --action sendQueueRequests\
-     --detector tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,faceapi\
+     --detector tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,humanapi\
      --maxPerRun 2000\
      --debug 1
 cd $CWD
