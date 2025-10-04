@@ -546,6 +546,7 @@ window.importStaticTranslationsJsonP = `
     "label.odimgobject.detector.tfjs_mobilenet_v1": "mobilenet_v1",
     "label.odimgobject.detector.tfjs_posenet": "posenet",
     "label.odimgobject.detector.faceapi": "faceapi",
+    "label.odimgobject.detector.humanapi": "humanapi",
     "label.odimgobject.detector.manual": "manuell",
     "label.odimgobject.detector.picasafile": "picasafile",
     "label.odimgobject.detector.picasa": "picasa",

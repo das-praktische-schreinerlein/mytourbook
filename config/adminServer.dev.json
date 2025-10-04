@@ -231,7 +231,7 @@
                         "parameters": {
                             "command": "objectDetectionManager",
                             "action": "sendImageQueueRequests",
-                            "detector": "tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,faceapi,picasafile",
+                            "detector": "tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,humanapi,picasafile",
                             "maxPerRun": "2000",
                             "backend": "config/backend.dev.json"
                         }

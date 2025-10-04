@@ -590,10 +590,10 @@ export class TourDocMediaFileImportManager  {
             ffmpeg.ffprobe(fileName,
                 function(err, metadata) {
                     if (err) {
-                        reject('error while reading video-metadata: ' + err);
+                        return reject('error while reading video-metadata: ' + err);
                     }
 
-                    resolve(metadata);
+                    return resolve(metadata);
                 });
         });
     }

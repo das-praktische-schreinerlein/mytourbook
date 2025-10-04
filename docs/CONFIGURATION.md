@@ -174,7 +174,7 @@ The configuration-file to configure the backend-api-server.
             "tfjs_cocossd_lite_mobilenet_v2",
             "tfjs_mobilenet_v1",
             "tfjs_posenet",
-            "faceapi",
+            "humanapi",
             "picasafile"
         ],
         "defaultDetectors": [
@@ -182,7 +182,7 @@ The configuration-file to configure the backend-api-server.
             "tfjs_cocossd_mobilenet_v2",
             "tfjs_cocossd_lite_mobilenet_v2",
             "tfjs_mobilenet_v1",
-            "faceapi",
+            "humanapi",
             "picasafile"
         ]
     }

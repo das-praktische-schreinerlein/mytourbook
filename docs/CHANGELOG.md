@@ -7,6 +7,7 @@
 - database: fix duplicated pois
 - frontend: improved keywords-, poi-, info-layouts
 - backend: added new dirProfile trip/location to group exportdirs
+- config: use humapapi instead of faceapi on object-detection
 
 ### new features
 - none
@@ -15,6 +16,7 @@
 - use new commons
 - frontend: improved keywords-, poi-, info-layouts
 - backend: added new dirProfile trip/location to group exportdirs
+- config: use humapapi instead of faceapi on object-detection
 
 ### bug fixes
 - database: fix duplicated pois
